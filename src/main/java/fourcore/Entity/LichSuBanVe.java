@@ -1,4 +1,4 @@
-package fourcore.VietNamRailwayModel;
+package fourcore.Entity;
 
 import java.time.LocalDate;
 

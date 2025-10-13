@@ -1,8 +1,8 @@
-package fourcore.VietNamRailwayInterface;
+package fourcore.GiaoDien;
 
 import java.net.URL;
 
-import fourcore.VietNamRailwayInterface.GiaoDienDangNhap;
+import fourcore.GiaoDien.GiaoDienDangNhap;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
