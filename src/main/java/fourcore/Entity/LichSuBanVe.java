@@ -1,4 +1,4 @@
-package fourcore.VietNamRailwayModel;
+package fourcore.Entity;
 
 import java.time.LocalDate;
 
@@ -7,7 +7,7 @@ public class LichSuBanVe {
     private String ten;
     private LocalDate ngayMua;
     public LichSuBanVe(String maVe, String ten, LocalDate ngayMua) {
-        this.maVe = maVe;
+        setMaVe(maVe);
         this.ten = ten;
         this.ngayMua = ngayMua;
     }
