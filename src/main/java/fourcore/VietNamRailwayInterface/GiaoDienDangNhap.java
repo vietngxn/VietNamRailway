@@ -59,7 +59,7 @@ public class GiaoDienDangNhap extends Application {
 		
 		create_right_layout();
 		create_left_layout();
-		Scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		Scene.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 		primaryStage.setScene(Scene);
 		primaryStage.setResizable(false);
 		primaryStage.show();
@@ -292,6 +292,5 @@ public class GiaoDienDangNhap extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
-	
+
 }
