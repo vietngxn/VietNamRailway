@@ -1,4 +1,4 @@
-package fourcore.VietNamRailwayInterface;
+package fourcore.GiaoDien;
 
 import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
