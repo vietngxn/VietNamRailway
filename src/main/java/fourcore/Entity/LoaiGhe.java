@@ -3,9 +3,9 @@ package fourcore.Entity;
 public class LoaiGhe {
     private String maLoaiGhe;
     private String tenLoaiGhe;
-    private String giaLoaiGhe;
+    private double giaLoaiGhe;
 
-    public LoaiGhe(String maLoaiGhe, String tenLoaiGhe, String giaLoaiGhe) {
+    public LoaiGhe(String maLoaiGhe, String tenLoaiGhe, double giaLoaiGhe) {
         setMaLoaiGhe(maLoaiGhe);
         setTenLoaiGhe(tenLoaiGhe);
         setGiaLoaiGhe(giaLoaiGhe);
@@ -28,11 +28,11 @@ public class LoaiGhe {
         this.tenLoaiGhe = tenLoaiGhe;
     }
 
-    public String getGiaLoaiGhe() {
+    public double getGiaLoaiGhe() {
         return giaLoaiGhe;
     }
 
-    public void setGiaLoaiGhe(String giaLoaiGhe) {
+    public void setGiaLoaiGhe(double giaLoaiGhe) {
         this.giaLoaiGhe = giaLoaiGhe;
     }
 }
