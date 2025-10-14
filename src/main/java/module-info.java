@@ -1,4 +1,4 @@
-module fourcore {
+module VietNamRailwayInterface {
     requires javafx.controls;
     requires javafx.fxml;
 
