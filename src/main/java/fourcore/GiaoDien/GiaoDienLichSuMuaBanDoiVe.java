@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-import javax.swing.JOptionPane;
-import javax.swing.table.TableColumn;
+
 
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
