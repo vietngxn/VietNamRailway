@@ -5,7 +5,6 @@ import java.time.LocalDate;
 public class DoiTuongGiamGia {
 	String maDoiTuongGiamGia, tenDoiTuongGiamGia, trangThaiGiamGia;
 	double giaTriPhanTramGiamGia;
-	LocalDate ngaySuaDoi;
 	public String getMaDoiTuongGiamGia() {
 		return maDoiTuongGiamGia;
 	}
@@ -30,28 +29,16 @@ public class DoiTuongGiamGia {
 	public void setGiaTriPhanTramGiamGia(double giaTriPhanTramGiamGia) {
 		this.giaTriPhanTramGiamGia = giaTriPhanTramGiamGia;
 	}
-	public LocalDate getNgaySuaDoi() {
-		return ngaySuaDoi;
-	}
-	public void setNgaySuaDoi(LocalDate ngaySuaDoi) {
-		this.ngaySuaDoi = ngaySuaDoi;
-	}
+
 	public DoiTuongGiamGia() {}
 	public DoiTuongGiamGia(String maDoiTuongGiamGia, String tenDoiTuongGiamGia, String trangThaiGiamGia,
-			double giaTriPhanTramGiamGia, LocalDate ngaySuaDoi) {
-		super();
+			double giaTriPhanTramGiamGia) {
 		setMaDoiTuongGiamGia(maDoiTuongGiamGia);
 		setTenDoiTuongGiamGia(tenDoiTuongGiamGia);
 		setTrangThaiGiamGia(trangThaiGiamGia);
 		setGiaTriPhanTramGiamGia(giaTriPhanTramGiamGia);
-		setNgaySuaDoi(ngaySuaDoi);
 	}
-	@Override
-	public String toString() {
-		return "DoiTuongGiamGia [maDoiTuongGiamGia=" + maDoiTuongGiamGia + ", tenDoiTuongGiamGia=" + tenDoiTuongGiamGia
-				+ ", trangThaiGiamGia=" + trangThaiGiamGia + ", giaTriPhanTramGiamGia=" + giaTriPhanTramGiamGia
-				+ ", ngaySuaDoi=" + ngaySuaDoi + "]";
-	}
+
 	
 	
 }

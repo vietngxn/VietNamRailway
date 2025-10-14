@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 public class LoaiTuongTacVe {
     private String maLoaiTuongTac;
     private String tenLoaiTuongTac;
-    private LocalDateTime ngaySuaDoi;
 
     // Constructor mặc định
     public LoaiTuongTacVe() {
@@ -15,7 +14,6 @@ public class LoaiTuongTacVe {
     public LoaiTuongTacVe(String maLoaiTuongTac, String tenLoaiTuongTac, LocalDateTime ngaySuaDoi) {
         setMaLoaiTuongTac(maLoaiTuongTac);
         setTenLoaiTuongTac(tenLoaiTuongTac);
-        setNgaySuaDoi(ngaySuaDoi);
     }
 
     // Getter và Setter
@@ -35,11 +33,5 @@ public class LoaiTuongTacVe {
         this.tenLoaiTuongTac = tenLoaiTuongTac;
     }
 
-    public LocalDateTime getNgaySuaDoi() {
-        return ngaySuaDoi;
-    }
 
-    public void setNgaySuaDoi(LocalDateTime ngaySuaDoi) {
-        this.ngaySuaDoi = ngaySuaDoi;
-    }
 }

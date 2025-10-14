@@ -20,13 +20,11 @@ public class ChucVu {
 		return "ChucVu [maChucVu=" + maChucVu + ", tenChucVu=" + tenChucVu + "]";
 	}
 	public ChucVu(String maChucVu, String tenChucVu) {
-		super();
 		setMaChucVu(maChucVu);
 		setTenChucVu(tenChucVu);
 	}
 	
 	public ChucVu() {
-		super();
 	}
 
 }

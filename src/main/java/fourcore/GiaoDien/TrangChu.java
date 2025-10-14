@@ -744,7 +744,7 @@ public class TrangChu extends Application {
             Label tiLe4 = new Label("2.3%");
             InputStream workSansSmBold4 = getClass().getResourceAsStream("/fonts/Work_Sans/static/WorkSans-SemiBold.ttf");
             Font tiLeFont4 = Font.loadFont(workSansSmBold4, 20);
-            tiLe1.setFont(tiLeFont4);
+            tiLe4.setFont(tiLeFont4);
             Label moTaTiLe4 = new Label("So với hôm qua");
             InputStream workSansRegular4 = getClass().getResourceAsStream("/fonts/Work_Sans/static/WorkSans-Regular.ttf");
             Font moTaTiLeFont4 = Font.loadFont(workSansRegular4, 20);

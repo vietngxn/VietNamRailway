@@ -4,26 +4,23 @@ import java.time.LocalDateTime;
 
 public class ChuyenTau {
     private String maChuyenTau;
-    private String maTau;
-    private String maHanhTrinh;
+    private Tau tau;
+    private HanhTrinh hanhTrinh;
     private LocalDateTime ngayGioDi;
     private LocalDateTime ngayGioDen;
     private double giaCuocTrenChuyenTau;
-    private LocalDateTime ngaySuaDoi;
 
     public ChuyenTau() {
     }
 
-    public ChuyenTau(String maChuyenTau, String maTau, String maHanhTrinh,
-                     LocalDateTime ngayGioDi, LocalDateTime ngayGioDen,
-                     double giaCuocTrenChuyenTau, LocalDateTime ngaySuaDoi) {
+    public ChuyenTau(String maChuyenTau, Tau tau, HanhTrinh hanhTrinh, LocalDateTime ngayGioDi, LocalDateTime ngayGioDen,
+                     double giaCuocTrenChuyenTau ) {
         setMaChuyenTau(maChuyenTau);
-        setMaTau(maTau);
-        setMaHanhTrinh(maHanhTrinh);
+        setTau(tau);
+        setHanhTrinh(hanhTrinh);
         setNgayGioDi(ngayGioDi);
         setNgayGioDen(ngayGioDen);
         setGiaCuocTrenChuyenTau(giaCuocTrenChuyenTau);
-        setNgaySuaDoi(ngaySuaDoi);
     }
 
     public String getMaChuyenTau() {
@@ -34,20 +31,20 @@ public class ChuyenTau {
         this.maChuyenTau = maChuyenTau;
     }
 
-    public String getMaTau() {
-        return maTau;
+    public Tau getTau() {
+        return tau;
     }
 
-    public void setMaTau(String maTau) {
-        this.maTau = maTau;
+    public void setTau(Tau tau) {
+        this.tau = tau;
     }
 
-    public String getMaHanhTrinh() {
-        return maHanhTrinh;
+    public HanhTrinh getHanhTrinh() {
+        return hanhTrinh;
     }
 
-    public void setMaHanhTrinh(String maHanhTrinh) {
-        this.maHanhTrinh = maHanhTrinh;
+    public void setHanhTrinh(HanhTrinh hanhTrinh) {
+        this.hanhTrinh = hanhTrinh;
     }
 
     public LocalDateTime getNgayGioDi() {
@@ -72,13 +69,5 @@ public class ChuyenTau {
 
     public void setGiaCuocTrenChuyenTau(double giaCuocTrenChuyenTau) {
         this.giaCuocTrenChuyenTau = giaCuocTrenChuyenTau;
-    }
-
-    public LocalDateTime getNgaySuaDoi() {
-        return ngaySuaDoi;
-    }
-
-    public void setNgaySuaDoi(LocalDateTime ngaySuaDoi) {
-        this.ngaySuaDoi = ngaySuaDoi;
     }
 }

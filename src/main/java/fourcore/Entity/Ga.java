@@ -1,23 +1,20 @@
 package fourcore.Entity;
 
-import java.time.LocalDateTime;
 
 public class Ga {
     private String maGa;
     private String tenGa;
     private double cuLy;
-    private LocalDateTime ngaySuaDoi;
+    private double thoiGian;
 
 
-    public Ga() {
-    	
-    }
+    public Ga() {}
 
-    public Ga(String maGa, String tenGa, double cuLy, LocalDateTime ngaySuaDoi) {
+    public Ga(String maGa, String tenGa, double cuLy, double thoiGian) {
         setMaGa(maGa);
         setTenGa(tenGa);
         setCuLy(cuLy);
-        setNgaySuaDoi(ngaySuaDoi);
+        setThoiGian(thoiGian);
     }
 
     public String getMaGa() {
@@ -44,11 +41,11 @@ public class Ga {
         this.cuLy = cuLy;
     }
 
-    public LocalDateTime getNgaySuaDoi() {
-        return ngaySuaDoi;
+    public double getThoiGian() {
+        return thoiGian;
     }
 
-    public void setNgaySuaDoi(LocalDateTime ngaySuaDoi) {
-        this.ngaySuaDoi = ngaySuaDoi;
+    public void setThoiGian(double thoiGian) {
+        this.thoiGian = thoiGian;
     }
 }

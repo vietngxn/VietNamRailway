@@ -563,6 +563,7 @@ public class ChonVe extends Application {
             BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
             root.setLeft(menuList);
             root.setCenter(noiDungChinh);
+            primaryStage.setFullScreen(true);
 
             primaryStage.show();
         } catch(Exception e) {

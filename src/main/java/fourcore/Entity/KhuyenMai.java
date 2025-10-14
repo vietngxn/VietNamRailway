@@ -1,12 +1,13 @@
 package fourcore.Entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class KhuyenMai {
 
-	String maKhuyenMai, tenChuongTrinh, trangThaiKhuyenMai, dieuKienApDung;
-	double giaTriPhanTramKhuyenMai;
-	LocalDate ngayBatDau, ngayKetThuc, ngaySuaDoi;
+	private String maKhuyenMai, tenChuongTrinh, trangThaiKhuyenMai, dieuKienApDung;
+	private  double giaTriPhanTramKhuyenMai;
+	LocalDateTime ngayBatDau, ngayKetThuc;
 	public String getMaKhuyenMai() {
 		return maKhuyenMai;
 	}
@@ -37,28 +38,21 @@ public class KhuyenMai {
 	public void setGiaTriPhanTramKhuyenMai(double giaTriPhanTramKhuyenMai) {
 		this.giaTriPhanTramKhuyenMai = giaTriPhanTramKhuyenMai;
 	}
-	public LocalDate getNgayBatDau() {
+	public LocalDateTime getNgayBatDau() {
 		return ngayBatDau;
 	}
-	public void setNgayBatDau(LocalDate ngayBatDau) {
+	public void setNgayBatDau(LocalDateTime ngayBatDau) {
 		this.ngayBatDau = ngayBatDau;
 	}
-	public LocalDate getNgayKetThuc() {
+	public LocalDateTime getNgayKetThuc() {
 		return ngayKetThuc;
 	}
-	public void setNgayKetThuc(LocalDate ngayKetThuc) {
+	public void setNgayKetThuc(LocalDateTime ngayKetThuc) {
 		this.ngayKetThuc = ngayKetThuc;
-	}
-	public LocalDate getNgaySuaDoi() {
-		return ngaySuaDoi;
-	}
-	public void setNgaySuaDoi(LocalDate ngaySuaDoi) {
-		this.ngaySuaDoi = ngaySuaDoi;
 	}
 	public KhuyenMai() {}
 	public KhuyenMai(String maKhuyenMai, String tenChuongTrinh, String trangThaiKhuyenMai, String dieuKienApDung,
-			double giaTriPhanTramKhuyenMai, LocalDate ngayBatDau, LocalDate ngayKetThuc, LocalDate ngaySuaDoi) {
-		super();
+			double giaTriPhanTramKhuyenMai, LocalDateTime ngayBatDau, LocalDateTime ngayKetThuc) {
 		setMaKhuyenMai(maKhuyenMai);
 		setTenChuongTrinh(tenChuongTrinh);
 		setTrangThaiKhuyenMai(trangThaiKhuyenMai);
@@ -66,7 +60,6 @@ public class KhuyenMai {
 		setGiaTriPhanTramKhuyenMai(giaTriPhanTramKhuyenMai);
 		setNgayBatDau(ngayBatDau);
 		setNgayKetThuc(ngayKetThuc);
-		setNgaySuaDoi(ngaySuaDoi);
 	}
 	
 }

@@ -88,7 +88,6 @@ public class NhanVien {
 	}
 	public NhanVien(String maNhanVien, String hoTen, ChucVu chucVu, LocalDate ngaySinh, String diaChi, String email,
 			String sdt, LocalDate ngayVaoLam, String tinhTrangLamViec, String gioiTinh, String cccd) {
-		super();
 		setMaNhanVien(maNhanVien);
 		setHoTen(hoTen);
 		setChucVu(chucVu);
@@ -102,7 +101,6 @@ public class NhanVien {
 		setCccd(cccd);
 	}
 	public NhanVien() {
-		super();
 	}
 	
 }

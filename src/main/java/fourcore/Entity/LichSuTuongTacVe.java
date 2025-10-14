@@ -1,49 +1,57 @@
 package fourcore.Entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class LichSuTuongTacVe {
 
-	String maTuongTac, maLoaiTuongTac, maVeTau;
+	String maTuongTac;
+    private Ve veTau;
+    LoaiTuongTacVe loaiTuongTacVe;
 	double giaTriChenhLech;
-	LocalDate ngayTuongTac;
-	public String getMaTuongTac() {
+	LocalDateTime ngayTuongTac;
+
+    public LoaiTuongTacVe getLoaiTuongTacVe() {
+        return loaiTuongTacVe;
+    }
+
+    public void setLoaiTuongTacVe(LoaiTuongTacVe loaiTuongTacVe) {
+        this.loaiTuongTacVe = loaiTuongTacVe;
+    }
+
+    public Ve getVeTau() {
+        return veTau;
+    }
+
+    public void setVeTau(Ve veTau) {
+        this.veTau = veTau;
+    }
+
+    public String getMaTuongTac() {
 		return maTuongTac;
 	}
 	public void setMaTuongTac(String maTuongTac) {
 		this.maTuongTac = maTuongTac;
 	}
-	public String getMaLoaiTuongTac() {
-		return maLoaiTuongTac;
-	}
-	public void setMaLoaiTuongTac(String maLoaiTuongTac) {
-		this.maLoaiTuongTac = maLoaiTuongTac;
-	}
-	public String getMaVeTau() {
-		return maVeTau;
-	}
-	public void setMaVeTau(String maVeTau) {
-		this.maVeTau = maVeTau;
-	}
+
 	public double getGiaTriChenhLech() {
 		return giaTriChenhLech;
 	}
 	public void setGiaTriChenhLech(double giaTriChenhLech) {
 		this.giaTriChenhLech = giaTriChenhLech;
 	}
-	public LocalDate getNgayTuongTac() {
+	public LocalDateTime getNgayTuongTac() {
 		return ngayTuongTac;
 	}
-	public void setNgayTuongTac(LocalDate ngayTuongTac) {
+	public void setNgayTuongTac(LocalDateTime ngayTuongTac) {
 		this.ngayTuongTac = ngayTuongTac;
 	}
 	public LichSuTuongTacVe() {}
-	public LichSuTuongTacVe(String maTuongTac, String maLoaiTuongTac, String maVeTau, double giaTriChenhLech,
-			LocalDate ngayTuongTac) {
-		super();
+	public LichSuTuongTacVe(String maTuongTac, LoaiTuongTacVe loaiTuongTacVe, Ve veTau, double giaTriChenhLech,
+		LocalDateTime ngayTuongTac) {
 		setMaTuongTac(maTuongTac);
-		setMaLoaiTuongTac(maLoaiTuongTac);
-		setMaVeTau(maVeTau);
+        setLoaiTuongTacVe(loaiTuongTacVe);
+        setVeTau(veTau);
 		setGiaTriChenhLech(giaTriChenhLech);
 		setNgayTuongTac(ngayTuongTac);
 	}

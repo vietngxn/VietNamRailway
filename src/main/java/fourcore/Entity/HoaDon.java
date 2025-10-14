@@ -1,29 +1,32 @@
 package fourcore.Entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class HoaDon {
 	private String maHoaDon;
-	private NhanVien maNhanVien;
-	private LocalDate ngayThanhToan;
+	private NhanVien nhanVien;
+	private LocalDateTime ngayThanhToan;
 	private double tongtien;
-	
-	public String getMaHoaDon() {
+
+    public NhanVien getNhanVien() {
+        return nhanVien;
+    }
+
+    public void setNhanVien(NhanVien nhanVien) {
+        this.nhanVien = nhanVien;
+    }
+
+    public String getMaHoaDon() {
 		return maHoaDon;
 	}
 	public void setMaHoaDon(String maHoaDon) {
 		this.maHoaDon = maHoaDon;
 	}
-	public NhanVien getMaNhanVien() {
-		return maNhanVien;
-	}
-	public void setMaNhanVien(NhanVien maNhanVien) {
-		this.maNhanVien = maNhanVien;
-	}
-	public LocalDate getNgayThanhToan() {
+	public LocalDateTime getNgayThanhToan() {
 		return ngayThanhToan;
 	}
-	public void setNgayThanhToan(LocalDate ngayThanhToan) {
+	public void setNgayThanhToan(LocalDateTime ngayThanhToan) {
 		this.ngayThanhToan = ngayThanhToan;
 	}
 	public double getTongtien() {
@@ -32,21 +35,16 @@ public class HoaDon {
 	public void setTongtien(double tongtien) {
 		this.tongtien = tongtien;
 	}
-	public HoaDon(String maHoaDon, NhanVien maNhanVien, LocalDate ngayThanhToan, double tongtien) {
-		super();
+	public HoaDon(String maHoaDon, NhanVien nhanVien, LocalDateTime ngayThanhToan, double tongtien) {
 		setMaHoaDon(maHoaDon);
-		setMaNhanVien(maNhanVien);
 		setNgayThanhToan(ngayThanhToan);
 		setTongtien(tongtien);
+        setNhanVien(nhanVien);
 	}
 	public HoaDon() {
-		super();
+
 	}
-	@Override
-	public String toString() {
-		return "HoaDon [maHoaDon=" + maHoaDon + ", maNhanVien=" + maNhanVien + ", ngayThanhToan=" + ngayThanhToan
-				+ ", tongtien=" + tongtien + "]";
-	}
+
 	
 	
 	

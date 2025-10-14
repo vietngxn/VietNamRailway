@@ -2,8 +2,8 @@ package fourcore.Entity;
 
 public class ChiTietHoaDon {
 	private String maChiTietHoaDon;
-	private HoaDon maHoaDon;
-	// Phần này có khóa ngoại là mã vé tàu có gì tiến làm xong tiến ghép khóa ngoại giúp đạt
+	private HoaDon hoaDon;
+    private Ve veTau;
 	private String moTa;
 	private double dongia;
 	private double thueVAT;
@@ -14,13 +14,24 @@ public class ChiTietHoaDon {
 	public void setMaChiTietHoaDon(String maChiTietHoaDon) {
 		this.maChiTietHoaDon = maChiTietHoaDon;
 	}
-	public HoaDon getMaHoaDon() {
-		return maHoaDon;
-	}
-	public void setMaHoaDon(HoaDon maHoaDon) {
-		this.maHoaDon = maHoaDon;
-	}
-	public String getMoTa() {
+
+    public HoaDon getHoaDon() {
+        return hoaDon;
+    }
+
+    public void setHoaDon(HoaDon hoaDon) {
+        this.hoaDon = hoaDon;
+    }
+
+    public Ve getVeTau() {
+        return veTau;
+    }
+
+    public void setVeTau(Ve veTau) {
+        this.veTau = veTau;
+    }
+
+    public String getMoTa() {
 		return moTa;
 	}
 	public void setMoTa(String moTa) {
@@ -44,23 +55,16 @@ public class ChiTietHoaDon {
 	public void setThanhTien(double thanhTien) {
 		this.thanhTien = thanhTien;
 	}
-	public ChiTietHoaDon(String maChiTietHoaDon, HoaDon maHoaDon, String moTa, double dongia, double thueVAT,
-			double thanhTien) {
-		super();
+	public ChiTietHoaDon(String maChiTietHoaDon, HoaDon hoaDon,Ve veTau, String moTa, double dongia, double thueVAT, double thanhTien) {
 		setMaChiTietHoaDon(maChiTietHoaDon);
-		setMaHoaDon(maHoaDon);
+		setHoaDon(hoaDon);
+        setVeTau(veTau);
 		setMoTa(moTa);
 		setDongia(dongia);
 		setThueVAT(thueVAT);
 		setThanhTien(thanhTien);
 	}
 	public ChiTietHoaDon() {
-		super();
-	}
-	@Override
-	public String toString() {
-		return "ChiTietHoaDon [maChiTietHoaDon=" + maChiTietHoaDon + ", maHoaDon=" + maHoaDon + ", moTa=" + moTa
-				+ ", dongia=" + dongia + ", thueVAT=" + thueVAT + ", thanhTien=" + thanhTien + "]";
 	}
 	
 }

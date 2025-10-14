@@ -1,52 +1,43 @@
 package fourcore.Entity;
 
-import java.time.LocalDateTime;
-
 public class Tau {
+
+//  =======================
+//  ||   VARIABLE        ||
+//  =======================
 	private String maTau;
 	private String tenTau;
-	private String maLoaiTau;
-	private LocalDateTime ngaySuaDoi;
+    private LoaiTau loaiTau;
 
+//  =======================
+//  ||   CONSTRUCTORS    ||
+//  =======================
+    public Tau(String maTau, String tenTau, LoaiTau loaiTau) {
+        setMaTau(maTau);
+        setTenTau(tenTau);
+        setLoaiTau(loaiTau);
+    }
 	public Tau() {
 	}
-
-	public Tau(String maTau, String tenTau, String maLoaiTau, LocalDateTime ngaySuaDoi) {
-		setMaTau(maTau);
-		setTenTau(tenTau);
-		setMaLoaiTau(maLoaiTau);
-		setNgaySuaDoi(ngaySuaDoi);
-	}
-
+//  =======================
+//  || GETTER AND SETTER ||
+//  =======================
 	public String getMaTau() {
 		return maTau;
 	}
-
 	public void setMaTau(String maTau) {
 		this.maTau = maTau;
 	}
-
 	public String getTenTau() {
 		return tenTau;
 	}
-
 	public void setTenTau(String tenTau) {
 		this.tenTau = tenTau;
 	}
-
-	public String getMaLoaiTau() {
-		return maLoaiTau;
-	}
-
-	public void setMaLoaiTau(String maLoaiTau) {
-		this.maLoaiTau = maLoaiTau;
-	}
-
-	public LocalDateTime getNgaySuaDoi() {
-		return ngaySuaDoi;
-	}
-
-	public void setNgaySuaDoi(LocalDateTime ngaySuaDoi) {
-		this.ngaySuaDoi = ngaySuaDoi;
-	}
+    public LoaiTau getLoaiTau() {
+        return loaiTau;
+    }
+    public void setLoaiTau(LoaiTau loaiTau) {
+        this.loaiTau = loaiTau;
+    }
 }
