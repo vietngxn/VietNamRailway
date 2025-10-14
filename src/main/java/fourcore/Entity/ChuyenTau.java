@@ -13,6 +13,14 @@ public class ChuyenTau {
     public ChuyenTau() {
     }
 
+    public ChuyenTau(double giaCuocTrenChuyenTau, LocalDateTime ngayGioDen, LocalDateTime ngayGioDi, Tau tau, String maChuyenTau) {
+        this.giaCuocTrenChuyenTau = giaCuocTrenChuyenTau;
+        this.ngayGioDen = ngayGioDen;
+        this.ngayGioDi = ngayGioDi;
+        this.tau = tau;
+        this.maChuyenTau = maChuyenTau;
+    }
+
     public ChuyenTau(String maChuyenTau, Tau tau, HanhTrinh hanhTrinh, LocalDateTime ngayGioDi, LocalDateTime ngayGioDen,
                      double giaCuocTrenChuyenTau ) {
         setMaChuyenTau(maChuyenTau);
