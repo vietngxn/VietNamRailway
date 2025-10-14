@@ -1,5 +1,8 @@
 package fourcore.GiaoDien;
 
+import fourcore.Entity.ChuyenTau;
+import fourcore.Entity.LoaiTau;
+import fourcore.Entity.Tau;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -7,6 +10,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -16,6 +20,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -25,15 +30,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.io.InputStream;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import fourcore.Entity.LichSuBanVe;
@@ -83,6 +87,7 @@ public class ChonVe extends Application {
     private Label userLabel;
     private ImageView settingIcon;
     private ImageView moTaDoanhThuIcon;
+    HBox chuyenTauMenu;
 
     @Override
     public void start(Stage primaryStage) {
@@ -549,8 +554,7 @@ public class ChonVe extends Application {
 
 
             noiDungChinh = new VBox();
-            noiDungChinh.setStyle("-fx-background-color: #F7F7F7;");
-            noiDungChinh.setPrefWidth(1200);
+
             //Label tong quan
             Label tongQuanLabel = new Label("Bán vé");
             InputStream interFont = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Bold.ttf");
@@ -558,6 +562,119 @@ public class ChonVe extends Application {
             tongQuanLabel.setFont(fontTongQuan);
             tongQuanLabel.setTranslateX(20);
             noiDungChinh.getChildren().add(tongQuanLabel);
+
+            chuyenTauMenu = new HBox();
+            chuyenTauMenu.setMinWidth(1200);
+//            HBox chuyenTauCont = new HBox();
+//            StackPane chuyenTauBox = new StackPane();
+//            ImageView chuyenTauImage = new ImageView(getClass().getResource("/img/TauHoaIcon.png").toExternalForm());
+//            chuyenTauBox.getChildren().addAll(chuyenTauImage);
+//            Label maChuyenTau = new Label ("SE1");
+//            maChuyenTau.setFont(labelFont);
+//            maChuyenTau.setTranslateX(-100);
+//            maChuyenTau.setTranslateY(5);
+//
+//            HBox tgDi = new HBox();
+//            InputStream interBold13Load = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Bold.ttf");
+//            Font interBold13 = Font.loadFont(interBold13Load, 15);
+//
+//            InputStream interRegular13Load = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Regular.ttf");
+//            Font interRegular13 = Font.loadFont(interRegular13Load, 15);
+//
+//            Label tgDiLabel = new Label ("TG đi");
+//            tgDiLabel.setFont(interBold13);
+//            tgDiLabel.setTranslateX(-10);
+//            Label tgDiDuLieu = new Label("25/05 12:05");
+//            tgDiDuLieu.setFont(interRegular13);
+//            tgDi.setTranslateX(-174);
+//            tgDi.setTranslateY(42);
+//            tgDi.getChildren().addAll(tgDiLabel, tgDiDuLieu);
+//
+//            HBox tgDen = new HBox();
+//            Label tgDenLabel = new Label ("TG đến");
+//            tgDenLabel.setFont(interBold13);
+//            tgDenLabel.setTranslateX(-10);
+//            Label tgDenDuLieu = new Label("25/05 12:05");
+//            tgDenDuLieu.setFont(interRegular13);
+//            tgDen.setTranslateX(-299);
+//            tgDen.setTranslateY(72);
+//            tgDen.getChildren().addAll(tgDenLabel, tgDenDuLieu);
+//
+//            VBox slChoDatBox = new VBox();
+//            Label slChoDatLabel = new Label("SL chỗ đặt");
+//            slChoDatLabel.setFont(interRegular13);
+//            Label soChoDat = new Label("120");
+//            soChoDat.setTranslateX(20);
+//            soChoDat.setFont(interBold13);
+//            slChoDatBox.getChildren().addAll( slChoDatLabel, soChoDat);
+//            slChoDatBox.setTranslateX(-440);
+//            slChoDatBox.setTranslateY(102);
+//
+//            VBox slChoTrongBox = new VBox();
+//            Label slChoTrongLabel = new Label("Trống");
+//            slChoTrongLabel.setFont(interRegular13);
+//            Label soChoTrong = new Label("8");
+//            soChoTrong.setTranslateX(20);
+//            soChoTrong.setFont(interBold13);
+//            slChoTrongBox.getChildren().addAll( slChoTrongLabel, soChoTrong);
+//            slChoTrongBox.setTranslateX(-420);
+//            slChoTrongBox.setTranslateY(102);
+//
+//            chuyenTauCont.getChildren().add(chuyenTauBox);
+//            chuyenTauCont.getChildren().add(maChuyenTau);
+//            chuyenTauCont.getChildren().add(tgDi);
+//            chuyenTauCont.getChildren().add(tgDen);
+//            chuyenTauCont.getChildren().add(slChoDatBox);
+//            chuyenTauCont.getChildren().add(slChoTrongBox);;
+//            noiDungChinh.getChildren().add(chuyenTauCont);
+
+
+
+
+
+
+// DATA TESTING----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            LoaiTau loaiTau1 = new LoaiTau("LT01", "TauHoaBacNam", 12000);
+            Tau tau1 = new Tau("SE6", "TauHi", loaiTau1);
+            Tau tau2 = new Tau("SE2", "TauHi", loaiTau1);
+            Tau tau3 = new Tau("SE3", "TauHi", loaiTau1);
+            ChuyenTau chuyen1 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 3, 15, 30),LocalDateTime.of(2025, 10, 14, 3, 30),tau1, "TauHihi");
+            ChuyenTau chuyen2 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 3, 20, 30),LocalDateTime.of(2025, 7, 14, 12, 30),tau2, "TauHihi");
+            ChuyenTau chuyen3 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 1, 7, 00),LocalDateTime.of(2025, 9, 14, 4, 30),tau3, "TauHihi");
+            ChuyenTau chuyen4 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 2, 12, 00),LocalDateTime.of(2025, 4, 14, 5, 30),tau2, "TauHihi");
+            ChuyenTau chuyen5 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 2, 12, 00),LocalDateTime.of(2025, 4, 14, 5, 30),tau2, "TauHihi");
+            ChuyenTau chuyen6 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 2, 12, 00),LocalDateTime.of(2025, 4, 14, 5, 30),tau2, "TauHihi");
+
+            ArrayList<ChuyenTau> chuyenTauArrayList = new ArrayList<>();
+            chuyenTauArrayList.add(chuyen1);
+            chuyenTauArrayList.add(chuyen2);
+            chuyenTauArrayList.add(chuyen3);
+            chuyenTauArrayList.add(chuyen4);
+            chuyenTauArrayList.add(chuyen5);
+            chuyenTauArrayList.add(chuyen6);
+            ChonVe chonVeGiaoDien = new ChonVe();
+            chonVeGiaoDien.hienThiDanhSachChuyenTau(chuyenTauArrayList,chuyenTauMenu);
+
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            noiDungChinh.getChildren().add(chuyenTauMenu);
+
+
+
+            HBox danhSachToaTauBox = new HBox();
+            ImageView dauTauImg = new ImageView(getClass().getResource("/img/dautau.png").toExternalForm());
+            ImageView thanTauTrong =  new ImageView(getClass().getResource("/img/thantautrong.png").toExternalForm());
+            danhSachToaTauBox.getChildren().addAll(thanTauTrong,dauTauImg);
+
+
+
+
+
+            noiDungChinh.getChildren().add(danhSachToaTauBox);
+
+            noiDungChinh.setStyle("-fx-background-color: #F7F7F7;");
+            noiDungChinh.setPrefWidth(1200);
+
 
 
             BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
@@ -570,8 +687,105 @@ public class ChonVe extends Application {
             e.printStackTrace();
         }
     }
+    public void hienThiDanhSachChuyenTau(ArrayList<ChuyenTau> danhSachChuyenTau, HBox menuChuyenTau){
+        Image defaultImage = new Image(getClass().getResource("/img/TauHoaIcon.png").toExternalForm());
+        Image selectedImage = new Image(getClass().getResource("/img/TauHoaIconChoose.png").toExternalForm());
+        InputStream interBoldFont = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Bold.ttf");
+        Font labelFont =  Font.loadFont(interBoldFont, 14);
+        List<ImageView> imageViews = new ArrayList<>();
 
+        for (ChuyenTau c : danhSachChuyenTau) {
+            HBox chuyenTauCont = new HBox();
+//            chuyenTauCont.setPrefWidth(200);
+            StackPane chuyenTauBox = new StackPane();
+            ImageView chuyenTauImage = new ImageView(defaultImage);
+            chuyenTauBox.getChildren().addAll(chuyenTauImage);
+            String maChuyenTau = c.getTau().getMaTau();
+            Label maChuyenTaulbl = new Label (maChuyenTau);
+            maChuyenTaulbl.setFont(labelFont);
+//            maChuyenTaulbl.setTranslateX(-100);
+            maChuyenTaulbl.setTranslateY(-80);
+
+            HBox tgDi = new HBox();
+            InputStream interBold13Load = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Bold.ttf");
+            Font interBold13 = Font.loadFont(interBold13Load, 15);
+
+            InputStream interRegular13Load = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Regular.ttf");
+            Font interRegular13 = Font.loadFont(interRegular13Load, 15);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM HH:mm");
+
+            Label tgDiLabel = new Label ("TG đi");
+            tgDiLabel.setFont(interBold13);
+            tgDiLabel.setTranslateX(-10);
+            LocalDateTime tgDiDuLieu = c.getNgayGioDi();
+            String tgDiDuLieuToString = tgDiDuLieu.format(formatter);
+            Label tgDiDuLieuLbl = new Label(tgDiDuLieuToString);
+            tgDiDuLieuLbl.setFont(interRegular13);
+            tgDi.setTranslateX(30);
+            tgDi.setTranslateY(42);
+            tgDi.getChildren().addAll(tgDiLabel, tgDiDuLieuLbl);
+
+            HBox tgDen = new HBox();
+            Label tgDenLabel = new Label ("TG đến");
+            tgDenLabel.setFont(interBold13);
+            tgDenLabel.setTranslateX(-10);
+            LocalDateTime tgDenDuLieu = c.getNgayGioDen();
+            String tgDenDuLieuToString = tgDenDuLieu.format(formatter);
+            Label tgDenDuLieuLbl = new Label(tgDenDuLieuToString);
+            tgDenDuLieuLbl.setFont(interRegular13);
+            tgDen.setTranslateX(26);
+            tgDen.setTranslateY(72);
+            tgDen.getChildren().addAll(tgDenLabel, tgDenDuLieuLbl);
+
+            VBox slChoDatBox = new VBox();
+            Label slChoDatLabel = new Label("SL chỗ đặt");
+            slChoDatLabel.setFont(interRegular13);
+            Label soChoDat = new Label("120");
+            soChoDat.setTranslateX(20);
+            soChoDat.setFont(interBold13);
+            slChoDatBox.getChildren().addAll( slChoDatLabel, soChoDat);
+            slChoDatBox.setTranslateX(10);
+            slChoDatBox.setTranslateY(102);
+
+            VBox slChoTrongBox = new VBox();
+            Label slChoTrongLabel = new Label("Trống");
+            slChoTrongLabel.setFont(interRegular13);
+            Label soChoTrong = new Label("8");
+            soChoTrong.setTranslateX(20);
+            soChoTrong.setFont(interBold13);
+            slChoTrongBox.getChildren().addAll( slChoTrongLabel, soChoTrong);
+            slChoTrongBox.setTranslateX(100);
+            slChoTrongBox.setTranslateY(102);
+
+
+            chuyenTauBox.getChildren().add(maChuyenTaulbl);
+            chuyenTauBox.getChildren().add(tgDi);
+            chuyenTauBox.getChildren().add(tgDen);
+            chuyenTauBox.getChildren().add(slChoDatBox);
+            chuyenTauBox.getChildren().add(slChoTrongBox);
+
+            chuyenTauCont.getChildren().add(chuyenTauBox);
+            chuyenTauCont.setPadding(new Insets(0,20,0,0));
+            menuChuyenTau.getChildren().add(chuyenTauCont);
+            imageViews.add(chuyenTauImage);
+
+            chuyenTauCont.setOnMouseClicked(event -> {
+                for (ImageView iv : imageViews) {
+                    iv.setImage(defaultImage);
+                }
+                chuyenTauImage.setImage(selectedImage);
+            });
+
+        }
+
+
+    }
+    public HBox getChuyenTauMenu() {
+        return this.chuyenTauMenu;
+    }
     public static void main(String[] args) {
         Application.launch(ChonVe.class, args);
+
     }
+
 }
