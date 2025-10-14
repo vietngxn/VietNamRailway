@@ -5,7 +5,7 @@ public class ChiTietHoaDon {
 	private HoaDon hoaDon;
     private Ve veTau;
 	private String moTa;
-	private double dongia;
+	private double donGia;
 	private double thueVAT;
 	private double thanhTien;
 	public String getMaChiTietHoaDon() {
@@ -38,10 +38,10 @@ public class ChiTietHoaDon {
 		this.moTa = moTa;
 	}
 	public double getDongia() {
-		return dongia;
+		return donGia;
 	}
 	public void setDongia(double dongia) {
-		this.dongia = dongia;
+		this.donGia = dongia;
 	}
 	public double getThueVAT() {
 		return thueVAT;
