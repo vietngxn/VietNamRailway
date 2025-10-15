@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-
-
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -251,8 +249,13 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 	}
 
 	private HBox createSubPane(String label, String value, String leftStyle, String rightStyle) {
-		StackPane left = new StackPane(new Label(label));
-		StackPane right = new StackPane(new Label(value));
+		Label lblLeft = new Label(label);
+		lblLeft.setWrapText(true);
+		StackPane left = new StackPane(lblLeft);
+		Label lblRight = new Label(value);
+		lblRight.setWrapText(true);
+		StackPane right = new StackPane(lblRight);
+		
 		left.setPrefWidth(100);
 		right.setPrefWidth(150);
 		left.setStyle(leftStyle);
@@ -759,7 +762,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 				TranslateTransition tt = new TranslateTransition(Duration.millis(350), lbl_timkiem);
 				if (nval) {
 					tt.setToY(-40);
-				} 
+				}
 				tt.play();
 			});
 
@@ -847,10 +850,8 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 			pnlDataDoiVe = new VBox(10);
 			pnlDataDoiVe.setAlignment(Pos.CENTER);
 
-			pnlDataDoiVe.getChildren()
-					.add(taoDataChoTableLichSuMuaBanDoiVe("VX123", "SE2", "Sài Gòn - Hà Nội", "27/09/2025 - 08:40",
-							"Toa số 3 chỗ 23", "27/09/2025", "Nguyễn Tiến Đạt G", "Con cặc", "093636363636", 14000000,
-							0, 0, 1400000));
+			pnlDataDoiVe.getChildren().add(taoDataChoTableLichSuMuaBanDoiVe("VX123","SE2", "Sài Gòn - Hà Nội", "27/09/2025  -  08:40",
+					"Toa số 3 chỗ 23","27/09/2025", "Nguyễn Thị Kiều Trinh aaa aaa ", "Trẻ em","0202651552" , 1400000, 0, 0, 1400000));
 			pnlDataDoiVe.getChildren()
 					.add(taoDataChoTableLichSuMuaBanDoiVe("VX123", "SE2", "Sài Gòn - Hà Nội", "27/09/2025 - 08:40",
 							"Toa số 3 chỗ 23", "27/09/2025", "Nguyễn Tiến Đạt G", "Con cặc", "093636363636", 1400000, 0,
@@ -887,7 +888,6 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 			txt_timkiem.setOnAction(event -> {
 				String regex = "^VX\\d{3}$";
 				String input = txt_timkiem.getText().trim();
-
 
 				if (input.isEmpty() || !Pattern.matches(regex, input)) {
 					btnLichSuDoiVe.setDisable(true);
@@ -990,7 +990,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 			});
 
 			btnLichSuHoanVe.setOnMouseClicked(event -> {
-				
+
 				String normalStyle = """
 						      -fx-font-family: 'Inter';
 						   -fx-font-weight: bold;
