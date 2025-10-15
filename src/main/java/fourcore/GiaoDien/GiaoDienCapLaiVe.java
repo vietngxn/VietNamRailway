@@ -237,8 +237,13 @@ public class GiaoDienCapLaiVe extends Application {
 	}
 
 	private HBox createSubPane(String label, String value, String leftStyle, String rightStyle) {
-		StackPane left = new StackPane(new Label(label));
-		StackPane right = new StackPane(new Label(value));
+		Label lblLeft = new Label(label);
+		lblLeft.setWrapText(true);
+		StackPane left = new StackPane(lblLeft);
+		Label lblRight = new Label(value);
+		lblRight.setWrapText(true);
+		StackPane right = new StackPane(lblRight);
+		
 		left.setPrefWidth(100);
 		right.setPrefWidth(150);
 		left.setStyle(leftStyle);

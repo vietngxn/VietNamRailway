@@ -17,9 +17,12 @@ import javafx.util.Duration;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -31,6 +34,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 public class GioVe extends Application {
 
@@ -156,7 +160,7 @@ public class GioVe extends Application {
 					"Toa số 3 chỗ 23", "Nguyễn Tiến Đạt G", "Con cặc", "093636363636", 1400000, 0, 0, 1400000));
 
 			pnlDataGioVe.getChildren().add(taoDataChoTableGioVe("SE2", "Sài Gòn - Hà Nội", "27/09/2025  -  08:40",
-					"Toa số 3 chỗ 23", "Nguyễn Tiến Đạt G", "Con cặc", "093636363636", 1400000, 0, 0, 1400000));
+					"Toa số 3 chỗ 23", "Nguyễn Thị Kiều Trinh", "Trẻ em", "093636363636", 1400000, 0, 0, 1400000));
 
 			pnlDataGioVe.getChildren().add(taoDataChoTableGioVe("SE2", "Sài Gòn - Hà Nội", "27/09/2025  -  08:40",
 					"Toa số 3 chỗ 23", "Nguyễn Tiến Đạt G", "Con cặc", "093636363636", 1400000, 0, 0, 1400000));
@@ -236,7 +240,7 @@ public class GioVe extends Application {
 		img_xoa.setFitHeight(40);
 		img_xoa.setFitWidth(40);
 		GridPane.setMargin(img_xoa, new Insets(0, 0, 0, 400));
-		
+
 		data.add(img_xoa, 4, 0);
 
 		String normalStyle = """
@@ -288,7 +292,7 @@ public class GioVe extends Application {
 				    -fx-background-color: #00BACB;
 				    -fx-background-radius: 10px 0 0 10px;
 				    -fx-border-radius: 10px 0 0 10px;
-				    -fx-border-color: #00BACB;
+				      -fx-border-color: black;
 				    -fx-alignment: center-left;
 				    -fx-font-weight: bold;
 				    -fx-font-family: "Kanit";
@@ -297,19 +301,19 @@ public class GioVe extends Application {
 
 //	-fx-padding: 8 12 8 12;
 		String rightStyle = """
-				    -fx-background-color: #E0E0E0;
+				    -fx-background-color: white;
 				    -fx-background-radius: 0 10px 10px 0;
 				    -fx-border-radius: 0 10px 10px 0;
-				    -fx-border-color: #E0E0E0;
+				    -fx-border-color: black;
 				    -fx-alignment: center-left;
 				    -fx-font-weight: bold;
 				    -fx-font-family: "Kanit";
 				    -fx-padding: 8 12 8 12;
 				""";
 
-		pnlsubCT1.addRow(0, createSubPane("Họ tên", hoten, leftStyle, rightStyle));
-		pnlsubCT1.addRow(1, createSubPane("Đối tượng", doituong, leftStyle, rightStyle));
-		pnlsubCT1.addRow(2, createSubPane("Số giấy tờ", sogiayto, leftStyle, rightStyle));
+		pnlsubCT1.addRow(0, createSubPane("Họ tên", hoten, leftStyle, rightStyle, 1));
+		pnlsubCT1.addRow(1, createSubPane("Đối tượng", doituong, leftStyle, rightStyle, 2));
+		pnlsubCT1.addRow(2, createSubPane("Số giấy tờ", sogiayto, leftStyle, rightStyle, 3));
 
 		// Các panel giá trị
 		String lblCTStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 18px;";
@@ -347,17 +351,80 @@ public class GioVe extends Application {
 			((VBox) pnlReturn.getParent()).getChildren().remove(pnlReturn);
 			System.out.println("Đã xóa vé: " + matau);
 		});
-		
+
 		return pnlReturn;
 	}
 
-	private HBox createSubPane(String label, String value, String leftStyle, String rightStyle) {
+	private HBox createSubPane(String label, String value, String leftStyle, String rightStyle, int check) {
 		StackPane left = new StackPane(new Label(label));
-		StackPane right = new StackPane(new Label(value));
+		StackPane right = new StackPane();
+		right.setPrefSize(200, 40);
+
+		if (check == 1) {
+			TextField txtHoTen = new TextField();
+			txtHoTen.setPromptText("Nhập họ tên");
+			String regexHoten = "[a-zA-ZÀ-ỹ\\s]+$";
+			txtHoTen.setOnAction(event -> {
+				String input = txtHoTen.getText();
+				if (!input.matches(regexHoten)) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Lỗi định dạng");
+					alert.setHeaderText(null);
+					alert.setContentText("Họ tên không hợp lệ");
+					alert.showAndWait();
+				}
+			});
+			txtHoTen.setStyle(rightStyle);
+			txtHoTen.setMaxWidth(Double.MAX_VALUE);
+			txtHoTen.setMaxHeight(Double.MAX_VALUE);
+			StackPane.setAlignment(txtHoTen, Pos.CENTER);
+			right.getChildren().add(txtHoTen);
+		} else if (check == 2) {
+			ComboBox<String> cmbDoiTuong = new ComboBox<>();
+			cmbDoiTuong.getItems().addAll("Người lớn", "Trẻ em");
+			cmbDoiTuong.setStyle(rightStyle);
+			cmbDoiTuong.setMaxWidth(Double.MAX_VALUE);
+			cmbDoiTuong.setMaxHeight(Double.MAX_VALUE);
+			StackPane.setAlignment(cmbDoiTuong, Pos.CENTER);
+			cmbDoiTuong.setOnAction(event -> {
+				String giaTriCmb = cmbDoiTuong.getValue();
+
+				if (giaTriCmb == null || giaTriCmb.isEmpty()) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Lỗi");
+					alert.setHeaderText(null);
+					alert.setContentText("Chưa chọn đối tượng!");
+					alert.showAndWait();
+				} else {
+					System.out.println("Đã chọn: " + giaTriCmb);
+				}
+			});
+
+			right.getChildren().add(cmbDoiTuong);
+		} else if (check == 3) {
+			TextField txtSoGiayTo = new TextField();
+			txtSoGiayTo.setPromptText("Nhập số giấy tờ");
+			String regexSoGiayTo = "^[0-9]+$";
+			txtSoGiayTo.setOnAction(event -> {
+				String input = txtSoGiayTo.getText();
+				if (!input.matches(regexSoGiayTo)) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Lỗi định dạng");
+					alert.setHeaderText(null);
+					alert.setContentText("Số giấy tờ không hợp lệ");
+					alert.showAndWait();
+				}
+			});
+			txtSoGiayTo.setStyle(rightStyle);
+			txtSoGiayTo.setMaxWidth(Double.MAX_VALUE);
+			txtSoGiayTo.setMaxHeight(Double.MAX_VALUE);
+			StackPane.setAlignment(txtSoGiayTo, Pos.CENTER);
+			right.getChildren().add(txtSoGiayTo);
+		}
+
 		left.setPrefWidth(100);
-		right.setPrefWidth(150);
+		right.setPrefWidth(200);
 		left.setStyle(leftStyle);
-		right.setStyle(rightStyle);
 		left.setAlignment(Pos.CENTER);
 		right.setAlignment(Pos.CENTER);
 		return new HBox(left, right);
