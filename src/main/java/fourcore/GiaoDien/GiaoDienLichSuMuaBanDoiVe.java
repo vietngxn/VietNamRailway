@@ -255,7 +255,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 		Label lblRight = new Label(value);
 		lblRight.setWrapText(true);
 		StackPane right = new StackPane(lblRight);
-		
+
 		left.setPrefWidth(100);
 		right.setPrefWidth(150);
 		left.setStyle(leftStyle);
@@ -850,8 +850,10 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 			pnlDataDoiVe = new VBox(10);
 			pnlDataDoiVe.setAlignment(Pos.CENTER);
 
-			pnlDataDoiVe.getChildren().add(taoDataChoTableLichSuMuaBanDoiVe("VX123","SE2", "Sài Gòn - Hà Nội", "27/09/2025  -  08:40",
-					"Toa số 3 chỗ 23","27/09/2025", "Nguyễn Thị Kiều Trinh aaa aaa ", "Trẻ em","0202651552" , 1400000, 0, 0, 1400000));
+			pnlDataDoiVe.getChildren()
+					.add(taoDataChoTableLichSuMuaBanDoiVe("VX123", "SE2", "Sài Gòn - Hà Nội", "27/09/2025  -  08:40",
+							"Toa số 3 chỗ 23", "27/09/2025", "Nguyễn Thị Kiều Trinh aaa aaa ", "Trẻ em", "0202651552",
+							1400000, 0, 0, 1400000));
 			pnlDataDoiVe.getChildren()
 					.add(taoDataChoTableLichSuMuaBanDoiVe("VX123", "SE2", "Sài Gòn - Hà Nội", "27/09/2025 - 08:40",
 							"Toa số 3 chỗ 23", "27/09/2025", "Nguyễn Tiến Đạt G", "Con cặc", "093636363636", 1400000, 0,
@@ -1016,56 +1018,34 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 				btnLichSuDoiVe.setStyle(blankStyle);
 			});
 
-			btnLichSuMuaVe.setOnMouseEntered(e -> {
-				ScaleTransition scaleUp = new ScaleTransition(Duration.millis(150), btnLichSuMuaVe);
-				scaleUp.setToX(1.1);
-				scaleUp.setToY(1.1);
-				scaleUp.play();
-			});
+			hieuUngHover(btnLichSuDoiVe);
+			hieuUngHover(btnLichSuHoanVe);
+			hieuUngHover(btnLichSuMuaVe);
 
-			btnLichSuMuaVe.setOnMouseExited(e -> {
-				ScaleTransition scaleDown = new ScaleTransition(Duration.millis(150), btnLichSuMuaVe);
-				scaleDown.setToX(1.0);
-				scaleDown.setToY(1.0);
-				scaleDown.play();
-			});
-
-			btnLichSuDoiVe.setOnMouseEntered(e -> {
-				ScaleTransition scaleUp = new ScaleTransition(Duration.millis(150), btnLichSuDoiVe);
-				scaleUp.setToX(1.1);
-				scaleUp.setToY(1.1);
-				scaleUp.play();
-			});
-
-			btnLichSuDoiVe.setOnMouseExited(e -> {
-				ScaleTransition scaleDown = new ScaleTransition(Duration.millis(150), btnLichSuDoiVe);
-				scaleDown.setToX(1.0);
-				scaleDown.setToY(1.0);
-				scaleDown.play();
-			});
-
-			btnLichSuHoanVe.setOnMouseEntered(e -> {
-				ScaleTransition scaleUp = new ScaleTransition(Duration.millis(150), btnLichSuHoanVe);
-				scaleUp.setToX(1.1);
-				scaleUp.setToY(1.1);
-				scaleUp.play();
-			});
-
-			btnLichSuHoanVe.setOnMouseExited(e -> {
-				ScaleTransition scaleDown = new ScaleTransition(Duration.millis(150), btnLichSuHoanVe);
-				scaleDown.setToX(1.0);
-				scaleDown.setToY(1.0);
-				scaleDown.play();
-			});
-
-//			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-    public VBox getLichSuMuaVe() {
-        return  this.noiDungChinh;
-    }
+
+	public void hieuUngHover(Button btn) {
+		btn.setOnMouseEntered(e -> {
+			ScaleTransition scaleUp = new ScaleTransition(Duration.millis(150), btn);
+			scaleUp.setToX(1.1);
+			scaleUp.setToY(1.1);
+			scaleUp.play();
+		});
+
+		btn.setOnMouseExited(e -> {
+			ScaleTransition scaleDown = new ScaleTransition(Duration.millis(150), btn);
+			scaleDown.setToX(1.0);
+			scaleDown.setToY(1.0);
+			scaleDown.play();
+		});
+	}
+
+	public VBox getLichSuMuaVe() {
+		return this.noiDungChinh;
+	}
 
 	public static void main(String[] args) {
 		launch(args);
