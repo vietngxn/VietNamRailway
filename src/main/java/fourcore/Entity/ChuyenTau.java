@@ -21,8 +21,7 @@ public class ChuyenTau {
         this.maChuyenTau = maChuyenTau;
     }
 
-    public ChuyenTau(String maChuyenTau, Tau tau, HanhTrinh hanhTrinh, LocalDateTime ngayGioDi, LocalDateTime ngayGioDen,
-                     double giaCuocTrenChuyenTau ) {
+    public ChuyenTau(String maChuyenTau, Tau tau, HanhTrinh hanhTrinh, LocalDateTime ngayGioDi, LocalDateTime ngayGioDen, double giaCuocTrenChuyenTau ) {
         setMaChuyenTau(maChuyenTau);
         setTau(tau);
         setHanhTrinh(hanhTrinh);

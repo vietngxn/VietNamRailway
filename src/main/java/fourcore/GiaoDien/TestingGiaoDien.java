@@ -15,6 +15,6 @@ public class TestingGiaoDien {
         ArrayList<ChuyenTau> chuyenTauArrayList = new ArrayList<>();
         chuyenTauArrayList.add(chuyen1);
         ChonVe chonVeGiaoDien = new ChonVe();
-        chonVeGiaoDien.hienThiDanhSachChuyenTau(chuyenTauArrayList, chonVeGiaoDien.getChuyenTauMenu());
+
     }
 }

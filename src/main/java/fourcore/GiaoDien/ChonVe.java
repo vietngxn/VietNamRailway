@@ -1,8 +1,7 @@
 package fourcore.GiaoDien;
 
-import fourcore.Entity.ChuyenTau;
-import fourcore.Entity.LoaiTau;
-import fourcore.Entity.Tau;
+import fourcore.Entity.*;
+import fourcore.dao.ChuyenTau_Dao;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -10,6 +9,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
@@ -33,14 +33,13 @@ import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 import java.io.InputStream;
+import java.security.cert.PolicyNode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import fourcore.Entity.LichSuBanVe;
 
 
 public class ChonVe extends Application {
@@ -88,6 +87,7 @@ public class ChonVe extends Application {
     private ImageView settingIcon;
     private ImageView moTaDoanhThuIcon;
     HBox chuyenTauMenu;
+    private HBox danhSachToaTauBox;
 
     @Override
     public void start(Stage primaryStage) {
@@ -638,12 +638,12 @@ public class ChonVe extends Application {
             Tau tau1 = new Tau("SE6", "TauHi", loaiTau1);
             Tau tau2 = new Tau("SE2", "TauHi", loaiTau1);
             Tau tau3 = new Tau("SE3", "TauHi", loaiTau1);
-            ChuyenTau chuyen1 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 3, 15, 30),LocalDateTime.of(2025, 10, 14, 3, 30),tau1, "TauHihi");
-            ChuyenTau chuyen2 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 3, 20, 30),LocalDateTime.of(2025, 7, 14, 12, 30),tau2, "TauHihi");
-            ChuyenTau chuyen3 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 1, 7, 00),LocalDateTime.of(2025, 9, 14, 4, 30),tau3, "TauHihi");
-            ChuyenTau chuyen4 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 2, 12, 00),LocalDateTime.of(2025, 4, 14, 5, 30),tau2, "TauHihi");
-            ChuyenTau chuyen5 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 2, 12, 00),LocalDateTime.of(2025, 4, 14, 5, 30),tau2, "TauHihi");
-            ChuyenTau chuyen6 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 2, 12, 00),LocalDateTime.of(2025, 4, 14, 5, 30),tau2, "TauHihi");
+            ChuyenTau chuyen1 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 3, 15, 30),LocalDateTime.of(2025, 10, 14, 3, 30),tau1, "CT001");
+            ChuyenTau chuyen2 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 3, 20, 30),LocalDateTime.of(2025, 7, 14, 12, 30),tau2, "CT002");
+            ChuyenTau chuyen3 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 1, 7, 00),LocalDateTime.of(2025, 9, 14, 4, 30),tau3, "CT003");
+            ChuyenTau chuyen4 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 2, 12, 00),LocalDateTime.of(2025, 4, 14, 5, 30),tau2, "CT004");
+            ChuyenTau chuyen5 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 2, 12, 00),LocalDateTime.of(2025, 4, 14, 5, 30),tau2, "CT005");
+            ChuyenTau chuyen6 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 2, 12, 00),LocalDateTime.of(2025, 4, 14, 5, 30),tau2, "CT006");
 
             ArrayList<ChuyenTau> chuyenTauArrayList = new ArrayList<>();
             chuyenTauArrayList.add(chuyen1);
@@ -653,7 +653,6 @@ public class ChonVe extends Application {
             chuyenTauArrayList.add(chuyen5);
             chuyenTauArrayList.add(chuyen6);
             ChonVe chonVeGiaoDien = new ChonVe();
-            chonVeGiaoDien.hienThiDanhSachChuyenTau(chuyenTauArrayList,chuyenTauMenu);
 
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -661,16 +660,15 @@ public class ChonVe extends Application {
 
 
 
-            HBox danhSachToaTauBox = new HBox();
-            ImageView dauTauImg = new ImageView(getClass().getResource("/img/dautau.png").toExternalForm());
-            ImageView thanTauTrong =  new ImageView(getClass().getResource("/img/thantautrong.png").toExternalForm());
-            danhSachToaTauBox.getChildren().addAll(thanTauTrong,dauTauImg);
-
-
-
-
-
+            danhSachToaTauBox = new HBox();
             noiDungChinh.getChildren().add(danhSachToaTauBox);
+
+
+
+
+
+            chonVeGiaoDien.hienThiDanhSachChuyenTau(chuyenTauArrayList,chuyenTauMenu,danhSachToaTauBox);
+
 
             noiDungChinh.setStyle("-fx-background-color: #F7F7F7;");
             noiDungChinh.setPrefWidth(1200);
@@ -687,7 +685,7 @@ public class ChonVe extends Application {
             e.printStackTrace();
         }
     }
-    public void hienThiDanhSachChuyenTau(ArrayList<ChuyenTau> danhSachChuyenTau, HBox menuChuyenTau){
+    public void hienThiDanhSachChuyenTau(ArrayList<ChuyenTau> danhSachChuyenTau, HBox menuChuyenTau, HBox danhSachToaTauBox){
         Image defaultImage = new Image(getClass().getResource("/img/TauHoaIcon.png").toExternalForm());
         Image selectedImage = new Image(getClass().getResource("/img/TauHoaIconChoose.png").toExternalForm());
         InputStream interBoldFont = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Bold.ttf");
@@ -768,12 +766,51 @@ public class ChonVe extends Application {
             chuyenTauCont.setPadding(new Insets(0,20,0,0));
             menuChuyenTau.getChildren().add(chuyenTauCont);
             imageViews.add(chuyenTauImage);
-
+            chuyenTauCont.setUserData(c);
             chuyenTauCont.setOnMouseClicked(event -> {
                 for (ImageView iv : imageViews) {
                     iv.setImage(defaultImage);
                 }
+                danhSachToaTauBox.getChildren().clear();
                 chuyenTauImage.setImage(selectedImage);
+                ChuyenTau selectedChuyenTau = (ChuyenTau) chuyenTauCont.getUserData();
+                ChuyenTau_Dao chuyenTauDao = new ChuyenTau_Dao();
+                chuyenTauDao.addGheVaoDSGhe();
+                chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau1, chuyenTauDao.chuyen1);
+                chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau2, chuyenTauDao.chuyen1);
+
+                chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau1, chuyenTauDao.chuyen2);
+                chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau1, chuyenTauDao.chuyen2);
+                chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau1, chuyenTauDao.chuyen2);
+
+                chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau1, chuyenTauDao.chuyen3);
+                chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau1, chuyenTauDao.chuyen3);
+                chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau1, chuyenTauDao.chuyen3);
+                chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau1, chuyenTauDao.chuyen3);
+
+                chuyenTauDao.setListChuyenTau();
+                ChuyenTau chuyenDuocSelect = chuyenTauDao.getChuyenTau(selectedChuyenTau.getMaChuyenTau());
+                System.out.println(selectedChuyenTau.getMaChuyenTau());
+                ArrayList<ToaTau> dsToaTrenChuyen = chuyenTauDao.getListToaTheoChuyenTau(chuyenDuocSelect);
+                System.out.println(dsToaTrenChuyen.size());
+                ImageView dauTauImg = new ImageView(getClass().getResource("/img/dautau.png").toExternalForm());
+                dauTauImg.setFitWidth(100);
+                dauTauImg.setFitHeight(55);
+                danhSachToaTauBox.setSpacing(10);
+                danhSachToaTauBox.setAlignment(Pos.CENTER_RIGHT);
+                danhSachToaTauBox.setPadding(new  Insets(0,200,0,0));
+                danhSachToaTauBox.setTranslateY(50);
+
+                for (ToaTau toa : dsToaTrenChuyen){
+                    ImageView toaImg = new ImageView(getClass().getResource("/img/thantautrong.png").toExternalForm());
+                    toaImg.setFitWidth(90);
+                    toaImg.setFitHeight(50);
+                    toaImg.setUserData(toa);
+                    danhSachToaTauBox.getChildren().addAll(toaImg);
+                }
+                danhSachToaTauBox.getChildren().add(dauTauImg);
+
+
             });
 
         }
