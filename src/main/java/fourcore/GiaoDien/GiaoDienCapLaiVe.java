@@ -94,6 +94,7 @@ public class GiaoDienCapLaiVe extends Application {
 	private VBox layout_txt_timkiem;
 	private TextField txt_timkiem;
 	private Button btnCapVe;
+	private Pane pnlCapLaiVe;
 
 	public VBox taoDataChoTableCapLaiVe(String mave, String chuyen, String gaDiGaDen, String trangThai, String vitrighe,
 			String ngayMua, String hoten, String doituong, String sogiayto, double giave, double giamdoituong,
@@ -702,12 +703,12 @@ public class GiaoDienCapLaiVe extends Application {
 			BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
 
 
-			pnlCapLaiVeve = new Pane();
+			pnlCapLaiVe = new Pane();
 			lblCapLaiVe = new Label("Cấp lại vé");
-			pnlCapLaiVeve.getChildren().add(lblCapLaiVe);
+			pnlCapLaiVe.getChildren().add(lblCapLaiVe);
 			lblCapLaiVe.setStyle("-fx-font-size: 40px;-fx-font-weight: bold;");
-			VBox.setMargin(pnlCapLaiVeve, new Insets(20, 0, 0, 50));
-			noiDungChinh.getChildren().add(pnlCapLaiVeve);
+			VBox.setMargin(pnlCapLaiVe, new Insets(20, 0, 0, 50));
+			noiDungChinh.getChildren().add(pnlCapLaiVe);
 
 			layout_timkiem = new VBox();
 

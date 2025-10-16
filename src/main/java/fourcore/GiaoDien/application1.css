@@ -36,7 +36,7 @@
 
 .combo-box .arrow-button {
     -fx-background-color: white; /* trong suốt */
-    -fx-background-image : url("/images/copy/Vector.png"); 
+    -fx-background-image : url("images/copy/Vector.png"); 
     -fx-background-size: 15px 10px;
     -fx-background-repeat : no-repeat;
     -fx-background-position: center center;
@@ -65,7 +65,7 @@
 	-fx-background-size :20px 20px;
 	-fx-background-position: center center;
 	-fx-background-repeat : no-repeat;
-	-fx-background-image : url("/images/copy/calendar.png");
+	-fx-background-image: url("images/copy/calendar.png");
 }
 .date-picker:pressed{
 	-fx-background-color: white;

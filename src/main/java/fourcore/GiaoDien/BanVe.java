@@ -1,5 +1,6 @@
 package fourcore.GiaoDien;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.time.LocalDate;
 
@@ -160,7 +161,7 @@ public class BanVe extends Application {
 			BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
 			root.setLeft(menuList);
 			root.setCenter(noiDungChinh);
-			root.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			root.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 			
 			window.setFullScreen(true);
 			window.show();
@@ -175,11 +176,17 @@ public class BanVe extends Application {
 		header_layout = new VBox();
 		header_layout.setPrefSize(1200, 200);
 		
-		Font Font1 = Font.loadFont(getClass().getResource("/fonts/Inter/static/Inter_28pt-Bold.ttf").toExternalForm(), 50); 
+		
+		
+	     
 		noidungtieude = new Label("Bán Vé");
 		noidungtieude.setTranslateY(50);
 		noidungtieude.setTranslateX(20);
-		noidungtieude.setFont(Font1);
+		
+		InputStream is = getClass().getResourceAsStream("/fonts/Inter/static/Inter_28pt-Bold.ttf");
+	    Font font_title = Font.loadFont(is, 50);
+	    noidungtieude.setFont(font_title);
+		
 		header_layout.getChildren().add(noidungtieude);
 		noiDungChinh.getChildren().add(header_layout);
 		
@@ -264,8 +271,12 @@ public class BanVe extends Application {
         combobox.setPrefWidth(200);
         combobox.setEditable(true);
         combobox.setId("combo-box");
-        Font2 = Font.loadFont(getClass().getResource("/fonts/Inter/static/Inter_24pt-Bold.ttf").toExternalForm(), 15);
-        combobox.getEditor().setFont(Font2);
+        
+        InputStream is = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Bold.ttf");
+        Font font_combobox = Font.loadFont(is, 15);
+        combobox.getEditor().setFont(font_combobox);
+        
+        
         ObservableList<String> listgoc = FXCollections.observableArrayList(items);
         
         combobox.getEditor().textProperty().addListener((obs,oval,nval) -> {
@@ -335,7 +346,10 @@ public class BanVe extends Application {
 			LocalDate ngaydi = date.getValue();
 			date.setValue(ngaydi);
 		});
-		date.getEditor().setFont(Font2);
+		InputStream is = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Bold.ttf");
+	    Font font_combobox = Font.loadFont(is, 15);
+	    date.getEditor().setFont(font_combobox);
+		
 		combolayout3.getChildren().add(date);
 		combobox2.getChildren().add(combolayout3);
 		
@@ -351,7 +365,8 @@ public class BanVe extends Application {
 			LocalDate ngayve = date1.getValue();
 			date1.setValue(ngayve);
 		});
-		date1.getEditor().setFont(Font2);
+		
+		date1.getEditor().setFont(font_combobox);
 		date1.setId("date");
 		combolayout4.getChildren().add(date1);
 		combobox2.getChildren().add(combolayout4);
@@ -360,28 +375,35 @@ public class BanVe extends Application {
 	}
 	public void create_radio_box()
 	{
+		radio_layout = new HBox();
 		ToggleGroup loaive = new ToggleGroup();
+		
+		InputStream is = getClass().getResourceAsStream("/fonts/Inter/static/Inter_18pt-Bold.ttf");
+		Font font_combobox = Font.loadFont(is, 15);
 		
 		radio_layout1 = new VBox();
 		
 		rb_motchieu = new RadioButton("Một Chiều");
-		rb_motchieu.setPrefSize(100,30);
+		rb_motchieu.setPrefSize(150,30);
+		rb_motchieu.setStyle("-fx-font-size:15px;-fx-font-weight:bold;");
 		rb_motchieu.setToggleGroup(loaive);
-		rb_motchieu.setFont(Font2);
+		
+	    rb_motchieu.setFont(font_combobox);
 		radio_layout1.getChildren().add(rb_motchieu);
 		
 		
 		radio_layout2 = new VBox();
 		
 		rb_khuhoi = new RadioButton("Khứ Hồi");
-		rb_khuhoi.setFont(Font2);
-		rb_khuhoi.setPrefSize(100,30);
+		rb_khuhoi.setFont(font_combobox);
+		rb_khuhoi.setPrefSize(150,30);
 		rb_khuhoi.setToggleGroup(loaive);
+		
 		radio_layout2.getChildren().add(rb_khuhoi);
 		
 		radio_layout.getChildren().addAll(radio_layout1,radio_layout2);
 		radio_layout2.setTranslateX(50);
-		radio_layout.setTranslateX(565);
+		radio_layout.setTranslateX(515);
 		radio_layout.setTranslateY(-140);
 		
 		loaive.selectedToggleProperty().addListener((obs,oval,nval) -> {
@@ -405,8 +427,10 @@ public class BanVe extends Application {
 	{
 		btn_timkiem = new Button("Tìm Kiếm");
 		btn_timkiem.setPrefSize(200, 50);
-		Font font_timkiem = Font.loadFont(getClass().getResource("/fonts/Inter/static/Inter_24pt-SemiBold.ttf").toExternalForm(),30);
-		btn_timkiem.setFont(font_timkiem);
+		InputStream is = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-SemiBold.ttf");
+	    Font font_timkiem = Font.loadFont(is, 30);
+	    btn_timkiem.setFont(font_timkiem);
+		
 		btn_timkiem.setPadding(new Insets(5));
 		btn_timkiem.setStyle(
 			    "-fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #00BACB 23%, #B6D0D3 100%);" +
