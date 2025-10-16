@@ -26,7 +26,7 @@
 	-fx-border-color : #00BACB;
 	-fx-border-width: 2px;
 	-fx-border-radius :5px;
-
+	
 }
 .combo-box .text-field{
 	-fx-padding: 5 10 5 10;
@@ -38,7 +38,7 @@
 
 .combo-box .arrow-button {
     -fx-background-color: white; /* trong suốt */
-    -fx-background-image : url("/images/copy/Vector.png");
+    -fx-background-image: url("/img/Vector.png");
     -fx-background-size: 15px 10px;
     -fx-background-repeat : no-repeat;
     -fx-background-position: center center;
@@ -51,7 +51,7 @@
     -fx-background-color: white;
     -fx-border-color: white; /* tránh double border */
     -fx-padding: 5 10 5 10;
-
+    
 }
 .combo-box .arrow {
 	-fx-background-color: white;
@@ -59,7 +59,7 @@
 }
 .date-picker{
 	-fx-border-color: #00BACB;
-	-fx-border-width: 1.5px;
+	-fx-border-width: 1.5px;	
 }
 .date-picker .arrow-button{
 	-fx-background-color : white;
@@ -67,7 +67,8 @@
 	-fx-background-size :20px 20px;
 	-fx-background-position: center center;
 	-fx-background-repeat : no-repeat;
-	-fx-background-image : url("/images/copy/calendar.png");
+	-fx-background-image: url("img/calendar.png");
+
 }
 .date-picker:pressed{
 	-fx-background-color: white;
@@ -79,10 +80,10 @@
 .date-picker:focused,
 .date-picker .text-field:focused{
 	-fx-background-color: white;
-
+	
 }
 .radio-button {
-    -fx-text-fill: #00BACB;
+    -fx-text-fill: #00BACB; 
 }
 .date-picker .text-field {
     -fx-background-color: white; /* tránh double border */
@@ -92,7 +93,7 @@
 /* Khi radio button được chọn */
 .radio-button:selected .radio {
     -fx-background-color: #00BACB;        /* Màu nền của vòng tròn */
-    -fx-border-color: #00BACB;
+    -fx-border-color: #00BACB;  
     -fx-border-radius: 50%;
     -fx-border-width :0.5px;
 }
@@ -137,7 +138,7 @@
 	-fx-background-color: transparent;
 }
 #lbl_Ghe {
-	-fx-text-fill: #FFFFF;
+/* 	-fx-text-fill: #FFFFF;*/
 	-fx-font-weight: bold;
 }
 #grid_AllGhe {
@@ -230,7 +231,7 @@
 
 .combo-box .arrow-button {
     -fx-background-color: white; /* trong suốt */
-    -fx-background-image : url("/images/copy/Vector.png");
+    -fx-background-image : url("images/copy/Vector.png");
     -fx-background-size: 15px 10px;
     -fx-background-repeat : no-repeat;
     -fx-background-position: center center;
@@ -259,7 +260,7 @@
 	-fx-background-size :20px 20px;
 	-fx-background-position: center center;
 	-fx-background-repeat : no-repeat;
-	-fx-background-image : url("/images/copy/calendar.png");
+	-fx-background-image : url("images/copy/calendar.png");
 }
 .date-picker:pressed{
 	-fx-background-color: white;

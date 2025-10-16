@@ -1,5 +1,7 @@
 package fourcore.GiaoDien;
 
+import java.io.InputStream;
+
 import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -117,7 +119,9 @@ public class GiaoDienDangNhap extends Application {
 		
 		
 		rightContent = new VBox();
-		Font font1 = Font.loadFont(getClass().getResourceAsStream("/fonts/PaytoneOne-Regular.ttf"),32);
+		
+		InputStream is = getClass().getResourceAsStream("/fonts/PaytoneOne-Regular.ttf");
+        Font font1 = Font.loadFont(is, 30);
 		
 		rightContent.setTranslateX(150);
 		lbl_DangNhap = new Label("Đăng Nhập");
@@ -127,7 +131,8 @@ public class GiaoDienDangNhap extends Application {
 		lbl_DangNhap.setStyle("-fx-text-fill: white;");
 		rightContent.getChildren().add(lbl_DangNhap);
 		
-		Font font3 = Font.loadFont(getClass().getResourceAsStream("/fonts/SawarabiGothic-Regular.ttf"), 15);
+		InputStream is2 = getClass().getResourceAsStream("/fonts/SawarabiGothic-Regular.ttf");
+        Font font3 = Font.loadFont(is2, 15);
 		
 		box_username = new VBox();
 		
