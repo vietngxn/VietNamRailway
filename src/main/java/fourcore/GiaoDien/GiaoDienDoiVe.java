@@ -33,7 +33,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class GiaoDienCapLaiVe extends Application {
+public class GiaoDienDoiVe extends Application {
 
 	private VBox menuList;
 	private VBox noiDungChinh;
@@ -94,9 +94,11 @@ public class GiaoDienCapLaiVe extends Application {
 	private VBox layout_txt_timkiem;
 	private TextField txt_timkiem;
 	private Button btnCapVe;
-	private Pane pnlCapLaiVe;
+	private Pane pnlDoiVe;
+	private Label lblDoiVe;
+	private Button btnDoiVe;
 
-	public VBox taoDataChoTableCapLaiVe(String mave, String chuyen, String gaDiGaDen, String trangThai, String vitrighe,
+	public VBox taoDataChoTableDoiVe(String mave, String chuyen, String gaDiGaDen, String trangThai, String vitrighe,
 			String ngayMua, String hoten, String doituong, String sogiayto, double giave, double giamdoituong,
 			double khuyenmai, double thanhtien) {
 
@@ -244,7 +246,7 @@ public class GiaoDienCapLaiVe extends Application {
 		Label lblRight = new Label(value);
 		lblRight.setWrapText(true);
 		StackPane right = new StackPane(lblRight);
-		
+
 		left.setPrefWidth(100);
 		right.setPrefWidth(150);
 		left.setStyle(leftStyle);
@@ -702,13 +704,12 @@ public class GiaoDienCapLaiVe extends Application {
 			noiDungChinh.setPrefWidth(1300);
 			BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
 
-
-			pnlCapLaiVe = new Pane();
-			lblCapLaiVe = new Label("Cấp lại vé");
-			pnlCapLaiVe.getChildren().add(lblCapLaiVe);
-			lblCapLaiVe.setStyle("-fx-font-size: 40px;-fx-font-weight: bold;");
-			VBox.setMargin(pnlCapLaiVe, new Insets(20, 0, 0, 50));
-			noiDungChinh.getChildren().add(pnlCapLaiVe);
+			pnlDoiVe = new Pane();
+			lblDoiVe = new Label("Đổi vé");
+			pnlDoiVe.getChildren().add(lblDoiVe);
+			lblDoiVe.setStyle("-fx-font-size: 40px;-fx-font-weight: bold;");
+			VBox.setMargin(pnlDoiVe, new Insets(20, 0, 0, 50));
+			noiDungChinh.getChildren().add(pnlDoiVe);
 
 			layout_timkiem = new VBox();
 
@@ -832,19 +833,19 @@ public class GiaoDienCapLaiVe extends Application {
 			pnlDataDoiVe.setAlignment(Pos.CENTER);
 
 			pnlDataDoiVe.getChildren()
-					.add(taoDataChoTableCapLaiVe("VX123", "SE2", "Sài Gòn - Hà Nội", "27/09/2025 - 08:40",
+					.add(taoDataChoTableDoiVe("VX123", "SE2", "Sài Gòn - Hà Nội", "27/09/2025 - 08:40",
 							"Toa số 3 chỗ 23", "Sẵn sàng", "Nguyễn Tiến Đạt G", "Con cặc", "093636363636", 1400000, 0,
 							0, 1400000));
 			pnlDataDoiVe.getChildren()
-					.add(taoDataChoTableCapLaiVe("VX123", "SE2", "Sài Gòn - Hà Nội", "27/09/2025 - 08:40",
+					.add(taoDataChoTableDoiVe("VX123", "SE2", "Sài Gòn - Hà Nội", "27/09/2025 - 08:40",
 							"Toa số 3 chỗ 23", "Đã khởi hành", "Nguyễn Tiến Đạt G", "Con cặc", "093636363636", 1400000,
 							0, 0, 1400000));
 			pnlDataDoiVe.getChildren()
-					.add(taoDataChoTableCapLaiVe("VX123", "SE2", "Sài Gòn - Hà Nội", "27/09/2025 - 08:40",
+					.add(taoDataChoTableDoiVe("VX123", "SE2", "Sài Gòn - Hà Nội", "27/09/2025 - 08:40",
 							"Toa số 3 chỗ 23", "Đã khởi hành", "Nguyễn Tiến Đạt G", "Con cặc", "093636363636", 1400000,
 							0, 0, 1400000));
 			pnlDataDoiVe.getChildren()
-					.add(taoDataChoTableCapLaiVe("VX123", "SE2", "Sài Gòn - Hà Nội", "27/09/2025 - 08:40",
+					.add(taoDataChoTableDoiVe("VX123", "SE2", "Sài Gòn - Hà Nội", "27/09/2025 - 08:40",
 							"Toa số 3 chỗ 23", "Sẵn sàng", "Nguyễn Tiến Đạt G", "Con cặc", "093636363636", 1400000, 0,
 							0, 1400000));
 
@@ -870,21 +871,20 @@ public class GiaoDienCapLaiVe extends Application {
 
 			btnCapNhatTrangThaiVe = new Button("Cập nhật trạng thái vé");
 			btnCapNhatTrangThaiVe.setPrefSize(250, 60);
-			btnCapVe = new Button("Cấp vé");
-			btnCapVe.setPrefSize(250, 60);
-		
-			btnCapVe.setStyle(btnStyle);
+			btnDoiVe = new Button("Đổi vé");
+			btnDoiVe.setPrefSize(250, 60);
+
+			btnDoiVe.setStyle(btnStyle);
 
 			btnCapNhatTrangThaiVe.setStyle(btnStyle);
-			pnlCapNhatVe.getChildren().addAll(btnCapNhatTrangThaiVe, btnCapVe);
+			pnlCapNhatVe.getChildren().addAll(btnCapNhatTrangThaiVe, btnDoiVe);
 			noiDungChinh.getChildren().add(pnlCapNhatVe);
-
 
 			// add su kien disable btn
 			btnTimKiem.setOnMouseClicked(event -> {
 				String regex = "^VX\\d{3}$";
 				String input = txt_timkiem.getText().trim();
-				
+
 				if (input.isEmpty() || !Pattern.matches(regex, input)) {
 					btnCapVe.setDisable(true);
 					btnCapNhatTrangThaiVe.setDisable(true);
@@ -908,7 +908,7 @@ public class GiaoDienCapLaiVe extends Application {
 				} else {
 					btnCapVe.setDisable(false);
 					btnCapNhatTrangThaiVe.setDisable(false);
-					
+
 					btnCapNhatTrangThaiVe.setStyle(btnStyle);
 					btnCapVe.setStyle(btnStyle);
 				}
@@ -918,10 +918,12 @@ public class GiaoDienCapLaiVe extends Application {
 			e.printStackTrace();
 		}
 	}
-    public VBox getNoiDungChinhVe() {
-        return this.noiDungChinh;
-    }
+
+	public VBox getNoiDungChinhVe() {
+		return this.noiDungChinh;
+	}
 
 	public static void main(String[] args) {
-        Application.launch(GiaoDienCapLaiVe.class, args);	}
+		Application.launch(GiaoDienDoiVe.class, args);
+	}
 }
