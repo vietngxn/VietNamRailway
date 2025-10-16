@@ -79,7 +79,7 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 		
 		
 		sceneCapNhatCTKM = new Scene(layoutCapNhatCTKM, 900, 700);
-		sceneCapNhatCTKM.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		sceneCapNhatCTKM.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 			
 		
 		txtMaCT.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {

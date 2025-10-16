@@ -99,6 +99,7 @@ public class QuanLiThongKe extends Application {
 	private DatePicker date;
 	private VBox btn_layout;
 	private Button btn_xuatThongKe;
+    String loaiThongKe;
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -190,20 +191,26 @@ public class QuanLiThongKe extends Application {
 			BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
 			root.setLeft(menuList);
 			root.setCenter(noiDungChinh);
-			root.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			root.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 			create_title_layout();
 		
 			create_table_desc();
 			
 			create_btnlayout();
 			primaryStage.setFullScreen(true);
-			primaryStage.show();
+//			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+	public VBox getQuanLiThongKe(){
+        return this.noiDungChinh;
+    }
+    public void setLoaiThongKe(String loaiThongKe){
+        this.loaiThongKe = loaiThongKe;
+    }
+
 	public void create_title_layout() {
 		title_layout  = new VBox();
 		title_layout.setPadding(new Insets(30));

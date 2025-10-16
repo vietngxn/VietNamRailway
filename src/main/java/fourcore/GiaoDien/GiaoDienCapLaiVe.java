@@ -266,10 +266,6 @@ public class GiaoDienCapLaiVe extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			BorderPane root = new BorderPane();
-			Scene scene = new Scene(root, 1600, 900);
-			primaryStage.setFullScreen(true);
-			primaryStage.setScene(scene);
 			menuList = new VBox();
 			menuList.setStyle("-fx-background-color: #F7F7F7;");
 			menuList.setPrefWidth(500);
@@ -704,8 +700,7 @@ public class GiaoDienCapLaiVe extends Application {
 			noiDungChinh.setStyle("-fx-background-color: #F7F7F7;");
 			noiDungChinh.setPrefWidth(1300);
 			BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
-			root.setLeft(menuList);
-			root.setCenter(noiDungChinh);
+
 
 			pnlCapLaiVeve = new Pane();
 			lblCapLaiVe = new Label("Cấp lại vé");
@@ -883,6 +878,7 @@ public class GiaoDienCapLaiVe extends Application {
 			pnlCapNhatVe.getChildren().addAll(btnCapNhatTrangThaiVe, btnCapVe);
 			noiDungChinh.getChildren().add(pnlCapNhatVe);
 
+
 			// add su kien disable btn
 			btnTimKiem.setOnMouseClicked(event -> {
 				String regex = "^VX\\d{3}$";
@@ -916,14 +912,15 @@ public class GiaoDienCapLaiVe extends Application {
 					btnCapVe.setStyle(btnStyle);
 				}
 			});
-			
-			primaryStage.show();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+    public VBox getNoiDungChinhVe() {
+        return this.noiDungChinh;
+    }
 
 	public static void main(String[] args) {
-		launch(args);
-	}
+        Application.launch(GiaoDienCapLaiVe.class, args);	}
 }

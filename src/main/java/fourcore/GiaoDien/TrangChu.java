@@ -221,7 +221,20 @@ public class TrangChu extends Application {
 
 
             });
-
+            capVeBox.setOnMouseClicked(event -> {
+                GiaoDienCapLaiVe capVe = new GiaoDienCapLaiVe();
+                Stage capVeStage = new Stage();
+                capVe.start(capVeStage);
+                VBox giaoDienCapVe =   capVe.getNoiDungChinhVe();
+                root.setCenter(giaoDienCapVe);
+            });
+            xemLichSuVeBox.setOnMouseClicked(event -> {
+                GiaoDienLichSuMuaBanDoiVe lichSuMuaBanDoiVe = new GiaoDienLichSuMuaBanDoiVe();
+                Stage lichSuMuaBanDoiVeStage = new Stage();
+                lichSuMuaBanDoiVe.start(lichSuMuaBanDoiVeStage);
+                VBox giaoDienLichSuMuaBanDoiVe = lichSuMuaBanDoiVe.getLichSuMuaVe();
+                root.setCenter(giaoDienLichSuMuaBanDoiVe);
+            });
 
 //				======================
 //				||QUAN LI KHACH HANG||
@@ -335,6 +348,22 @@ public class TrangChu extends Application {
 
 
 
+            });
+            quanLiKhachHangBox.setOnMouseClicked(event -> {
+                QuanLyKhachHang gdQuanLyKhachHang = new QuanLyKhachHang();
+                Stage quanLyKhachHangStage = new Stage();
+                gdQuanLyKhachHang.start(quanLyKhachHangStage);
+                VBox quanLyKhachHangVBox = gdQuanLyKhachHang.getQuanLiKhachHang();
+               root.setCenter(quanLyKhachHangVBox);
+            });
+
+            thongKeKhachHang.setOnMouseClicked(event -> {
+               QuanLiThongKe gdQuanLiThongKe = new QuanLiThongKe();
+               gdQuanLiThongKe.setLoaiThongKe("ThongKeKhachHang");
+               Stage thongKeKhachHangStage = new Stage();
+               gdQuanLiThongKe.start(thongKeKhachHangStage);
+               VBox quanLiThongKeVBox = gdQuanLiThongKe.getQuanLiThongKe();
+               root.setCenter(quanLiThongKeVBox);
             });
 
 //			======================
@@ -450,6 +479,24 @@ public class TrangChu extends Application {
                 slide.play();
 
 
+
+
+            });
+            quanLiHoaDonBox.setOnMouseClicked(event -> {
+               QuanLiHoaDon gdQuanLiHoaDon = new QuanLiHoaDon();
+               Stage quanLiHoaDonStage = new Stage();
+               gdQuanLiHoaDon.start(quanLiHoaDonStage);
+               VBox gdQLHD = gdQuanLiHoaDon.getQuanLiHoaDon();
+               root.setCenter(gdQLHD);
+            });
+
+            thongKeDoanhThuBox.setOnMouseClicked(event -> {
+                QuanLiThongKe gdQuanLiThongKe2 = new QuanLiThongKe();
+                gdQuanLiThongKe2.setLoaiThongKe("ThongKeDoanhThu");
+                Stage thongKeDoanhStage = new Stage();
+                gdQuanLiThongKe2.start(thongKeDoanhStage);
+                VBox gdQLTK2 = gdQuanLiThongKe2.getQuanLiThongKe();
+                root.setCenter(gdQLTK2);
 
 
             });
@@ -606,6 +653,7 @@ public class TrangChu extends Application {
 
 
             danhSachMenuItem.getChildren().add(quanLiNhanVienMenu);
+            scrollPaneMenu.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
             scrollPaneMenu.setContent(danhSachMenuItem);
 
 //			=======================
@@ -637,7 +685,13 @@ public class TrangChu extends Application {
 
 //		showMenuPhuIcon = new Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
             quanLiCTKMMenu.getChildren().addAll(quanLiCTKMIconView, quanLiCTKMLabel);
-
+            quanLiCTKMMenu.setOnMouseClicked(event -> {
+               QuanLyCTKM quanLyCTKM = new QuanLyCTKM();
+               Stage stage = new Stage();
+               quanLyCTKM.start(stage);
+               VBox quanLyCTKMMenu = quanLyCTKM.getQuanLiCTKM();
+               root.setCenter(quanLyCTKMMenu);
+            });
             danhSachMenuItem.getChildren().add(quanLiCTKMMenu);
             scrollPaneMenu.setContent(danhSachMenuItem);
 

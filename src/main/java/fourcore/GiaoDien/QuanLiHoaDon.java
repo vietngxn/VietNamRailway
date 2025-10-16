@@ -174,13 +174,15 @@ public class QuanLiHoaDon extends Application {
 			
 			create_layout_button();
 			primaryStage.setFullScreen(true);
-			primaryStage.show();
+//			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+    public VBox getQuanLiHoaDon(){
+        return this.noiDungChinh;
+    }
 	public void create_title_layout() {
 		title_layout  = new VBox();
 		title_layout.setPadding(new Insets(30));

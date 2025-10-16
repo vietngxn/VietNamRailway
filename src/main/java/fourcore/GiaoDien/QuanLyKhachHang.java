@@ -166,7 +166,7 @@ public class QuanLyKhachHang extends Application {
 			
 			create_layout_button();
 			primaryStage.setFullScreen(true);
-			primaryStage.show();
+//			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -447,7 +447,9 @@ public class QuanLyKhachHang extends Application {
 	    
 		table_desc.getChildren().add(layout_dong);
 	}	 
-	
+	public VBox getQuanLiKhachHang(){
+        return this.noiDungChinh;
+    }
 	public static void main(String[] args) {
 		launch(args);
 //		Application.launch(QuanLyKhachHang.class, args);

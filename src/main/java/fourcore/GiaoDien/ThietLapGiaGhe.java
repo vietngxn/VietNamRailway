@@ -128,7 +128,7 @@ public class ThietLapGiaGhe extends Application {
 		try {
 			BorderPane root = new BorderPane();
 			Scene scene = new Scene(root, 1540, 1000);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 
 			primaryStage.setScene(scene);
 			menuList = new VBox();
@@ -672,7 +672,7 @@ public class ThietLapGiaGhe extends Application {
 	
 	
 	public static void main(String[] args) {
-		launch(args);
-//		Application.launch(QuanLyKhachHang.class, args);
+//		launch(args);
+		Application.launch(ThietLapGiaGhe.class, args);
 	}
 }

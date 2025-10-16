@@ -27,7 +27,7 @@ import javafx.util.Duration;
 
 public class ThemChuongTrinhKhuyenMai extends Application {
 	public static void main(String[] args) {
-		launch(args);
+		Application.launch(ThemChuongTrinhKhuyenMai.class, args);
 	}
 	private Stage window;
 	private VBox layoutThemCTKM;
@@ -77,7 +77,7 @@ public class ThemChuongTrinhKhuyenMai extends Application {
 		
 		
 		sceneThemCTKM = new Scene(layoutThemCTKM, 900, 700);
-		sceneThemCTKM.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		sceneThemCTKM.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 			
 		
 		txtMaCT.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {

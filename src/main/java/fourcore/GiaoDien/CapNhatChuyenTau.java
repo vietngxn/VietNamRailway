@@ -116,7 +116,7 @@ public class CapNhatChuyenTau extends Application {
 		try {
 			BorderPane root = new BorderPane();
 			Scene scene = new Scene(root, 1540, 800);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 
 			primaryStage.setScene(scene);
 			menuList = new VBox();
@@ -412,7 +412,7 @@ public void creat_capnhatchuyentau_layout() {
 	
 	
 	public static void main(String[] args) {
-		launch(args);
-//		Application.launch(QuanLyKhachHang.class, args);
+
+		Application.launch(CapNhatChuyenTau.class, args);
 	}
 }

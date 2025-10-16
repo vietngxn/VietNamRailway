@@ -1058,11 +1058,14 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 				scaleDown.play();
 			});
 
-			primaryStage.show();
+//			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+    public VBox getLichSuMuaVe() {
+        return  this.noiDungChinh;
+    }
 
 	public static void main(String[] args) {
 		launch(args);

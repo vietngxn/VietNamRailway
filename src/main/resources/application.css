@@ -1,4 +1,183 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+/*--module-path "D:\javafx1\javafx-sdk-21.0.8\lib" --add-modules javafx.controls,javafx.fxml */
+#txt_manhanvien,
+#txt_password{
+	-fx-background-color : transparent;
+	-fx-border-color : transparent transparent rgb(121,217,225) transparent;
+	-fx-border-width : 1px;
+	-fx-text-fill : white;
+}
+#lbl_manhanvien,
+#lbl_password{
+	-fx-text-fill : rgb(121,217,225);
+}
+#btn_dangnhap{
+	-fx-background-color: rgb(121,217,225);
+	-fx-text-fill: white;
+}
+#btn_dangnhap{
+	-fx-background-color: rgb(121,217,225);
+	-fx-text-fill: white;
+}
+#combo-box{
+	-fx-background-color: white;
+	-fx-border-color : #00BACB;
+	-fx-border-width: 2px;
+	-fx-border-radius :5px;
+
+}
+.combo-box .text-field{
+	-fx-padding: 5 10 5 10;
+	-fx-border-radius :5px;
+}
+.combo-box:pressed{
+	-fx-background-color: white;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: white; /* trong suốt */
+    -fx-background-image : url("/images/copy/Vector.png");
+    -fx-background-size: 15px 10px;
+    -fx-background-repeat : no-repeat;
+    -fx-background-position: center center;
+    -fx-opacity: 1;
+}
+.combo-box:showing .arrow-button{
+	-fx-rotate: 180;
+}
+.combo-box .text-field {
+    -fx-background-color: white;
+    -fx-border-color: white; /* tránh double border */
+    -fx-padding: 5 10 5 10;
+
+}
+.combo-box .arrow {
+	-fx-background-color: white;
+    -fx-opacity: 0;
+}
+.date-picker{
+	-fx-border-color: #00BACB;
+	-fx-border-width: 1.5px;
+}
+.date-picker .arrow-button{
+	-fx-background-color : white;
+	-fx-opacity : 1;
+	-fx-background-size :20px 20px;
+	-fx-background-position: center center;
+	-fx-background-repeat : no-repeat;
+	-fx-background-image : url("/images/copy/calendar.png");
+}
+.date-picker:pressed{
+	-fx-background-color: white;
+}
+.date-picker .arrow-button .arrow {
+    -fx-opacity: 0;
+    -fx-background-color:transparent;
+}
+.date-picker:focused,
+.date-picker .text-field:focused{
+	-fx-background-color: white;
+
+}
+.radio-button {
+    -fx-text-fill: #00BACB;
+}
+.date-picker .text-field {
+    -fx-background-color: white; /* tránh double border */
+    -fx-padding: 5 10 5 10;
+    -fx-border-color: white;
+}
+/* Khi radio button được chọn */
+.radio-button:selected .radio {
+    -fx-background-color: #00BACB;        /* Màu nền của vòng tròn */
+    -fx-border-color: #00BACB;
+    -fx-border-radius: 50%;
+    -fx-border-width :0.5px;
+}
+/* Vòng tròn nhỏ bên trong (dấu chấm) */
+.radio-button:selected .dot {
+    -fx-background-color: #00BACB;          /* Màu của chấm nhỏ */
+}
+
+#txt_CapNhatChuyenTau{
+	-fx-font-size: 18px;
+	-fx-border-color: transparent transparent #00BACB transparent;
+	-fx-border-width: 0 0 2px 0;
+	-fx-background-color: transparent;
+	-fx-text-fill: #00BACB;
+}
+#lbl_TieuDe {
+	-fx-text-fill: #0A1824;
+	-fx-font-weight: bold;
+	-fx-font-size: 30px;
+}
+#lbl_TextField {
+	-fx-font-size: 18px;
+	-fx-text-fill: #00BACB;
+}
+#lbl_TextField_Convert {
+	-fx-font-size: 14px;
+	-fx-text-fill: #00BACB;
+}
+#button_Blue {
+	-fx-font-size: 18px;
+	-fx-background-color: linear-gradient(to top, #00BACB, #B6D0D3);
+	-fx-text-fill: white; -fx-font-weight: bold;
+	-fx-background-radius: 20;
+}
+#button_White {
+	-fx-font-size: 18px;
+	-fx-font-weight: bold;
+	-fx-text-fill: linear-gradient(to top, #00BACB, #B6D0D3);
+	-fx-border-color: linear-gradient(to top, #00BACB, #B6D0D3);
+	-fx-border-width: 2px; -fx-border-radius: 20;
+	-fx-background-radius: 20;
+	-fx-background-color: transparent;
+}
+#lbl_Ghe {
+	-fx-text-fill: #FFFFF;
+	-fx-font-weight: bold;
+}
+#grid_AllGhe {
+
+}
+#box_Money {
+	-fx-border-color: #0A1824;
+	-fx-border-width: 2px;
+	-fx-border-radius: 10px;
+}
+#lbl_Money {
+	-fx-background-color: #00BACB;
+	-fx-background-radius: 8 0 0 8;
+	-fx-border-color: #0A1824;
+	-fx-border-width: 0 2 0 0;
+	-fx-font-weight: bold;
+	-fx-font-size: 16px;
+}
+#txt_Money {
+	-fx-background-color: transparent;
+	-fx-font-weight: bold;
+	-fx-font-size: 16px;
+}
+#grid_AllGhe {
+	-fx-border-color: #0A1824;
+	-fx-border-width: 2px;
+	-fx-border-radius: 10px;
+}
+#grid_CumGhe {
+	-fx-border-color: #0A1824;
+	-fx-border-width: 0 2 0 0;
+}
+#button_Red {
+	-fx-font-size: 18px;
+	-fx-background-color: linear-gradient(to top, #CB002C, #D498A5);
+	-fx-text-fill: white; -fx-font-weight: bold;
+	-fx-background-radius: 20;
+}
+
+
 #txt_manhanvien,
 #txt_password{
 	-fx-background-color : transparent;
