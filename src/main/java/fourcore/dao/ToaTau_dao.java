@@ -19,8 +19,8 @@ public class ToaTau_dao {
 //	
 	public ArrayList<ToaTau> testListToaTau() {
 		toaTaudao.clear();
-		ToaTau toaTau1 = new ToaTau("GN01", "LGN01", 1, loaiToaTau);
-		ToaTau toaTau2 = new ToaTau("GN02", "LGN01", 2, loaiToaTau);
+		ToaTau toaTau1 = new ToaTau("GN01", "LGN01", 36, "Sẵn sàng", loaiToaTau);
+		ToaTau toaTau2 = new ToaTau("GN02", "LGN01", 18, "Sẵn sàng", loaiToaTau);
 		toaTaudao.add(toaTau1);
 		toaTaudao.add(toaTau2);
 		return this.toaTaudao;

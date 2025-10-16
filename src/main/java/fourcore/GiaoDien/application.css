@@ -174,4 +174,7 @@
 	-fx-text-fill: white; -fx-font-weight: bold; 
 	-fx-background-radius: 20;
 }
+#lbl_ToaTau {
+	-fx-font-weight: bold;
+}
 

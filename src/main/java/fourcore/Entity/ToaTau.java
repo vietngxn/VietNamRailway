@@ -3,7 +3,8 @@ package fourcore.Entity;
 public class ToaTau {
 	private String maToaTau;
 	private String tenToaTau;
-	private int soToa;
+	private int soGhe;
+	private String trangThai;
     private LoaiToaTau loaiToaTau;
 
 
@@ -26,19 +27,23 @@ public class ToaTau {
 	public void setTenToaTau(String tenToaTau) {
 		this.tenToaTau = tenToaTau;
 	}
-	public int getSoToa() {
-		return soToa;
+    public int getSoGhe() {
+		return soGhe;
 	}
-	public void setSoToa(int soToa) {
-		this.soToa = soToa;
+	public void setSoGhe(int soGhe) {
+		this.soGhe = soGhe;
 	}
-
-
-
-    public ToaTau(String maToaTau, String tenToaTau, int soToa,  LoaiToaTau loaiToaTau) {
+	public String getTrangThai() {
+		return trangThai;
+	}
+	public void setTrangThai(String trangThai) {
+		this.trangThai = trangThai;
+	}
+	public ToaTau(String maToaTau, String tenToaTau, int soGhe,  String trangThai,LoaiToaTau loaiToaTau) {
         setMaToaTau(maToaTau);
         setTenToaTau(tenToaTau);
-        setSoToa(soToa);
+        setSoGhe(soGhe);
+        setTrangThai(trangThai);
         setLoaiToaTau(loaiToaTau);
     }
 	public ToaTau() {
