@@ -205,18 +205,18 @@ public class GiaoDienCapLaiVe extends Application {
 				    -fx-padding: 8 12 8 12;
 				""";
 
-		pnlsubCT1.addRow(0, createSubPane("Họ tên", hoten, leftStyle, rightStyle));
-		pnlsubCT1.addRow(1, createSubPane("Đối tượng", doituong, leftStyle, rightStyle));
-		pnlsubCT1.addRow(2, createSubPane("Số giấy tờ", sogiayto, leftStyle, rightStyle));
+		pnlsubCT1.addRow(0, taoSubCT1("Họ tên", hoten, leftStyle, rightStyle));
+		pnlsubCT1.addRow(1, taoSubCT1("Đối tượng", doituong, leftStyle, rightStyle));
+		pnlsubCT1.addRow(2, taoSubCT1("Số giấy tờ", sogiayto, leftStyle, rightStyle));
 
 		// Các panel giá trị
 		String lblCTStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 18px;";
 		String lblValueCTStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 30px;";
 
-		VBox pnlsubCT2 = createPriceBox("Giá vé", nf.format(giave), lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT3 = createPriceBox("Giảm đối tượng", nf.format(giamdoituong), lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT4 = createPriceBox("Khuyến mãi", nf.format(khuyenmai), lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT5 = createPriceBox("Thành tiền", nf.format(thanhtien), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT2 = taoSubCT2("Giá vé", nf.format(giave), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT3 = taoSubCT2("Giảm đối tượng", nf.format(giamdoituong), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT4 = taoSubCT2("Khuyến mãi", nf.format(khuyenmai), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT5 = taoSubCT2("Thành tiền", nf.format(thanhtien), lblCTStyle, lblValueCTStyle);
 
 		pnlsubCT1.setPrefWidth(400);
 		for (Pane pnl : new Pane[] { pnlsubCT2, pnlsubCT3, pnlsubCT4, pnlsubCT5 })
@@ -237,14 +237,14 @@ public class GiaoDienCapLaiVe extends Application {
 		return pnlReturn;
 	}
 
-	private HBox createSubPane(String label, String value, String leftStyle, String rightStyle) {
+	private HBox taoSubCT1(String label, String value, String leftStyle, String rightStyle) {
 		Label lblLeft = new Label(label);
 		lblLeft.setWrapText(true);
 		StackPane left = new StackPane(lblLeft);
 		Label lblRight = new Label(value);
 		lblRight.setWrapText(true);
 		StackPane right = new StackPane(lblRight);
-		
+
 		left.setPrefWidth(100);
 		right.setPrefWidth(150);
 		left.setStyle(leftStyle);
@@ -254,7 +254,7 @@ public class GiaoDienCapLaiVe extends Application {
 		return new HBox(left, right);
 	}
 
-	private VBox createPriceBox(String title, String value, String labelStyle, String valueStyle) {
+	private VBox taoSubCT2(String title, String value, String labelStyle, String valueStyle) {
 		Label lblTitle = new Label(title);
 		lblTitle.setStyle(labelStyle);
 		Label lblValue = new Label(value);
@@ -702,7 +702,6 @@ public class GiaoDienCapLaiVe extends Application {
 			noiDungChinh.setPrefWidth(1300);
 			BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
 
-
 			pnlCapLaiVe = new Pane();
 			lblCapLaiVe = new Label("Cấp lại vé");
 			pnlCapLaiVe.getChildren().add(lblCapLaiVe);
@@ -872,19 +871,18 @@ public class GiaoDienCapLaiVe extends Application {
 			btnCapNhatTrangThaiVe.setPrefSize(250, 60);
 			btnCapVe = new Button("Cấp vé");
 			btnCapVe.setPrefSize(250, 60);
-		
+
 			btnCapVe.setStyle(btnStyle);
 
 			btnCapNhatTrangThaiVe.setStyle(btnStyle);
 			pnlCapNhatVe.getChildren().addAll(btnCapNhatTrangThaiVe, btnCapVe);
 			noiDungChinh.getChildren().add(pnlCapNhatVe);
 
-
 			// add su kien disable btn
 			btnTimKiem.setOnMouseClicked(event -> {
 				String regex = "^VX\\d{3}$";
 				String input = txt_timkiem.getText().trim();
-				
+
 				if (input.isEmpty() || !Pattern.matches(regex, input)) {
 					btnCapVe.setDisable(true);
 					btnCapNhatTrangThaiVe.setDisable(true);
@@ -908,7 +906,7 @@ public class GiaoDienCapLaiVe extends Application {
 				} else {
 					btnCapVe.setDisable(false);
 					btnCapNhatTrangThaiVe.setDisable(false);
-					
+
 					btnCapNhatTrangThaiVe.setStyle(btnStyle);
 					btnCapVe.setStyle(btnStyle);
 				}
@@ -918,10 +916,12 @@ public class GiaoDienCapLaiVe extends Application {
 			e.printStackTrace();
 		}
 	}
-    public VBox getNoiDungChinhVe() {
-        return this.noiDungChinh;
-    }
+
+	public VBox getNoiDungChinhVe() {
+		return this.noiDungChinh;
+	}
 
 	public static void main(String[] args) {
-        Application.launch(GiaoDienCapLaiVe.class, args);	}
+		Application.launch(GiaoDienCapLaiVe.class, args);
+	}
 }

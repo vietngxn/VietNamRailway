@@ -12,6 +12,7 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Node;
@@ -207,18 +208,18 @@ public class GiaoDienDoiVe extends Application {
 				    -fx-padding: 8 12 8 12;
 				""";
 
-		pnlsubCT1.addRow(0, createSubPane("Họ tên", hoten, leftStyle, rightStyle));
-		pnlsubCT1.addRow(1, createSubPane("Đối tượng", doituong, leftStyle, rightStyle));
-		pnlsubCT1.addRow(2, createSubPane("Số giấy tờ", sogiayto, leftStyle, rightStyle));
+		pnlsubCT1.addRow(0, taoSubCT1("Họ tên", hoten, leftStyle, rightStyle));
+		pnlsubCT1.addRow(1, taoSubCT1("Đối tượng", doituong, leftStyle, rightStyle));
+		pnlsubCT1.addRow(2, taoSubCT1("Số giấy tờ", sogiayto, leftStyle, rightStyle));
 
 		// Các panel giá trị
 		String lblCTStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 18px;";
 		String lblValueCTStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 30px;";
 
-		VBox pnlsubCT2 = createPriceBox("Giá vé", nf.format(giave), lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT3 = createPriceBox("Giảm đối tượng", nf.format(giamdoituong), lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT4 = createPriceBox("Khuyến mãi", nf.format(khuyenmai), lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT5 = createPriceBox("Thành tiền", nf.format(thanhtien), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT2 = taoSubCT2("Giá vé", nf.format(giave), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT3 = taoSubCT2("Giảm đối tượng", nf.format(giamdoituong), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT4 = taoSubCT2("Khuyến mãi", nf.format(khuyenmai), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT5 = taoSubCT2("Thành tiền", nf.format(thanhtien), lblCTStyle, lblValueCTStyle);
 
 		pnlsubCT1.setPrefWidth(400);
 		for (Pane pnl : new Pane[] { pnlsubCT2, pnlsubCT3, pnlsubCT4, pnlsubCT5 })
@@ -239,7 +240,7 @@ public class GiaoDienDoiVe extends Application {
 		return pnlReturn;
 	}
 
-	private HBox createSubPane(String label, String value, String leftStyle, String rightStyle) {
+	private HBox taoSubCT1(String label, String value, String leftStyle, String rightStyle) {
 		Label lblLeft = new Label(label);
 		lblLeft.setWrapText(true);
 		StackPane left = new StackPane(lblLeft);
@@ -256,7 +257,7 @@ public class GiaoDienDoiVe extends Application {
 		return new HBox(left, right);
 	}
 
-	private VBox createPriceBox(String title, String value, String labelStyle, String valueStyle) {
+	private VBox taoSubCT2(String title, String value, String labelStyle, String valueStyle) {
 		Label lblTitle = new Label(title);
 		lblTitle.setStyle(labelStyle);
 		Label lblValue = new Label(value);
@@ -903,6 +904,12 @@ public class GiaoDienDoiVe extends Application {
 					alert.setTitle("Lỗi định dạng");
 					alert.setHeaderText(null);
 					alert.setContentText("Mã vé không hợp lệ! (Định dạng hợp lệ: VX123)");
+					// Gắn vào Stage hiện tại (cực kỳ quan trọng)
+					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+					alert.initOwner(stage);
+
+					// Không cho resize, luôn ở giữa cửa sổ cha
+					alert.initModality(Modality.WINDOW_MODAL);
 					alert.showAndWait();
 
 				} else {
