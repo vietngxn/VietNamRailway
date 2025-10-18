@@ -25,6 +25,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -937,7 +938,31 @@ public class ChonVe extends Application {
                     toaImg.setFitHeight(50);
                     toaImg.setUserData(dsToaTrenChuyen.get(i));
                     toaImageViews.add(toaImg);
+                    ToaTau toa = dsToaTrenChuyen.get(i);
+                    Popup popup = new Popup();
+                    Label popupLabel = new Label();
+                    popupLabel.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-padding: 5; -fx-font-size: 13;");
+                    popup.getContent().add(popupLabel);
 
+                    toaImg.setOnMouseEntered(e -> {
+                        String content = String.format(
+                                "Mã toa: %s\nLoại: %s",
+                                toa.getMaToaTau(),
+                                toa.getLoaiToaTau().getTenLoaiToaTau()
+                        );
+                        popupLabel.setText(content);
+                        popup.show(toaImg, e.getScreenX() + 10, e.getScreenY() + 10);
+                    });
+                // Vi tri cua chuot
+                    toaImg.setOnMouseMoved(e -> {
+                        popup.setX(e.getScreenX() + 10);
+                        popup.setY(e.getScreenY() + 10);
+                    });
+
+                // An khi roi khoi
+                    toaImg.setOnMouseExited(e -> {
+                        popup.hide();
+                    });
                     // Gán sự kiện click
                     toaImg.setOnMouseClicked(toaEvent -> {
                         for (ImageView iv : toaImageViews) {
@@ -1035,12 +1060,12 @@ public class ChonVe extends Application {
     }
     public void hienThiLayoutGhe(GridPane danhSachGheGridPane){
         danhSachGheGridPane.getChildren().clear();
-        int soGhe = 18;
+        int soGhe = 36;
         int soCot = 9;
         int soHang = 4;
-        int thuTuGhe = 1;
-        for(int row=0; row<soHang; row++){
-            for(int col=0; col<soCot; col++){
+        int thuTuGhe = 36;
+        for(int col=0; col<soCot; col++){
+            for(int row=0; row<soHang; row++){
                 ImageView gheTrongImg =  new ImageView(getClass().getResource("/img/gheTrong.png").toExternalForm());
 
                 final int soGheH = thuTuGhe;
@@ -1055,10 +1080,11 @@ public class ChonVe extends Application {
                 soThuTuGheLabel.setStyle("-fx-text-fill: #ffffff;");
                 StackPane ghePane = new StackPane();
                 ghePane.getChildren().addAll(gheTrongImg,soThuTuGheLabel);
-                if(thuTuGhe==22 || thuTuGhe==25){
+                if(thuTuGhe==22 || thuTuGhe==10){
                     ghePane.setPadding(new Insets(30,0,0,30));
 
-                }else if(col==3 || col==6){
+                }else
+                    if(col==3 || col==6){
                     ghePane.setPadding(new Insets(0,0,0,30));
                 }else if(row==2){
                     ghePane.setPadding(new Insets(30,0,0,0));
@@ -1081,7 +1107,7 @@ public class ChonVe extends Application {
                     }
                 });
 
-                thuTuGhe++;
+                thuTuGhe--;
             }
 
         }
