@@ -14,6 +14,7 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Cursor;
@@ -768,18 +769,18 @@ public class GioVe extends Application {
 				    -fx-padding: 8 12 8 12;
 				""";
 
-		pnlsubCT1.addRow(0, createSubPane("Họ tên", hoten, leftStyle, rightStyle, 1));
-		pnlsubCT1.addRow(1, createSubPane("Đối tượng", doituong, leftStyle, rightStyle, 2));
-		pnlsubCT1.addRow(2, createSubPane("Số giấy tờ", sogiayto, leftStyle, rightStyle, 3));
+		pnlsubCT1.addRow(0, taoSubCT1("Họ tên", hoten, leftStyle, rightStyle, 1));
+		pnlsubCT1.addRow(1, taoSubCT1("Đối tượng", doituong, leftStyle, rightStyle, 2));
+		pnlsubCT1.addRow(2, taoSubCT1("Số giấy tờ", sogiayto, leftStyle, rightStyle, 3));
 
 		// Các panel giá trị
 		String lblCTStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 18px;";
 		String lblValueCTStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 30px;";
 
-		VBox pnlsubCT2 = createPriceBox("Giá vé", nf.format(giave), lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT3 = createPriceBox("Giảm đối tượng", nf.format(giamdoituong), lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT4 = createPriceBox("Khuyến mãi", nf.format(khuyenmai), lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT5 = createPriceBox("Thành tiền", nf.format(thanhtien), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT2 = taoSubCT2("Giá vé", nf.format(giave), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT3 = taoSubCT2("Giảm đối tượng", nf.format(giamdoituong), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT4 = taoSubCT2("Khuyến mãi", nf.format(khuyenmai), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT5 = taoSubCT2("Thành tiền", nf.format(thanhtien), lblCTStyle, lblValueCTStyle);
 
 		pnlReturn.setUserData(thanhtien);
 		tongCongThanhTien += thanhtien;
@@ -817,7 +818,7 @@ public class GioVe extends Application {
 		return pnlReturn;
 	}
 
-	private HBox createSubPane(String label, String value, String leftStyle, String rightStyle, int check) {
+	private HBox taoSubCT1(String label, String value, String leftStyle, String rightStyle, int check) {
 		StackPane left = new StackPane(new Label(label));
 		StackPane right = new StackPane();
 		right.setPrefSize(200, 40);
@@ -833,6 +834,11 @@ public class GioVe extends Application {
 					alert.setTitle("Lỗi định dạng");
 					alert.setHeaderText(null);
 					alert.setContentText("Họ tên không hợp lệ");
+					// Gắn vào Stage hiện tại (cực kỳ quan trọng)
+					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+					alert.initOwner(stage);
+					// Không cho resize, luôn ở giữa cửa sổ cha
+					alert.initModality(Modality.WINDOW_MODAL);
 					alert.showAndWait();
 				}
 			});
@@ -856,6 +862,12 @@ public class GioVe extends Application {
 					alert.setTitle("Lỗi");
 					alert.setHeaderText(null);
 					alert.setContentText("Chưa chọn đối tượng!");
+					// Gắn vào Stage hiện tại (cực kỳ quan trọng)
+					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+					alert.initOwner(stage);
+
+					// Không cho resize, luôn ở giữa cửa sổ cha
+					alert.initModality(Modality.WINDOW_MODAL);
 					alert.showAndWait();
 				} else {
 					System.out.println("Đã chọn: " + giaTriCmb);
@@ -874,6 +886,12 @@ public class GioVe extends Application {
 					alert.setTitle("Lỗi định dạng");
 					alert.setHeaderText(null);
 					alert.setContentText("Số giấy tờ không hợp lệ");
+					// Gắn vào Stage hiện tại (cực kỳ quan trọng)
+					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+					alert.initOwner(stage);
+
+					// Không cho resize, luôn ở giữa cửa sổ cha
+					alert.initModality(Modality.WINDOW_MODAL);
 					alert.showAndWait();
 				}
 			});
@@ -892,7 +910,7 @@ public class GioVe extends Application {
 		return new HBox(left, right);
 	}
 
-	private VBox createPriceBox(String title, String value, String labelStyle, String valueStyle) {
+	private VBox taoSubCT2(String title, String value, String labelStyle, String valueStyle) {
 		Label lblTitle = new Label(title);
 		lblTitle.setStyle(labelStyle);
 		Label lblValue = new Label(value);

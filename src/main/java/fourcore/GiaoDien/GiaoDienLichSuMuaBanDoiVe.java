@@ -141,7 +141,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 				else if (text.equals("đã khởi hành"))
 					lbl.setStyle(baseStyle + "-fx-font-size: 18px; -fx-text-fill: rgba(203, 0, 44, 0.83);");
 			}
-
+			
 			StackPane pane = new StackPane(lbl);
 			pane.setPrefSize(widths[i], 70);
 			pane.setAlignment(Pos.CENTER);
@@ -216,18 +216,18 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 				    -fx-padding: 8 12 8 12;
 				""";
 
-		pnlsubCT1.addRow(0, createSubPane("Họ tên", hoten, leftStyle, rightStyle));
-		pnlsubCT1.addRow(1, createSubPane("Đối tượng", doituong, leftStyle, rightStyle));
-		pnlsubCT1.addRow(2, createSubPane("Số giấy tờ", sogiayto, leftStyle, rightStyle));
+		pnlsubCT1.addRow(0, taoSubCT1("Họ tên", hoten, leftStyle, rightStyle));
+		pnlsubCT1.addRow(1, taoSubCT1("Đối tượng", doituong, leftStyle, rightStyle));
+		pnlsubCT1.addRow(2, taoSubCT1("Số giấy tờ", sogiayto, leftStyle, rightStyle));
 
 		// Các panel giá trị
 		String lblCTStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 18px;";
 		String lblValueCTStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 30px;";
 
-		VBox pnlsubCT2 = createPriceBox("Giá vé", nf.format(giave), lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT3 = createPriceBox("Giảm đối tượng", nf.format(giamdoituong), lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT4 = createPriceBox("Khuyến mãi", nf.format(khuyenmai), lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT5 = createPriceBox("Thành tiền", nf.format(thanhtien), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT2 = taoSubCT2("Giá vé", nf.format(giave), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT3 = taoSubCT2("Giảm đối tượng", nf.format(giamdoituong), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT4 = taoSubCT2("Khuyến mãi", nf.format(khuyenmai), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT5 = taoSubCT2("Thành tiền", nf.format(thanhtien), lblCTStyle, lblValueCTStyle);
 
 		pnlsubCT1.setPrefWidth(400);
 		for (Pane pnl : new Pane[] { pnlsubCT2, pnlsubCT3, pnlsubCT4, pnlsubCT5 })
@@ -248,7 +248,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 		return pnlReturn;
 	}
 
-	private HBox createSubPane(String label, String value, String leftStyle, String rightStyle) {
+	private HBox taoSubCT1(String label, String value, String leftStyle, String rightStyle) {
 		Label lblLeft = new Label(label);
 		lblLeft.setWrapText(true);
 		StackPane left = new StackPane(lblLeft);
@@ -265,7 +265,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 		return new HBox(left, right);
 	}
 
-	private VBox createPriceBox(String title, String value, String labelStyle, String valueStyle) {
+	private VBox taoSubCT2(String title, String value, String labelStyle, String valueStyle) {
 		Label lblTitle = new Label(title);
 		lblTitle.setStyle(labelStyle);
 		Label lblValue = new Label(value);
@@ -800,7 +800,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 			tableColLichSu.setVgap(20);
 			tableColLichSu.setAlignment(Pos.CENTER);
 			tableColLichSu.setMaxWidth(1330);
-			VBox.setMargin(tableColLichSu, new Insets(30, 10, 10, 0));
+			VBox.setMargin(tableColLichSu, new Insets(30, 20, 10, 35));
 
 			String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 24px; -fx-font-weight: bold;";
 
