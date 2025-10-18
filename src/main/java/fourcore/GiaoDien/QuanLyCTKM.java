@@ -1051,7 +1051,7 @@ public class QuanLyCTKM extends Application {
             if (khuyenMai.getTrangThaiKhuyenMai().equals("kích hoạt")){
                 trangThai = true;
             }
-            loadCTKMData(khuyenMai.getMaKhuyenMai(), khuyenMai.getTenChuongTrinh(), khuyenMai.getNgayBatDau().toLocalDate(), khuyenMai.getNgayKetThuc().toLocalDate(), "Tất cả", trangThai);
+            loadCTKMData(khuyenMai.getMaKhuyenMai(), khuyenMai.getTenChuongTrinh(), khuyenMai.getNgayBatDau().toLocalDate(), khuyenMai.getNgayKetThuc().toLocalDate(), khuyenMai.getDieuKienApDung(), trangThai);
         }
 
 
