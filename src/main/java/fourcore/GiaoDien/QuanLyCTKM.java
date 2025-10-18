@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import fourcore.Entity.KhuyenMai;
+import fourcore.dao.ChuongTrinhKhuyenMaiDAO;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -108,10 +110,26 @@ public class QuanLyCTKM extends Application {
     private ImageView settingIcon;
     private ImageView moTaDoanhThuIcon;
     private HBox xemLichSuVeBox;
+    private ArrayList<KhuyenMai> listKhuyenMai = new ArrayList<>();
 	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+//			======================
+//			||     GET DATA     ||
+//			======================
+            ChuongTrinhKhuyenMaiDAO ctkmDAO = new ChuongTrinhKhuyenMaiDAO();
+            listKhuyenMai = ctkmDAO.getListKhuyenMai();
+
+
+
+
+
+
+
+//			======================
+//			||     GIAO DIEN     ||
+//			======================
             BorderPane root = new BorderPane();
             Scene scene = new Scene(root,1920,1000);
             primaryStage.setScene(scene);
@@ -1020,77 +1038,87 @@ public class QuanLyCTKM extends Application {
 	    
 	    table_desc = new VBox();
 	    table_desc.setSpacing(20);
-	    
-	    create_layout_dong("CTKM001", "Quach Ngoc Long", LocalDate.now(), LocalDate.now(), "tiendat", true);
-	    create_layout_dong("CTKM001", "Quach Ngoc Long", LocalDate.now(), LocalDate.now(), "tiendat", false);
-	    create_layout_dong("CTKM001", "Quach Ngoc Long", LocalDate.now(), LocalDate.now(), "tiendat", false);
-	    create_layout_dong("CTKM001", "Quach Ngoc Long", LocalDate.now(), LocalDate.now(), "tiendat", true);
-	    create_layout_dong("CTKM001", "Quach Ngoc Long", LocalDate.now(), LocalDate.now(), "tiendat", true);
-	    
-	    scrollPane = new ScrollPane();
+
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+//			======================
+//			||     CONTROL     ||
+//			======================
+
+//  DATA INPUT PATTERN:      maCT,tenCT,ngaybatdau,ngayketthuc,trangthai
+        for (KhuyenMai khuyenMai : listKhuyenMai) {
+            boolean trangThai =false;
+            if (khuyenMai.getTrangThaiKhuyenMai().equals("kích hoạt")){
+                trangThai = true;
+            }
+            loadCTKMData(khuyenMai.getMaKhuyenMai(), khuyenMai.getTenChuongTrinh(), khuyenMai.getNgayBatDau().toLocalDate(), khuyenMai.getNgayKetThuc().toLocalDate(), "Tất cả", trangThai);
+        }
+
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------------------------*/	    scrollPane = new ScrollPane();
 	    scrollPane.setContent(table_desc);
 	    scrollPane.setFitToWidth(true);
 	    scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 	    scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 	    scrollPane.setStyle("-fx-background-color: transparent");
 	    scrollPane.setPannable(true);
-	    
+
 	    VBox.setVgrow(scrollPane, Priority.ALWAYS);
 	    scrollPane.setMaxHeight(400);
-	    
+
 	    table_layout.getChildren().add(scrollPane);
-	    
+
 	    noiDungChinh.getChildren().add(table_layout);
 	}
 	public void create_layout_button()
 	{
 		layout_button = new HBox();
-		
+
 		layout_button.setPrefSize(950, 50);
 		layout_button.setAlignment(Pos.CENTER_RIGHT);
-		layout_button.setTranslateX(-20);	
+		layout_button.setTranslateX(-20);
 		String style = "-fx-font-family: 'Inter';-fx-font-weight: bold;-fx-font-size:13.5px;-fx-text-fill:white;-fx-background-radius: 20px;";
-		
+
 		btn_xoaCTKM = new Button("Xóa Chương Trình Khuyến Mãi");
 		btn_xoaCTKM.setStyle(style+ "-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #CB002CD3 23%, #CB002C1F 100%);");
 		btn_xoaCTKM.setPrefSize(225, 50);
 		btn_xoaCTKM.setDisable(true);
-		
+
 		btn_themCTKM = new Button("Thêm Chương Trình Khuyến Mãi");
 		btn_themCTKM.setStyle(style+"-fx-background-color: linear-gradient(to top, #00BACB, #8EE6ED);");
 		btn_themCTKM.setPrefSize(225, 50);
-		
-		
+
+
 		btn_capnhat = new Button("Cập nhật thông tin");
 		btn_capnhat.setStyle(style+"-fx-background-color: linear-gradient(to top, #00BACB, #8EE6ED);");
 		btn_capnhat.setPrefSize(225, 50);
-		
+
 		layout_button.setSpacing(40);
 		layout_button.getChildren().addAll(btn_xoaCTKM,btn_themCTKM,btn_capnhat);
-		
-		
+
+
 		btn_xoaCTKM.setOnMouseClicked(event -> {
 			if(hangchon.size() == 0)
 			{
-				
+
 			}
 			else {
 				ArrayList<GridPane> dsxoa = new ArrayList<GridPane>(hangchon);
 				for(GridPane x : dsxoa)
-				{					
+				{
 					FadeTransition ft = new FadeTransition(Duration.millis(300),x);
 					ft.setFromValue(1.0);
 					ft.setToValue(0);
 					ft.play();
-					ft.setOnFinished(E ->{						
+					ft.setOnFinished(E ->{
 						table_desc.getChildren().remove(x);
 					});
 				}
 				hangchon.clear();
-				
+
 			}
 		});
-		
+
 		btn_xoaCTKM.hoverProperty().addListener((obs,oval,nval) -> {
 			if(nval)
 			{
@@ -1100,7 +1128,7 @@ public class QuanLyCTKM extends Application {
 				btn_xoaCTKM.setStyle(btn_xoaCTKM.getStyle());
 			}
 		});
-		
+
 		btn_themCTKM.hoverProperty().addListener((obs,oval,nval) -> {
 			if(nval)
 			{
@@ -1110,7 +1138,7 @@ public class QuanLyCTKM extends Application {
 				btn_themCTKM.setStyle(btn_themCTKM.getStyle());
 			}
 		});
-		
+
 		btn_capnhat.hoverProperty().addListener((obs,oval,nval) -> {
 			if(nval)
 			{
@@ -1120,38 +1148,38 @@ public class QuanLyCTKM extends Application {
 				btn_capnhat.setStyle(btn_capnhat.getStyle());
 			}
 		});
-		
+
 		noiDungChinh.getChildren().add(layout_button);
-		
+
 	}
-	public void create_layout_dong(String maCT, String tenCT, LocalDate ngaybatdau, LocalDate ngayketthuc, String doituong, boolean trangthai) {
+	public void loadCTKMData(String maCT, String tenCT, LocalDate ngaybatdau, LocalDate ngayketthuc, String doituong, boolean trangthaiCTKM) {
 	    GridPane data = new GridPane();
-	    
+
 	    data.setHgap(10);
 	    data.setAlignment(Pos.CENTER);
 	    data.setMaxWidth(1250);
 	    data.setTranslateX(20);
 	    data.setPrefHeight(70);
 	    data.setPadding(new Insets(0, 0, 0, 10));
-	    
+
 	    String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
-	    
+
 	    Label lblMaCT = new Label(maCT);
 	    Label lblTenCT = new Label(tenCT);
 	    Label lblNgayBD = new Label(ngaybatdau.toString());
 	    Label lblNgayKT = new Label(ngayketthuc.toString());
 	    Label lblDoiTuong = new Label(doituong);
-	    
-	    Label lblTrangThai = new Label(trangthai ? "Sẵn Sàng" : "Đã Kết Thúc");
-	    String colorStyle = trangthai ? "-fx-text-fill: green;" : "-fx-text-fill: red;";
-	    
+
+	    Label lblTrangThai = new Label(trangthaiCTKM ? "Hoạt động" : "Đã Kết Thúc");
+	    String colorStyle = trangthaiCTKM ? "-fx-text-fill: green;" : "-fx-text-fill: red;";
+
 	    lblMaCT.setStyle(baseStyle);
 	    lblTenCT.setStyle(baseStyle);
 	    lblNgayBD.setStyle(baseStyle);
 	    lblNgayKT.setStyle(baseStyle);
 	    lblDoiTuong.setStyle(baseStyle);
 	    lblTrangThai.setStyle(baseStyle + colorStyle);
-	   
+
 	    lblMaCT.setTranslateX(-140);
 	    lblTenCT.setTranslateX(-90);
 	    lblNgayBD.setTranslateX(-40);
@@ -1159,35 +1187,35 @@ public class QuanLyCTKM extends Application {
 	    lblTrangThai.setTranslateX(110);
 	    lblDoiTuong.setTranslateX(5);
 	    lblTenCT.setWrapText(true);
-	    
+
 	    StackPane paneData1 = new StackPane(lblMaCT);
 	    StackPane paneData2 = new StackPane(lblTenCT);
 	    StackPane paneData3 = new StackPane(lblNgayBD);
 	    StackPane paneData4 = new StackPane(lblNgayKT);
 	    StackPane paneData5 = new StackPane(lblDoiTuong);
 	    StackPane paneData6 = new StackPane(lblTrangThai);
-	    
+
 	    paneData1.setPrefWidth(150);
 	    paneData2.setPrefWidth(180);
 	    paneData3.setPrefWidth(150);
 	    paneData4.setPrefWidth(150);
 	    paneData5.setPrefWidth(150);
 	    paneData6.setPrefWidth(130);
-	    
+
 	    paneData1.setAlignment(Pos.CENTER);
 	    paneData2.setAlignment(Pos.CENTER);
 	    paneData3.setAlignment(Pos.CENTER);
 	    paneData4.setAlignment(Pos.CENTER);
 	    paneData5.setAlignment(Pos.CENTER);
 	    paneData6.setAlignment(Pos.CENTER);
-	    
+
 	    data.add(paneData1, 0, 0);
 	    data.add(paneData2, 1, 0);
 	    data.add(paneData3, 2, 0);
 	    data.add(paneData4, 3, 0);
 	    data.add(paneData5, 4, 0);
 	    data.add(paneData6, 5, 0);
-	    
+
 	    String normalStyle = """
 	    	    -fx-background-color: rgba(0, 186, 203, 0.3);
 	    	    -fx-background-radius: 15px;
@@ -1212,14 +1240,14 @@ public class QuanLyCTKM extends Application {
 	    	    -fx-border-width: 2px;
 	    	""";
 
-	    
+
 	    data.setStyle(normalStyle);
-	    
+
 	    final GridPane dongHienTai = data;
-	    
+
 	    String style_macdinh = "-fx-background-color : #00BACB4D;-fx-background-radius:15px;-fx-border-radius:15px;";
 	    String style_thaydoi = "-fx-background-color : #00BACB4D;-fx-background-radius:15px;-fx-border-radius:15px;-fx-border-color:#00BACB;-fx-border-width:2px;";
-	    
+
 	    dongHienTai.setOnMouseClicked(e -> {
 			if (hangchon.contains(dongHienTai)) {
 				hangchon.remove(dongHienTai);
@@ -1230,7 +1258,7 @@ public class QuanLyCTKM extends Application {
 			}
 			btn_xoaCTKM.setDisable(hangchon.isEmpty());
 		});
-	    
+
 	    dongHienTai.setOnMouseEntered(e -> {
 			if (!hangchon.contains(dongHienTai)) {
 				dongHienTai.setStyle(hoverStyle);

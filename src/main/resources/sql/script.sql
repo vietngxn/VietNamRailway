@@ -363,7 +363,7 @@ INSERT INTO GheTrenChuyenTau (maGheTrenChuyenTau, maChuyenTau, maGheNgoi, giaTie
 -- Dữ liệu mẫu cho bảng KhuyenMai, DoiTuongGiamGia
 INSERT INTO KhuyenMai (maKhuyenMai, tenChuongTrinh, giaTriPhanTramKhuyenMai, ngayBatDau, ngayKetThuc, trangThaiKhuyenMai, dieuKienApDungKhuyenMai) VALUES
 (N'KM01', N'Mùa hè rực rỡ', 10, '2025‑06‑01', '2025‑08‑31', N'kích hoạt', N'Tất cả vé'),
-(N'KM02', N'Ưu đãi người lớn tuổi', 15, '2025‑09‑01', '2025‑12‑31', N'kích hoạt', N'Người > 60 tuổi');
+(N'KM02', N'Ưu đãi người lớn tuổi', 15, '2025‑09‑01', '2025‑12‑31', N'kết thúc', N'Người > 60 tuổi');
 
 INSERT INTO DoiTuongGiamGia (maDoiTuongGiamGia, tenDoiTuongGiamGia, giaTriPhanTramGiamGia, trangThaiGiamGia) VALUES
 (N'DT01', N'Học sinh – sinh viên', 5, N'kích hoạt'),
@@ -383,3 +383,20 @@ INSERT INTO Ve (maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKh
 INSERT INTO ChiTietHoaDon (maChiTietHoaDon, maHoaDon, maVeTau, moTa, donGia, giaTriThueVAT, thanhTien) VALUES
 (N'CTHD001', N'HD001', N'V001', N'Ve Super Express 1 toa', 500000, 50000, 550000),
 (N'CTHD002', N'HD002', N'V002', N'Ve Night Dreamer VIP', 820000, 82000, 902000);
+
+
+-- Dữ liệu mẫu cho bảng LoaiTuongTacVe
+INSERT INTO LoaiTuongTacVe (maLoaiTuongTac, tenLoaiTuongTac) VALUES
+(N'LT01', N'bán'),
+(N'LT02', N'hoàn trả'),
+(N'LT03', N'đổi'),
+(N'LT04', N'cấp lại vé');
+
+-- Dữ liệu mẫu cho bảng LichSuTuongTacVe
+INSERT INTO LichSuTuongTacVe (maTuongTac, maLoaiTuongTac, maVeTau, giaTriChenhLech, ngayTuongTac) VALUES
+(N'TT001', N'LT01', N'V001', 0, '2025-10-18 14:30:00'), -- vé V001 được bán
+(N'TT002', N'LT03', N'V001', 50000, '2025-10-19 10:00:00'), -- vé V001 đổi, chênh lệch giá 50,000
+(N'TT003', N'LT04', N'V002', 0, '2025-10-20 09:00:00'), -- vé V002 cấp lại
+(N'TT004', N'LT02', N'V002', -820000, '2025-10-21 12:00:00'); -- vé V002 hoàn trả, hoàn tiền
+
+
