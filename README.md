@@ -1,4 +1,4 @@
-# 🚆 Ứng Dụng Bán Vé Tàu Hỏa – Nhóm [Tên Nhóm]
+# 🚆Đường sắt Việt Nam – The 4Cores Team
 
 ![JavaFX](https://img.shields.io/badge/UI-JavaFX-blue)
 ![SQL Server](https://img.shields.io/badge/Database-SQL--Server-red)
