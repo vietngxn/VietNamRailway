@@ -77,6 +77,7 @@ public class TrangChu extends Application {
     private ImageView settingIcon;
     private ImageView moTaDoanhThuIcon;
     private HBox xemLichSuVeBox;
+    VBox noiDungWrapper = new VBox(10);
 
     @Override
     public void start(Stage primaryStage) {
@@ -92,6 +93,10 @@ public class TrangChu extends Application {
             logoImgView.setFitWidth(500);
             logoImgView.setFitHeight(270);
             menuList.getChildren().add(logoImgView);
+
+            logoImgView.setOnMouseClicked(event -> {
+                root.setCenter(noiDungWrapper);
+            });
 
             scrollPaneMenu = new ScrollPane();
             danhSachMenuItem = new VBox();
@@ -1180,7 +1185,7 @@ public class TrangChu extends Application {
                     noiDungChinh.getChildren().add(background);
                 }
             });
-            VBox noiDungWrapper = new VBox(10);
+
             noiDungWrapper.getChildren().addAll(hienNoiDungCheckBox,noiDungChinh);
 
             BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
