@@ -164,7 +164,7 @@ public class BanVe extends Application {
 			root.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 			
 			window.setFullScreen(true);
-			window.show();
+//			window.show();
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -466,6 +466,9 @@ public class BanVe extends Application {
 		});
 		
 	}
+    public VBox getGDBanVe(){
+        return this.noiDungChinh;
+    }
 	
 	
 	public static void main(String[] args) {

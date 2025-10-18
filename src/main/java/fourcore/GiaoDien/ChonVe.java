@@ -3,6 +3,7 @@ package fourcore.GiaoDien;
 import fourcore.Entity.*;
 import fourcore.dao.ChuyenTau_Dao;
 import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -16,18 +17,16 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
@@ -37,9 +36,7 @@ import java.security.cert.PolicyNode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class ChonVe extends Application {
@@ -88,6 +85,17 @@ public class ChonVe extends Application {
     private ImageView moTaDoanhThuIcon;
     HBox chuyenTauMenu;
     private HBox danhSachToaTauBox;
+    private VBox danhSachGheBox;
+    private StackPane ghePane= new StackPane();;
+    private  GridPane danhSachGheGridPane = new GridPane();
+    private HBox chuThichVaBtnBox;
+    private VBox chuThichGheBox;
+    public Label tenToaVaKhoang = new Label();
+    Label khoangLbl = new Label();
+    InputStream fontTieuDeToaTauInput = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Bold.ttf");
+    Font fontTieuDeToaTau = Font.loadFont(fontTieuDeToaTauInput, 18);
+    private HBox layout_button;
+
 
     @Override
     public void start(Stage primaryStage) {
@@ -662,19 +670,131 @@ public class ChonVe extends Application {
 
             danhSachToaTauBox = new HBox();
             noiDungChinh.getChildren().add(danhSachToaTauBox);
+            danhSachGheBox = new VBox();
+
+
+            danhSachGheBox.setMaxWidth(800);
+            danhSachGheBox.setPrefHeight(350);
+            danhSachGheBox.setStyle("-fx-border-color: #091723; " +
+                    "-fx-border-width: 2; " +
+                    "-fx-border-radius: 10; " +
+                    "-fx-padding: 10;");
+            danhSachGheBox.setTranslateX(200);
+            danhSachGheBox.setTranslateY(100);
 
 
 
 
 
-            chonVeGiaoDien.hienThiDanhSachChuyenTau(chuyenTauArrayList,chuyenTauMenu,danhSachToaTauBox);
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------------------------------------------
+
+
+
+
+            tenToaVaKhoang.setTranslateX(400);
+            tenToaVaKhoang.setTranslateY(80);
+            tenToaVaKhoang.setFont(fontTieuDeToaTau);
+            chonVeGiaoDien.hienThiDanhSachChuyenTau(chuyenTauArrayList,chuyenTauMenu,danhSachToaTauBox,tenToaVaKhoang, danhSachGheGridPane,khoangLbl);
+            noiDungChinh.getChildren().add(tenToaVaKhoang);
+
+
+
+            danhSachGheBox.getChildren().add(khoangLbl);
+            danhSachGheBox.getChildren().add(danhSachGheGridPane);
+            noiDungChinh.getChildren().add(danhSachGheBox);
+
+            chuThichVaBtnBox = new HBox();
+            chuThichVaBtnBox.setTranslateY(150);
+            chuThichVaBtnBox.setTranslateX(40);
+
+            VBox chuThichToaBox =  new VBox();
+
+            HBox chuThichToaFull = new HBox();
+            ImageView toaFullImg = new ImageView(getClass().getResource("/img/toaFullCho.png").toExternalForm());
+            Label toaFullLabel = new Label("Toa đã đầy chỗ");
+            toaFullLabel.setFont(fontTieuDeToaTau);
+            toaFullLabel.setStyle("-fx-text-fill: #EC6BC5;");
+            toaFullLabel.setTranslateY(5);
+            toaFullLabel.setTranslateX(12);
+            chuThichToaFull.getChildren().addAll(toaFullImg,toaFullLabel);
+
+            HBox chuThichToaChon = new HBox();
+            chuThichToaChon.setPadding(new Insets(30,0,0,0));
+            ImageView toaChonImg = new ImageView(getClass().getResource("/img/toaDangChon.png").toExternalForm());
+            Label toaChonLabel = new Label("Toa đang được chọn");
+            toaChonLabel.setFont(fontTieuDeToaTau);
+            toaChonLabel.setStyle("-fx-text-fill: #00EAC3;");
+            toaChonLabel.setTranslateY(5);
+            toaChonLabel.setTranslateX(12);
+            chuThichToaChon.getChildren().addAll(toaChonImg,toaChonLabel);
+
+
+            HBox chuThichToaTrong = new HBox();
+            chuThichToaTrong.setPadding(new Insets(30,0,0,0));
+            ImageView toaTrongImg = new ImageView(getClass().getResource("/img/thantautrong.png").toExternalForm());
+            Label toaTrongLabel = new Label("Toa đang trống");
+            toaTrongLabel.setFont(fontTieuDeToaTau);
+            toaTrongLabel.setStyle("-fx-text-fill: #4D99E4;");
+            toaTrongLabel.setTranslateY(5);
+            toaTrongLabel.setTranslateX(12);
+            chuThichToaTrong.getChildren().addAll(toaTrongImg,toaTrongLabel);
+
+
+
+            chuThichToaBox.getChildren().addAll(chuThichToaFull,chuThichToaChon,chuThichToaTrong);
+
+
+            chuThichGheBox = new VBox();
+            chuThichGheBox.setTranslateX(100);
+
+
+            HBox chuThichGheFull = new HBox();
+            ImageView gheFullImg = new ImageView(getClass().getResource("/img/gheDaDat.png").toExternalForm());
+            Label gheFullLabel = new Label("Ghế đã được đặt");
+            gheFullLabel.setFont(fontTieuDeToaTau);
+            gheFullLabel.setStyle("-fx-text-fill: #EC6BC5;");
+            gheFullLabel.setTranslateY(5);
+            gheFullLabel.setTranslateX(12);
+            chuThichGheFull.getChildren().addAll(gheFullImg,gheFullLabel);
+
+            chuThichGheBox.getChildren().addAll(chuThichGheFull);
+
+            HBox chuThichGheChon = new HBox();
+            ImageView gheChonImg = new ImageView(getClass().getResource("/img/gheDangChon.png").toExternalForm());
+            Label gheChonLabel = new Label("Ghế đang được chọn");
+            gheChonLabel.setFont(fontTieuDeToaTau);
+            gheChonLabel.setStyle("-fx-text-fill: #00EAC3;");
+            gheChonLabel.setTranslateY(5);
+            gheChonLabel.setTranslateX(12);
+            chuThichGheChon.getChildren().addAll(gheChonImg,gheChonLabel);
+
+            chuThichGheBox.getChildren().addAll(chuThichGheChon);
+
+
+            HBox chuThichGheTrong = new HBox();
+            ImageView gheTrongImg = new ImageView(getClass().getResource("/img/gheTrong.png").toExternalForm());
+            Label gheTrongLabel = new Label("Ghế đang trống");
+            gheTrongLabel.setFont(fontTieuDeToaTau);
+            gheTrongLabel.setStyle("-fx-text-fill: #4D99E4;");
+            gheTrongLabel.setTranslateY(5);
+            gheTrongLabel.setTranslateX(12);
+            chuThichGheTrong.getChildren().addAll(gheTrongImg,gheTrongLabel);
+
+            chuThichGheBox.getChildren().addAll(chuThichGheTrong);
+
+            chuThichVaBtnBox.getChildren().addAll(chuThichToaBox,chuThichGheBox);
+
+            noiDungChinh.getChildren().add(chuThichVaBtnBox);
 
 
             noiDungChinh.setStyle("-fx-background-color: #F7F7F7;");
             noiDungChinh.setPrefWidth(1200);
 
 
-
+            tao_button();
             BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
             root.setLeft(menuList);
             root.setCenter(noiDungChinh);
@@ -685,7 +805,12 @@ public class ChonVe extends Application {
             e.printStackTrace();
         }
     }
-    public void hienThiDanhSachChuyenTau(ArrayList<ChuyenTau> danhSachChuyenTau, HBox menuChuyenTau, HBox danhSachToaTauBox){
+
+
+
+
+    public void hienThiDanhSachChuyenTau(ArrayList<ChuyenTau> danhSachChuyenTau, HBox menuChuyenTau, HBox danhSachToaTauBox, Label tenToaVaKhoang, GridPane danhSachGheGridPane,Label khoangLbl){
+        danhSachGheGridPane.getChildren().clear();
         Image defaultImage = new Image(getClass().getResource("/img/TauHoaIcon.png").toExternalForm());
         Image selectedImage = new Image(getClass().getResource("/img/TauHoaIconChoose.png").toExternalForm());
         InputStream interBoldFont = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Bold.ttf");
@@ -776,8 +901,8 @@ public class ChonVe extends Application {
                 ChuyenTau selectedChuyenTau = (ChuyenTau) chuyenTauCont.getUserData();
                 ChuyenTau_Dao chuyenTauDao = new ChuyenTau_Dao();
                 chuyenTauDao.addGheVaoDSGhe();
-                chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau1, chuyenTauDao.chuyen1);
                 chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau2, chuyenTauDao.chuyen1);
+                chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau1, chuyenTauDao.chuyen1);
 
                 chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau1, chuyenTauDao.chuyen2);
                 chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau1, chuyenTauDao.chuyen2);
@@ -792,6 +917,8 @@ public class ChonVe extends Application {
                 ChuyenTau chuyenDuocSelect = chuyenTauDao.getChuyenTau(selectedChuyenTau.getMaChuyenTau());
                 System.out.println(selectedChuyenTau.getMaChuyenTau());
                 ArrayList<ToaTau> dsToaTrenChuyen = chuyenTauDao.getListToaTheoChuyenTau(chuyenDuocSelect);
+
+
                 System.out.println(dsToaTrenChuyen.size());
                 ImageView dauTauImg = new ImageView(getClass().getResource("/img/dautau.png").toExternalForm());
                 dauTauImg.setFitWidth(100);
@@ -800,14 +927,49 @@ public class ChonVe extends Application {
                 danhSachToaTauBox.setAlignment(Pos.CENTER_RIGHT);
                 danhSachToaTauBox.setPadding(new  Insets(0,200,0,0));
                 danhSachToaTauBox.setTranslateY(50);
+                List<ImageView> toaImageViews = new ArrayList<>();
 
-                for (ToaTau toa : dsToaTrenChuyen){
+                for (int i = dsToaTrenChuyen.size()-1; i >= 0; i--) {
+                    final int toaSo = i+1;
+                    // Tạo ImageView với ảnh mặc định
                     ImageView toaImg = new ImageView(getClass().getResource("/img/thantautrong.png").toExternalForm());
                     toaImg.setFitWidth(90);
                     toaImg.setFitHeight(50);
-                    toaImg.setUserData(toa);
-                    danhSachToaTauBox.getChildren().addAll(toaImg);
+                    toaImg.setUserData(dsToaTrenChuyen.get(i));
+                    toaImageViews.add(toaImg);
+
+                    // Gán sự kiện click
+                    toaImg.setOnMouseClicked(toaEvent -> {
+                        for (ImageView iv : toaImageViews) {
+                            iv.setImage(new Image(getClass().getResource("/img/thantautrong.png").toExternalForm()));
+                        }
+
+
+                        toaImg.setImage(new Image(getClass().getResource("/img/toaDangChon.png").toExternalForm()));
+
+                        // Xử lý logic sau khi chọn toa
+                        ToaTau selectedToa = (ToaTau) toaImg.getUserData();
+                        System.out.println("Toa được chọn: " + selectedToa.getMaToaTau());
+                        tenToaVaKhoang.setText("Toa số " +toaSo + ": " +selectedToa.getLoaiToaTau().getTenLoaiToaTau());
+                        System.out.println("Toa được chọn: " + selectedToa.getLoaiToaTau().getTenLoaiToaTau());
+
+                        if(selectedToa.getLoaiToaTau().getMaLoaiToaTau().equals("GN01")){
+                            khoangLbl.setText("");
+                            danhSachGheGridPane.getChildren().clear();
+                            hienThiLayoutGhe(danhSachGheGridPane);
+                        }else if(selectedToa.getLoaiToaTau().getMaLoaiToaTau().equals("GN02")){
+                            danhSachGheGridPane.getChildren().clear();
+                            hienThiLayoutGiuong(khoangLbl, danhSachGheGridPane);
+                        }
+
+
+                    });
+
+                    // Thêm vào danh sách hiển thị
+                    danhSachToaTauBox.getChildren().add(toaImg);
                 }
+
+
                 danhSachToaTauBox.getChildren().add(dauTauImg);
 
 
@@ -816,6 +978,182 @@ public class ChonVe extends Application {
         }
 
 
+
+    }
+    public void tao_button() {
+
+        layout_button = new HBox();
+        layout_button.setPrefSize(1000, 100);
+        layout_button.setTranslateY(70);
+        layout_button.setTranslateX(800);
+
+
+        Button btn_trolai = new Button("Trở lại");
+        btn_trolai.setPrefSize(150, 50);
+        btn_trolai.setTranslateY(-90);
+        btn_trolai.setTranslateX(150);
+
+        btn_trolai.setStyle(
+                "-fx-font-family: 'Inter';-fx-font-size: 20px;-fx-font-weight: bold;-fx-text-fill:white;-fx-background-color: linear-gradient(to top, #CB002C, #D498A5);-fx-background-radius:15px;");
+        Button btn_tieptuc = new Button("Tiếp Tục");
+        btn_tieptuc.setPrefSize(150, 50);
+        btn_tieptuc.setStyle(
+                "-fx-font-family: 'Inter';-fx-font-size: 20px;-fx-font-weight: bold;-fx-text-fill:white;-fx-background-color: linear-gradient(to top, #00BACB, #B6D0D3);-fx-background-radius:15px;");
+        btn_tieptuc.setTranslateX(0);
+
+        btn_trolai.hoverProperty().addListener((obs, oval, nval) -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(200), btn_trolai);
+
+            if (nval) {
+                st.setToX(1.1);
+                st.setToY(1.1);
+                btn_trolai.setStyle(
+                        "-fx-font-family: 'Inter';-fx-font-size: 20px;-fx-font-weight: bold;-fx-text-fill:white;-fx-background-color: linear-gradient(to top, #CB002C, #D498A5);-fx-background-radius:15px;-fx-cursor:hand;");
+            } else {
+                st.setToX(1);
+                st.setToY(1);
+            }
+            st.play();
+        });
+
+        btn_tieptuc.hoverProperty().addListener((obs, oval, nval) -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(200), btn_tieptuc);
+            if (nval) {
+                st.setToX(1.1);
+                st.setToY(1.1);
+                btn_tieptuc.setStyle(
+                        "-fx-font-family: 'Inter';-fx-font-size: 20px;-fx-font-weight: bold;-fx-text-fill:white;-fx-background-color: linear-gradient(to top, #00BACB, #B6D0D3);-fx-background-radius:15px;-fx-cursor:hand;");
+            } else {
+                st.setToX(1);
+                st.setToY(1);
+            }
+            st.play();
+        });
+
+        layout_button.getChildren().addAll(btn_trolai, btn_tieptuc);
+        noiDungChinh.getChildren().add(layout_button);
+    }
+    public void hienThiLayoutGhe(GridPane danhSachGheGridPane){
+        danhSachGheGridPane.getChildren().clear();
+        int soGhe = 18;
+        int soCot = 9;
+        int soHang = 4;
+        int thuTuGhe = 1;
+        for(int row=0; row<soHang; row++){
+            for(int col=0; col<soCot; col++){
+                ImageView gheTrongImg =  new ImageView(getClass().getResource("/img/gheTrong.png").toExternalForm());
+
+                final int soGheH = thuTuGhe;
+
+                gheTrongImg.setFitWidth(60);
+                gheTrongImg.setFitHeight(60);
+                Label soThuTuGheLabel =  new Label(String.valueOf(thuTuGhe));
+                InputStream fontGheInput = getClass().getResourceAsStream("/fonts/Inter/static/Inter_18pt-Bold.ttf");
+                Font fontGhe = Font.loadFont(fontGheInput, 20);
+                soThuTuGheLabel.setFont(fontGhe);
+                soThuTuGheLabel.setTranslateX(3);
+                soThuTuGheLabel.setStyle("-fx-text-fill: #ffffff;");
+                StackPane ghePane = new StackPane();
+                ghePane.getChildren().addAll(gheTrongImg,soThuTuGheLabel);
+                if(thuTuGhe==22 || thuTuGhe==25){
+                    ghePane.setPadding(new Insets(30,0,0,30));
+
+                }else if(col==3 || col==6){
+                    ghePane.setPadding(new Insets(0,0,0,30));
+                }else if(row==2){
+                    ghePane.setPadding(new Insets(30,0,0,0));
+                }
+
+                danhSachGheGridPane.add(ghePane,col,row);
+
+                final boolean[] isSelected = {false};
+                ghePane.setOnMouseClicked(event -> {
+                    isSelected[0] = !isSelected[0]; // Toggle chọn / hủy chọn
+
+                    if (isSelected[0]) {
+                        // Đổi sang ảnh ghế đang chọn
+                        gheTrongImg.setImage(new Image(getClass().getResource("/img/gheDangChon.png").toExternalForm()));
+                        System.out.println("Ghế số " + soGheH + " đã chọn");
+                    } else {
+                        // Trả lại ảnh ghế trống
+                        gheTrongImg.setImage(new Image(getClass().getResource("/img/gheTrong.png").toExternalForm()));
+                        System.out.println("Ghế số " + soGheH + " bỏ chọn");
+                    }
+                });
+
+                thuTuGhe++;
+            }
+
+        }
+        danhSachGheGridPane.setHgap(10);
+        danhSachGheGridPane.setVgap(10);
+        danhSachGheGridPane.setTranslateX(40);
+        danhSachGheGridPane.setTranslateY(-5);
+    }
+
+    public void hienThiLayoutGiuong(Label khoangLbl, GridPane danhSachGheGridPane) {
+        int soCot = 6;
+        int soHang = 3;
+        int thuTuGhe = 18;
+
+        khoangLbl.setText("                      Khoang 3                                       Khoang 2                                Khoang 1");
+        khoangLbl.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+
+        danhSachGheGridPane.getChildren().clear();
+
+        for (int col = 0; col < soCot; col++) {
+            for (int row = 0; row < soHang; row++) {
+
+                final int soGheH = thuTuGhe;
+                final boolean[] isSelected = {false};
+
+                ImageView gheTrongImg = new ImageView(getClass().getResource("/img/giuongConTrong.png").toExternalForm());
+                gheTrongImg.setFitWidth(80);
+                gheTrongImg.setFitHeight(80);
+
+                Label soThuTuGheLabel = new Label(String.valueOf(soGheH));
+                InputStream fontGheInput = getClass().getResourceAsStream("/fonts/Inter/static/Inter_18pt-Bold.ttf");
+                Font fontGhe = Font.loadFont(fontGheInput, 20);
+                soThuTuGheLabel.setFont(fontGhe);
+                soThuTuGheLabel.setTranslateX(0);
+                soThuTuGheLabel.setTranslateY(-7);
+                soThuTuGheLabel.setStyle("-fx-text-fill: #ffffff;");
+
+                StackPane ghePane = new StackPane();
+                ghePane.getChildren().addAll(gheTrongImg, soThuTuGheLabel);
+
+                if (col == 2 || col == 4) {
+                    ghePane.setPadding(new Insets(0, 0, 0, 50));
+                } else if (row == 2) {
+                    ghePane.setPadding(new Insets(0, 0, 0, 0));
+                }
+
+                ghePane.setOnMouseClicked(event -> {
+                    isSelected[0] = !isSelected[0];
+                    if (isSelected[0]) {
+                        gheTrongImg.setImage(new Image(getClass().getResource("/img/giuongDangChon.png").toExternalForm()));
+                        System.out.println("Giường số " + soGheH + " đã chọn");
+                    } else {
+                        gheTrongImg.setImage(new Image(getClass().getResource("/img/giuongConTrong.png").toExternalForm()));
+                        System.out.println("Giường số " + soGheH + " bỏ chọn");
+                    }
+                });
+
+                danhSachGheGridPane.add(ghePane, col, row);
+
+                thuTuGhe--; // giảm số giường vì bạn đếm từ 18 về 1
+            }
+        }
+
+        danhSachGheGridPane.setHgap(10);
+        danhSachGheGridPane.setVgap(10);
+        danhSachGheGridPane.setTranslateX(50);
+        danhSachGheGridPane.setTranslateY(10);
+    }
+
+
+    public String getTenToaTau(ToaTau toaTau) {
+        return toaTau.getLoaiToaTau().getTenLoaiToaTau();
     }
     public HBox getChuyenTauMenu() {
         return this.chuyenTauMenu;

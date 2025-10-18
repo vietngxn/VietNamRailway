@@ -235,6 +235,13 @@ public class TrangChu extends Application {
                 VBox giaoDienLichSuMuaBanDoiVe = lichSuMuaBanDoiVe.getLichSuMuaVe();
                 root.setCenter(giaoDienLichSuMuaBanDoiVe);
             });
+            banVeBox.setOnMouseClicked(event -> {
+                BanVe gdBanVe = new BanVe();
+                Stage thongKeKhachHangStage = new Stage();
+                gdBanVe.start(thongKeKhachHangStage);
+                VBox gdBanVeShow = gdBanVe.getGDBanVe();
+                root.setCenter(gdBanVeShow);
+            });
 
 //				======================
 //				||QUAN LI KHACH HANG||

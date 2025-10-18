@@ -172,6 +172,16 @@ public class ChuyenTau_Dao {
         return listGheNgoiTheoToa;
     }
 
+    public ArrayList<GheTrenChuyenTau> getDanhSachGheTCTheoToa(ToaTau toaTau, ChuyenTau chuyenTau) {
+        ArrayList<GheTrenChuyenTau> listGheNgoiTCTheoToa = new ArrayList<>();
+        for (GheTrenChuyenTau g : listGheTrenChuyenTau) {
+            if (g.getGheNgoi().getToaTau() == toaTau && g.getChuyenTau() == chuyenTau) {
+                listGheNgoiTCTheoToa.add(g);
+            }
+        }
+        return listGheNgoiTCTheoToa;
+    }
+
 //Search Chuyen tau bang ma chuyen
     public ChuyenTau getChuyenTau(String maChuyen){
         for(ChuyenTau c: listChuyenTau){
