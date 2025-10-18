@@ -5,18 +5,19 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
 public class DatabaseConnector {
+    DBConfig dbConfig = new DBConfig();
     static Connection con = null;
     private static DatabaseConnector instance = new DatabaseConnector();
     public static DatabaseConnector getInstance() {
         return instance;
     }
     public Statement connect() throws SQLException {
-        String url = "jdbc:sqlserver://localhost:1433;DatabaseName=QuanLyVeTauDB;encrypt=false;trustServerCertificate=true";
-        String user = "sa";
-        String password = "sapassword";
-        con = DriverManager.getConnection(url,user,password);
+
+
+        con = DriverManager.getConnection(dbConfig.getUrl(),dbConfig.getUsername(),dbConfig.getPassword());
 
         Statement myStmt = con.createStatement();
 
