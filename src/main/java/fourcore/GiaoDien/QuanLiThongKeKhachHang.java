@@ -55,7 +55,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 
-public class QuanLiThongKe extends Application {
+public class QuanLiThongKeKhachHang extends Application {
 	private BorderPane manHinhChinh;
 	private VBox menuList;
 	private VBox noiDungChinh;
@@ -91,7 +91,7 @@ public class QuanLiThongKe extends Application {
 	private Node lbl_title_loaiHoaDon;
 	private VBox table_desc;
 	private ScrollPane scrollPane;
-	private ArrayList<HBox> hangchon = new ArrayList<>();
+	private GridPane hangchon = new GridPane();
 	private HBox layout_button;
 	private Button btn_xoaChuyenTau;
 	private Button btn_xuatHoaDon;
@@ -108,8 +108,8 @@ public class QuanLiThongKe extends Application {
 	private VBox btn_layout;
 	private Button btn_xuatThongKe;
 	private GridPane tableCol;
-	private Label colmaGhe;
-	private Label coltenGhe;
+	private Label colmaKhachHang;
+	private Label coltenKhachHang;
 	private Label colsoLanSuDung;
 	private StackPane paneCol1;
 	private StackPane paneCol2;
@@ -629,7 +629,7 @@ try {
 			
 			create_btnlayout();
 			primaryStage.setFullScreen(true);
-//			primaryStage.show();
+			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -641,7 +641,7 @@ try {
 		title_layout.setPadding(new Insets(30));
 		title_layout.setSpacing(20);
 		
-		lbl_title = new Label("Quản Lí Thống Kê"); 
+		lbl_title = new Label("Thống kê top 10 khách hàng đi tàu nhiều nhất"); 
 		lbl_title.setStyle("-fx-font-family: 'Inter';-fx-font-weight:bold;-fx-font-size:30px;");
 		title_layout.getChildren().add(lbl_title);
 		
@@ -667,10 +667,12 @@ try {
 		button_thongKe3.setStyle(style);
 		button_thongKe3.setPrefSize(275, 50);
 		
-		layout_nutthongke.getChildren().addAll(button_thongKe1,button_thongKe2,button_thongKe3);
+//		layout_nutthongke.getChildren().addAll(button_thongKe1,button_thongKe2,button_thongKe3);
 		
 		checks = new ArrayList<>(Arrays.asList(false, false, false));
 
+		button_thongKe1.setStyle(style + "-fx-background-color:#00BACB;-fx-text-fill:white;");
+		
 		button_thongKe1.setOnMouseClicked(e -> {
 		    if (!checks.get(0)) {
 		    	table_desc.getChildren().clear();
@@ -682,30 +684,28 @@ try {
 		        checks.set(2, false);
 		        noiDungChinh.getChildren().remove(layout_total);
 		        
-		        ObservableList<String> items = FXCollections.observableArrayList("BarChart","Table");
-		        comboBox.setItems(items);
-		        comboBox.getSelectionModel().selectFirst();
+//		        ObservableList<String> items = FXCollections.observableArrayList("BarChart","Table");
+//		        comboBox.setItems(items);
 		        if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
-	        		table_desc.getChildren().clear();
-	        		create_barchart_ghengoi();
-	        		noiDungChinh.getChildren().remove(layout_total);
-	        	}
-	        	else {
-	        		table_desc.getChildren().clear();
-	        		create_table();
-	        		
-	        	}
-		        comboBox.setOnAction(null);
+		        	table_desc.getChildren().clear();
+		        	create_barchart_khachHang();
+		        	noiDungChinh.getChildren().remove(layout_total);
+		        }
+		        else {
+		        	table_desc.getChildren().clear();
+		        	create_table();
+		        }
+		        comboBox.getSelectionModel().selectFirst();
+//		        comboBox.setOnAction(null);
 		        comboBox.setOnAction(event  -> { 
 		        	if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
 		        		table_desc.getChildren().clear();
-		        		create_barchart_ghengoi();
+		        		create_barchart_khachHang();
 		        		noiDungChinh.getChildren().remove(layout_total);
 		        	}
 		        	else {
 		        		table_desc.getChildren().clear();
 		        		create_table();
-		        		
 		        	}
 		        });
 		    } else {
@@ -714,93 +714,93 @@ try {
 		    }
 		});
 
-		button_thongKe2.setOnMouseClicked(e -> {
-		    if (!checks.get(1)) {
-		        button_thongKe2.setStyle(style + "-fx-background-color:#00BACB;-fx-text-fill:white;");
-		        button_thongKe1.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
-		        button_thongKe3.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
-		        
-		        ObservableList<String> itemsThang = FXCollections.observableArrayList("BarChart", "PieChart");
-		        comboBox.setItems(itemsThang);
-		        comboBox.getSelectionModel().selectFirst();
-		        
-		        if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
-	            	table_desc.getChildren().clear();
-	                create_barchart_thang();
-	                noiDungChinh.getChildren().remove(layout_total);
-	                create_layout_total();
-	            } else {
-	            	table_desc.getChildren().clear();
-	                create_piechart_thang();
-	                noiDungChinh.getChildren().remove(layout_total);
-	                create_layout_total();
-	            }
-		        checks.set(0, false);
-		        checks.set(1, true);
-		        checks.set(2, false);
-		        comboBox.setOnAction(null);
-		        comboBox.setOnAction(event -> {
-		            if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
-		            	table_desc.getChildren().clear();
-		                create_barchart_thang();
-		                noiDungChinh.getChildren().remove(layout_total);
-		                create_layout_total();
-		            } else {
-		            	table_desc.getChildren().clear();
-		                create_piechart_thang();
-		                noiDungChinh.getChildren().remove(layout_total);
-		                create_layout_total();
-		            }
-		        });
-		    } else {
-		        button_thongKe2.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
-		        checks.set(1, false);
-		    }
-		});
-
-		button_thongKe3.setOnMouseClicked(e -> {
-			
-		    if (!checks.get(2)) {
-		        button_thongKe3.setStyle(style + "-fx-background-color:#00BACB;-fx-text-fill:white;");
-		        button_thongKe1.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
-		        button_thongKe2.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
-		        checks.set(0, false);
-		        checks.set(1, false);
-		        checks.set(2, true);
-		        ObservableList<String> itemsThang = FXCollections.observableArrayList("BarChart", "PieChart");
-		        comboBox.setItems(itemsThang);
-		        comboBox.getSelectionModel().selectFirst();
-		        
-		        if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
-	            	table_desc.getChildren().clear();
-	                create_barchart_nam();
-	                noiDungChinh.getChildren().remove(layout_total);
-	                create_layout_total();
-	            } else {
-	            	table_desc.getChildren().clear();
-	                create_piechart_nam();
-	                noiDungChinh.getChildren().remove(layout_total);
-	                create_layout_total();
-	            }
-		        comboBox.setOnAction(null);
-		        comboBox.setOnAction(event -> {
-		            if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
-		            	table_desc.getChildren().clear();
-		                create_barchart_nam();
-		                noiDungChinh.getChildren().remove(layout_total);
-		                create_layout_total();
-		            } else {
-		            	table_desc.getChildren().clear();
-		                create_piechart_nam();
-		                noiDungChinh.getChildren().remove(layout_total);
-		                create_layout_total();
-		            }
-		        });
-		    } else {
-		        button_thongKe3.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
-		        checks.set(2, false);
-		    }
-		});
+//		button_thongKe2.setOnMouseClicked(e -> {
+//		    if (!checks.get(1)) {
+//		        button_thongKe2.setStyle(style + "-fx-background-color:#00BACB;-fx-text-fill:white;");
+//		        button_thongKe1.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
+//		        button_thongKe3.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
+//		        
+//		        ObservableList<String> itemsThang = FXCollections.observableArrayList("BarChart", "PieChart");
+//		        comboBox.setItems(itemsThang);
+//		        comboBox.getSelectionModel().selectFirst();
+//		        
+//		        if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
+//	            	table_desc.getChildren().clear();
+//	                create_barchart_thang();
+//	                noiDungChinh.getChildren().remove(layout_total);
+//	                create_layout_total();
+//	            } else {
+//	            	table_desc.getChildren().clear();
+//	                create_piechart_thang();
+//	                noiDungChinh.getChildren().remove(layout_total);
+//	                create_layout_total();
+//	            }
+//		        checks.set(0, false);
+//		        checks.set(1, true);
+//		        checks.set(2, false);
+//		        comboBox.setOnAction(null);
+//		        comboBox.setOnAction(event -> {
+//		            if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
+//		            	table_desc.getChildren().clear();
+//		                create_barchart_thang();
+//		                noiDungChinh.getChildren().remove(layout_total);
+//		                create_layout_total();
+//		            } else {
+//		            	table_desc.getChildren().clear();
+//		                create_piechart_thang();
+//		                noiDungChinh.getChildren().remove(layout_total);
+//		                create_layout_total();
+//		            }
+//		        });
+//		    } else {
+//		        button_thongKe2.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
+//		        checks.set(1, false);
+//		    }
+//		});
+//
+//		button_thongKe3.setOnMouseClicked(e -> {
+//			
+//		    if (!checks.get(2)) {
+//		        button_thongKe3.setStyle(style + "-fx-background-color:#00BACB;-fx-text-fill:white;");
+//		        button_thongKe1.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
+//		        button_thongKe2.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
+//		        checks.set(0, false);
+//		        checks.set(1, false);
+//		        checks.set(2, true);
+//		        ObservableList<String> itemsThang = FXCollections.observableArrayList("BarChart", "PieChart");
+//		        comboBox.setItems(itemsThang);
+//		        comboBox.getSelectionModel().selectFirst();
+//		        
+//		        if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
+//	            	table_desc.getChildren().clear();
+//	                create_barchart_nam();
+//	                noiDungChinh.getChildren().remove(layout_total);
+//	                create_layout_total();
+//	            } else {
+//	            	table_desc.getChildren().clear();
+//	                create_piechart_nam();
+//	                noiDungChinh.getChildren().remove(layout_total);
+//	                create_layout_total();
+//	            }
+//		        comboBox.setOnAction(null);
+//		        comboBox.setOnAction(event -> {
+//		            if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
+//		            	table_desc.getChildren().clear();
+//		                create_barchart_nam();
+//		                noiDungChinh.getChildren().remove(layout_total);
+//		                create_layout_total();
+//		            } else {
+//		            	table_desc.getChildren().clear();
+//		                create_piechart_nam();
+//		                noiDungChinh.getChildren().remove(layout_total);
+//		                create_layout_total();
+//		            }
+//		        });
+//		    } else {
+//		        button_thongKe3.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
+//		        checks.set(2, false);
+//		    }
+//		});
 //		check(checks);
 		button_thongKe1.hoverProperty().addListener((obs,oval,nval)->{
 			ScaleTransition st = new ScaleTransition(Duration.millis(200), button_thongKe1);
@@ -818,49 +818,62 @@ try {
 			st.play();
 		});
 		
-		button_thongKe2.hoverProperty().addListener((obs,oval,nval)->{
-			ScaleTransition st = new ScaleTransition(Duration.millis(200), button_thongKe2);
-			if(nval)
-			{
-				button_thongKe2.setStyle(button_thongKe2.getStyle()+"-fx-cursor:hand;");	
-				st.setToX(1.1);
-				st.setToY(1.1);
-			}
-			else {
-			
-				st.setToX(1);
-				st.setToY(1);
-			}
-			st.play();
-		});
-		
-		button_thongKe3.hoverProperty().addListener((obs,oval,nval)->{
-			ScaleTransition st = new ScaleTransition(Duration.millis(200), button_thongKe3);
-			if(nval)
-			{
-				button_thongKe3.setStyle(button_thongKe3.getStyle()+"-fx-cursor:hand;");
-				st.setToX(1.1);
-				st.setToY(1.1);
-			}
-			else {
-			
-				st.setToX(1);
-				st.setToY(1);
-			}
-			st.play();	
-		});
+//		button_thongKe2.hoverProperty().addListener((obs,oval,nval)->{
+//			ScaleTransition st = new ScaleTransition(Duration.millis(200), button_thongKe2);
+//			if(nval)
+//			{
+//				button_thongKe2.setStyle(button_thongKe2.getStyle()+"-fx-cursor:hand;");	
+//				st.setToX(1.1);
+//				st.setToY(1.1);
+//			}
+//			else {
+//			
+//				st.setToX(1);
+//				st.setToY(1);
+//			}
+//			st.play();
+//		});
+//		
+//		button_thongKe3.hoverProperty().addListener((obs,oval,nval)->{
+//			ScaleTransition st = new ScaleTransition(Duration.millis(200), button_thongKe3);
+//			if(nval)
+//			{
+//				button_thongKe3.setStyle(button_thongKe3.getStyle()+"-fx-cursor:hand;");
+//				st.setToX(1.1);
+//				st.setToY(1.1);
+//			}
+//			else {
+//			
+//				st.setToX(1);
+//				st.setToY(1);
+//			}
+//			st.play();	
+//		});
 		
 		title_layout.getChildren().add(layout_nutthongke);
 		
 		layout_combobox = new HBox();
 		layout_combobox.setTranslateY(20);
 		layout_combobox.setSpacing(30);
-		ObservableList<String> items = FXCollections.observableArrayList("BarChart","PieChart");
+		ObservableList<String> items = FXCollections.observableArrayList("BarChart","Table");
 		
 		String style1 = "-fx-font-family:'Inter';-fx-text-fill:#00BACB;-fx-font-size: 15px;";
 		comboBox = createComboBox(items);
 		comboBox.setPromptText("Kiểu Thống Kê");
 		comboBox.setStyle(comboBox.getStyle()+";"+style1);
+		comboBox.getSelectionModel().selectFirst();
+		
+		comboBox.setOnAction(event  -> { 
+        	if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
+        		table_desc.getChildren().clear();
+        		create_barchart_khachHang();
+        		noiDungChinh.getChildren().remove(layout_total);
+        	}
+        	else {
+        		table_desc.getChildren().clear();
+        		create_table();
+        	}
+        });
 		
 		date = new DatePicker();
 		date.setPromptText("Thời Gian");
@@ -894,9 +907,11 @@ try {
 	{
 		table_desc = new VBox();
 		table_desc.setPrefHeight(400);
-		comboBox.getSelectionModel().selectFirst();
-		create_barchart_thang();
 		
+		comboBox.getSelectionModel().selectFirst();
+		
+		
+		create_barchart_khachHang();
 		noiDungChinh.getChildren().add(table_desc);
 	}
 	
@@ -990,30 +1005,30 @@ try {
 	    table_desc.getChildren().add(pieChart);
 	}
 	
-	public void create_barchart_ghengoi()
+	public void create_barchart_khachHang()
 	{
 			CategoryAxis ca = new CategoryAxis();
-			ca.setLabel("Ghế");
+			ca.setLabel("Khách Hàng");
 			NumberAxis na = new NumberAxis();
-			na.setLabel("Số lượng ngồi");
+			na.setLabel("Số lần đi");
 			
 			BarChart<String, Number> barchart = new BarChart<String, Number>(ca, na);
-			barchart.setTitle("Thống kê top 10 ghế bán chạy nhất tháng");
+			barchart.setTitle("Thống kê top 10 khách hàng đi  nhiều nhất tháng");
 			barchart.setLegendVisible(false);
 			barchart.setAnimated(false);
 			
 			ArrayList<XYChart.Data<String, Number>> listdata = new ArrayList<>();
 			
-			listdata.add(new XYChart.Data<>("GN001", 10));
-			listdata.add(new XYChart.Data<>("GN002", 20));
-			listdata.add(new XYChart.Data<String, Number>("GN003", 30));
-			listdata.add(new XYChart.Data<String, Number>("GN004", 40));
-			listdata.add(new XYChart.Data<String, Number>("GN005", 50));
-			listdata.add(new XYChart.Data<String, Number>("GN006", 60));
-			listdata.add(new XYChart.Data<String, Number>("GN007", 70));
-			listdata.add(new XYChart.Data<String, Number>("GN008", 80));
-			listdata.add(new XYChart.Data<String, Number>("GN009", 90));
-			listdata.add(new XYChart.Data<String, Number>("GN010", 100));
+			listdata.add(new XYChart.Data<>("KH001", 10));
+			listdata.add(new XYChart.Data<>("KH002", 20));
+			listdata.add(new XYChart.Data<String, Number>("KH003", 30));
+			listdata.add(new XYChart.Data<String, Number>("KH004", 40));
+			listdata.add(new XYChart.Data<String, Number>("KH005", 50));
+			listdata.add(new XYChart.Data<String, Number>("KH006", 60));
+			listdata.add(new XYChart.Data<String, Number>("KH007", 70));
+			listdata.add(new XYChart.Data<String, Number>("KH008", 80));
+			listdata.add(new XYChart.Data<String, Number>("KH009", 90));
+			listdata.add(new XYChart.Data<String, Number>("KH010", 100));
 			
 			for(int i = 0; i < listdata.size() - 1;i++)
 			{
@@ -1053,23 +1068,23 @@ try {
 
 		String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 24px; -fx-font-weight: bold;";
 
-		colmaGhe = new Label("Mã Ghế");
-		colmaGhe.setTranslateX(-100);
-		colmaGhe.setStyle(styleHeader);
+		colmaKhachHang = new Label("Mã Khách Hàng");
+		colmaKhachHang.setTranslateX(-100);
+		colmaKhachHang.setStyle(styleHeader);
 		
-		coltenGhe = new Label("Tên Ghế");
-		coltenGhe.setTranslateX(-100);
-		coltenGhe.setStyle(styleHeader);
+		coltenKhachHang = new Label("Tên Khách Hàng");
+		coltenKhachHang.setTranslateX(-100);
+		coltenKhachHang.setStyle(styleHeader);
 		
 		
 		
-		colsoLanSuDung = new Label("Tổng");
+		colsoLanSuDung = new Label("Số lần đi");
 		colsoLanSuDung.setTranslateX(100);
 		colsoLanSuDung.setStyle(styleHeader);
 		
 		
-		paneCol1 = new StackPane(colmaGhe);
-		paneCol2 = new StackPane(coltenGhe);
+		paneCol1 = new StackPane(colmaKhachHang);
+		paneCol2 = new StackPane(coltenKhachHang);
 		paneCol3 = new StackPane(colsoLanSuDung);
 		
 		paneCol1.setPrefWidth(200);
@@ -1091,13 +1106,12 @@ try {
 		table_desc_layout = new VBox();
 		table_desc_layout.setSpacing(20);
 		
-		create_layout_dong("MG001","Ghe Nam", 15);
-		create_layout_dong("MG001","Ghe Nam", 25);
+		create_layout_dong("KH001","Tien Dat", 15);
+		create_layout_dong("KH001","Tien Dat", 25);
 		
 		
 		table_layout.getChildren().add(table_desc_layout);
 		table_desc.getChildren().add(table_layout);
-		
 	}
 	
 	public void create_layout_dong(String maGhe,String tenGhe,int soLanSuuDung)
@@ -1139,24 +1153,52 @@ try {
 			    -fx-border-width: 1px;
 			    -fx-cursor: hand;
 			""";
-
+		
+		String selectedStyle = """
+	    	    -fx-background-color: rgba(0, 186, 203, 0.9);
+	    	    -fx-background-radius: 15px;
+	    	    -fx-border-radius: 15px;
+	    	    -fx-border-color: #00BACB;
+	    	    -fx-border-width: 2px;
+	    	""";
+		
 		data.setStyle(normalStyle);
 		
-		data.setOnMouseEntered(e -> {
-			data.setStyle(hoverStyle);
-			ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), data);
-			scaleUp.setToX(1.02);
-			scaleUp.setToY(1.02);
-			scaleUp.play();
-		});
+		final GridPane dongHienTai = data;
+		
+		data.setOnMouseClicked(e -> {
+	        // Bỏ chọn dòng cũ nếu có
+	        if (hangchon != null && hangchon != data) {
+	        	hangchon.setStyle(normalStyle);
+	        }
+	        // Chọn dòng hiện tại
+	        hangchon = data;
+	        data.setStyle(selectedStyle);
+	    });
 
-		data.setOnMouseExited(e -> {
-			data.setStyle(normalStyle);
-			ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), data);
-			scaleDown.setToX(1.0);
-			scaleDown.setToY(1.0);
-			scaleDown.play();
-		});
+	    // Hover effect
+	    data.setOnMouseEntered(e -> {
+	        // Chỉ thay đổi style nếu dòng này không phải dòng được chọn
+	        if (hangchon != data) {
+	            data.setStyle(hoverStyle);
+	        }
+	        ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), data);
+	        scaleUp.setToX(1.02);
+	        scaleUp.setToY(1.02);
+	        scaleUp.play();
+	    });
+
+	    // Rời chuột
+	    data.setOnMouseExited(e -> {
+	        // Nếu đây không phải dòng được chọn, trả về style bình thường
+	        if (hangchon != data) {
+	            data.setStyle(normalStyle);
+	        }
+	        ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), data);
+	        scaleDown.setToX(1.0);
+	        scaleDown.setToY(1.0);
+	        scaleDown.play();
+	    });
 		data.getChildren().addAll(labels);
 		table_desc_layout.getChildren().add(data);
 	}
