@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import fourcore.Entity.KhuyenMai;
+import fourcore.dao.ChuongTrinhKhuyenMaiDAO;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -108,10 +110,16 @@ public class QuanLyCTKM extends Application {
     private ImageView settingIcon;
     private ImageView moTaDoanhThuIcon;
     private HBox xemLichSuVeBox;
-	
-	@Override
+    private ArrayList<KhuyenMai> listKhuyenMai;
+
+    @Override
 	public void start(Stage primaryStage) {
 		try {
+//			======================
+//			||     GET DATA     ||
+//			======================
+            ChuongTrinhKhuyenMaiDAO ctkmDAO = new ChuongTrinhKhuyenMaiDAO();
+            listKhuyenMai = ctkmDAO.getListKhuyenMai();
             BorderPane root = new BorderPane();
             Scene scene = new Scene(root,1920,1000);
             primaryStage.setScene(scene);
@@ -881,7 +889,7 @@ public class QuanLyCTKM extends Application {
 			
 			create_layout_button();
 			primaryStage.setFullScreen(true);
-			primaryStage.show();
+//			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -1021,12 +1029,24 @@ public class QuanLyCTKM extends Application {
 	    
 	    table_desc = new VBox();
 	    table_desc.setSpacing(20);
-	    
-	    create_layout_dong("CTKM001", "Quach Ngoc Long", LocalDate.now(), LocalDate.now(), "tiendat", true);
-	    create_layout_dong("CTKM001", "Quach Ngoc Long", LocalDate.now(), LocalDate.now(), "tiendat", false);
-	    create_layout_dong("CTKM001", "Quach Ngoc Long", LocalDate.now(), LocalDate.now(), "tiendat", false);
-	    create_layout_dong("CTKM001", "Quach Ngoc Long", LocalDate.now(), LocalDate.now(), "tiendat", true);
-	    create_layout_dong("CTKM001", "Quach Ngoc Long", LocalDate.now(), LocalDate.now(), "tiendat", true);
+
+
+        /*-------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+//			======================
+//			||     CONTROL     ||
+//			======================
+
+//  DATA INPUT PATTERN:      maCT,tenCT,ngaybatdau,ngayketthuc,trangthai
+        for (KhuyenMai khuyenMai : listKhuyenMai) {
+            boolean trangThai =false;
+            if (khuyenMai.getTrangThaiKhuyenMai().equals("kích hoạt")){
+                trangThai = true;
+            }
+            loadCTKMData(khuyenMai.getMaKhuyenMai(), khuyenMai.getTenChuongTrinh(), khuyenMai.getNgayBatDau().toLocalDate(), khuyenMai.getNgayKetThuc().toLocalDate(), khuyenMai.getDieuKienApDung(), trangThai);
+        }
+
+
+        /*-------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 	    
 	    scrollPane = new ScrollPane();
 	    scrollPane.setContent(table_desc);
@@ -1125,7 +1145,7 @@ public class QuanLyCTKM extends Application {
 		noiDungChinh.getChildren().add(layout_button);
 		
 	}
-	public void create_layout_dong(String maCT, String tenCT, LocalDate ngaybatdau, LocalDate ngayketthuc, String doituong, boolean trangthai) {
+	public void loadCTKMData(String maCT, String tenCT, LocalDate ngaybatdau, LocalDate ngayketthuc, String doituong, boolean trangthai) {
 	    GridPane data = new GridPane();
 	    
 	    data.setHgap(10);
