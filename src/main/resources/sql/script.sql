@@ -331,6 +331,31 @@ INSERT INTO ChuyenTau (maChuyenTau, maTau, maHanhTrinh, ngayGioDi, ngayGioDen, g
 (N'CT001', N'T001', N'HT001', '2025‑10‑20 08:00:00', '2025‑10‑20 18:00:00', 500000),
 (N'CT002', N'T002', N'HT002', '2025‑10‑21 22:00:00', '2025‑10‑22 06:00:00', 700000);
 
+--Add them
+INSERT INTO ChuyenTau (maChuyenTau, maTau, maHanhTrinh, ngayGioDi, ngayGioDen, giaCuocTrenChuyenTau) VALUES
+(N'CT008', N'T001', N'HT001', '2025-10-27 06:00:00', '2025-10-27 14:00:00', 510000),
+(N'CT009', N'T002', N'HT002', '2025-10-28 07:30:00', '2025-10-28 15:30:00', 530000),
+(N'CT010', N'T001', N'HT001', '2025-10-29 08:00:00', '2025-10-29 16:00:00', 550000),
+(N'CT011', N'T002', N'HT002', '2025-10-30 09:00:00', '2025-10-30 17:00:00', 570000),
+(N'CT012', N'T001', N'HT001', '2025-10-31 10:00:00', '2025-10-31 18:00:00', 590000),
+(N'CT013', N'T002', N'HT002', '2025-11-01 06:30:00', '2025-11-01 14:30:00', 600000),
+(N'CT014', N'T001', N'HT001', '2025-11-02 07:00:00', '2025-11-02 15:00:00', 620000),
+(N'CT015', N'T002', N'HT002', '2025-11-03 08:30:00', '2025-11-03 16:30:00', 640000),
+(N'CT016', N'T001', N'HT001', '2025-11-04 09:00:00', '2025-11-04 17:00:00', 660000),
+(N'CT017', N'T002', N'HT002', '2025-11-05 10:00:00', '2025-11-05 18:00:00', 680000),
+(N'CT018', N'T001', N'HT001', '2025-11-06 06:00:00', '2025-11-06 14:00:00', 700000),
+(N'CT019', N'T002', N'HT002', '2025-11-07 07:30:00', '2025-11-07 15:30:00', 720000),
+(N'CT020', N'T001', N'HT001', '2025-11-08 08:00:00', '2025-11-08 16:00:00', 740000),
+(N'CT021', N'T002', N'HT002', '2025-11-09 09:00:00', '2025-11-09 17:00:00', 760000),
+(N'CT022', N'T001', N'HT001', '2025-11-10 10:00:00', '2025-11-10 18:00:00', 780000),
+(N'CT023', N'T002', N'HT002', '2025-11-11 06:30:00', '2025-11-11 14:30:00', 800000),
+(N'CT024', N'T001', N'HT001', '2025-11-12 07:00:00', '2025-11-12 15:00:00', 820000),
+(N'CT025', N'T002', N'HT002', '2025-11-13 08:30:00', '2025-11-13 16:30:00', 840000),
+(N'CT026', N'T001', N'HT001', '2025-11-14 09:00:00', '2025-11-14 17:00:00', 860000),
+(N'CT027', N'T002', N'HT002', '2025-11-15 10:00:00', '2025-11-15 18:00:00', 880000);
+
+
+
 -- Dữ liệu mẫu cho bảng LoaiToaTau, ToaTau, KhoangTau, Tang
 INSERT INTO LoaiToaTau (maLoaiToaTau, tenLoaiToa) VALUES
 (N'LTToa01', N'Toà thường'),
@@ -354,11 +379,46 @@ INSERT INTO GheNgoi (maGheNgoi, maTang, maLoaiGhe, maKhoangTau, maToaTau, soGhe,
 (N'Ghe002', N'T1', N'LG02', N'KT01', N'TT001', 2, 50000, 0),
 (N'Ghe003', N'T2', N'LG03', N'KT02', N'TT002', 1, 150000, 0);
 
+INSERT INTO GheNgoi (maGheNgoi, maTang, maLoaiGhe, maKhoangTau, maToaTau, soGhe, giaTriTangThem, luuDong) VALUES
+(N'Ghe004', N'T1', N'LG01', N'KT01', N'TT001', 3, 0, 0),
+(N'Ghe005', N'T1', N'LG02', N'KT01', N'TT001', 4, 50000, 0),
+(N'Ghe006', N'T2', N'LG03', N'KT02', N'TT002', 5, 150000, 0),
+(N'Ghe007', N'T1', N'LG01', N'KT01', N'TT001', 6, 0, 0),
+(N'Ghe008', N'T1', N'LG02', N'KT01', N'TT001', 7, 50000, 0),
+(N'Ghe009', N'T2', N'LG03', N'KT02', N'TT002', 8, 150000, 0),
+(N'Ghe010', N'T1', N'LG01', N'KT01', N'TT001', 9, 0, 0),
+(N'Ghe011', N'T1', N'LG02', N'KT01', N'TT001', 10, 50000, 0),
+(N'Ghe012', N'T2', N'LG03', N'KT02', N'TT002', 11, 150000, 0),
+(N'Ghe013', N'T1', N'LG01', N'KT01', N'TT001', 12, 0, 0),
+
 -- Dữ liệu mẫu cho bảng GheTrenChuyenTau
 INSERT INTO GheTrenChuyenTau (maGheTrenChuyenTau, maChuyenTau, maGheNgoi, giaTienGhe, trangThaiGhe) VALUES
 (N'GT001', N'CT001', N'Ghe001', 500000, N'còn trống'),
 (N'GT002', N'CT001', N'Ghe002', 550000, N'đã bán'),
 (N'GT003', N'CT002', N'Ghe003', 700000, N'còn trống');
+
+
+INSERT INTO GheTrenChuyenTau (maGheTrenChuyenTau, maChuyenTau, maGheNgoi, giaTienGhe, trangThaiGhe) VALUES
+(N'GT004', N'CT001', N'Ghe004', 500000, N'còn trống'),
+(N'GT005', N'CT001', N'Ghe005', 550000, N'đã bán'),
+(N'GT006', N'CT002', N'Ghe006', 700000, N'còn trống'),
+(N'GT007', N'CT002', N'Ghe007', 520000, N'đã bán'),
+(N'GT008', N'CT003', N'Ghe008', 600000, N'còn trống'),
+(N'GT009', N'CT003', N'Ghe009', 580000, N'đã bán'),
+(N'GT010', N'CT004', N'Ghe010', 610000, N'còn trống'),
+(N'GT011', N'CT004', N'Ghe011', 630000, N'đã bán'),
+(N'GT012', N'CT005', N'Ghe012', 650000, N'còn trống'),
+(N'GT013', N'CT005', N'Ghe013', 670000, N'đã bán'),
+(N'GT014', N'CT006', N'Ghe014', 690000, N'còn trống'),
+(N'GT015', N'CT006', N'Ghe015', 710000, N'đã bán'),
+(N'GT016', N'CT007', N'Ghe016', 730000, N'còn trống'),
+(N'GT017', N'CT007', N'Ghe017', 750000, N'đã bán'),
+(N'GT018', N'CT008', N'Ghe018', 770000, N'còn trống'),
+(N'GT019', N'CT008', N'Ghe019', 790000, N'đã bán'),
+(N'GT020', N'CT009', N'Ghe020', 810000, N'còn trống'),
+(N'GT021', N'CT009', N'Ghe021', 830000, N'đã bán'),
+(N'GT022', N'CT010', N'Ghe022', 850000, N'còn trống'),
+(N'GT023', N'CT010', N'Ghe023', 870000, N'đã bán');
 
 -- Dữ liệu mẫu cho bảng KhuyenMai, DoiTuongGiamGia
 INSERT INTO KhuyenMai (maKhuyenMai, tenChuongTrinh, giaTriPhanTramKhuyenMai, ngayBatDau, ngayKetThuc, trangThaiKhuyenMai, dieuKienApDungKhuyenMai) VALUES

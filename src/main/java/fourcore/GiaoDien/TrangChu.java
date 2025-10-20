@@ -815,7 +815,15 @@ public class TrangChu extends Application {
                         }
                         slide.play();
                     });
+            quanLiChuyenTauBox.setOnMouseClicked(event -> {
+                QuanLyChuyenTau gdQuanLiChuyenTau = new QuanLyChuyenTau();
+                Stage qlChuyenTauStage = new Stage();
+                gdQuanLiChuyenTau.start(qlChuyenTauStage);
+                VBox gdChinhQLChuyenTau = gdQuanLiChuyenTau.getGDQuanLiChuyenTau();
+                root.setCenter(gdChinhQLChuyenTau);
 
+
+            });
 
             scrollPaneMenu.setContent(danhSachMenuItem);
 
