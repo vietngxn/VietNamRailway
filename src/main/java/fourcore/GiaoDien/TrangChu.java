@@ -33,19 +33,15 @@ import fourcore.Entity.LichSuBanVe;
 
 
 public class TrangChu extends Application {
-    private BorderPane manHinhChinh;
     private VBox menuList;
     private VBox noiDungChinh;
     private ImageView logoImgView;
-    private Image logoImage;
     Class<?> clazz = this.getClass();
     private ScrollPane scrollPaneMenu;
     private VBox danhSachMenuItem;
     private HBox quanLiVeTauMenu;
     private Label quanLiVeTauLabel;
-    private Image quanLiVeTauIcon;
     private ImageView quanLiVeTauIconView;
-    private Image showMenuPhuIcon;
     private ImageView showMenuPhuIconView;
     private HBox banVeBox;
     private HBox doiVeBox;
@@ -53,19 +49,10 @@ public class TrangChu extends Application {
     private HBox capVeBox;
     private HBox quanLiKhachHangMenu;
     private ImageView quanLiKhachHangIconView;
-    private ImageView quanLiKhachHangView;
-    private HBox themKhachHangBox;
-    private HBox xoaKhachHangBox;
-    private HBox suaKhachHangBox;
-    private Label quanLiKhachHang;
     private Label quanLiKhachHangLabel;
     private HBox quanLiHoaDonMenu;
     private ImageView quanLiHoaDonIconView;
     private Label quanLiHoaDonLabel;
-    private HBox timHoaDonBox;
-    private HBox quanLiThongKeMenu;
-    private ImageView quanLiThongKeIconView;
-    private Label quanLiThongKeLabel;
     private HBox quanLiNhanVienMenu;
     private ImageView quanLiNhanVienIconView;
     private HBox quanLiCTKMMenu;
