@@ -884,7 +884,7 @@ public class QuanLiHoaDon extends Application {
 			
 			create_layout_button();
 			primaryStage.setFullScreen(true);
-//			primaryStage.show();
+			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -904,7 +904,7 @@ public class QuanLiHoaDon extends Application {
 		
 		layout_lbl_timkiem = new HBox();
 		layout_lbl_timkiem.setPrefSize(740, 40);
-		lbl_timkiem = new Label("Nhập mã vé");
+		lbl_timkiem = new Label("Nhập mã hóa đơn");
 		lbl_timkiem.setTranslateX(10);
 		lbl_timkiem.setTranslateY(0);
 		lbl_timkiem.setStyle("-fx-font-family: 'Inter';-fx-font-weight:bold;-fx-font-size:18px;-fx-text-fill : #00BACB;");
@@ -958,9 +958,9 @@ public class QuanLiHoaDon extends Application {
 	    tableCol.setAlignment(Pos.CENTER);
 	    tableCol.setMaxWidth(1330);
 	    
-	    table_layout.setPrefSize(1350, 500);
+	    table_layout.setPrefSize(1350, 730);
 	    table_layout.setTranslateX(10);
-	    table_layout.setMaxSize(1350, 500);
+	    table_layout.setMaxSize(1350, 730);
 	    
 	    String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 18px; -fx-font-weight: bold;";
 	    
@@ -1027,7 +1027,7 @@ public class QuanLiHoaDon extends Application {
 	    scrollPane.setPannable(true);
 	    
 	    VBox.setVgrow(scrollPane, Priority.ALWAYS);
-	    scrollPane.setMaxHeight(400);
+	    scrollPane.setMaxHeight(660);
 	    
 	    table_layout.getChildren().add(scrollPane);
 	    
@@ -1038,20 +1038,20 @@ public class QuanLiHoaDon extends Application {
 	{
 		layout_button = new HBox();
 		
-		layout_button.setPrefSize(950, 50);
+		layout_button.setPrefSize(950, 60);
 		layout_button.setAlignment(Pos.CENTER_RIGHT);
-		layout_button.setTranslateX(-20);	
+		layout_button.setTranslateX(-70);	
 		String style = "-fx-font-family: 'Inter';-fx-font-weight: bold;-fx-font-size:13.5px;-fx-text-fill:white;-fx-background-radius: 20px;";
 		
 		
 		btn_xuatHoaDon = new Button("Xuất Hóa Đơn");
 		btn_xuatHoaDon.setStyle(style+"-fx-background-color: linear-gradient(to top, #00BACB, #8EE6ED);");
-		btn_xuatHoaDon.setPrefSize(225, 50);
+		btn_xuatHoaDon.setPrefSize(225, 60);
 		
 		
 		btn_xemChiTiet = new Button("Xem Chi Tiết");
 		btn_xemChiTiet.setStyle(style+"-fx-background-color: linear-gradient(to top, #00BACB, #8EE6ED);");
-		btn_xemChiTiet.setPrefSize(225, 50);
+		btn_xemChiTiet.setPrefSize(225, 60);
 		
 		layout_button.setSpacing(40);
 		layout_button.getChildren().addAll(btn_xuatHoaDon,btn_xemChiTiet);
@@ -1178,8 +1178,8 @@ public class QuanLiHoaDon extends Application {
 	        	hangchon.setStyle(normalStyle);
 	        }
 	        // Chọn dòng hiện tại
-	        hangchon = data;
-	        data.setStyle(selectedStyle);
+	        	hangchon = data;
+	        	data.setStyle(selectedStyle);
 	    });
 
 	    // Hover effect

@@ -80,6 +80,16 @@ public class NhanVien {
 	public void setCccd(String cccd) {
 		this.cccd = cccd;
 	}
+	public NhanVien(String maNhanVien, String hoTen, String sdt,String gioiTinh, String email,String cccd,String tinhTrangLamViec) {
+		super();
+		this.maNhanVien = maNhanVien;
+		this.hoTen = hoTen;
+		this.email = email;
+		this.sdt = sdt;
+		this.tinhTrangLamViec = tinhTrangLamViec;
+		this.gioiTinh = gioiTinh;
+		this.cccd = cccd;
+	}
 	@Override
 	public String toString() {
 		return "NhanVien [maNhanVien=" + maNhanVien + ", hoTen=" + hoTen + ", chucVu=" + chucVu + ", ngaySinh="
@@ -100,6 +110,7 @@ public class NhanVien {
 		setGioiTinh(gioiTinh);
 		setCccd(cccd);
 	}
+	
 	public NhanVien() {
 	}
 	
