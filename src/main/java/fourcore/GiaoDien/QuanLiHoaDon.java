@@ -75,7 +75,7 @@ public class QuanLiHoaDon extends Application {
 	private Node lbl_title_loaiHoaDon;
 	private VBox table_desc;
 	private ScrollPane scrollPane;
-	private ArrayList<GridPane> hangchon = new ArrayList<>();
+	private GridPane hangchon = null;
 	private HBox layout_button;
 	private Button btn_xoaChuyenTau;
 	private Button btn_xuatHoaDon;
@@ -1014,9 +1014,9 @@ public class QuanLiHoaDon extends Application {
 	    table_desc = new VBox();
 	    table_desc.setSpacing(20);
 	    
-	    create_layout_dong("CT001", "SE1", LocalDate.now(), "hello", 50000.0);
-	    create_layout_dong("CT002", "SE2", LocalDate.now(), "hello", 50000.0);
-	    create_layout_dong("CT003", "SE3", LocalDate.now(), "hello", 50000.0);
+	    create_layout_dong("CT001", "TD", LocalDate.now(), "hello", 50000.0);
+	    create_layout_dong("CT002", "TD", LocalDate.now(), "hello", 50000.0);
+	    create_layout_dong("CT003", "TD", LocalDate.now(), "hello", 50000.0);
 	    
 	    scrollPane = new ScrollPane();
 	    scrollPane.setContent(table_desc);
@@ -1171,41 +1171,40 @@ public class QuanLiHoaDon extends Application {
 	    
 	    final GridPane dongHienTai = data;
 	    
-	    
-	    dongHienTai.setOnMouseClicked(e -> {
-	        if (hangchon.contains(dongHienTai)) {
-	            hangchon.remove(dongHienTai);
-	            dongHienTai.setStyle(normalStyle);
-	        } else {
-	            hangchon.add(dongHienTai);
-	            dongHienTai.setStyle(selectedStyle);
+	     
+	    data.setOnMouseClicked(e -> {
+	        // Bỏ chọn dòng cũ nếu có
+	        if (hangchon != null && hangchon != data) {
+	        	hangchon.setStyle(normalStyle);
 	        }
+	        // Chọn dòng hiện tại
+	        hangchon = data;
+	        data.setStyle(selectedStyle);
 	    });
 
-	    dongHienTai.setOnMouseEntered(e -> {
-			if (!hangchon.contains(dongHienTai)) {
-				dongHienTai.setStyle(hoverStyle);
-			}
-			ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), dongHienTai);
-			scaleUp.setToX(1.02);
-			scaleUp.setToY(1.02);
-			scaleUp.play();
-		});
+	    // Hover effect
+	    data.setOnMouseEntered(e -> {
+	        // Chỉ thay đổi style nếu dòng này không phải dòng được chọn
+	        if (hangchon != data) {
+	            data.setStyle(hoverStyle);
+	        }
+	        ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), data);
+	        scaleUp.setToX(1.02);
+	        scaleUp.setToY(1.02);
+	        scaleUp.play();
+	    });
 
-		// RỜI CHUỘT
-		dongHienTai.setOnMouseExited(e -> {
-			if (hangchon.contains(dongHienTai)) {
-				dongHienTai.setStyle(selectedStyle);
-			} else {
-				dongHienTai.setStyle(normalStyle);
-			}
-			ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), dongHienTai);
-			scaleDown.setToX(1.0);
-			scaleDown.setToY(1.0);
-			scaleDown.play();
-		});
-
-	    
+	    // Rời chuột
+	    data.setOnMouseExited(e -> {
+	        // Nếu đây không phải dòng được chọn, trả về style bình thường
+	        if (hangchon != data) {
+	            data.setStyle(normalStyle);
+	        }
+	        ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), data);
+	        scaleDown.setToX(1.0);
+	        scaleDown.setToY(1.0);
+	        scaleDown.play();
+	    });
 	    table_desc.getChildren().add(data);
 	}
 	
