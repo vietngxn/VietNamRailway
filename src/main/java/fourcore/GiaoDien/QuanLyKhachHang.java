@@ -976,9 +976,9 @@ public class QuanLyKhachHang extends Application {
 		tableCol.setAlignment(Pos.CENTER);
 		tableCol.setMaxWidth(1330);
 		
-		table_layout.setPrefSize(1350, 500);
+		table_layout.setPrefSize(1350, 730);
 		table_layout.setTranslateX(10);
-		table_layout.setMaxSize(1350, 500);
+		table_layout.setMaxSize(1350, 730);
 		
 		String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 20px; -fx-font-weight: bold;";
 		
@@ -1075,7 +1075,7 @@ public class QuanLyKhachHang extends Application {
 
 		// ScrollPane sẽ tự động mở rộng nhưng không vượt quá chiều cao còn lại của cửa sổ
 		VBox.setVgrow(scrollPane, Priority.ALWAYS);
-		scrollPane.setMaxHeight(400);
+		scrollPane.setMaxHeight(660);
 		
 		table_layout.getChildren().add(scrollPane);
 		
@@ -1087,23 +1087,23 @@ public class QuanLyKhachHang extends Application {
 	{
 		layout_button = new HBox();
 		
-		layout_button.setPrefSize(950, 50);
+		layout_button.setPrefSize(950, 60);
 		layout_button.setAlignment(Pos.CENTER_RIGHT);
-		layout_button.setTranslateX(-20);	
+		layout_button.setTranslateX(-70);	
 		String style = "-fx-font-family: 'Inter';-fx-font-weight: bold;-fx-font-size:15px;-fx-text-fill:white;-fx-background-radius: 20px;";
 		
 		btn_xoakh = new Button("Xóa Khách Hàng");
-		btn_xoakh.setStyle(style+ "-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #CB002CD3 23%, #CB002C1F 100%);");
-		btn_xoakh.setPrefSize(175, 50);
+		btn_xoakh.setStyle(style+ "-fx-background-color: linear-gradient(to bottom, #D498A5, #D32B4F);");
+		btn_xoakh.setPrefSize(175, 60);
 		btn_xoakh.setDisable(true);
 		btn_themkh = new Button("Thêm Khách Hàng");
 		btn_themkh.setStyle(style+"-fx-background-color: linear-gradient(to top, #00BACB, #8EE6ED);");
-		btn_themkh.setPrefSize(175, 50);
+		btn_themkh.setPrefSize(175, 60);
 		
 		
 		btn_capnhat = new Button("Cập nhật thông tin");
 		btn_capnhat.setStyle(style+"-fx-background-color: linear-gradient(to top, #00BACB, #8EE6ED);");
-		btn_capnhat.setPrefSize(175, 50);
+		btn_capnhat.setPrefSize(175, 60);
 		
 		layout_button.setSpacing(40);
 		layout_button.getChildren().addAll(btn_xoakh,btn_themkh,btn_capnhat);

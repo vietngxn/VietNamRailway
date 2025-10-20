@@ -968,9 +968,9 @@ public class QuanLyCTKM extends Application {
 	    tableCol.setAlignment(Pos.CENTER);
 	    tableCol.setMaxWidth(1330);
 	    
-	    table_layout.setPrefSize(1350, 500);
+	    table_layout.setPrefSize(1350, 730);
 	    table_layout.setTranslateX(10);
-	    table_layout.setMaxSize(1350, 500);
+	    table_layout.setMaxSize(1350, 730);
 	    
 	    String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 18px; -fx-font-weight: bold;";
 	    
@@ -1031,7 +1031,7 @@ public class QuanLyCTKM extends Application {
 	    
 	    table_desc = new VBox();
 	    table_desc.setSpacing(20);
-
+	    
 /*-------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 //			======================
 //			||     CONTROL     ||
@@ -1058,7 +1058,7 @@ public class QuanLyCTKM extends Application {
 	    scrollPane.setPannable(true);
 	    
 	    VBox.setVgrow(scrollPane, Priority.ALWAYS);
-	    scrollPane.setMaxHeight(400);
+	    scrollPane.setMaxHeight(660);
 	    
 	    table_layout.getChildren().add(scrollPane);
 	    
@@ -1068,24 +1068,24 @@ public class QuanLyCTKM extends Application {
 	{
 		layout_button = new HBox();
 		
-		layout_button.setPrefSize(950, 50);
+		layout_button.setPrefSize(950, 60);
 		layout_button.setAlignment(Pos.CENTER_RIGHT);
-		layout_button.setTranslateX(-20);	
+		layout_button.setTranslateX(-70);	
 		String style = "-fx-font-family: 'Inter';-fx-font-weight: bold;-fx-font-size:13.5px;-fx-text-fill:white;-fx-background-radius: 20px;";
 		
 		btn_xoaCTKM = new Button("Xóa Chương Trình Khuyến Mãi");
-		btn_xoaCTKM.setStyle(style+ "-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #CB002CD3 23%, #CB002C1F 100%);");
-		btn_xoaCTKM.setPrefSize(225, 50);
+		btn_xoaCTKM.setStyle(style+ "-fx-background-color: linear-gradient(to bottom, #D498A5, #D32B4F);");
+		btn_xoaCTKM.setPrefSize(225, 60);
 		btn_xoaCTKM.setDisable(true);
 		
 		btn_themCTKM = new Button("Thêm Chương Trình Khuyến Mãi");
 		btn_themCTKM.setStyle(style+"-fx-background-color: linear-gradient(to top, #00BACB, #8EE6ED);");
-		btn_themCTKM.setPrefSize(225, 50);
+		btn_themCTKM.setPrefSize(225, 60);
 		
 		
 		btn_capnhat = new Button("Cập nhật thông tin");
 		btn_capnhat.setStyle(style+"-fx-background-color: linear-gradient(to top, #00BACB, #8EE6ED);");
-		btn_capnhat.setPrefSize(225, 50);
+		btn_capnhat.setPrefSize(225, 60);
 		
 		layout_button.setSpacing(40);
 		layout_button.getChildren().addAll(btn_xoaCTKM,btn_themCTKM,btn_capnhat);
