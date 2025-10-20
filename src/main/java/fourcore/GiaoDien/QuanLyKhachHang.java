@@ -5,6 +5,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import fourcore.Entity.KhachHang;
+import fourcore.dao.KhachHangDAO;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -118,9 +120,19 @@ public class QuanLyKhachHang extends Application {
     private ImageView settingIcon;
     private ImageView moTaDoanhThuIcon;
     private HBox xemLichSuVeBox;
+    private KhachHangDAO khdao = new KhachHangDAO();
+	private ArrayList<KhachHang> listkh;
+	private Node lblemail;
+	private Label lblsdt;
+	private Label colsoDienThoai;
+	private Label colemail;
+	private StackPane paneCol5;
+	private StackPane paneCol6;
+    
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			listkh = khdao.getListKhachHang();
             BorderPane root = new BorderPane();
             Scene scene = new Scene(root,1920,1000);
             primaryStage.setScene(scene);
@@ -968,7 +980,7 @@ public class QuanLyKhachHang extends Application {
 		table_layout.setTranslateX(10);
 		table_layout.setMaxSize(1350, 500);
 		
-		String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 24px; -fx-font-weight: bold;";
+		String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 20px; -fx-font-weight: bold;";
 		
 		
 		
@@ -977,63 +989,81 @@ public class QuanLyKhachHang extends Application {
 		
 		
 		
-		colmaKhachHang = new Label("Mã Ghế");
+		colmaKhachHang = new Label("Mã Khách Hàng");
 		
 		colmaKhachHang.setStyle(styleHeader);
 		
-		colhoTen = new Label("Tên Ghế");
-		
+		colhoTen = new Label("Tên Khách Hàng");
 		colhoTen.setStyle(styleHeader);
 		
 		
 		
-		colCCCD = new Label("CCCD");
-
+		
+		colCCCD = new Label("CCCD/Passport");
 		colCCCD.setStyle(styleHeader);
 
-		coldoiTuong = new Label("Đối Tượng");
 		
+		colsoDienThoai = new Label("Số Điện Thoại");
+		colsoDienThoai.setStyle(styleHeader);
+		
+		colemail = new Label("Email");
+		colemail.setStyle(styleHeader);
+		
+		
+		
+		coldoiTuong = new Label("Đối Tượng");
 		coldoiTuong.setStyle(styleHeader);	
 		
-		colmaKhachHang.setTranslateX(-150);
-		colhoTen.setTranslateX(-150);
-		colCCCD.setTranslateX(100);
-		coldoiTuong.setTranslateX(100);
+//		colmaKhachHang.setTranslateX(-150);
+//		colhoTen.setTranslateX(-150);
+//		colCCCD.setTranslateX(100);
+//		coldoiTuong.setTranslateX(100);
 		
 		paneCol1 = new StackPane(colmaKhachHang);
 		paneCol2 = new StackPane(colhoTen);
-		paneCol3 = new StackPane(colCCCD);
-		paneCol4 = new StackPane(coldoiTuong);
+		paneCol3 = new StackPane(colsoDienThoai);
+		paneCol4 = new StackPane(colemail);
+		paneCol5 = new StackPane(colCCCD);
+		paneCol6 = new StackPane(coldoiTuong);
 		
 		
-		paneCol1.setPrefWidth(200);
-		paneCol2.setPrefWidth(200);
+		
+		paneCol1.setPrefWidth(300);
+		paneCol2.setPrefWidth(300);
 		paneCol3.setPrefWidth(300);
 		paneCol4.setPrefWidth(300);
+		paneCol5.setPrefWidth(300);
+		paneCol6.setPrefWidth(300);
 		
 		paneCol1.setAlignment(Pos.CENTER);
 		paneCol2.setAlignment(Pos.CENTER);
 		paneCol3.setAlignment(Pos.CENTER);
 		paneCol4.setAlignment(Pos.CENTER);
+		paneCol5.setAlignment(Pos.CENTER);
+		paneCol6.setAlignment(Pos.CENTER);
 		
 		tableCol.add(paneCol1, 0, 0);
 		tableCol.add(paneCol2, 1, 0);
 		tableCol.add(paneCol3, 2, 0);
 		tableCol.add(paneCol4, 3, 0);
+		tableCol.add(paneCol5, 4, 0);
+		tableCol.add(paneCol6, 5, 0);
 		
 		table_layout.getChildren().add(tableCol);
 		table_desc = new VBox();
 		table_desc.setSpacing(20);
-		create_layout_dong("KH111", "Quach Ngoc Long", "111111111111", "Vua Khong Bao");
+	
 		
-		create_layout_dong("KH111", "Nguyen Ba Viet", "111111111111", "Chang Trai 36");
-		
-		create_layout_dong("KH111", "Nguyen Huu Tien", "111111111111", "Loli Con");
-		
-		
-		create_layout_dong("KH111", "Nguyen Tien Dat", "111111111111", "Tommy Teo");
-		
-		create_layout_dong("KH111", "Nguyen Tien Dat", "111111111111", "Tommy Teo");
+		for(KhachHang kh : listkh)
+		{
+			if(kh.getCccd() != null)
+			{
+			create_layout_dong(kh.getMaKhachHang(), kh.getHoten(), kh.getSdt(), kh.getEmail(), kh.getCccd(), kh.getDoiTuong());
+			}
+			else {
+				create_layout_dong(kh.getMaKhachHang(), kh.getHoten(), kh.getSdt(), kh.getEmail(), kh.getPassport(), kh.getDoiTuong());	
+			}
+		}
 		
 		scrollPane = new ScrollPane();
 		scrollPane.setContent(table_desc);
@@ -1137,12 +1167,12 @@ public class QuanLyKhachHang extends Application {
 		noiDungChinh.getChildren().add(layout_button);
 		
 	}
-	public void create_layout_dong(String makh, String hoten, String cccd, String loaidoituong) {
+	public void create_layout_dong(String makh, String hoten,String sdt, String cccd,String email, String loaidoituong) {
 	    GridPane data = new GridPane();
 	    
 	    data.setHgap(10);
 	    data.setAlignment(Pos.CENTER);
-	    data.setMaxWidth(1250);
+	    data.setMaxWidth(1280);
 	    data.setTranslateX(20);
 	    data.setPrefHeight(70);
 	    data.setPadding(new Insets(0, 0, 0, 10));
@@ -1152,44 +1182,57 @@ public class QuanLyKhachHang extends Application {
 	    // Tạo labels
 	    lblmaKhachHang = new Label(makh);
 	    lblhoTen = new Label(hoten);
+	    lblsdt = new  Label(sdt); 
 	    lblCCCD = new Label(cccd);
+	    lblemail = new Label(email);
 	    lblloaidoituong = new Label(loaidoituong);
 	    
 	    lblmaKhachHang.setStyle(baseStyle);
 	    lblhoTen.setStyle(baseStyle);
+	    lblsdt.setStyle(baseStyle);
 	    lblCCCD.setStyle(baseStyle);
+	    lblemail.setStyle(baseStyle);
 	    lblloaidoituong.setStyle(baseStyle);
 	    
 	    
 	    // Tạo StackPane cho mỗi cột giống như tableCol
 	    StackPane paneData1 = new StackPane(lblmaKhachHang);
 	    StackPane paneData2 = new StackPane(lblhoTen);
-	    StackPane paneData3 = new StackPane(lblCCCD);
-	    StackPane paneData4 = new StackPane(lblloaidoituong);
+	    StackPane paneData3 = new StackPane(lblsdt);
+	    StackPane paneData5 = new StackPane(lblCCCD);
+	    StackPane paneData4 = new StackPane(lblemail);
+	    StackPane paneData6 = new StackPane(lblloaidoituong);
 	    
 	    // Set width giống như paneCol
-	    paneData1.setPrefWidth(200);
-	    paneData2.setPrefWidth(200);
+	    paneData1.setPrefWidth(300);
+	    paneData2.setPrefWidth(300);
 	    paneData3.setPrefWidth(300);
-	    paneData4.setPrefWidth(300);
+	    paneData4.setPrefWidth(300);	    
+	    paneData5.setPrefWidth(300);
+	    paneData6.setPrefWidth(300);
 	    
 	    // Set alignment CENTER giống như paneCol
 	    paneData1.setAlignment(Pos.CENTER);
 	    paneData2.setAlignment(Pos.CENTER);
 	    paneData3.setAlignment(Pos.CENTER);
 	    paneData4.setAlignment(Pos.CENTER);
+	    paneData5.setAlignment(Pos.CENTER);
+	    paneData6.setAlignment(Pos.CENTER);
 	    
 	    // Add vào GridPane theo đúng cột
 	    data.add(paneData1, 0, 0);
 	    data.add(paneData2, 1, 0);
 	    data.add(paneData3, 2, 0);
-	    data.add(paneData4, 3, 0);
+	    data.add(paneData5, 3, 0);
+	    data.add(paneData4, 4, 0);
+	    data.add(paneData6, 5, 0);
 	    
-	    lblmaKhachHang.setTranslateX(-140);
-	    lblhoTen.setTranslateX(-140);
-	    lblCCCD.setTranslateX(110);
-	    lblloaidoituong.setTranslateX(110);
-	    
+	    lblmaKhachHang.setTranslateX(-20);
+	    lblhoTen.setTranslateX(-10);
+	    lblCCCD.setTranslateX(10);
+	    lblemail.setTranslateX(10);
+	    lblloaidoituong.setTranslateX(20);
+//	    
 	    String normalStyle = """
 	    	    -fx-background-color: rgba(0, 186, 203, 0.3);
 	    	    -fx-background-radius: 15px;

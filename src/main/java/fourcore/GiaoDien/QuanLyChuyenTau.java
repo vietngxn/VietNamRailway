@@ -3,10 +3,16 @@ package fourcore.GiaoDien;
 import java.io.InputStream;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import fourcore.Entity.KhuyenMai;
+import fourcore.dao.ChuongTrinhKhuyenMaiDAO;
+import fourcore.dao.QuanLiChuyenTauDAO;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -110,9 +116,20 @@ public class QuanLyChuyenTau extends Application {
     private ImageView settingIcon;
     private ImageView moTaDoanhThuIcon;
     private HBox xemLichSuVeBox;
+    ArrayList listChuyenTau;
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+//			======================
+//			||     GET DATA     ||
+//			======================
+            QuanLiChuyenTauDAO qlCTDao = new QuanLiChuyenTauDAO();
+            listChuyenTau = qlCTDao.getListThongTinChuyenTau();
+//---------------------------------------------------------------------------------------------------
+
+
+
+
             BorderPane root = new BorderPane();
             Scene scene = new Scene(root,1920,1000);
             primaryStage.setScene(scene);
@@ -882,7 +899,7 @@ public class QuanLyChuyenTau extends Application {
 			
 			create_layout_button();
 			primaryStage.setFullScreen(true);
-			primaryStage.show();
+//			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -995,10 +1012,27 @@ public class QuanLyChuyenTau extends Application {
 	    table_desc = new VBox();
 	    table_desc.setSpacing(20);
 
-	    // Tạo dữ liệu mẫu
-	    create_layout_dong("CT001", "SE1", 10, 10, LocalDate.now(), "Hà Nội", "TP.Hồ Chí Minh");
-	    create_layout_dong("CT002", "SE2", 12, 8, LocalDate.now(), "Đà Nẵng", "Huế");
-	    create_layout_dong("CT003", "SE3", 9, 3, LocalDate.now(), "Nha Trang", "Hà Nội");
+/*-------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+//			======================
+//			||     CONTROL     ||
+//			======================
+
+//  DATA INPUT PATTERN:      String maChuyenTau, String dauTau, int soLuongToa, int veTrong, LocalDate thoiGianKhoiHanh, String gaDi, String gaDen
+        for (int i=0; i<listChuyenTau.size(); i++) {
+            Map<String, Object> chuyenTauInfo = (Map<String, Object>) listChuyenTau.get(i);
+            String maChuyen = (String) chuyenTauInfo.get("maChuyen");
+            String dauTau = (String) chuyenTauInfo.get("dauTau");
+            int soLuongToa = (int) chuyenTauInfo.get("soLuongToa");
+            int soLuongVeTrong = (int) chuyenTauInfo.get("soLuongVeTrong");
+            LocalDateTime thoiGianKhoiHanh = (LocalDateTime) chuyenTauInfo.get("thoiGianKhoiHanh");
+            String gaDi = (String) chuyenTauInfo.get("gaDi");
+            String gaDen = (String) chuyenTauInfo.get("gaDen");
+            create_layout_dong(maChuyen, dauTau,soLuongToa,soLuongVeTrong,thoiGianKhoiHanh.toLocalDate(),gaDi,gaDen);
+
+        }
+
+
+        /*-------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 	    // --- SCROLL ---
 	    scrollPane = new ScrollPane();
@@ -1222,6 +1256,9 @@ public class QuanLyChuyenTau extends Application {
 	    // Thêm vào layout chính
 	    table_desc.getChildren().add(data);
 	}
+    public VBox getGDQuanLiChuyenTau(){
+        return  this.noiDungChinh;
+    }
 	
 	
 	
