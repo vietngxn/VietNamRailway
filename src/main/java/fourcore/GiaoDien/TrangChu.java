@@ -64,6 +64,7 @@ public class TrangChu extends Application {
     private ImageView settingIcon;
     private ImageView moTaDoanhThuIcon;
     private HBox xemLichSuVeBox;
+    VBox noiDungWrapper = new VBox(10);
 
     @Override
     public void start(Stage primaryStage) {
@@ -79,6 +80,10 @@ public class TrangChu extends Application {
             logoImgView.setFitWidth(500);
             logoImgView.setFitHeight(270);
             menuList.getChildren().add(logoImgView);
+
+            logoImgView.setOnMouseClicked(event -> {
+                root.setCenter(noiDungWrapper);
+            });
 
             scrollPaneMenu = new ScrollPane();
             danhSachMenuItem = new VBox();
@@ -352,7 +357,7 @@ public class TrangChu extends Application {
             });
 
             thongKeKhachHang.setOnMouseClicked(event -> {
-               QuanLiThongKe gdQuanLiThongKe = new QuanLiThongKe();
+               QuanLiThongKeChuyenTau gdQuanLiThongKe = new QuanLiThongKeChuyenTau();
                gdQuanLiThongKe.setLoaiThongKe("ThongKeKhachHang");
                Stage thongKeKhachHangStage = new Stage();
                gdQuanLiThongKe.start(thongKeKhachHangStage);
@@ -485,7 +490,7 @@ public class TrangChu extends Application {
             });
 
             thongKeDoanhThuBox.setOnMouseClicked(event -> {
-                QuanLiThongKe gdQuanLiThongKe2 = new QuanLiThongKe();
+                QuanLiThongKeChuyenTau gdQuanLiThongKe2 = new QuanLiThongKeChuyenTau();
                 gdQuanLiThongKe2.setLoaiThongKe("ThongKeDoanhThu");
                 Stage thongKeDoanhStage = new Stage();
                 gdQuanLiThongKe2.start(thongKeDoanhStage);
@@ -1167,13 +1172,14 @@ public class TrangChu extends Application {
                     noiDungChinh.getChildren().add(background);
                 }
             });
-            VBox noiDungWrapper = new VBox(10);
+
             noiDungWrapper.getChildren().addAll(hienNoiDungCheckBox,noiDungChinh);
 
             BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
             root.setLeft(menuList);
             root.setCenter(noiDungWrapper);
             root.setStyle("-fx-background-color: #FFFFFF;");
+            root.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
             primaryStage.setFullScreen(true);
             primaryStage.show();
         }catch(Exception e) {

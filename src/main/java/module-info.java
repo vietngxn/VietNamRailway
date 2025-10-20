@@ -3,7 +3,7 @@ module VietNamRailwayInterface {
     requires javafx.fxml;
 	requires javafx.graphics;
 
-
+    requires java.sql;
     exports fourcore.Entity;
     exports fourcore.GiaoDien;
 

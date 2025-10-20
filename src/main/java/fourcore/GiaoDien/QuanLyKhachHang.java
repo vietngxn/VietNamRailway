@@ -398,7 +398,7 @@ public class QuanLyKhachHang extends Application {
             });
 
             thongKeKhachHang.setOnMouseClicked(event -> {
-               QuanLiThongKe gdQuanLiThongKe = new QuanLiThongKe();
+               QuanLiThongKeChuyenTau gdQuanLiThongKe = new QuanLiThongKeChuyenTau();
                gdQuanLiThongKe.setLoaiThongKe("ThongKeKhachHang");
                Stage thongKeKhachHangStage = new Stage();
                gdQuanLiThongKe.start(thongKeKhachHangStage);
@@ -531,7 +531,7 @@ public class QuanLyKhachHang extends Application {
             });
 
             thongKeDoanhThuBox.setOnMouseClicked(event -> {
-                QuanLiThongKe gdQuanLiThongKe2 = new QuanLiThongKe();
+                QuanLiThongKeChuyenTau gdQuanLiThongKe2 = new QuanLiThongKeChuyenTau();
                 gdQuanLiThongKe2.setLoaiThongKe("ThongKeDoanhThu");
                 Stage thongKeDoanhStage = new Stage();
                 gdQuanLiThongKe2.start(thongKeDoanhStage);

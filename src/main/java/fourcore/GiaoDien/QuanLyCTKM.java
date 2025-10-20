@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import fourcore.Entity.KhuyenMai;
+import fourcore.dao.ChuongTrinhKhuyenMaiDAO;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -76,7 +78,7 @@ public class QuanLyCTKM extends Application {
 	private Button btn_xoaCTKM;
 	private Button btn_themCTKM;
 	private Button btn_capnhat;
-	private Label lbl_title_doituong;
+	private Label lbl_title_dieuKienApDung;
 	private Node lbl_title_trangthai;
     private HBox banVeBox;
     private HBox doiVeBox;
@@ -108,10 +110,16 @@ public class QuanLyCTKM extends Application {
     private ImageView settingIcon;
     private ImageView moTaDoanhThuIcon;
     private HBox xemLichSuVeBox;
-	
-	@Override
+    private ArrayList<KhuyenMai> listKhuyenMai;
+
+    @Override
 	public void start(Stage primaryStage) {
 		try {
+//			======================
+//			||     GET DATA     ||
+//			======================
+            ChuongTrinhKhuyenMaiDAO ctkmDAO = new ChuongTrinhKhuyenMaiDAO();
+            listKhuyenMai = ctkmDAO.getListKhuyenMai();
             BorderPane root = new BorderPane();
             Scene scene = new Scene(root,1920,1000);
             primaryStage.setScene(scene);
@@ -389,7 +397,7 @@ public class QuanLyCTKM extends Application {
             });
 
             thongKeKhachHang.setOnMouseClicked(event -> {
-               QuanLiThongKe gdQuanLiThongKe = new QuanLiThongKe();
+               QuanLiThongKeChuyenTau gdQuanLiThongKe = new QuanLiThongKeChuyenTau();
                gdQuanLiThongKe.setLoaiThongKe("ThongKeKhachHang");
                Stage thongKeKhachHangStage = new Stage();
                gdQuanLiThongKe.start(thongKeKhachHangStage);
@@ -522,7 +530,7 @@ public class QuanLyCTKM extends Application {
             });
 
             thongKeDoanhThuBox.setOnMouseClicked(event -> {
-                QuanLiThongKe gdQuanLiThongKe2 = new QuanLiThongKe();
+                QuanLiThongKeChuyenTau gdQuanLiThongKe2 = new QuanLiThongKeChuyenTau();
                 gdQuanLiThongKe2.setLoaiThongKe("ThongKeDoanhThu");
                 Stage thongKeDoanhStage = new Stage();
                 gdQuanLiThongKe2.start(thongKeDoanhStage);
@@ -976,8 +984,9 @@ public class QuanLyCTKM extends Application {
 	    lbl_title_ngayketthuc = new Label("Ngày Kết Thúc");
 	    lbl_title_ngayketthuc.setStyle(styleHeader);
 	    
-	    lbl_title_doituong = new Label("Đối Tượng");
-	    lbl_title_doituong.setStyle(styleHeader);
+	    lbl_title_dieuKienApDung = new Label("Điều Kiện Áp Dụng");
+	    
+	    lbl_title_dieuKienApDung.setStyle(styleHeader);
 	    
 	    lbl_title_trangthai = new Label("Trạng Thái");
 	    lbl_title_trangthai.setStyle(styleHeader);
@@ -992,14 +1001,14 @@ public class QuanLyCTKM extends Application {
 	    StackPane paneCol2 = new StackPane(lbl_title_tenCTKM);
 	    StackPane paneCol3 = new StackPane(lbl_title_ngaybatdau);
 	    StackPane paneCol4 = new StackPane(lbl_title_ngayketthuc);
-	    StackPane paneCol5 = new StackPane(lbl_title_doituong);
+	    StackPane paneCol5 = new StackPane(lbl_title_dieuKienApDung);
 	    StackPane paneCol6 = new StackPane(lbl_title_trangthai);
 	    
 	    paneCol1.setPrefWidth(150);
 	    paneCol2.setPrefWidth(180);
 	    paneCol3.setPrefWidth(150);
 	    paneCol4.setPrefWidth(150);
-	    paneCol5.setPrefWidth(150);
+	    paneCol5.setPrefWidth(200);
 	    paneCol6.setPrefWidth(130);
 	    
 	    paneCol1.setAlignment(Pos.CENTER);
@@ -1020,12 +1029,24 @@ public class QuanLyCTKM extends Application {
 	    
 	    table_desc = new VBox();
 	    table_desc.setSpacing(20);
-	    
-	    create_layout_dong("CTKM001", "Quach Ngoc Long", LocalDate.now(), LocalDate.now(), "tiendat", true);
-	    create_layout_dong("CTKM001", "Quach Ngoc Long", LocalDate.now(), LocalDate.now(), "tiendat", false);
-	    create_layout_dong("CTKM001", "Quach Ngoc Long", LocalDate.now(), LocalDate.now(), "tiendat", false);
-	    create_layout_dong("CTKM001", "Quach Ngoc Long", LocalDate.now(), LocalDate.now(), "tiendat", true);
-	    create_layout_dong("CTKM001", "Quach Ngoc Long", LocalDate.now(), LocalDate.now(), "tiendat", true);
+
+
+        /*-------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+//			======================
+//			||     CONTROL     ||
+//			======================
+
+//  DATA INPUT PATTERN:      maCT,tenCT,ngaybatdau,ngayketthuc,trangthai
+        for (KhuyenMai khuyenMai : listKhuyenMai) {
+            boolean trangThai =false;
+            if (khuyenMai.getTrangThaiKhuyenMai().equals("kích hoạt")){
+                trangThai = true;
+            }
+            loadCTKMData(khuyenMai.getMaKhuyenMai(), khuyenMai.getTenChuongTrinh(), khuyenMai.getNgayBatDau().toLocalDate(), khuyenMai.getNgayKetThuc().toLocalDate(), khuyenMai.getDieuKienApDung(), trangThai);
+        }
+
+
+        /*-------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 	    
 	    scrollPane = new ScrollPane();
 	    scrollPane.setContent(table_desc);
@@ -1124,7 +1145,7 @@ public class QuanLyCTKM extends Application {
 		noiDungChinh.getChildren().add(layout_button);
 		
 	}
-	public void create_layout_dong(String maCT, String tenCT, LocalDate ngaybatdau, LocalDate ngayketthuc, String doituong, boolean trangthai) {
+	public void loadCTKMData(String maCT, String tenCT, LocalDate ngaybatdau, LocalDate ngayketthuc, String doituong, boolean trangthai) {
 	    GridPane data = new GridPane();
 	    
 	    data.setHgap(10);
@@ -1140,7 +1161,7 @@ public class QuanLyCTKM extends Application {
 	    Label lblTenCT = new Label(tenCT);
 	    Label lblNgayBD = new Label(ngaybatdau.toString());
 	    Label lblNgayKT = new Label(ngayketthuc.toString());
-	    Label lblDoiTuong = new Label(doituong);
+	    Label lbldieuKienApDung = new Label(doituong);
 	    
 	    Label lblTrangThai = new Label(trangthai ? "Sẵn Sàng" : "Đã Kết Thúc");
 	    String colorStyle = trangthai ? "-fx-text-fill: green;" : "-fx-text-fill: red;";
@@ -1149,7 +1170,7 @@ public class QuanLyCTKM extends Application {
 	    lblTenCT.setStyle(baseStyle);
 	    lblNgayBD.setStyle(baseStyle);
 	    lblNgayKT.setStyle(baseStyle);
-	    lblDoiTuong.setStyle(baseStyle);
+	    lbldieuKienApDung.setStyle(baseStyle);
 	    lblTrangThai.setStyle(baseStyle + colorStyle);
 	   
 	    lblMaCT.setTranslateX(-140);
@@ -1157,21 +1178,21 @@ public class QuanLyCTKM extends Application {
 	    lblNgayBD.setTranslateX(-40);
 	    lblNgayKT.setTranslateX(-40);
 	    lblTrangThai.setTranslateX(110);
-	    lblDoiTuong.setTranslateX(5);
+	    lbldieuKienApDung.setTranslateX(5);
 	    lblTenCT.setWrapText(true);
 	    
 	    StackPane paneData1 = new StackPane(lblMaCT);
 	    StackPane paneData2 = new StackPane(lblTenCT);
 	    StackPane paneData3 = new StackPane(lblNgayBD);
 	    StackPane paneData4 = new StackPane(lblNgayKT);
-	    StackPane paneData5 = new StackPane(lblDoiTuong);
+	    StackPane paneData5 = new StackPane(lbldieuKienApDung);
 	    StackPane paneData6 = new StackPane(lblTrangThai);
 	    
 	    paneData1.setPrefWidth(150);
 	    paneData2.setPrefWidth(180);
 	    paneData3.setPrefWidth(150);
 	    paneData4.setPrefWidth(150);
-	    paneData5.setPrefWidth(150);
+	    paneData5.setPrefWidth(200);
 	    paneData6.setPrefWidth(130);
 	    
 	    paneData1.setAlignment(Pos.CENTER);
