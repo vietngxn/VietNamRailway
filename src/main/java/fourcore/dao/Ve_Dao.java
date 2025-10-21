@@ -16,12 +16,12 @@ public class Ve_Dao {
 	public ArrayList<Ve> listVeTau = new ArrayList<Ve>();
 
 	public Ve_Dao() {
-		
+
 	}
 
 	// ======= LOẠI TOA TÀU =======
-	public static final LoaiToaTau TOA_GHE_XOAY = new LoaiToaTau("GN01", "Ghế xoay lên tầng vũ trụ");
-	public static final LoaiToaTau TOA_GIUONG_NAM = new LoaiToaTau("GN02", "Giường nằm phê pha");
+	public static final LoaiToaTau TOA_GHE_XOAY = new LoaiToaTau("GN01", "Ghế xoay lên tầng vũ trụ", 0.0);
+	public static final LoaiToaTau TOA_GIUONG_NAM = new LoaiToaTau("GN02", "Giường nằm phê pha", 0.0);
 
 	// ======= LOẠI TÀU =======
 	public static final LoaiTau LOAI_TAU_1 = new LoaiTau("LT01", "TauHoaBacNam", 12000);
@@ -75,8 +75,5 @@ public class Ve_Dao {
 		listVeTau.add(VE_5);
 		return listVeTau;
 	}
-	
-	
-	
-	
+
 }

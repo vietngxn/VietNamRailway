@@ -892,11 +892,8 @@ public class GiaoDienXuatHoaDon extends Application {
 					alert.setTitle("Lỗi định dạng");
 					alert.setHeaderText(null);
 					alert.setContentText("Số điện thoại không hợp lệ");
-					// Gắn vào Stage hiện tại (cực kỳ quan trọng)
 					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 					alert.initOwner(stage);
-
-					// Không cho resize, luôn ở giữa cửa sổ cha
 					alert.initModality(Modality.WINDOW_MODAL);
 					alert.showAndWait();
 				}

@@ -3,21 +3,17 @@ package fourcore.GiaoDien;
 import java.io.InputStream;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import fourcore.Entity.KhuyenMai;
+import fourcore.Entity.NhanVien;
 import fourcore.dao.ChuongTrinhKhuyenMaiDAO;
-import fourcore.dao.QuanLiChuyenTauDAO;
+import fourcore.dao.NhanVienDAO;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
@@ -41,10 +37,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 
 
-public class QuanLyChuyenTau extends Application {
+public class QuanLiNhanVien extends Application {
 	private BorderPane manHinhChinh;
 	private VBox menuList;
 	private VBox noiDungChinh;
@@ -67,25 +62,26 @@ public class QuanLyChuyenTau extends Application {
 	private VBox layout_txt_timkiem;
 	private VBox layout_timkiem;
 	private VBox table_layout;
-	private GridPane table_title;
+	private HBox table_title;
 	private Label lbl_maKhachHang;
 	private Label lbl_hoTen;
 	private Label lbl_cccd;
 	private Label lbl_doituong;
+	private Label lbl_doiTuong;
 	private HBox layout_dong;
-	private Label lbl_title_maChuyenTau;
-	private Label lbl_title_dauTau;
-	private Node lbl_title_soluongtoa;
-	private Node lbl_title_veTrong;
+	private Label lbl_title_maNhanVien;
+	private Label lbl_title_tenNhanVien;
+	private Node lbl_title_maChucVu;
+	private Node lbl_title_sdt;
 	private VBox table_desc;
 	private ScrollPane scrollPane;
 	private ArrayList<GridPane> hangchon = new ArrayList<>();
 	private HBox layout_button;
-	private Button btn_xoaChuyenTau;
-	private Button btn_themChuyenTau;
-	private Button btn_suaChuyenTau;
-	private Label lbl_title_thoigiankhoihanh;
-	private Node lbl_title_gadigaden;
+	private Button btn_xoaNhanVien;
+	private Button btn_themNhanVien;
+	private Button btn_capnhat;
+	private Label lbl_title_email;
+	private Node lbl_title_cccd;
     private HBox banVeBox;
     private HBox doiVeBox;
     private HBox hoanVeBox;
@@ -116,20 +112,21 @@ public class QuanLyChuyenTau extends Application {
     private ImageView settingIcon;
     private ImageView moTaDoanhThuIcon;
     private HBox xemLichSuVeBox;
-    ArrayList listChuyenTau;
-	@Override
+    
+	private Label lbl_title_tinhTrangLamViec;
+	private Label lbl_title_gioiTinh;
+	private ArrayList<NhanVien> listnhanVien;
+
+    @Override
 	public void start(Stage primaryStage) {
 		try {
 //			======================
 //			||     GET DATA     ||
 //			======================
-            QuanLiChuyenTauDAO qlCTDao = new QuanLiChuyenTauDAO();
-            listChuyenTau = qlCTDao.getListThongTinChuyenTau();
-//---------------------------------------------------------------------------------------------------
+            NhanVienDAO nhanvienDAO = new NhanVienDAO();
+            listnhanVien = nhanvienDAO.getListNhanVien();
 
-
-
-
+//----------------------------------------------------------------------------------------------------------------------------------------
             BorderPane root = new BorderPane();
             Scene scene = new Scene(root,1920,1000);
             primaryStage.setScene(scene);
@@ -735,7 +732,7 @@ public class QuanLyChuyenTau extends Application {
 //		showMenuPhuIcon = new Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
             quanLiCTKMMenu.getChildren().addAll(quanLiCTKMIconView, quanLiCTKMLabel);
             quanLiCTKMMenu.setOnMouseClicked(event -> {
-               QuanLyCTKM quanLyCTKM = new QuanLyCTKM();
+               QuanLiNhanVien quanLyCTKM = new QuanLiNhanVien();
                Stage stage = new Stage();
                quanLyCTKM.start(stage);
                VBox quanLyCTKMMenu = quanLyCTKM.getQuanLiCTKM();
@@ -899,19 +896,22 @@ public class QuanLyChuyenTau extends Application {
 			
 			create_layout_button();
 			primaryStage.setFullScreen(true);
-//			primaryStage.show();
+			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
+    public VBox getQuanLiCTKM() {
+     return this.noiDungChinh;
+    }
 	
 	public void create_title_layout() {
 		title_layout  = new VBox();
 		title_layout.setPadding(new Insets(30));
 		title_layout.setSpacing(20);
 		
-		lbl_title = new Label("Quản Lí Chuyến Tàu"); 
+		lbl_title = new Label("Quản Lí Nhân Viên"); 
 		lbl_title.setStyle("-fx-font-family: 'Inter';-fx-font-weight:bold;-fx-font-size:30px;");
 		title_layout.getChildren().add(lbl_title);
 		
@@ -919,13 +919,13 @@ public class QuanLyChuyenTau extends Application {
 		
 		layout_lbl_timkiem = new HBox();
 		layout_lbl_timkiem.setPrefSize(740, 40);
-		lbl_timkiem = new Label("Nhập mã Chuyến Tàu");
+		lbl_timkiem = new Label("Nhập CCCD để tìm kiếm");
 		lbl_timkiem.setTranslateX(10);
 		lbl_timkiem.setTranslateY(0);
 		lbl_timkiem.setStyle("-fx-font-family: 'Inter';-fx-font-weight:bold;-fx-font-size:18px;-fx-text-fill : #00BACB;");
 	
 		ImageView img_timkiem = new ImageView(getClass().getResource("/images/copy/lookup.png").toExternalForm());
-		img_timkiem.setTranslateX(520);
+		img_timkiem.setTranslateX(410);
 		img_timkiem.setFitHeight(25);
 		img_timkiem.setFitWidth(25);
 		layout_lbl_timkiem.getChildren().addAll(lbl_timkiem,img_timkiem);
@@ -966,229 +966,279 @@ public class QuanLyChuyenTau extends Application {
 	public void create_table_layout() {
 	    table_layout = new VBox();
 	    table_layout.setPadding(new Insets(10));
+	    
+	    GridPane tableCol = new GridPane();
+	    tableCol.setHgap(10);
+	    tableCol.setVgap(20);
+	    tableCol.setAlignment(Pos.CENTER);
+	    tableCol.setMaxWidth(1330);
+	    
+	    table_layout.setPrefSize(1350, 730);
 	    table_layout.setTranslateX(10);
+	    table_layout.setMaxSize(1350, 730);
 	    
-	    table_layout.setMaxHeight(730);
-	    // --- HEADER ---
-	    table_title = new GridPane();
-	    table_title.setHgap(10);
-	    table_title.setAlignment(Pos.CENTER_LEFT);
-	    table_title.setPrefHeight(50);
-	    table_title.setTranslateX(60);
-	    String styleHeader = "-fx-font-family: 'Kanit';-fx-font-weight:bold;-fx-font-size:18px;";
-
-	    lbl_title_maChuyenTau = new Label("Mã Chuyến");
-	    lbl_title_dauTau = new Label("Đầu Tàu");
-	    lbl_title_soluongtoa = new Label("Số lượng toa");
-	    lbl_title_veTrong = new Label("Vé Trống");
-	    lbl_title_thoigiankhoihanh = new Label("Thời Gian Khởi Hành");
-	    lbl_title_gadigaden = new Label("Ga đi - Ga đến");
+	    String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 18px; -fx-font-weight: bold;";
 	    
-	    lbl_title_dauTau.setTranslateX(80);
-	    lbl_title_soluongtoa.setTranslateX(80);
-	    lbl_title_veTrong.setTranslateX(60);
-	    lbl_title_thoigiankhoihanh.setTranslateX(50);
-	    lbl_title_gadigaden.setTranslateX(90);
+	    lbl_title_maNhanVien = new Label("Mã Nhân Viên");
+	    lbl_title_maNhanVien.setStyle(styleHeader);
 	    
-	    Label[] headers = {
-	        lbl_title_maChuyenTau, lbl_title_dauTau,
-	        (Label) lbl_title_soluongtoa, (Label) lbl_title_veTrong,
-	        lbl_title_thoigiankhoihanh, (Label) lbl_title_gadigaden
-	    };
-
-	    double[] colWidths = {150, 150, 150, 150, 250, 250};
-
-	    for (Label lbl : headers) lbl.setStyle(styleHeader);
-
-	    for (int i = 0; i < headers.length; i++) {
-	        StackPane pane = new StackPane(headers[i]);
-	        pane.setPrefWidth(colWidths[i]);
-	        pane.setAlignment(Pos.CENTER_LEFT);
-	        table_title.add(pane, i, 0);
-	    }
-
-	    table_layout.getChildren().add(table_title);
-
-	    // --- NỘI DUNG (DÒNG DỮ LIỆU) ---
+	    lbl_title_tenNhanVien = new Label("Tên Nhân Viên");
+	    lbl_title_tenNhanVien.setStyle(styleHeader);
+	    
+	    
+	    
+	    lbl_title_sdt = new Label("Số Điện Thoại");
+	    lbl_title_sdt.setStyle(styleHeader);
+	    
+	    lbl_title_gioiTinh = new Label("Giới Tính");
+	    lbl_title_gioiTinh.setStyle(styleHeader);
+	    
+	    lbl_title_email = new Label("Email");
+	    lbl_title_email.setStyle(styleHeader);
+	    
+	    lbl_title_cccd = new Label("CCCD");
+	    lbl_title_cccd.setStyle(styleHeader);
+	    
+	    lbl_title_tinhTrangLamViec = new Label("Tình Trạng Làm Việc");
+	    lbl_title_tinhTrangLamViec.setStyle(styleHeader);
+	    
+	    
+	    lbl_title_maNhanVien.setTranslateX(-130);
+	    lbl_title_tenNhanVien.setTranslateX(-140);
+	    lbl_title_sdt.setTranslateX(-100);
+	    lbl_title_gioiTinh.setTranslateX(50);
+	    lbl_title_email.setTranslateX(30);
+	    lbl_title_cccd.setTranslateX(60);
+	    lbl_title_tinhTrangLamViec.setTranslateX(70);
+	    
+	    StackPane paneCol1 = new StackPane(lbl_title_maNhanVien);
+	    StackPane paneCol2 = new StackPane(lbl_title_tenNhanVien);
+	    StackPane paneCol3 = new StackPane(lbl_title_sdt);
+	    StackPane paneCol4 = new StackPane(lbl_title_gioiTinh);
+	    StackPane paneCol5 = new StackPane(lbl_title_email);
+	    StackPane paneCol6 = new StackPane(lbl_title_cccd);
+	    StackPane paneCol7 = new StackPane(lbl_title_tinhTrangLamViec);
+	    
+	    paneCol1.setPrefWidth(150);
+	    paneCol2.setPrefWidth(180);
+	    paneCol3.setPrefWidth(150);
+	    paneCol4.setPrefWidth(150);
+	    paneCol5.setPrefWidth(200);
+	    paneCol6.setPrefWidth(130);
+	    paneCol7.setPrefWidth(200);
+	    
+	    paneCol1.setAlignment(Pos.CENTER);
+	    paneCol2.setAlignment(Pos.CENTER);
+	    paneCol3.setAlignment(Pos.CENTER);
+	    paneCol4.setAlignment(Pos.CENTER);
+	    paneCol5.setAlignment(Pos.CENTER);
+	    paneCol6.setAlignment(Pos.CENTER);
+	    paneCol7.setAlignment(Pos.CENTER);
+	    
+	    
+	    tableCol.add(paneCol1, 0, 0);
+	    tableCol.add(paneCol2, 1, 0);
+	    tableCol.add(paneCol3, 2, 0);
+	    tableCol.add(paneCol4, 2, 0);
+	    tableCol.add(paneCol5, 3, 0);
+	    tableCol.add(paneCol6, 4, 0);
+	    tableCol.add(paneCol7, 5, 0);
+	    
+	    table_layout.getChildren().add(tableCol);
+	    
 	    table_desc = new VBox();
 	    table_desc.setSpacing(20);
-
+	    
 /*-------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 //			======================
 //			||     CONTROL     ||
 //			======================
 
-//  DATA INPUT PATTERN:      String maChuyenTau, String dauTau, int soLuongToa, int veTrong, LocalDate thoiGianKhoiHanh, String gaDi, String gaDen
-        for (int i=0; i<listChuyenTau.size(); i++) {
-            Map<String, Object> chuyenTauInfo = (Map<String, Object>) listChuyenTau.get(i);
-            String maChuyen = (String) chuyenTauInfo.get("maChuyen");
-            String dauTau = (String) chuyenTauInfo.get("dauTau");
-            int soLuongToa = (int) chuyenTauInfo.get("soLuongToa");
-            int soLuongVeTrong = (int) chuyenTauInfo.get("soLuongVeTrong");
-            LocalDateTime thoiGianKhoiHanh = (LocalDateTime) chuyenTauInfo.get("thoiGianKhoiHanh");
-            String gaDi = (String) chuyenTauInfo.get("gaDi");
-            String gaDen = (String) chuyenTauInfo.get("gaDen");
-            create_layout_dong(maChuyen, dauTau,soLuongToa,soLuongVeTrong,thoiGianKhoiHanh.toLocalDate(),gaDi,gaDen);
-
+//  DATA INPUT PATTERN:      maCT,tenCT,ngaybatdau,ngayketthuc,trangthai
+        for (NhanVien nv : listnhanVien) {
+            loadCTKMData(nv.getMaNhanVien(),nv.getHoTen(),nv.getSdt(),nv.getGioiTinh(),nv.getEmail(),nv.getCccd(),nv.getTinhTrangLamViec());
         }
 
 
-        /*-------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-
-	    // --- SCROLL ---
+/*-------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+	    
 	    scrollPane = new ScrollPane();
 	    scrollPane.setContent(table_desc);
 	    scrollPane.setFitToWidth(true);
-	    scrollPane.setMaxHeight(6600);
 	    scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-	    scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+	    scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 	    scrollPane.setStyle("-fx-background-color: transparent");
 	    scrollPane.setPannable(true);
+	    
 	    VBox.setVgrow(scrollPane, Priority.ALWAYS);
-
+	    scrollPane.setMaxHeight(660);
+	    
 	    table_layout.getChildren().add(scrollPane);
+	    
 	    noiDungChinh.getChildren().add(table_layout);
 	}
-	
 	public void create_layout_button()
 	{
 		layout_button = new HBox();
+		
 		layout_button.setPrefSize(950, 60);
 		layout_button.setAlignment(Pos.CENTER_RIGHT);
 		layout_button.setTranslateX(-70);	
 		String style = "-fx-font-family: 'Inter';-fx-font-weight: bold;-fx-font-size:13.5px;-fx-text-fill:white;-fx-background-radius: 20px;";
 		
-		btn_xoaChuyenTau = new Button("Xóa Chuyến Tàu");
-		btn_xoaChuyenTau.setStyle(style+ "-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #CB002CD3 23%, #CB002C1F 100%);");
-		btn_xoaChuyenTau.setPrefSize(225, 60);
-		btn_xoaChuyenTau.setDisable(true);
+		btn_xoaNhanVien = new Button("Xóa Nhân Viên");
+		btn_xoaNhanVien.setStyle(style+ "-fx-background-color: linear-gradient(to bottom, #D498A5, #D32B4F);");
+		btn_xoaNhanVien.setPrefSize(225, 60);
+		btn_xoaNhanVien.setDisable(true);
 		
-		btn_themChuyenTau = new Button("Thêm Chuyến Tàu");
-		btn_themChuyenTau.setStyle(style+"-fx-background-color: linear-gradient(to top, #00BACB, #8EE6ED);");
-		btn_themChuyenTau.setPrefSize(225, 60);
+		btn_themNhanVien = new Button("Thêm Nhân Viên");
+		btn_themNhanVien.setStyle(style+"-fx-background-color: linear-gradient(to top, #00BACB, #8EE6ED);");
+		btn_themNhanVien.setPrefSize(225, 60);
 		
-		btn_suaChuyenTau = new Button("Cập nhật thông tin");
-		btn_suaChuyenTau.setStyle(style+"-fx-background-color: linear-gradient(to top, #00BACB, #8EE6ED);");
-		btn_suaChuyenTau.setPrefSize(225, 60);
+		
+		btn_capnhat = new Button("Cập nhật thông tin");
+		btn_capnhat.setStyle(style+"-fx-background-color: linear-gradient(to top, #00BACB, #8EE6ED);");
+		btn_capnhat.setPrefSize(225, 60);
 		
 		layout_button.setSpacing(40);
-		layout_button.getChildren().addAll(btn_xoaChuyenTau,btn_themChuyenTau,btn_suaChuyenTau);
+		layout_button.getChildren().addAll(btn_xoaNhanVien,btn_themNhanVien,btn_capnhat);
 		
-		btn_xoaChuyenTau.setOnMouseClicked(event -> {
-			if(hangchon.size() == 0) {
+		
+		btn_xoaNhanVien.setOnMouseClicked(event -> {
+			if(hangchon.size() == 0)
+			{
 				
-			} else {
-				ArrayList<GridPane> dsxoa = new ArrayList<>(hangchon);
-				for(GridPane x : dsxoa) {					
+			}
+			else {
+				ArrayList<GridPane> dsxoa = new ArrayList<GridPane>(hangchon);
+				for(GridPane x : dsxoa)
+				{					
 					FadeTransition ft = new FadeTransition(Duration.millis(300),x);
 					ft.setFromValue(1.0);
 					ft.setToValue(0);
 					ft.play();
-					ft.setOnFinished(E -> table_desc.getChildren().remove(x));
+					ft.setOnFinished(E ->{						
+						table_desc.getChildren().remove(x);
+					});
 				}
 				hangchon.clear();
 				
 			}
 		});
 		
-		btn_xoaChuyenTau.hoverProperty().addListener((obs, oval, nval) -> {
-		    ScaleTransition st = new ScaleTransition(Duration.millis(200), btn_xoaChuyenTau);
-		    if(nval) {
-		        st.setToX(1.05);
-		        st.setToY(1.05);
-		        btn_xoaChuyenTau.setStyle(btn_xoaChuyenTau.getStyle() + "-fx-cursor:hand;");
-		    } else {
-		        st.setToX(1.0);
-		        st.setToY(1.0);
-		    }
-		    st.play();
+		btn_xoaNhanVien.hoverProperty().addListener((obs,oval,nval) -> {
+			if(nval)
+			{
+				btn_xoaNhanVien.setStyle(btn_xoaNhanVien.getStyle() +"-fx-cursor:hand;");
+			}
+			else {
+				btn_xoaNhanVien.setStyle(btn_xoaNhanVien.getStyle());
+			}
 		});
 		
-		btn_themChuyenTau.hoverProperty().addListener((obs, oval, nval) -> {
-		    ScaleTransition st = new ScaleTransition(Duration.millis(200), btn_themChuyenTau);
-		    if(nval) {
-		        st.setToX(1.05);
-		        st.setToY(1.05);
-		        btn_themChuyenTau.setStyle(btn_themChuyenTau.getStyle() + "-fx-cursor:hand;");
-		    } else {
-		        st.setToX(1.0);
-		        st.setToY(1.0);
-		    }
-		    st.play();
+		btn_themNhanVien.hoverProperty().addListener((obs,oval,nval) -> {
+			if(nval)
+			{
+				btn_themNhanVien.setStyle(btn_themNhanVien.getStyle() +"-fx-cursor:hand;");
+			}
+			else {
+				btn_themNhanVien.setStyle(btn_themNhanVien.getStyle());
+			}
 		});
 		
-		btn_suaChuyenTau.hoverProperty().addListener((obs, oval, nval) -> {
-		    ScaleTransition st = new ScaleTransition(Duration.millis(200), btn_suaChuyenTau);
-		    if(nval) {
-		        st.setToX(1.05);
-		        st.setToY(1.05);
-		        btn_suaChuyenTau.setStyle(btn_suaChuyenTau.getStyle() + "-fx-cursor:hand;");
-		    } else {
-		        st.setToX(1.0);
-		        st.setToY(1.0);
-		    }
-		    st.play();
+		btn_capnhat.hoverProperty().addListener((obs,oval,nval) -> {
+			if(nval)
+			{
+				btn_capnhat.setStyle(btn_capnhat.getStyle() +"-fx-cursor:hand;");
+			}
+			else {
+				btn_capnhat.setStyle(btn_capnhat.getStyle());
+			}
 		});
 		
 		noiDungChinh.getChildren().add(layout_button);
 		
 	}
-								   
-	public void create_layout_dong(String maChuyenTau, String dauTau, int soLuongToa, int veTrong, LocalDate thoiGianKhoiHanh, String gaDi, String gaDen) {
+	public void loadCTKMData(String maNhanVien, String tenNhanVien, String soDienThoai,String gioiTinh,String email,String cccd, String tinhtranglamviec) {
 	    GridPane data = new GridPane();
+	    
 	    data.setHgap(10);
 	    data.setAlignment(Pos.CENTER);
 	    data.setMaxWidth(1250);
 	    data.setTranslateX(20);
 	    data.setPrefHeight(70);
 	    data.setPadding(new Insets(0, 0, 0, 10));
-
-	    // Style cơ bản cho label
-	    String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
-
-	    // Các label dữ liệu
-	    Label lblMaCT = new Label(maChuyenTau);
-	    Label lblDauTau = new Label(dauTau);
-	    Label lblSoLuong = new Label(String.valueOf(soLuongToa));
-	    Label lblVeTrong = new Label(String.valueOf(veTrong));
-	    Label lblThoiGian = new Label(thoiGianKhoiHanh.toString());
-	    Label lblGa = new Label(gaDi + " - " + gaDen);
-
-	    lblMaCT.setStyle(baseStyle);
-	    lblDauTau.setStyle(baseStyle);
-	    lblSoLuong.setStyle(baseStyle);
-	    lblVeTrong.setStyle(baseStyle);
-	    lblThoiGian.setStyle(baseStyle);
-	    lblGa.setStyle(baseStyle);
 	    
-	    lblDauTau.setWrapText(true);
-	    lblGa.setWrapText(true);
-
-	    // Điều chỉnh vị trí nếu cần
-	    lblMaCT.setTranslateX(-130);
-	    lblDauTau.setTranslateX(-80);
-	    lblSoLuong.setTranslateX(-40);
-	    lblVeTrong.setTranslateX(-30);
-	    lblThoiGian.setTranslateX(0);
-	    lblGa.setTranslateX(80);
-
-	    // Bọc mỗi label trong StackPane
-	    StackPane pane1 = new StackPane(lblMaCT);
-	    StackPane pane2 = new StackPane(lblDauTau);
-	    StackPane pane3 = new StackPane(lblSoLuong);
-	    StackPane pane4 = new StackPane(lblVeTrong);
-	    StackPane pane5 = new StackPane(lblThoiGian);
-	    StackPane pane6 = new StackPane(lblGa);
-
-	    double[] widths = {150, 180, 100, 100, 180, 220};
-	    StackPane[] panes = {pane1, pane2, pane3, pane4, pane5, pane6};
-
-	    for (int i = 0; i < panes.length; i++) {
-	        panes[i].setPrefWidth(widths[i]);
-	        panes[i].setAlignment(Pos.CENTER);
-	        data.add(panes[i], i, 0);
+	    String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
+	    
+	    Label lblMaNhanVien = new Label(maNhanVien);
+	    Label lblTenNhanVien = new Label(tenNhanVien);
+	    Label lblsoDienThoai = new Label(soDienThoai);
+	    Label lblgioiTinh = new Label(gioiTinh);
+	    Label lblemail = new Label(email);
+	    Label lblCCCD = new Label(cccd);
+	    Label lbltinhTrangLamViec = new Label(tinhtranglamviec);
+	    
+	    String colorStyle;
+	    if(lbltinhTrangLamViec.getText().equalsIgnoreCase("còn làm"))
+	    {
+	    colorStyle = "-fx-text-fill: green;" ;
+	    }else {
+	    colorStyle = "-fx-text-fill: red;";
 	    }
-
+	    
+	    lblMaNhanVien.setStyle(baseStyle);
+	    lblTenNhanVien.setStyle(baseStyle);
+	    lblsoDienThoai.setStyle(baseStyle);
+	    lblemail.setStyle(baseStyle);
+	    lblgioiTinh.setStyle(baseStyle);
+	    lblCCCD.setStyle(baseStyle);
+	    
+	    lbltinhTrangLamViec.setStyle(baseStyle + colorStyle);
+	    
+	    lblMaNhanVien.setTranslateX(-70);
+	    lblTenNhanVien.setTranslateX(-80);
+	    lblsoDienThoai.setTranslateX(-40);
+	    lblgioiTinh.setTranslateX(-50);
+	    lblemail.setTranslateX(-55);
+	    lblCCCD.setTranslateX(-40);
+	    lblTenNhanVien.setWrapText(true);
+	    
+	    StackPane paneData1 = new StackPane(lblMaNhanVien);
+	    StackPane paneData2 = new StackPane(lblTenNhanVien);
+	    StackPane paneData3 = new StackPane(lblsoDienThoai);
+	    StackPane paneData4 = new StackPane(lblgioiTinh);
+	    StackPane paneData5 = new StackPane(lblemail);
+	    StackPane paneData6 = new StackPane(lblCCCD);
+	    StackPane paneData7 = new StackPane(lbltinhTrangLamViec);
+	    
+	    
+	    paneData1.setPrefWidth(150);
+	    paneData2.setPrefWidth(180);
+	    paneData3.setPrefWidth(150);
+	    paneData4.setPrefWidth(150);
+	    paneData5.setPrefWidth(200);
+	    paneData6.setPrefWidth(130);
+	    paneData7.setPrefWidth(130);
+	    
+	    
+	    paneData1.setAlignment(Pos.CENTER);
+	    paneData2.setAlignment(Pos.CENTER);
+	    paneData3.setAlignment(Pos.CENTER);
+	    paneData4.setAlignment(Pos.CENTER);
+	    paneData5.setAlignment(Pos.CENTER);
+	    paneData6.setAlignment(Pos.CENTER);
+	    paneData7.setAlignment(Pos.CENTER);
+	    
+	    
+	    data.add(paneData1, 0, 0);
+	    data.add(paneData2, 1, 0);
+	    data.add(paneData3, 2, 0);
+	    data.add(paneData4, 3, 0);
+	    data.add(paneData5, 4, 0);
+	    data.add(paneData6, 5, 0);
+	    data.add(paneData7, 6, 0);
+	    
 	    String normalStyle = """
 	    	    -fx-background-color: rgba(0, 186, 203, 0.3);
 	    	    -fx-background-radius: 15px;
@@ -1197,7 +1247,7 @@ public class QuanLyChuyenTau extends Application {
 	    	    -fx-border-width: 1px;
 	    	""";
 
-	    String hoverStyle = """
+		String hoverStyle = """
 	    	    -fx-background-color: rgba(0, 186, 203, 0.6);
 	    	    -fx-background-radius: 15px;
 	    	    -fx-border-radius: 15px;
@@ -1205,7 +1255,7 @@ public class QuanLyChuyenTau extends Application {
 	    	    -fx-border-width: 1px;
 	    	""";
 
-	    String selectedStyle = """
+		String selectedStyle = """
 	    	    -fx-background-color: rgba(0, 186, 203, 0.9);
 	    	    -fx-background-radius: 15px;
 	    	    -fx-border-radius: 15px;
@@ -1213,24 +1263,25 @@ public class QuanLyChuyenTau extends Application {
 	    	    -fx-border-width: 2px;
 	    	""";
 
+	    
 	    data.setStyle(normalStyle);
-
+	    
 	    final GridPane dongHienTai = data;
-
+	    
 	    String style_macdinh = "-fx-background-color : #00BACB4D;-fx-background-radius:15px;-fx-border-radius:15px;";
 	    String style_thaydoi = "-fx-background-color : #00BACB4D;-fx-background-radius:15px;-fx-border-radius:15px;-fx-border-color:#00BACB;-fx-border-width:2px;";
-
+	    
 	    dongHienTai.setOnMouseClicked(e -> {
-	        if (hangchon.contains(dongHienTai)) {
-	            hangchon.remove(dongHienTai);
-	            dongHienTai.setStyle(normalStyle);
-	        } else {
-	            hangchon.add(dongHienTai);
-	            dongHienTai.setStyle(selectedStyle);
-	        }
-	        btn_xoaChuyenTau.setDisable(hangchon.isEmpty());
-	    });
-
+			if (hangchon.contains(dongHienTai)) {
+				hangchon.remove(dongHienTai);
+				dongHienTai.setStyle(normalStyle);
+			} else {
+				hangchon.add(dongHienTai);
+				dongHienTai.setStyle(selectedStyle);
+			}
+			btn_xoaNhanVien.setDisable(hangchon.isEmpty());
+		});
+	    
 	    dongHienTai.setOnMouseEntered(e -> {
 			if (!hangchon.contains(dongHienTai)) {
 				dongHienTai.setStyle(hoverStyle);
@@ -1253,13 +1304,9 @@ public class QuanLyChuyenTau extends Application {
 			scaleDown.setToY(1.0);
 			scaleDown.play();
 		});
-
-	    // Thêm vào layout chính
+	    
 	    table_desc.getChildren().add(data);
-	}
-    public VBox getGDQuanLiChuyenTau(){
-        return  this.noiDungChinh;
-    }
+	} 
 	
 	
 	

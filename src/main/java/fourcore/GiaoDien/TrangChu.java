@@ -164,7 +164,7 @@ public class TrangChu extends Application {
                 label.setPadding(new Insets(12, 320, 12, 155));
                 label.setOnMouseEntered(e -> label.setStyle("-fx-background-color: #79D9E1;"));
                 label.setOnMouseExited(e -> label.setStyle("-fx-background-color: #D2EEF0;"));
-
+                
             }
             for (HBox hbox : new HBox[]{banVeBox, doiVeBox, hoanVeBox,capVeBox,xemLichSuVeBox}) {
                 hbox.setStyle("-fx-font-size: 15px;-fx-background-color: #D2EEF0;");

@@ -47,6 +47,7 @@ public class LichSuTuongTacVe {
 		this.ngayTuongTac = ngayTuongTac;
 	}
 	public LichSuTuongTacVe() {}
+	
 	public LichSuTuongTacVe(String maTuongTac, LoaiTuongTacVe loaiTuongTacVe, Ve veTau, double giaTriChenhLech,
 		LocalDateTime ngayTuongTac) {
 		setMaTuongTac(maTuongTac);
