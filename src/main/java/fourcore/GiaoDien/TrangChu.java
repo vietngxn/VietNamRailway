@@ -33,19 +33,15 @@ import fourcore.Entity.LichSuBanVe;
 
 
 public class TrangChu extends Application {
-    private BorderPane manHinhChinh;
     private VBox menuList;
     private VBox noiDungChinh;
     private ImageView logoImgView;
-    private Image logoImage;
     Class<?> clazz = this.getClass();
     private ScrollPane scrollPaneMenu;
     private VBox danhSachMenuItem;
     private HBox quanLiVeTauMenu;
     private Label quanLiVeTauLabel;
-    private Image quanLiVeTauIcon;
     private ImageView quanLiVeTauIconView;
-    private Image showMenuPhuIcon;
     private ImageView showMenuPhuIconView;
     private HBox banVeBox;
     private HBox doiVeBox;
@@ -53,19 +49,10 @@ public class TrangChu extends Application {
     private HBox capVeBox;
     private HBox quanLiKhachHangMenu;
     private ImageView quanLiKhachHangIconView;
-    private ImageView quanLiKhachHangView;
-    private HBox themKhachHangBox;
-    private HBox xoaKhachHangBox;
-    private HBox suaKhachHangBox;
-    private Label quanLiKhachHang;
     private Label quanLiKhachHangLabel;
     private HBox quanLiHoaDonMenu;
     private ImageView quanLiHoaDonIconView;
     private Label quanLiHoaDonLabel;
-    private HBox timHoaDonBox;
-    private HBox quanLiThongKeMenu;
-    private ImageView quanLiThongKeIconView;
-    private Label quanLiThongKeLabel;
     private HBox quanLiNhanVienMenu;
     private ImageView quanLiNhanVienIconView;
     private HBox quanLiCTKMMenu;
@@ -177,7 +164,7 @@ public class TrangChu extends Application {
                 label.setPadding(new Insets(12, 320, 12, 155));
                 label.setOnMouseEntered(e -> label.setStyle("-fx-background-color: #79D9E1;"));
                 label.setOnMouseExited(e -> label.setStyle("-fx-background-color: #D2EEF0;"));
-
+                
             }
             for (HBox hbox : new HBox[]{banVeBox, doiVeBox, hoanVeBox,capVeBox,xemLichSuVeBox}) {
                 hbox.setStyle("-fx-font-size: 15px;-fx-background-color: #D2EEF0;");

@@ -9,8 +9,8 @@ import fourcore.Entity.ToaTau;
 
 public class ToaTau_dao {
 
-    LoaiToaTau loaiToaTau = new LoaiToaTau("GN01", "Giường xoay lên tầng vũ trụ");
-    LoaiToaTau loaiToaTau1 = new LoaiToaTau("GN02", "Giường nằm phê pha");
+    LoaiToaTau loaiToaTau = new LoaiToaTau("GN01", "Giường xoay lên tầng vũ trụ",0.0);
+    LoaiToaTau loaiToaTau1 = new LoaiToaTau("GN02", "Giường nằm phê pha",0.0);
 
     private ArrayList<ToaTau> toaTaudao = new ArrayList<ToaTau>();
 

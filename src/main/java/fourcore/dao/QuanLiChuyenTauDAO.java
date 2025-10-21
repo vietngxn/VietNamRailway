@@ -80,7 +80,6 @@ public class QuanLiChuyenTauDAO {
             chuyenTauInfo.put("gaDi", gaDi);
             chuyenTauInfo.put("gaDen", gaDen);
             listThongTinChuyenTau.add(chuyenTauInfo);
-
         }
 
         return listThongTinChuyenTau;
