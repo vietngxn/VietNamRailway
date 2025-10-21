@@ -31,4 +31,24 @@ public class KhachHangDAO {
 		}
 		return listKhachHang;
 	}
+	public KhachHang getKhachHangByMa(String maKhachHang) throws SQLException {
+		Statement st = databaseConnector.connect();
+		String q = "select * from KhachHang where maKhachHang = '" + maKhachHang + "'";
+		ResultSet rs = st.executeQuery(q);
+		
+		KhachHang kh = null;
+		if (rs.next()) {
+			String makh = rs.getString(1);
+			String hoten = rs.getString(2);
+			String sdt = rs.getString(3);
+			String email = rs.getString(4);
+			String cccd = rs.getString(5);
+			String pp = rs.getString(6);
+			String doiTuong = rs.getString(7);
+			
+			kh = new KhachHang(makh, hoten, sdt, email, cccd, pp, doiTuong);
+		}
+		
+		return kh;
+	}
 }

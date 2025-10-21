@@ -51,9 +51,13 @@ public class KhachHang {
 		this.doiTuong = doiTuong;
 	}
 	public KhachHang() {}
+	
+	public KhachHang(String maKhachHang) {
+		this.maKhachHang = maKhachHang;
+	}
 	public KhachHang(String maKhachHang, String hoten, String sdt, String email, String cccd, String passport,
 			String doiTuong) {
-		super();
+		
 		setMaKhachHang(maKhachHang);
 		setHoten(hoten);
 		setSdt(sdt);
@@ -62,6 +66,7 @@ public class KhachHang {
 		setPassport(passport);
 		setDoiTuong(doiTuong);
 	}
+	
 	@Override
 	public String toString() {
 		return "KhachHang [maKhachHang=" + maKhachHang + ", hoten=" + hoTen + ", sdt=" + sdt + ", email=" + email
