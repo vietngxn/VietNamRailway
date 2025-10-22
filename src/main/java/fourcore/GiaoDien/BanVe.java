@@ -2,8 +2,11 @@ package fourcore.GiaoDien;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
+import fourcore.dao.GaTauDao;
 import javafx.animation.ScaleTransition;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -171,8 +174,7 @@ public class BanVe extends Application {
 		}
 	}
 	
-	public void create_head_title()
-	{
+	public void create_head_title() throws SQLException {
 		header_layout = new VBox();
 		header_layout.setPrefSize(1200, 200);
 		
@@ -223,12 +225,15 @@ public class BanVe extends Application {
 		
 	}
 	
-	public void create_combobox_layout1() {
+	public void create_combobox_layout1() throws SQLException {
 		
 		// combo 1
 		combolayout1 = new HBox(); 
 		combolayout1.setPrefSize(400, 150);
-		ObservableList<String> items = FXCollections.observableArrayList("Ha Noi","TPHCM","Da Nang");
+        GaTauDao gaTauDao = new GaTauDao();
+        ArrayList<String> dsTenGa = gaTauDao.getDanhSachTenGaTau();
+        String gaDi = gaTauDao.getGaDi();
+		ObservableList<String> items = FXCollections.observableArrayList(gaDi);
 		 
 		ComboBox<String> comboBox1 = createSearchableComboBox(items);
 	    comboBox1.setPromptText("Ga đi");
@@ -245,7 +250,7 @@ public class BanVe extends Application {
 		//combo 2
 		combolayout2 = new HBox(); 
 		combolayout2.setPrefSize(400, 150);
-		ObservableList<String> item = FXCollections.observableArrayList("Ha Noi","TPHCM","Da Nang");
+		ObservableList<String> item = FXCollections.observableArrayList(dsTenGa);
 		
 		
 		ComboBox<String> combobox = createSearchableComboBox(item);
