@@ -99,7 +99,7 @@ public class GiaoDienCapLaiVe extends Application {
 	private Pane pnlCapLaiVe;
 
 	private Ve_Dao vedao = new Ve_Dao();
-	private ArrayList<Ve> list = vedao.themNhieuVeTau();
+//	private ArrayList<Ve> list = vedao.themNhieuVeTau();
 
 	public VBox taoDataChoTableCapLaiVe(String mave, String chuyen, String gaDiGaDen, String trangThai, String vitrighe,
 			String ngayMua, String hoten, String doituong, String sogiayto, double giave, double giamdoituong,

@@ -25,12 +25,10 @@ public class LichSuTuongTacVe_Dao {
 	}
 
 	ArrayList<LichSuTuongTacVe> list = new ArrayList<>();
-	Ve_Dao daoVe = new Ve_Dao();
-	ArrayList<Ve> listVeEx = daoVe.themNhieuVeTau();
-	
+
 	public ArrayList<LichSuTuongTacVe> getList() throws SQLException {
 		LoaiTuongTac_Dao lttDao = new LoaiTuongTac_Dao();
-		ArrayList<LoaiTuongTacVe> listLoaiTuongTac = lttDao.getList();
+		VeDAO veDao = new VeDAO();
 		Statement myStmt = databaseConnector.connect();
 		String query = "select * from LichSuTuongTacVe";
 		ResultSet rs = myStmt.executeQuery(query);
@@ -40,19 +38,14 @@ public class LichSuTuongTacVe_Dao {
 			String maVeTau = rs.getString(3);
 			double giaTriChenhLech = rs.getDouble(4);
 			LocalDateTime ngayTuongTac = rs.getTimestamp(5).toLocalDateTime();
-			
-			LoaiTuongTacVe tt = new LoaiTuongTacVe();
-			
-			for (LoaiTuongTacVe x : listLoaiTuongTac) {
-				if (x.getMaLoaiTuongTac().equalsIgnoreCase(maLoaiTuongTac)) {
-					tt = x;
-				}
-			}
-			
-			LichSuTuongTacVe ls = new LichSuTuongTacVe(maTuongTac, tt,listVeEx.get(0), giaTriChenhLech, ngayTuongTac);
+			LoaiTuongTacVe tt = lttDao.getLoaiTheoMa(maLoaiTuongTac);
+			Ve v = veDao.getVeBangMaVe(maVeTau);
+			LichSuTuongTacVe ls = new LichSuTuongTacVe(maTuongTac, tt, v, giaTriChenhLech, ngayTuongTac);
 			list.add(ls);
 			System.out.println("Lấy dữ liệu thành công");
 		}
+
 		return list;
 	}
+
 }

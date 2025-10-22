@@ -109,7 +109,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 
 	public VBox taoDataChoTableLichSuMuaBanDoiVe(String mave, String chuyen, String loai, String gaDiGaDen,
 			String ngayKhoiHanh, String vitrighe, LocalDate ngayMua, String hoten, String doituong, String sogiayto,
-			double giave, double giamdoituong, double khuyenmai, double giatrichenhlech, double thanhtien) {
+			double giave, String giamdoituong, String khuyenmai, double giatrichenhlech, double thanhtien) {
 
 		VBox pnlReturn = new VBox();
 		VBox.setMargin(pnlReturn, new Insets(0, 30, 0, 45));
@@ -223,8 +223,8 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 		String lblValueCTStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 30px;";
 
 		VBox pnlsubCT2 = taoSubCT2("Giá vé", nf.format(giave), lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT3 = taoSubCT2("Giảm đối tượng", nf.format(giamdoituong), lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT4 = taoSubCT2("Khuyến mãi", nf.format(khuyenmai), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT3 = taoSubCT2("Giảm đối tượng", giamdoituong, lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT4 = taoSubCT2("Khuyến mãi", khuyenmai, lblCTStyle, lblValueCTStyle);
 		VBox pnlsubCT5 = taoSubCT2("Giá trị chênh lệch", nf.format(giatrichenhlech), lblCTStyle, lblValueCTStyle);
 		VBox pnlsubCT6 = taoSubCT2("Thành tiền", nf.format(thanhtien), lblCTStyle, lblValueCTStyle);
 
@@ -842,7 +842,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 
 			// add su kien disable btn
 			txt_timkiem.setOnAction(event -> {
-				String regex = "^VE\\d{3}$";
+				String regex = "^V\\d{3}$";
 				String input = txt_timkiem.getText().trim();
 
 				if (input.isEmpty() || !Pattern.matches(regex, input)) {
@@ -899,21 +899,20 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 							if (x.getLoaiTuongTacVe().getTenLoaiTuongTac().equalsIgnoreCase("bán")
 									&& x.getVeTau().getMaVeTau().contains(maVeGetText)) {
 								pnlDataDoiVe.getChildren().clear();
-								pnlDataDoiVe.getChildren()
-										.add(taoDataChoTableLichSuMuaBanDoiVe(x.getVeTau().getMaVeTau(),
-												x.getVeTau().getChuyenTau().getMaChuyenTau(),
-												x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
-												x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
-												x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
-														+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
-												"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
-												x.getVeTau().getNgayGioDi().toLocalDate(),
-												x.getVeTau().getKhachHang().getHoten(),
-												x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
-												x.getVeTau().getKhachHang().getSdt(), x.getVeTau().getGiaVe(),
-												x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia(),
-												x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai(),
-												x.getGiaTriChenhLech(), 0.0));
+								pnlDataDoiVe.getChildren().add(taoDataChoTableLichSuMuaBanDoiVe(
+										x.getVeTau().getMaVeTau(), x.getVeTau().getChuyenTau().getMaChuyenTau(),
+										x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
+										x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
+										x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
+												+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
+										"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
+										x.getVeTau().getNgayGioDi().toLocalDate(),
+										x.getVeTau().getKhachHang().getHoten(),
+										x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
+										x.getVeTau().getKhachHang().getSdt(), x.getVeTau().getGiaVe(),
+										nf.format(x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
+										nf.format(x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%",
+										x.getGiaTriChenhLech(), x.tinhTongTien()));
 							}
 						}
 						if (pnlDataDoiVe.getChildren().isEmpty()) {
@@ -924,21 +923,20 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 						pnlDataDoiVe.getChildren().clear();
 						for (LichSuTuongTacVe x : list) {
 							if (x.getLoaiTuongTacVe().getTenLoaiTuongTac().equalsIgnoreCase("bán")) {
-								pnlDataDoiVe.getChildren()
-										.add(taoDataChoTableLichSuMuaBanDoiVe(x.getVeTau().getMaVeTau(),
-												x.getVeTau().getChuyenTau().getMaChuyenTau(),
-												x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
-												x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
-												x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
-														+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
-												"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
-												x.getVeTau().getNgayGioDi().toLocalDate(),
-												x.getVeTau().getKhachHang().getHoten(),
-												x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
-												x.getVeTau().getKhachHang().getSdt(), x.getVeTau().getGiaVe(),
-												x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia(),
-												x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai(),
-												x.getGiaTriChenhLech(), 0.0));
+								pnlDataDoiVe.getChildren().add(taoDataChoTableLichSuMuaBanDoiVe(
+										x.getVeTau().getMaVeTau(), x.getVeTau().getChuyenTau().getMaChuyenTau(),
+										x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
+										x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
+										x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
+												+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
+										"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
+										x.getVeTau().getNgayGioDi().toLocalDate(),
+										x.getVeTau().getKhachHang().getHoten(),
+										x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
+										x.getVeTau().getKhachHang().getSdt(), x.getVeTau().getGiaVe(),
+										nf.format(x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
+										nf.format(x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%",
+										x.getGiaTriChenhLech(), x.tinhTongTien()));
 							}
 						}
 					}
@@ -962,8 +960,9 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 								x.getVeTau().getNgayGioDi().toLocalDate(), x.getVeTau().getKhachHang().getHoten(),
 								x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
 								x.getVeTau().getKhachHang().getSdt(), x.getVeTau().getGiaVe(),
-								x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia(),
-								x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai(), x.getGiaTriChenhLech(), 0.0));
+								nf.format(x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
+								nf.format(x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%",
+								x.getGiaTriChenhLech(), x.tinhTongTien()));
 					}
 				}
 
@@ -1010,21 +1009,20 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 						for (LichSuTuongTacVe x : list) {
 							if (x.getLoaiTuongTacVe().getTenLoaiTuongTac().equalsIgnoreCase("đổi")
 									&& x.getVeTau().getMaVeTau().contains(maVeGetText)) {
-								pnlDataDoiVe.getChildren()
-										.add(taoDataChoTableLichSuMuaBanDoiVe(x.getVeTau().getMaVeTau(),
-												x.getVeTau().getChuyenTau().getMaChuyenTau(),
-												x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
-												x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
-												x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
-														+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
-												"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
-												x.getVeTau().getNgayGioDi().toLocalDate(),
-												x.getVeTau().getKhachHang().getHoten(),
-												x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
-												x.getVeTau().getKhachHang().getSdt(), x.getVeTau().getGiaVe(),
-												x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia(),
-												x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai(),
-												x.getGiaTriChenhLech(), 0.0));
+								pnlDataDoiVe.getChildren().add(taoDataChoTableLichSuMuaBanDoiVe(
+										x.getVeTau().getMaVeTau(), x.getVeTau().getChuyenTau().getMaChuyenTau(),
+										x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
+										x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
+										x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
+												+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
+										"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
+										x.getVeTau().getNgayGioDi().toLocalDate(),
+										x.getVeTau().getKhachHang().getHoten(),
+										x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
+										x.getVeTau().getKhachHang().getSdt(), x.getVeTau().getGiaVe(),
+										nf.format(x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
+										nf.format(x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%",
+										x.getGiaTriChenhLech(), x.tinhTongTien()));
 							}
 						}
 						if (pnlDataDoiVe.getChildren().isEmpty()) {
@@ -1035,21 +1033,20 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 						pnlDataDoiVe.getChildren().clear();
 						for (LichSuTuongTacVe x : list) {
 							if (x.getLoaiTuongTacVe().getTenLoaiTuongTac().equalsIgnoreCase("đổi")) {
-								pnlDataDoiVe.getChildren()
-										.add(taoDataChoTableLichSuMuaBanDoiVe(x.getVeTau().getMaVeTau(),
-												x.getVeTau().getChuyenTau().getMaChuyenTau(),
-												x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
-												x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
-												x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
-														+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
-												"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
-												x.getVeTau().getNgayGioDi().toLocalDate(),
-												x.getVeTau().getKhachHang().getHoten(),
-												x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
-												x.getVeTau().getKhachHang().getSdt(), x.getVeTau().getGiaVe(),
-												x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia(),
-												x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai(),
-												x.getGiaTriChenhLech(), 0.0));
+								pnlDataDoiVe.getChildren().add(taoDataChoTableLichSuMuaBanDoiVe(
+										x.getVeTau().getMaVeTau(), x.getVeTau().getChuyenTau().getMaChuyenTau(),
+										x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
+										x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
+										x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
+												+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
+										"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
+										x.getVeTau().getNgayGioDi().toLocalDate(),
+										x.getVeTau().getKhachHang().getHoten(),
+										x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
+										x.getVeTau().getKhachHang().getSdt(), x.getVeTau().getGiaVe(),
+										nf.format(x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
+										nf.format(x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%",
+										x.getGiaTriChenhLech(), x.tinhTongTien()));
 							}
 						}
 					}
@@ -1073,8 +1070,9 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 								x.getVeTau().getNgayGioDi().toLocalDate(), x.getVeTau().getKhachHang().getHoten(),
 								x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
 								x.getVeTau().getKhachHang().getSdt(), x.getVeTau().getGiaVe(),
-								x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia(),
-								x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai(), x.getGiaTriChenhLech(), 0.0));
+								nf.format(x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
+								nf.format(x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%",
+								x.getGiaTriChenhLech(), x.tinhTongTien()));
 					}
 				}
 			});
@@ -1120,21 +1118,20 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 						for (LichSuTuongTacVe x : list) {
 							if (x.getLoaiTuongTacVe().getTenLoaiTuongTac().equalsIgnoreCase("hoàn trả")
 									&& x.getVeTau().getMaVeTau().contains(maVeGetText)) {
-								pnlDataDoiVe.getChildren()
-										.add(taoDataChoTableLichSuMuaBanDoiVe(x.getVeTau().getMaVeTau(),
-												x.getVeTau().getChuyenTau().getMaChuyenTau(),
-												x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
-												x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
-												x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
-														+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
-												"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
-												x.getVeTau().getNgayGioDi().toLocalDate(),
-												x.getVeTau().getKhachHang().getHoten(),
-												x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
-												x.getVeTau().getKhachHang().getSdt(), x.getVeTau().getGiaVe(),
-												x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia(),
-												x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai(),
-												x.getGiaTriChenhLech(), 0.0));
+								pnlDataDoiVe.getChildren().add(taoDataChoTableLichSuMuaBanDoiVe(
+										x.getVeTau().getMaVeTau(), x.getVeTau().getChuyenTau().getMaChuyenTau(),
+										x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
+										x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
+										x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
+												+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
+										"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
+										x.getVeTau().getNgayGioDi().toLocalDate(),
+										x.getVeTau().getKhachHang().getHoten(),
+										x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
+										x.getVeTau().getKhachHang().getSdt(), x.getVeTau().getGiaVe(),
+										nf.format(x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
+										nf.format(x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%",
+										x.getGiaTriChenhLech(), x.tinhTongTien()));
 							}
 						}
 						if (pnlDataDoiVe.getChildren().isEmpty()) {
@@ -1145,21 +1142,20 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 						pnlDataDoiVe.getChildren().clear();
 						for (LichSuTuongTacVe x : list) {
 							if (x.getLoaiTuongTacVe().getTenLoaiTuongTac().equalsIgnoreCase("hoàn trả")) {
-								pnlDataDoiVe.getChildren()
-										.add(taoDataChoTableLichSuMuaBanDoiVe(x.getVeTau().getMaVeTau(),
-												x.getVeTau().getChuyenTau().getMaChuyenTau(),
-												x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
-												x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
-												x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
-														+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
-												"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
-												x.getVeTau().getNgayGioDi().toLocalDate(),
-												x.getVeTau().getKhachHang().getHoten(),
-												x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
-												x.getVeTau().getKhachHang().getSdt(), x.getVeTau().getGiaVe(),
-												x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia(),
-												x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai(),
-												x.getGiaTriChenhLech(), 0.0));
+								pnlDataDoiVe.getChildren().add(taoDataChoTableLichSuMuaBanDoiVe(
+										x.getVeTau().getMaVeTau(), x.getVeTau().getChuyenTau().getMaChuyenTau(),
+										x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
+										x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
+										x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
+												+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
+										"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
+										x.getVeTau().getNgayGioDi().toLocalDate(),
+										x.getVeTau().getKhachHang().getHoten(),
+										x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
+										x.getVeTau().getKhachHang().getSdt(), x.getVeTau().getGiaVe(),
+										nf.format(x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
+										nf.format(x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%",
+										x.getGiaTriChenhLech(), x.tinhTongTien()));
 							}
 						}
 					}
@@ -1183,8 +1179,9 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 								x.getVeTau().getNgayGioDi().toLocalDate(), x.getVeTau().getKhachHang().getHoten(),
 								x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
 								x.getVeTau().getKhachHang().getSdt(), x.getVeTau().getGiaVe(),
-								x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia(),
-								x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai(), x.getGiaTriChenhLech(), 0.0));
+								nf.format(x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
+								nf.format(x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%",
+								x.getGiaTriChenhLech(), x.tinhTongTien()));
 					}
 				}
 
@@ -1216,23 +1213,23 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 		list = dao.getList();
 		VBox box = new VBox(10);
 		for (LichSuTuongTacVe x : list) {
-			box.getChildren().add(taoDataChoTableLichSuMuaBanDoiVe(x.getVeTau().getMaVeTau(),
-					x.getVeTau().getChuyenTau().getMaChuyenTau(), x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
-					x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
-					x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
-							+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
-					"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
-					x.getVeTau().getNgayGioDi().toLocalDate(), x.getVeTau().getKhachHang().getHoten(),
-					x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(), x.getVeTau().getKhachHang().getSdt(),
-					x.getVeTau().getGiaVe(), x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia(),
-					x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai(), x.getGiaTriChenhLech(), 0.0));
+			box.getChildren()
+					.add(taoDataChoTableLichSuMuaBanDoiVe(x.getVeTau().getMaVeTau(),
+							x.getVeTau().getChuyenTau().getMaChuyenTau(), x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
+							x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
+							x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
+									+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
+							"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
+							x.getVeTau().getNgayGioDi().toLocalDate(), x.getVeTau().getKhachHang().getHoten(),
+							x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
+							x.getVeTau().getKhachHang().getSdt(), x.getVeTau().getGiaVe(),
+							nf.format(x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
+							nf.format(x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%",
+							x.getGiaTriChenhLech(), x.tinhTongTien()));
 		}
 		return box;
 	}
 
-	public void xoaDataTrenTable(VBox pnlData) {
-		pnlData.getChildren().clear();
-	}
 
 	public void hieuUngHover(Button btn) {
 		btn.setOnMouseEntered(e -> {
