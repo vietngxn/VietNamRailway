@@ -30,4 +30,17 @@ public class LoaiTuongTac_Dao {
 		}
 		return list;
 	}
+
+	public LoaiTuongTacVe getLoaiTheoMa(String maTuongTac) throws SQLException {
+		Statement myStmt = databaseConnector.connect();
+		LoaiTuongTacVe ltt = new LoaiTuongTacVe();
+		String query = "select * from LoaiTuongTacVe where maLoaiTuongTac = " + "'" + maTuongTac + "'";
+		ResultSet rs = myStmt.executeQuery(query);
+		while (rs.next()) {
+			String maLoai = rs.getString(1);
+			String tenLoai = rs.getString(2);
+			ltt = new LoaiTuongTacVe(maLoai, tenLoai);
+		}
+		return ltt;
+	}
 }
