@@ -8,7 +8,6 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 import fourcore.Entity.Ve;
-import fourcore.dao.Ve_Dao;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -98,7 +97,7 @@ public class GiaoDienCapLaiVe extends Application {
 	private Button btnCapVe;
 	private Pane pnlCapLaiVe;
 
-	private Ve_Dao vedao = new Ve_Dao();
+
 //	private ArrayList<Ve> list = vedao.themNhieuVeTau();
 
 	public VBox taoDataChoTableCapLaiVe(String mave, String chuyen, String gaDiGaDen, String trangThai, String vitrighe,
@@ -835,25 +834,25 @@ public class GiaoDienCapLaiVe extends Application {
 			pnlDataDoiVe = new VBox(10);
 			pnlDataDoiVe.setAlignment(Pos.CENTER);
 
-			for (Ve x : list) {
-				pnlDataDoiVe.getChildren().add(	    
-						taoDataChoTableCapLaiVe(
-				        x.getMaVeTau(),
-				        x.getChuyenTau().getMaChuyenTau(),
-				        x.getGaDi() + " - " + x.getGaDen(),
-				        x.getTrangThaiVe(),
-				        String.valueOf(x.getSoGhe()), // ép int -> String
-				        x.getNgayGioDi().toString(),  // chuyển LocalDateTime -> String
-				        x.getKhachHang().getHoten(),
-				        x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
-				        x.getKhachHang().getCccd(),
-				        x.getGiaVe(),
-				        x.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia(),
-				        x.getKhuyenMai().getGiaTriPhanTramKhuyenMai(),
-				        100000
-				    ));
-			    System.out.println(x.toString());
-			}
+//			for (Ve x : list) {
+//				pnlDataDoiVe.getChildren().add(	    
+//						taoDataChoTableCapLaiVe(
+//				        x.getMaVeTau(),
+//				        x.getChuyenTau().getMaChuyenTau(),
+//				        x.getGaDi() + " - " + x.getGaDen(),
+//				        x.getTrangThaiVe(),
+//				        String.valueOf(x.getSoGhe()), // ép int -> String
+//				        x.getNgayGioDi().toString(),  // chuyển LocalDateTime -> String
+//				        x.getKhachHang().getHoten(),
+//				        x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
+//				        x.getKhachHang().getCccd(),
+//				        x.getGiaVe(),
+//				        x.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia(),
+//				        x.getKhuyenMai().getGiaTriPhanTramKhuyenMai(),
+//				        100000
+//				    ));
+//			    System.out.println(x.toString());
+//			}
 
 			// === TẠO SCROLLPANE ===
 			scrollPane = new ScrollPane(pnlDataDoiVe);
