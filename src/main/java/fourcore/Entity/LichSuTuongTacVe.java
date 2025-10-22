@@ -6,30 +6,31 @@ import java.time.LocalDateTime;
 public class LichSuTuongTacVe {
 
 	String maTuongTac;
-    private Ve veTau;
-    LoaiTuongTacVe loaiTuongTacVe;
+	private Ve veTau;
+	LoaiTuongTacVe loaiTuongTacVe;
 	double giaTriChenhLech;
 	LocalDateTime ngayTuongTac;
 
-    public LoaiTuongTacVe getLoaiTuongTacVe() {
-        return loaiTuongTacVe;
-    }
+	public LoaiTuongTacVe getLoaiTuongTacVe() {
+		return loaiTuongTacVe;
+	}
 
-    public void setLoaiTuongTacVe(LoaiTuongTacVe loaiTuongTacVe) {
-        this.loaiTuongTacVe = loaiTuongTacVe;
-    }
+	public void setLoaiTuongTacVe(LoaiTuongTacVe loaiTuongTacVe) {
+		this.loaiTuongTacVe = loaiTuongTacVe;
+	}
 
-    public Ve getVeTau() {
-        return veTau;
-    }
+	public Ve getVeTau() {
+		return veTau;
+	}
 
-    public void setVeTau(Ve veTau) {
-        this.veTau = veTau;
-    }
+	public void setVeTau(Ve veTau) {
+		this.veTau = veTau;
+	}
 
-    public String getMaTuongTac() {
+	public String getMaTuongTac() {
 		return maTuongTac;
 	}
+
 	public void setMaTuongTac(String maTuongTac) {
 		this.maTuongTac = maTuongTac;
 	}
@@ -37,25 +38,35 @@ public class LichSuTuongTacVe {
 	public double getGiaTriChenhLech() {
 		return giaTriChenhLech;
 	}
+
 	public void setGiaTriChenhLech(double giaTriChenhLech) {
 		this.giaTriChenhLech = giaTriChenhLech;
 	}
+
 	public LocalDateTime getNgayTuongTac() {
 		return ngayTuongTac;
 	}
+
 	public void setNgayTuongTac(LocalDateTime ngayTuongTac) {
 		this.ngayTuongTac = ngayTuongTac;
 	}
-	public LichSuTuongTacVe() {}
-	
+
+	public LichSuTuongTacVe() {
+	}
+
 	public LichSuTuongTacVe(String maTuongTac, LoaiTuongTacVe loaiTuongTacVe, Ve veTau, double giaTriChenhLech,
-		LocalDateTime ngayTuongTac) {
+			LocalDateTime ngayTuongTac) {
 		setMaTuongTac(maTuongTac);
-        setLoaiTuongTacVe(loaiTuongTacVe);
-        setVeTau(veTau);
+		setLoaiTuongTacVe(loaiTuongTacVe);
+		setVeTau(veTau);
 		setGiaTriChenhLech(giaTriChenhLech);
 		setNgayTuongTac(ngayTuongTac);
 	}
-	
-	
+
+	public double tinhTongTien() {
+		double giamDT = veTau.getGiaVe() * veTau.getDoiTuongGiamGia().giaTriPhanTramGiamGia * 0.01;
+		double giamKM = veTau.getGiaVe() * veTau.getKhuyenMai().getGiaTriPhanTramKhuyenMai() * 0.01;
+		return veTau.getGiaVe() - giamDT - giamKM + giaTriChenhLech;
+	}
+
 }

@@ -11,9 +11,8 @@ import java.util.ArrayList;
 
 public class GaTauDao {
     DatabaseConnector databaseConnector = new DatabaseConnector();
-    ArrayList<Ga> danhSachGaTau =  new ArrayList<>();
+    ArrayList<Ga> danhSachGaTau = new ArrayList<>();
     ArrayList<String> danhSachTenGa = new ArrayList<>();
-
 
 
     public String getGaDi() throws SQLException {
@@ -38,6 +37,4 @@ public class GaTauDao {
         }
         return danhSachTenGa;
     }
-
-
 }
