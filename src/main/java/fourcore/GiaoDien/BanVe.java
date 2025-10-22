@@ -5,14 +5,17 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import fourcore.dao.GaTauDao;
 import javafx.animation.ScaleTransition;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Scene;
@@ -63,17 +66,24 @@ public class BanVe extends Application {
 	private VBox radio_layout2;
 	private RadioButton rb_motchieu;
 	private RadioButton rb_khuhoi;
-	private VBox layout_btn_timkiem;
+	private VBox layout_btn_timkiem = null;
 	private Button btn_timkiem;
 	private DatePicker date1;
 	private Font Font2;
 	private DatePicker date;
-	private Stage window = new Stage(); 
-	@Override
+	private Stage window = new Stage();
+    GaTauDao gaTauDao = new GaTauDao();
+    ArrayList<String> dsTenGa = gaTauDao.getDanhSachTenGaTau();
+    String gaDi = gaTauDao.getGaDi();
+    BorderPane root = new BorderPane();
+    public BanVe() throws SQLException {
+    }
+
+    @Override
 	public void start(Stage primaryStage) {
 		try {
 			window = primaryStage;
-			BorderPane root = new BorderPane();
+
 			Scene scene = new Scene(root,1920,1000);
 			
 			primaryStage.setScene(scene);
@@ -158,9 +168,8 @@ public class BanVe extends Application {
 			noiDungChinh = new VBox();
 			noiDungChinh.setStyle("-fx-background-color: #F7F7F7;");
 			noiDungChinh.setPrefWidth(1200);
-			
+
 			create_head_title();
-			
 			BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
 			root.setLeft(menuList);
 			root.setCenter(noiDungChinh);
@@ -173,7 +182,7 @@ public class BanVe extends Application {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void create_head_title() throws SQLException {
 		header_layout = new VBox();
 		header_layout.setPrefSize(1200, 200);
@@ -221,123 +230,95 @@ public class BanVe extends Application {
 		//btn TimKiem
 		layout_btn_timkiem = new VBox();
 		layout_btn_timkiem.setPrefSize(400, 50);
-		create_timkiem_btn();
-		
+        btn_timkiem = new Button("Tìm Kiếm");
+        btn_timkiem.setPrefSize(200, 50);
+        InputStream is1 = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-SemiBold.ttf");
+        Font font_timkiem = Font.loadFont(is1, 30);
+        btn_timkiem.setFont(font_timkiem);
+
+        btn_timkiem.setPadding(new Insets(5));
+        btn_timkiem.setStyle(
+                "-fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #00BACB 23%, #B6D0D3 100%);" +
+                        "-fx-text-fill: white;" +
+                        "-fx-background-radius: 20px;" +
+                        "-fx-border-radius: 20px;"+
+                        "-fx-cursor : hand;"
+        );
+        layout_btn_timkiem.getChildren().add(btn_timkiem);
+        layout_btn_timkiem.setTranslateX(350);
+        layout_btn_timkiem.setTranslateY(-100);
+
+        center_layout.getChildren().add(layout_btn_timkiem);
+
+        btn_timkiem.hoverProperty().addListener((obs,oval,nval) -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(200), btn_timkiem);
+            if(nval)
+            {
+                st.setToX(1.1);
+                st.setToY(1.1);
+            }
+            else {
+                st.setToX(1);
+                st.setToY(1);
+            }
+            st.play();
+        });
+
+
 	}
-	
+
 	public void create_combobox_layout1() throws SQLException {
-		
+
 		// combo 1
-		combolayout1 = new HBox(); 
+		combolayout1 = new HBox();
 		combolayout1.setPrefSize(400, 150);
-        GaTauDao gaTauDao = new GaTauDao();
-        ArrayList<String> dsTenGa = gaTauDao.getDanhSachTenGaTau();
-        String gaDi = gaTauDao.getGaDi();
+
 		ObservableList<String> items = FXCollections.observableArrayList(gaDi);
-		 
-		ComboBox<String> comboBox1 = createSearchableComboBox(items);
+
+//		ComboBox<String> comboBox1 = createSearchableComboBox(items);
+        ComboBox<String> comboBox1 = new ComboBox(items);
 	    comboBox1.setPromptText("Ga đi");
 	    comboBox1.setPrefWidth(300);
 	    //comboBox1.setStyle("-fx-background-color  : rgb(121,217,225)");
-	        
+
 	    comboBox1.setId("combo-box");
 	    combolayout1.getChildren().add(comboBox1);
 		combobox1.getChildren().add(combolayout1);
 		//center_layout1.getChildren().add(combobox1);
-		
-		
-		
+
+
+
 		//combo 2
-		combolayout2 = new HBox(); 
+		combolayout2 = new HBox();
 		combolayout2.setPrefSize(400, 150);
 		ObservableList<String> item = FXCollections.observableArrayList(dsTenGa);
-		
-		
-		ComboBox<String> combobox = createSearchableComboBox(item);
-	    combobox.setPromptText("Ga đến");
-	    combobox.setPrefWidth(300);
+
+
+//		ComboBox<String> combobox = createSearchableComboBox(item);
+        ComboBox<String> comboBox2 = new ComboBox(item);
+
+        comboBox2.setPromptText("Ga đến");
+        comboBox2.setPrefWidth(300);
 	   // combobox.setStyle("-fx-background-color  : rgb(121,217,225)");
-	    combobox.setId("combo-box");
-        combolayout2.getChildren().add(combobox);
-		
+        comboBox2.setId("combo-box");
+        combolayout2.getChildren().add(comboBox2);
+
         combobox1.getChildren().add(combolayout2);
-        
+
 		center_layout1.getChildren().add(combobox1);
-		
-		
-		
+
+
+
 		center_layout.getChildren().add(center_layout1);
 		noiDungChinh.getChildren().add(center_layout);
 	}
-	private ComboBox<String> createSearchableComboBox(ObservableList<String> items) {
-        ComboBox<String> combobox = new ComboBox<>(items);
-        
-        combobox.setPrefHeight(35);
-        combobox.setPrefWidth(200);
-        combobox.setEditable(true);
-        combobox.setId("combo-box");
-        
-        InputStream is = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Bold.ttf");
-        Font font_combobox = Font.loadFont(is, 15);
-        combobox.getEditor().setFont(font_combobox);
-        
-        
-        ObservableList<String> listgoc = FXCollections.observableArrayList(items);
-        
-        combobox.getEditor().textProperty().addListener((obs,oval,nval) -> {
-        if(nval == null || nval.isEmpty())
-        {
-        		combobox.setItems(listgoc);
-        		combobox.hide();
-        }
-        else {
-        ObservableList<String> list2 = FXCollections.observableArrayList();
-        String txt = nval.toLowerCase();
-        for(String item : listgoc)
-        {
-        	if(item.toLowerCase().contains(txt))
-        	{	
-        		list2.add(item);
-        	}
-        }
-        
-        combobox.setItems(list2);
-        if(!list2.isEmpty())
-        {
-        	combobox.show();
-        }
-        else 
-        {
-        	combobox.hide();
-        }
-        }
-        });
-        
-        combobox.setOnAction(e -> {
-        	String txt = combobox.getSelectionModel().getSelectedItem();
-        	if(txt != null)
-        	{
-        		combobox.getEditor().setText(txt);
-        	}
-        });
-        
-        
-        combobox.setOnHidden(e -> {
-        	String txt = combobox.getSelectionModel().getSelectedItem();
-        	if(txt!= null && !txt.isEmpty() && listgoc.contains(txt)) {
-        		combobox.setValue(txt);
-        	}
-        });
-        combobox.skinProperty().addListener((obs, oldSkin, newSkin) -> {
-		    if (newSkin != null) {
-		        javafx.scene.Node arrowButton = combobox.lookup(".arrow-button");
-		        if (arrowButton != null) {
-		            arrowButton.setStyle("-fx-background-color: transparent;");
-		        }
-		    }
-		});
-        return combobox;
+    public void setDataForComboBox(ComboBox<String> comboBox, ArrayList<String> dataList) {
+        ObservableList<String> items = FXCollections.observableArrayList(dataList);
+        comboBox.setItems(items);
     }
+
+
+
 	public void create_combobox_layout2()
 	{
 		//combo 3
@@ -430,53 +411,17 @@ public class BanVe extends Application {
 	
 	public void create_timkiem_btn()
 	{
-		btn_timkiem = new Button("Tìm Kiếm");
-		btn_timkiem.setPrefSize(200, 50);
-		InputStream is = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-SemiBold.ttf");
-	    Font font_timkiem = Font.loadFont(is, 30);
-	    btn_timkiem.setFont(font_timkiem);
-		
-		btn_timkiem.setPadding(new Insets(5));
-		btn_timkiem.setStyle(
-			    "-fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #00BACB 23%, #B6D0D3 100%);" +
-			    "-fx-text-fill: white;" +
-			    "-fx-background-radius: 20px;" +
-			    "-fx-border-radius: 20px;"+
-			    "-fx-cursor : hand;"
-			);
-		layout_btn_timkiem.getChildren().add(btn_timkiem);
-		layout_btn_timkiem.setTranslateX(350);
-		layout_btn_timkiem.setTranslateY(-100);
-		
-		center_layout.getChildren().add(layout_btn_timkiem);
-		
-		btn_timkiem.hoverProperty().addListener((obs,oval,nval) -> {
-			ScaleTransition st = new ScaleTransition(Duration.millis(200), btn_timkiem);
-			if(nval)
-			{
-				st.setToX(1.1);
-				st.setToY(1.1);
-			}
-			else {
-				st.setToX(1);
-				st.setToY(1);
-			}
-			st.play();
-		});
-		btn_timkiem.setOnAction(E -> {
-			window.close();
-			TrangChu tc = new TrangChu();
-			Stage newstage = new Stage();
-			tc.start(newstage);
-		});
+
 		
 	}
     public VBox getGDBanVe(){
         return this.noiDungChinh;
     }
-	
-	
-	public static void main(String[] args) {
+
+    public Button getBtn_timkiem(){
+        return this.btn_timkiem;
+    }
+    public static void main(String[] args) {
 		launch(args);
 //		Application.launch(BanVe.class, args);
 	}

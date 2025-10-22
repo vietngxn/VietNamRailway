@@ -1,5 +1,6 @@
 package fourcore.GiaoDien;
 
+import fourcore.Control.*;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -26,6 +27,7 @@ import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -213,27 +215,7 @@ public class TrangChu extends Application {
 
 
             });
-            capVeBox.setOnMouseClicked(event -> {
-                GiaoDienCapLaiVe capVe = new GiaoDienCapLaiVe();
-                Stage capVeStage = new Stage();
-                capVe.start(capVeStage);
-                VBox giaoDienCapVe =   capVe.getNoiDungChinhVe();
-                root.setCenter(giaoDienCapVe);
-            });
-            xemLichSuVeBox.setOnMouseClicked(event -> {
-                GiaoDienLichSuMuaBanDoiVe lichSuMuaBanDoiVe = new GiaoDienLichSuMuaBanDoiVe();
-                Stage lichSuMuaBanDoiVeStage = new Stage();
-                lichSuMuaBanDoiVe.start(lichSuMuaBanDoiVeStage);
-                VBox giaoDienLichSuMuaBanDoiVe = lichSuMuaBanDoiVe.getLichSuMuaVe();
-                root.setCenter(giaoDienLichSuMuaBanDoiVe);
-            });
-            banVeBox.setOnMouseClicked(event -> {
-                BanVe gdBanVe = new BanVe();
-                Stage thongKeKhachHangStage = new Stage();
-                gdBanVe.start(thongKeKhachHangStage);
-                VBox gdBanVeShow = gdBanVe.getGDBanVe();
-                root.setCenter(gdBanVeShow);
-            });
+
 
 //				======================
 //				||QUAN LI KHACH HANG||
@@ -348,22 +330,7 @@ public class TrangChu extends Application {
 
 
             });
-            quanLiKhachHangBox.setOnMouseClicked(event -> {
-                QuanLyKhachHang gdQuanLyKhachHang = new QuanLyKhachHang();
-                Stage quanLyKhachHangStage = new Stage();
-                gdQuanLyKhachHang.start(quanLyKhachHangStage);
-                VBox quanLyKhachHangVBox = gdQuanLyKhachHang.getQuanLiKhachHang();
-               root.setCenter(quanLyKhachHangVBox);
-            });
 
-            thongKeKhachHang.setOnMouseClicked(event -> {
-               QuanLiThongKeChuyenTau gdQuanLiThongKe = new QuanLiThongKeChuyenTau();
-               gdQuanLiThongKe.setLoaiThongKe("ThongKeKhachHang");
-               Stage thongKeKhachHangStage = new Stage();
-               gdQuanLiThongKe.start(thongKeKhachHangStage);
-               VBox quanLiThongKeVBox = gdQuanLiThongKe.getQuanLiThongKe();
-               root.setCenter(quanLiThongKeVBox);
-            });
 
 //			======================
 //			||QUAN LI HOA DON   ||
@@ -481,143 +448,6 @@ public class TrangChu extends Application {
 
 
             });
-            quanLiHoaDonBox.setOnMouseClicked(event -> {
-               QuanLiHoaDon gdQuanLiHoaDon = new QuanLiHoaDon();
-               Stage quanLiHoaDonStage = new Stage();
-               gdQuanLiHoaDon.start(quanLiHoaDonStage);
-               VBox gdQLHD = gdQuanLiHoaDon.getQuanLiHoaDon();
-               root.setCenter(gdQLHD);
-            });
-
-            thongKeDoanhThuBox.setOnMouseClicked(event -> {
-                QuanLiThongKeChuyenTau gdQuanLiThongKe2 = new QuanLiThongKeChuyenTau();
-                gdQuanLiThongKe2.setLoaiThongKe("ThongKeDoanhThu");
-                Stage thongKeDoanhStage = new Stage();
-                gdQuanLiThongKe2.start(thongKeDoanhStage);
-                VBox gdQLTK2 = gdQuanLiThongKe2.getQuanLiThongKe();
-                root.setCenter(gdQLTK2);
-
-
-            });
-//			======================
-//			||QUAN LI THONG KE  ||
-//			======================
-//            quanLiThongKeMenu = new HBox();
-//            quanLiThongKeMenu.setSpacing(102);
-//            quanLiThongKeMenu.setPadding(new Insets(15, 95, 15, 20));
-//            quanLiThongKeMenu.setStyle("-fx-alignment: center-left;");
-//
-//
-////			quanLiVeTauIcon = new Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
-//            quanLiThongKeIconView = new ImageView(getClass().getResource("/img/presentation-chart-bar.png").toExternalForm());
-//            quanLiThongKeIconView.setFitWidth(30);
-//            quanLiThongKeIconView.setFitHeight(30);
-//            quanLiThongKeIconView.setTranslateX(20);
-//
-//            quanLiThongKeLabel = new Label("Quản lí thống kê");
-//
-//            interBoldFont = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Bold.ttf");
-//            if (interBoldFont != null) {
-//                labelFont = Font.loadFont(interBoldFont, 20);
-//                quanLiThongKeLabel.setFont(labelFont);
-//                System.out.println("⚠️ Set font thanh cong.");
-//                System.out.println("Loaded font: " + labelFont.getName());
-//            } else {
-//                System.out.println("⚠️ Không tìm thấy font, dùng font mặc định.");
-//                labelFont = Font.font("System", FontWeight.BOLD, 20); // fallback
-//            }
-//
-////			showMenuPhuIcon = new Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
-//            showMenuPhuIconSource = "/img/chevron-down.png";
-//            showMenuPhuIconView = new ImageView(getClass().getResource(showMenuPhuIconSource).toExternalForm());
-//            showMenuPhuIconView.setFitWidth(20);
-//            showMenuPhuIconView.setFitHeight(20);
-//            showMenuPhuIconView.setTranslateX(25.5);
-//            quanLiThongKeMenu.getChildren().addAll(quanLiThongKeIconView, quanLiThongKeLabel, showMenuPhuIconView);
-//
-//
-//            danhSachMenuItem.getChildren().add(quanLiThongKeMenu);
-//            scrollPaneMenu.setContent(danhSachMenuItem);
-//            VBox menuPhuQuanLiThongKe = new VBox();
-//            menuPhuQuanLiThongKe.setSpacing(10);
-//            menuPhuQuanLiThongKe.setPadding(new Insets(0, 40, 0, 0));
-//            menuPhuQuanLiThongKe.setVisible(false);
-//            menuPhuQuanLiThongKe.setManaged(false);
-//            menuPhuQuanLiThongKe.setStyle("-fx-background-color: #D2EEF0;");
-//
-//            HBox thongKe1Box = new HBox();
-//            HBox thongKe2Box = new HBox();
-//            HBox thongKe3Box = new HBox();
-//
-//            Label thongKe1Label = new Label("Thống kê doanh thu theo tháng");
-//            Label thongKe2Label = new Label("Thống kê ");
-//            Label thongKe3Label = new Label("Thống kê ghế bán chạy trong tháng");
-//
-//
-//            thongKe1Box.getChildren().add(thongKe1Label);
-//            thongKe2Box.getChildren().add(thongKe2Label);
-//            thongKe3Box.getChildren().add(thongKe3Label);
-//
-//            interSemiBold = getClass().getResourceAsStream("/fonts/Inter/static/Inter_18pt-SemiBold.ttf");
-//            labelMenuPhu = Font.loadFont(interSemiBold,15);
-//
-//            for (Label label : new Label[]{thongKe1Label,thongKe2Label,thongKe3Label}) {
-//                label.setStyle("-fx-background-color: #D2EEF0;");
-//                label.setTranslateY(0);
-//                label.setFont(labelMenuPhu);
-//                label.setPadding(new Insets(12, 320, 12, 155));
-//                label.setOnMouseEntered(e -> label.setStyle("-fx-background-color: #79D9E1;"));
-//                label.setOnMouseExited(e -> label.setStyle("-fx-background-color: #D2EEF0;"));
-//
-//            }
-//            for (HBox hbox : new HBox[]{thongKe1Box,thongKe2Box,thongKe3Box}) {
-//                hbox.setStyle("-fx-font-size: 15px;-fx-background-color: #D2EEF0;");
-//                hbox.setPadding(new Insets(0,50,0,0));
-//                hbox.setOnMouseEntered(e -> hbox.setStyle("-fx-background-color: #79D9E1;"));
-//                hbox.setOnMouseExited(e -> hbox.setStyle("-fx-background-color: #D2EEF0;"));
-//            }
-//
-//            menuPhuQuanLiThongKe.getChildren().addAll(thongKe1Box,thongKe2Box,thongKe3Box);
-//            danhSachMenuItem.getChildren().add(menuPhuQuanLiThongKe);
-//
-//            // Sự kiện onclick vào menu
-//            quanLiThongKeMenu.setOnMouseClicked(event -> {
-//                boolean isVisible = menuPhuQuanLiThongKe.isVisible();
-//                menuPhuQuanLiThongKe.setVisible(!isVisible);
-//                menuPhuQuanLiThongKe.setManaged(!isVisible);
-//                if (isVisible == false) {
-//                    quanLiThongKeMenu.setStyle(" -fx-background-color: #79D9E1;");
-//                }
-//                else {
-//                    quanLiThongKeMenu.setStyle(" -fx-background-color: #F7F7F7;");
-//
-//
-//
-//                }
-//                TranslateTransition slide = new TranslateTransition(Duration.millis(300), menuPhuQuanLiThongKe);
-//                if (!isVisible) {
-//                    menuPhuQuanLiThongKe.setVisible(true);
-//                    menuPhuQuanLiThongKe.setManaged(true);
-//                    menuPhuQuanLiThongKe.setTranslateY(-20);
-//                    slide.setFromY(-20);
-//                    slide.setToY(0);
-//                    quanLiThongKeMenu.setStyle("-fx-background-color: #79D9E1;");
-//                } else {
-//                    slide.setFromY(0);
-//                    slide.setToY(-20);
-//                    slide.setOnFinished(e -> {
-//                        menuPhuQuanLiThongKe.setVisible(false);
-//                        menuPhuQuanLiThongKe.setManaged(false);
-//                    });
-//                    quanLiThongKeMenu.setStyle("-fx-background-color: #F7F7F7;");
-//                }
-//                slide.play();
-//
-//
-//
-//
-//            });
-
 
 //			=======================
 //			||QUAN LI NHAN VIEN  ||
@@ -655,13 +485,7 @@ public class TrangChu extends Application {
             scrollPaneMenu.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
             scrollPaneMenu.setContent(danhSachMenuItem);
 
-            quanLiNhanVienMenu.setOnMouseClicked(event -> {
-                QuanLiNhanVien qlyNhanVien = new QuanLiNhanVien();
-                Stage stage = new Stage();
-                qlyNhanVien.start(stage);
-                VBox quanLyNhanVienGD = qlyNhanVien.getGDQlyNhanVien();
-                root.setCenter(quanLyNhanVienGD);
-            });
+
 
 //			=======================
 //			||QUAN LI CTKM        ||
@@ -692,13 +516,7 @@ public class TrangChu extends Application {
 
 //		showMenuPhuIcon = new Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
             quanLiCTKMMenu.getChildren().addAll(quanLiCTKMIconView, quanLiCTKMLabel);
-            quanLiCTKMMenu.setOnMouseClicked(event -> {
-               QuanLyCTKM quanLyCTKM = new QuanLyCTKM();
-               Stage stage = new Stage();
-               quanLyCTKM.start(stage);
-               VBox quanLyCTKMMenu = quanLyCTKM.getQuanLiCTKM();
-               root.setCenter(quanLyCTKMMenu);
-            });
+
             danhSachMenuItem.getChildren().add(quanLiCTKMMenu);
             scrollPaneMenu.setContent(danhSachMenuItem);
 
@@ -810,15 +628,7 @@ public class TrangChu extends Application {
                         }
                         slide.play();
                     });
-            quanLiChuyenTauBox.setOnMouseClicked(event -> {
-                QuanLyChuyenTau gdQuanLiChuyenTau = new QuanLyChuyenTau();
-                Stage qlChuyenTauStage = new Stage();
-                gdQuanLiChuyenTau.start(qlChuyenTauStage);
-                VBox gdChinhQLChuyenTau = gdQuanLiChuyenTau.getGDQuanLiChuyenTau();
-                root.setCenter(gdChinhQLChuyenTau);
 
-
-            });
 
             scrollPaneMenu.setContent(danhSachMenuItem);
 
@@ -1190,7 +1000,54 @@ public class TrangChu extends Application {
             });
 
             noiDungWrapper.getChildren().addAll(hienNoiDungCheckBox,noiDungChinh);
+//			=========================
+//			||      HUNG SU KIEN    ||
+//			=========================
+            capVeBox.setOnMouseClicked(event -> {
+                CapVeControl capVeControl = new CapVeControl();
+                capVeControl.handleMenuTrangChuSelect(root);
+            });
+            xemLichSuVeBox.setOnMouseClicked(event -> {
+                XemLichSuVeBoxControl lichSuVeControl = new XemLichSuVeBoxControl();
+                lichSuVeControl.handleMenuTrangChuSelect(root);
+            });
+            banVeBox.setOnMouseClicked(event -> {
+                BanVeControl banVeControl = new BanVeControl();
+                banVeControl.handleMenuTrangChuSelect(root);
+            });
+            quanLiKhachHangBox.setOnMouseClicked(event -> {
+                KhachHangControl khachHangControl = new KhachHangControl();
+                khachHangControl.handleMenuTrangChuSelect(root);
+            });
 
+            thongKeKhachHang.setOnMouseClicked(event -> {
+                ThongKeKhachHangControl thongKeKhachHangControl = new ThongKeKhachHangControl();
+                thongKeKhachHangControl.handleMenuTrangChuSelect(root);
+            });
+
+            quanLiHoaDonBox.setOnMouseClicked(event -> {
+                HoaDonControl hoaDonControl = new HoaDonControl();
+                hoaDonControl.handleMenuTrangChuSelect(root);
+            });
+
+            thongKeDoanhThuBox.setOnMouseClicked(event -> {
+                ThongKeChuyenTauControl thongKeTauControl = new ThongKeChuyenTauControl();
+                thongKeTauControl.handleMenuTrangChuSelect(root);
+            });
+            quanLiNhanVienMenu.setOnMouseClicked(event -> {
+                NhanVienControl nhanVienControl = new NhanVienControl();
+                nhanVienControl.handleMenuTrangChuSelect(root);
+            });
+            quanLiCTKMMenu.setOnMouseClicked(event -> {
+                KhuyenMaiControl khuyenMaiControl = new KhuyenMaiControl();
+                khuyenMaiControl.handleMenuTrangChuSelect(root);
+
+            });
+            quanLiChuyenTauBox.setOnMouseClicked(event -> {
+                ChuyenTauControl chuyenTauControl =  new ChuyenTauControl();
+                chuyenTauControl.handleMenuTrangChuSelect(root);
+            });
+//------------------------------------------------------------------------------------------------------
             BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
             root.setLeft(menuList);
             root.setCenter(noiDungWrapper);

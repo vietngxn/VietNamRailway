@@ -801,7 +801,7 @@ public class ChonVe extends Application {
             root.setCenter(noiDungChinh);
             primaryStage.setFullScreen(true);
 
-            primaryStage.show();
+//            primaryStage.show();
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -1177,6 +1177,9 @@ public class ChonVe extends Application {
         danhSachGheGridPane.setTranslateY(10);
     }
 
+    public VBox getGdChonVe(){
+        return this.noiDungChinh;
+    }
 
     public String getTenToaTau(ToaTau toaTau) {
         return toaTau.getLoaiToaTau().getTenLoaiToaTau();
