@@ -655,6 +655,14 @@ public class TrangChu extends Application {
             scrollPaneMenu.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
             scrollPaneMenu.setContent(danhSachMenuItem);
 
+            quanLiNhanVienMenu.setOnMouseClicked(event -> {
+                QuanLiNhanVien qlyNhanVien = new QuanLiNhanVien();
+                Stage stage = new Stage();
+                qlyNhanVien.start(stage);
+                VBox quanLyNhanVienGD = qlyNhanVien.getGDQlyNhanVien();
+                root.setCenter(quanLyNhanVienGD);
+            });
+
 //			=======================
 //			||QUAN LI CTKM        ||
 //			=======================

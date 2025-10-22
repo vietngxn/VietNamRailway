@@ -896,7 +896,7 @@ public class QuanLiNhanVien extends Application {
 			
 			create_layout_button();
 			primaryStage.setFullScreen(true);
-			primaryStage.show();
+//			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -1308,7 +1308,9 @@ public class QuanLiNhanVien extends Application {
 	    table_desc.getChildren().add(data);
 	} 
 	
-	
+	public VBox getGDQlyNhanVien(){
+        return this.noiDungChinh;
+    }
 	
 	public static void main(String[] args) {
 		launch(args);
