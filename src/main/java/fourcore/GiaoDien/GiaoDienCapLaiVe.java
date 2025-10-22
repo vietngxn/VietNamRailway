@@ -98,10 +98,6 @@ public class GiaoDienCapLaiVe extends Application {
     private Pane pnlCapLaiVe;
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> fd48bbbc943892752a937a20c9eb8db01cfe6e5d
 //	private ArrayList<Ve> list = vedao.themNhieuVeTau();
 
     public VBox taoDataChoTableCapLaiVe(String mave, String chuyen, String gaDiGaDen, String trangThai, String vitrighe,
@@ -839,11 +835,10 @@ public class GiaoDienCapLaiVe extends Application {
             pnlDataDoiVe.setAlignment(Pos.CENTER);
 
 //			for (Ve x : list) {
-<<<<<<< HEAD
 //				pnlDataDoiVe.getChildren().add(
-=======
+
 //				pnlDataDoiVe.getChildren().add(	    
->>>>>>> fd48bbbc943892752a937a20c9eb8db01cfe6e5d
+
 //						taoDataChoTableCapLaiVe(
 //				        x.getMaVeTau(),
 //				        x.getChuyenTau().getMaChuyenTau(),
