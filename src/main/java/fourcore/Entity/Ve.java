@@ -4,221 +4,212 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Ve {
-	private String maVeTau;
-	private String gaDi;
-	private String gaDen;
-	private String tenTau;
-	private LocalDateTime ngayGioDi;
-	private LocalDateTime ngayGioDen;
-	private int soToa;
-	private int soKhoang;
-	private int soTang;
-	private int soGhe;
-	private String loaiVe;
-	private String maGiayTo;
-	private double giaVe;
-	private String ghiChu;
-	private String trangThaiDoiVe;
-	private String trangThaiVe;
-	private ChuyenTau chuyenTau;
-	private KhachHang khachHang;
-	private KhuyenMai khuyenMai;
-	private DoiTuongGiamGia doiTuongGiamGia;
+    private String maVeTau;
+    private String gaDi;
+    private String gaDen;
+    private String tenTau;
+    private LocalDateTime ngayGioDi;
+    private LocalDateTime ngayGioDen;
+    private int soToa;
+    private int soKhoang;
+    private int soTang;
+    private int soGhe;
+    private String loaiVe;
+    private String maGiayTo;
+    private double giaVe;
+    private String ghiChu;
+    private String trangThaiDoiVe;
+    private String trangThaiVe;
+    private ChuyenTau chuyenTau;
+    private KhachHang khachHang;
+    private KhuyenMai khuyenMai;
+    private DoiTuongGiamGia doiTuongGiamGia;
 
-	public Ve(String maVeTau, String gaDi, String gaDen, String tenTau, LocalDateTime ngayGioDi,
-			LocalDateTime ngayGioDen, int soToa, int soKhoang, int soTang, int soGhe, String loaiVe, String maGiayTo,
-			double giaVe, String ghiChu, String trangThaiDoiVe, String trangThaiVe, ChuyenTau chuyenTau,
-			KhachHang khachHang, KhuyenMai khuyenMai, DoiTuongGiamGia doiTuongGiamGia) {
-		setMaVeTau(maVeTau);
-		setGaDi(gaDi);
-		setGaDen(gaDen);
-		setTenTau(tenTau);
-		setNgayGioDi(ngayGioDi);
-		setNgayGioDen(ngayGioDen);
-		setSoToa(soToa);
-		setSoKhoang(soKhoang);
-		setSoTang(soTang);
-		setSoGhe(soGhe);
-		setLoaiVe(loaiVe);
-		setMaGiayTo(maGiayTo);
-		setGiaVe(giaVe);
-		setGhiChu(ghiChu);
-		setTrangThaiDoiVe(trangThaiDoiVe);
-		setTrangThaiVe(trangThaiVe);
-		setChuyenTau(chuyenTau);
-		setKhachHang(khachHang);
-		setKhuyenMai(khuyenMai);
-		setDoiTuongGiamGia(doiTuongGiamGia);
-	}
-
-	public String getMaVeTau() {
-		return maVeTau;
-	}
-
-	public void setMaVeTau(String maVeTau) {
+    public Ve(String maVeTau) {
+		
 		this.maVeTau = maVeTau;
 	}
 
-	public String getGaDi() {
-		return gaDi;
-	}
+	public Ve(String maVeTau, String gaDi, String gaDen, String tenTau, LocalDateTime ngayGioDi, LocalDateTime ngayGioDen, int soToa, int soKhoang, int soTang, int soGhe, String loaiVe, String maGiayTo, double giaVe, String ghiChu, String trangThaiDoiVe, String trangThaiVe, ChuyenTau chuyenTau, KhachHang khachHang, KhuyenMai khuyenMai, DoiTuongGiamGia doiTuongGiamGia) {
+        setMaVeTau(maVeTau);
+        setGaDi(gaDi);
+        setGaDen(gaDen);
+        setTenTau(tenTau);
+        setNgayGioDi(ngayGioDi);
+        setNgayGioDen(ngayGioDen);
+        setSoToa(soToa);
+        setSoKhoang(soKhoang);
+        setSoTang(soTang);
+        setSoGhe(soGhe);
+        setLoaiVe(loaiVe);
+        setMaGiayTo(maGiayTo);
+        setGiaVe(giaVe);
+        setGhiChu(ghiChu);
+        setTrangThaiDoiVe(trangThaiDoiVe);
+        setTrangThaiVe(trangThaiVe);
+        setChuyenTau(chuyenTau);
+        setKhachHang(khachHang);
+        setKhuyenMai(khuyenMai);
+        setDoiTuongGiamGia(doiTuongGiamGia);
+    }
 
-	public void setGaDi(String gaDi) {
-		this.gaDi = gaDi;
-	}
+    public String getMaVeTau() {
+        return maVeTau;
+    }
 
-	public String getGaDen() {
-		return gaDen;
-	}
+    public void setMaVeTau(String maVeTau) {
+        this.maVeTau = maVeTau;
+    }
 
-	public void setGaDen(String gaDen) {
-		this.gaDen = gaDen;
-	}
+    public String getGaDi() {
+        return gaDi;
+    }
 
-	public String getTenTau() {
-		return tenTau;
-	}
+    public void setGaDi(String gaDi) {
+        this.gaDi = gaDi;
+    }
 
-	public void setTenTau(String tenTau) {
-		this.tenTau = tenTau;
-	}
+    public String getGaDen() {
+        return gaDen;
+    }
 
-	public LocalDateTime getNgayGioDi() {
-		return ngayGioDi;
-	}
+    public void setGaDen(String gaDen) {
+        this.gaDen = gaDen;
+    }
 
-	public void setNgayGioDi(LocalDateTime ngayGioDi) {
-		this.ngayGioDi = ngayGioDi;
-	}
+    public String getTenTau() {
+        return tenTau;
+    }
 
-	public LocalDateTime getNgayGioDen() {
-		return ngayGioDen;
-	}
+    public void setTenTau(String tenTau) {
+        this.tenTau = tenTau;
+    }
 
-	public void setNgayGioDen(LocalDateTime ngayGioDen) {
-		this.ngayGioDen = ngayGioDen;
-	}
+    public LocalDateTime getNgayGioDi() {
+        return ngayGioDi;
+    }
 
-	public int getSoToa() {
-		return soToa;
-	}
+    public void setNgayGioDi(LocalDateTime ngayGioDi) {
+        this.ngayGioDi = ngayGioDi;
+    }
 
-	public void setSoToa(int soToa) {
-		this.soToa = soToa;
-	}
+    public LocalDateTime getNgayGioDen() {
+        return ngayGioDen;
+    }
 
-	public int getSoKhoang() {
-		return soKhoang;
-	}
+    public void setNgayGioDen(LocalDateTime ngayGioDen) {
+        this.ngayGioDen = ngayGioDen;
+    }
 
-	public void setSoKhoang(int soKhoang) {
-		this.soKhoang = soKhoang;
-	}
+    public int getSoToa() {
+        return soToa;
+    }
 
-	public int getSoTang() {
-		return soTang;
-	}
+    public void setSoToa(int soToa) {
+        this.soToa = soToa;
+    }
 
-	public void setSoTang(int soTang) {
-		this.soTang = soTang;
-	}
+    public int getSoKhoang() {
+        return soKhoang;
+    }
 
-	public int getSoGhe() {
-		return soGhe;
-	}
+    public void setSoKhoang(int soKhoang) {
+        this.soKhoang = soKhoang;
+    }
 
-	public void setSoGhe(int soGhe) {
-		this.soGhe = soGhe;
-	}
+    public int getSoTang() {
+        return soTang;
+    }
 
-	public String getLoaiVe() {
-		return loaiVe;
-	}
+    public void setSoTang(int soTang) {
+        this.soTang = soTang;
+    }
 
-	public void setLoaiVe(String loaiVe) {
-		this.loaiVe = loaiVe;
-	}
+    public int getSoGhe() {
+        return soGhe;
+    }
 
-	public String getMaGiayTo() {
-		return maGiayTo;
-	}
+    public void setSoGhe(int soGhe) {
+        this.soGhe = soGhe;
+    }
 
-	public void setMaGiayTo(String maGiayTo) {
-		this.maGiayTo = maGiayTo;
-	}
+    public String getLoaiVe() {
+        return loaiVe;
+    }
 
-	public double getGiaVe() {
-		return giaVe;
-	}
+    public void setLoaiVe(String loaiVe) {
+        this.loaiVe = loaiVe;
+    }
 
-	public void setGiaVe(double giaVe) {
-		this.giaVe = giaVe;
-	}
+    public String getMaGiayTo() {
+        return maGiayTo;
+    }
 
-	public String getGhiChu() {
-		return ghiChu;
-	}
+    public void setMaGiayTo(String maGiayTo) {
+        this.maGiayTo = maGiayTo;
+    }
 
-	public void setGhiChu(String ghiChu) {
-		this.ghiChu = ghiChu;
-	}
+    public double getGiaVe() {
+        return giaVe;
+    }
 
-	public String getTrangThaiDoiVe() {
-		return trangThaiDoiVe;
-	}
+    public void setGiaVe(double giaVe) {
+        this.giaVe = giaVe;
+    }
 
-	public void setTrangThaiDoiVe(String trangThaiDoiVe) {
-		this.trangThaiDoiVe = trangThaiDoiVe;
-	}
+    public String getGhiChu() {
+        return ghiChu;
+    }
 
-	public String getTrangThaiVe() {
-		return trangThaiVe;
-	}
+    public void setGhiChu(String ghiChu) {
+        this.ghiChu = ghiChu;
+    }
 
-	public void setTrangThaiVe(String trangThaiVe) {
-		this.trangThaiVe = trangThaiVe;
-	}
+    public String getTrangThaiDoiVe() {
+        return trangThaiDoiVe;
+    }
 
-	public ChuyenTau getChuyenTau() {
-		return chuyenTau;
-	}
+    public void setTrangThaiDoiVe(String trangThaiDoiVe) {
+        this.trangThaiDoiVe = trangThaiDoiVe;
+    }
 
-	public void setChuyenTau(ChuyenTau chuyenTau) {
-		this.chuyenTau = chuyenTau;
-	}
+    public String getTrangThaiVe() {
+        return trangThaiVe;
+    }
 
-	public KhachHang getKhachHang() {
-		return khachHang;
-	}
+    public void setTrangThaiVe(String trangThaiVe) {
+        this.trangThaiVe = trangThaiVe;
+    }
 
-	public void setKhachHang(KhachHang khachHang) {
-		this.khachHang = khachHang;
-	}
+    public ChuyenTau getChuyenTau() {
+        return chuyenTau;
+    }
 
-	public KhuyenMai getKhuyenMai() {
-		return khuyenMai;
-	}
+    public void setChuyenTau(ChuyenTau chuyenTau) {
+        this.chuyenTau = chuyenTau;
+    }
 
-	public void setKhuyenMai(KhuyenMai khuyenMai) {
-		this.khuyenMai = khuyenMai;
-	}
+    public KhachHang getKhachHang() {
+        return khachHang;
+    }
 
-	public DoiTuongGiamGia getDoiTuongGiamGia() {
-		return doiTuongGiamGia;
-	}
+    public void setKhachHang(KhachHang khachHang) {
+        this.khachHang = khachHang;
+    }
 
-	public void setDoiTuongGiamGia(DoiTuongGiamGia doiTuongGiamGia) {
-		this.doiTuongGiamGia = doiTuongGiamGia;
-	}
+    public KhuyenMai getKhuyenMai() {
+        return khuyenMai;
+    }
 
-	@Override
-	public String toString() {
-		return "Ve [maVeTau=" + maVeTau + ", gaDi=" + gaDi + ", gaDen=" + gaDen + ", tenTau=" + tenTau + ", ngayGioDi="
-				+ ngayGioDi + ", ngayGioDen=" + ngayGioDen + ", soToa=" + soToa + ", soKhoang=" + soKhoang + ", soTang="
-				+ soTang + ", soGhe=" + soGhe + ", loaiVe=" + loaiVe + ", maGiayTo=" + maGiayTo + ", giaVe=" + giaVe
-				+ ", ghiChu=" + ghiChu + ", trangThaiDoiVe=" + trangThaiDoiVe + ", trangThaiVe=" + trangThaiVe
-				+ ", chuyenTau=" + chuyenTau + ", khachHang=" + khachHang + ", khuyenMai=" + khuyenMai
-				+ ", doiTuongGiamGia=" + doiTuongGiamGia + "]";
-	}
+    public void setKhuyenMai(KhuyenMai khuyenMai) {
+        this.khuyenMai = khuyenMai;
+    }
 
+    public DoiTuongGiamGia getDoiTuongGiamGia() {
+        return doiTuongGiamGia;
+    }
+
+    public void setDoiTuongGiamGia(DoiTuongGiamGia doiTuongGiamGia) {
+        this.doiTuongGiamGia = doiTuongGiamGia;
+    }
 }

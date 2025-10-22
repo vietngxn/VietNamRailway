@@ -30,6 +30,10 @@ public class DoiTuongGiamGia {
 		this.giaTriPhanTramGiamGia = giaTriPhanTramGiamGia;
 	}
 
+	public DoiTuongGiamGia(String maDoiTuongGiamGia) {
+		
+		this.maDoiTuongGiamGia = maDoiTuongGiamGia;
+	}
 	public DoiTuongGiamGia() {}
 	public DoiTuongGiamGia(String maDoiTuongGiamGia, String tenDoiTuongGiamGia, String trangThaiGiamGia,
 			double giaTriPhanTramGiamGia) {

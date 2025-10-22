@@ -80,8 +80,13 @@ public class NhanVien {
 	public void setCccd(String cccd) {
 		this.cccd = cccd;
 	}
-	public NhanVien(String maNhanVien, String hoTen, String sdt,String gioiTinh, String email,String cccd,String tinhTrangLamViec) {
+	
+	public NhanVien(String maNhanVien) {
 		super();
+		this.maNhanVien = maNhanVien;
+	}
+	public NhanVien(String maNhanVien, String hoTen, String sdt,String gioiTinh, String email,String cccd,String tinhTrangLamViec) {
+		
 		this.maNhanVien = maNhanVien;
 		this.hoTen = hoTen;
 		this.email = email;

@@ -61,5 +61,10 @@ public class KhuyenMai {
 		setNgayBatDau(ngayBatDau);
 		setNgayKetThuc(ngayKetThuc);
 	}
+	public KhuyenMai(String maKhuyenMai) {
+		
+		this.maKhuyenMai = maKhuyenMai;
+	}
+	
 	
 }

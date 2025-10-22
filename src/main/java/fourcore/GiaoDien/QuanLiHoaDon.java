@@ -2,12 +2,18 @@ package fourcore.GiaoDien;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import fourcore.Entity.HoaDon;
+import fourcore.Entity.KhachHang;
+import fourcore.dao.HoaDonDAO;
+import fourcore.dao.VeDAO;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -112,9 +118,17 @@ public class QuanLiHoaDon extends Application {
     private ImageView settingIcon;
     private ImageView moTaDoanhThuIcon;
     private HBox xemLichSuVeBox;
+    private HoaDonDAO hddao;
+	private VeDAO vedao;
+	private ArrayList<HoaDon> listhd;
+	private Node lbl_title_soDienThoai;
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			hddao = new HoaDonDAO();
+			listhd = hddao.getListHoaDon();
+			vedao = new VeDAO();
             BorderPane root = new BorderPane();
             Scene scene = new Scene(root,1920,1000);
             primaryStage.setScene(scene);
@@ -884,7 +898,7 @@ public class QuanLiHoaDon extends Application {
 			
 			create_layout_button();
 			primaryStage.setFullScreen(true);
-			primaryStage.show();
+//			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -948,7 +962,7 @@ public class QuanLiHoaDon extends Application {
 		noiDungChinh.getChildren().add(title_layout);
 	}
 	
-	public void create_table_layout() {
+	public void create_table_layout() throws SQLException {
 	    table_layout = new VBox();
 	    table_layout.setPadding(new Insets(10));
 	    
@@ -970,25 +984,25 @@ public class QuanLiHoaDon extends Application {
 	    lbl_title_nguoiMua = new Label("Người Mua");
 	    lbl_title_nguoiMua.setStyle(styleHeader);
 	    
+	    lbl_title_soDienThoai = new Label("Số Điện Thoại");
+	    lbl_title_soDienThoai.setStyle(styleHeader);
+	    
 	    lbl_title_ngayLap = new Label("Ngày Lập");
 	    lbl_title_ngayLap.setStyle(styleHeader);
-	    
-	    lbl_title_loaiHoaDon = new Label("Loại Hóa Đơn");
-	    lbl_title_loaiHoaDon.setStyle(styleHeader);
 	    
 	    lbl_title_tongTien = new Label("Tổng Tiền");
 	    lbl_title_tongTien.setStyle(styleHeader);
 	    
 	    StackPane paneCol1 = new StackPane(lbl_title_maHoaDon);
 	    StackPane paneCol2 = new StackPane(lbl_title_nguoiMua);
-	    StackPane paneCol3 = new StackPane(lbl_title_ngayLap);
-	    StackPane paneCol4 = new StackPane(lbl_title_loaiHoaDon);
+	    StackPane paneCol3 = new StackPane(lbl_title_soDienThoai);
+	    StackPane paneCol4 = new StackPane(lbl_title_ngayLap);
 	    StackPane paneCol5 = new StackPane(lbl_title_tongTien);
 	    
 	    lbl_title_maHoaDon.setTranslateX(-200);
 	    lbl_title_nguoiMua.setTranslateX(-200);
-	    lbl_title_ngayLap.setTranslateX(-100);
-	    
+//	    lbl_title_ngayLap.setTranslateX(-150);
+	    lbl_title_soDienThoai.setTranslateX(-100);
 	    lbl_title_tongTien.setTranslateX(150);
 	    
 	    paneCol1.setPrefWidth(180);
@@ -1014,9 +1028,14 @@ public class QuanLiHoaDon extends Application {
 	    table_desc = new VBox();
 	    table_desc.setSpacing(20);
 	    
-	    create_layout_dong("CT001", "TD", LocalDate.now(), "hello", 50000.0);
-	    create_layout_dong("CT002", "TD", LocalDate.now(), "hello", 50000.0);
-	    create_layout_dong("CT003", "TD", LocalDate.now(), "hello", 50000.0);
+	    for(HoaDon hd : listhd) {
+	        KhachHang kh = hddao.getKH(hd.getMaHoaDon());
+	        
+	        
+	        create_layout_dong(hd.getMaHoaDon(), kh.getHoten(), kh.getSdt(), hd.getNgayThanhToan(), hd.getTongtien());
+	        
+	    }
+	    
 	    
 	    scrollPane = new ScrollPane();
 	    scrollPane.setContent(table_desc);
@@ -1082,7 +1101,7 @@ public class QuanLiHoaDon extends Application {
 		
 	}
 								   
-	public void create_layout_dong(String mahoadon, String nguoimua, LocalDate ngaylap, String loaiHD, double tongtien) {
+	public void create_layout_dong(String mahoadon, String nguoimua, String loaiHD, LocalDateTime ngaylap, double tongtien) {
 	    GridPane data = new GridPane();
 	    
 	    data.setHgap(10);
@@ -1102,27 +1121,28 @@ public class QuanLiHoaDon extends Application {
 	    String ngaylap1 = ngaylap.format(dtf);
 	    Label lblNgayLap = new Label(ngaylap1);
 	    
-	    Label lblLoaiHoaDon = new Label(loaiHD);
+	    Label lblsoDienThoai = new Label(loaiHD);
 	    Label lblTongTien = new Label("" + tongtien);
 	    
 	    lblMaHoaDon.setStyle(baseStyle);
 	    lblNguoiMua.setStyle(baseStyle);
 	    lblNgayLap.setStyle(baseStyle);
-	    lblLoaiHoaDon.setStyle(baseStyle);
+	    lblsoDienThoai.setStyle(baseStyle);
 	    lblTongTien.setStyle(baseStyle);
 	    
 	    
 	    lblMaHoaDon.setTranslateX(-190);
 	    lblNguoiMua.setTranslateX(-190);
-	    lblNgayLap.setTranslateX(-90);
+	    lblNgayLap.setTranslateX(15);
+	    lblsoDienThoai.setTranslateX(-90);
 	    lblTongTien.setTranslateX(165);
 	    
 	    lblNguoiMua.setWrapText(true);
 	    
 	    StackPane paneData1 = new StackPane(lblMaHoaDon);
 	    StackPane paneData2 = new StackPane(lblNguoiMua);
-	    StackPane paneData3 = new StackPane(lblNgayLap);
-	    StackPane paneData4 = new StackPane(lblLoaiHoaDon);
+	    StackPane paneData3 = new StackPane(lblsoDienThoai);
+	    StackPane paneData4 = new StackPane(lblNgayLap);
 	    StackPane paneData5 = new StackPane(lblTongTien);
 	    
 	    paneData1.setPrefWidth(180);

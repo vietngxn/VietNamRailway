@@ -8,7 +8,7 @@ public class HoaDon {
 	private NhanVien nhanVien;
 	private LocalDateTime ngayThanhToan;
 	private double tongtien;
-
+	
     public NhanVien getNhanVien() {
         return nhanVien;
     }
@@ -41,6 +41,17 @@ public class HoaDon {
 		setTongtien(tongtien);
         setNhanVien(nhanVien);
 	}
+	
+	public HoaDon(String maHoaDon) {
+		this.maHoaDon = maHoaDon;
+	}
+
+	public HoaDon(String maHoaDon, LocalDateTime ngayThanhToan, double tongtien) {
+		this.maHoaDon = maHoaDon;
+		this.ngayThanhToan = ngayThanhToan;
+		this.tongtien = tongtien;
+	}
+
 	public HoaDon() {
 
 	}
