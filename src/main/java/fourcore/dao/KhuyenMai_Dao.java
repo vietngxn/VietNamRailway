@@ -12,7 +12,8 @@ import fourcore.Entity.KhuyenMai;
 public class KhuyenMai_Dao {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
 
-	public KhuyenMai_Dao() {
+	public KhuyenMai_Dao() throws SQLException {
+        getList();
 	}
 
 	ArrayList<KhuyenMai> list = new ArrayList<>();
@@ -37,22 +38,11 @@ public class KhuyenMai_Dao {
 	}
 
 	public KhuyenMai getKhuyenMaiBangMa(String maKhuyenMai) throws SQLException {
-		Statement myStmt = databaseConnector.connect();
-		KhuyenMai km = new KhuyenMai();
-		String query = "select * from KhuyenMai WHERE maKhuyenMai = " + "'" + maKhuyenMai + "'";
-		ResultSet rs = myStmt.executeQuery(query);
-		while (rs.next()) {
-			String ma = rs.getString("maKhuyenMai");
-			String ten = rs.getString("tenChuongTrinh");
-			String trangThai = rs.getString("trangThaiKhuyenMai");
-			String dieuKien = rs.getString("dieuKienApDungKhuyenMai");
-			double phanTram = rs.getDouble("giaTriPhanTramKhuyenMai");
-			LocalDateTime ngayBD = rs.getTimestamp("ngayBatDau").toLocalDateTime();
-			LocalDateTime ngayKT = rs.getTimestamp("ngayKetThuc").toLocalDateTime();
-
-			km = new KhuyenMai(ma, ten, trangThai, dieuKien, phanTram, ngayBD, ngayKT);
-			System.out.println("Lấy dữ liệu thành công");
-		}
-		return km;
+		for (KhuyenMai khuyenMai : list) {
+            if (khuyenMai.getMaKhuyenMai().equals(maKhuyenMai)) {
+                return khuyenMai;
+            }
+        }
+		return null;
 	}
 }
