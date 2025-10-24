@@ -1,6 +1,8 @@
 package fourcore.Entity;
 
-public class Tau {
+import java.io.Serializable;
+
+public class Tau implements Serializable {
 
 //  =======================
 //  ||   VARIABLE        ||

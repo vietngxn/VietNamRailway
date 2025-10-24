@@ -1,9 +1,10 @@
 package fourcore.Entity;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class HanhTrinh {
+public class HanhTrinh implements Serializable {
     private String maHanhTrinh;
     private String tenHanhTrinh;
     private ArrayList<Ga> listGa;

@@ -10,7 +10,15 @@ public class Ga {
 
 	public Ga() {
 	}
-
+    public  Ga(String maGa, String tenGa, double cuLy) {
+        setMaGa(maGa);
+        setTenGa(tenGa);
+        setCuLy(cuLy);
+    }
+    public  Ga(String maGa, String tenGa) {
+        setMaGa(maGa);
+        setTenGa(tenGa);
+    }
 	public Ga(String maGa, String tenGa, double cuLy, LocalDateTime thoiGian) {
 		setMaGa(maGa);
 		setTenGa(tenGa);

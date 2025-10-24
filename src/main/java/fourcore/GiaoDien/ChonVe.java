@@ -1,30 +1,19 @@
 package fourcore.GiaoDien;
 
+import fourcore.Control.BanVeControl;
 import fourcore.Entity.*;
-import fourcore.dao.ChuyenTau_Dao;
-import javafx.animation.FadeTransition;
+import fourcore.dao.ChuyenTauDAO;
+import fourcore.dao.GheNgoiDAO;
+import fourcore.dao.ToaTauDAO;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
-import javafx.scene.Node;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.MapValueFactory;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -32,9 +21,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
-import java.security.cert.PolicyNode;
-import java.time.LocalDate;
+import java.io.ObjectInputStream;
+import java.sql.Array;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -84,7 +76,7 @@ public class ChonVe extends Application {
     private Label userLabel;
     private ImageView settingIcon;
     private ImageView moTaDoanhThuIcon;
-    HBox chuyenTauMenu;
+    HBox chuyenTauMenu = new HBox();
     private HBox danhSachToaTauBox;
     private VBox danhSachGheBox;
     private StackPane ghePane= new StackPane();;
@@ -96,11 +88,15 @@ public class ChonVe extends Application {
     InputStream fontTieuDeToaTauInput = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Bold.ttf");
     Font fontTieuDeToaTau = Font.loadFont(fontTieuDeToaTauInput, 18);
     private HBox layout_button;
+    public ArrayList<GheNgoi> gheDuocChon = new ArrayList<>();
 
 
     @Override
     public void start(Stage primaryStage) {
         try {
+            System.out.println("Run Chon ve");
+            System.out.println("Get list:....");
+
             BorderPane root = new BorderPane();
             Scene scene = new Scene(root,1920,1000);
             primaryStage.setScene(scene);
@@ -642,26 +638,8 @@ public class ChonVe extends Application {
 
 
 
-// DATA TESTING----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-            LoaiTau loaiTau1 = new LoaiTau("LT01", "TauHoaBacNam", 12000);
-            Tau tau1 = new Tau("SE6", "TauHi", loaiTau1);
-            Tau tau2 = new Tau("SE2", "TauHi", loaiTau1);
-            Tau tau3 = new Tau("SE3", "TauHi", loaiTau1);
-            ChuyenTau chuyen1 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 3, 15, 30),LocalDateTime.of(2025, 10, 14, 3, 30),tau1, "CT001");
-            ChuyenTau chuyen2 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 3, 20, 30),LocalDateTime.of(2025, 7, 14, 12, 30),tau2, "CT002");
-            ChuyenTau chuyen3 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 1, 7, 00),LocalDateTime.of(2025, 9, 14, 4, 30),tau3, "CT003");
-            ChuyenTau chuyen4 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 2, 12, 00),LocalDateTime.of(2025, 4, 14, 5, 30),tau2, "CT004");
-            ChuyenTau chuyen5 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 2, 12, 00),LocalDateTime.of(2025, 4, 14, 5, 30),tau2, "CT005");
-            ChuyenTau chuyen6 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 2, 12, 00),LocalDateTime.of(2025, 4, 14, 5, 30),tau2, "CT006");
+// DATA LOAD----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-            ArrayList<ChuyenTau> chuyenTauArrayList = new ArrayList<>();
-            chuyenTauArrayList.add(chuyen1);
-            chuyenTauArrayList.add(chuyen2);
-            chuyenTauArrayList.add(chuyen3);
-            chuyenTauArrayList.add(chuyen4);
-            chuyenTauArrayList.add(chuyen5);
-            chuyenTauArrayList.add(chuyen6);
-            ChonVe chonVeGiaoDien = new ChonVe();
 
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -694,17 +672,25 @@ public class ChonVe extends Application {
 
 
 
-
+            
             tenToaVaKhoang.setTranslateX(400);
             tenToaVaKhoang.setTranslateY(80);
             tenToaVaKhoang.setFont(fontTieuDeToaTau);
-            chonVeGiaoDien.hienThiDanhSachChuyenTau(chuyenTauArrayList,chuyenTauMenu,danhSachToaTauBox,tenToaVaKhoang, danhSachGheGridPane,khoangLbl);
+
             noiDungChinh.getChildren().add(tenToaVaKhoang);
 
 
-
+            ArrayList<ChuyenTau> docLai = new ArrayList<>();
             danhSachGheBox.getChildren().add(khoangLbl);
             danhSachGheBox.getChildren().add(danhSachGheGridPane);
+            BanVeControl banVeControl = new BanVeControl();
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("listChuyenTauFiltered.dat"))) {
+                docLai = (ArrayList<ChuyenTau>) ois.readObject();
+                System.out.println("Dữ liệu đọc được: " + docLai);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            hienThiDanhSachChuyenTau(docLai);
             noiDungChinh.getChildren().add(danhSachGheBox);
 
             chuThichVaBtnBox = new HBox();
@@ -810,7 +796,10 @@ public class ChonVe extends Application {
 
 
 
-    public void hienThiDanhSachChuyenTau(ArrayList<ChuyenTau> danhSachChuyenTau, HBox menuChuyenTau, HBox danhSachToaTauBox, Label tenToaVaKhoang, GridPane danhSachGheGridPane,Label khoangLbl){
+    public void hienThiDanhSachChuyenTau(ArrayList<ChuyenTau> danhSachChuyenTau) throws SQLException {
+//        hienThiDanhSachChuyenTau(chuyenTauMenu,danhSachToaTauBox,tenToaVaKhoang, danhSachGheGridPane,khoangLbl);
+
+
         danhSachGheGridPane.getChildren().clear();
         Image defaultImage = new Image(getClass().getResource("/img/TauHoaIcon.png").toExternalForm());
         Image selectedImage = new Image(getClass().getResource("/img/TauHoaIconChoose.png").toExternalForm());
@@ -890,7 +879,7 @@ public class ChonVe extends Application {
 
             chuyenTauCont.getChildren().add(chuyenTauBox);
             chuyenTauCont.setPadding(new Insets(0,20,0,0));
-            menuChuyenTau.getChildren().add(chuyenTauCont);
+            chuyenTauMenu.getChildren().add(chuyenTauCont);
             imageViews.add(chuyenTauImage);
             chuyenTauCont.setUserData(c);
             chuyenTauCont.setOnMouseClicked(event -> {
@@ -900,24 +889,27 @@ public class ChonVe extends Application {
                 danhSachToaTauBox.getChildren().clear();
                 chuyenTauImage.setImage(selectedImage);
                 ChuyenTau selectedChuyenTau = (ChuyenTau) chuyenTauCont.getUserData();
-                ChuyenTau_Dao chuyenTauDao = new ChuyenTau_Dao();
-                chuyenTauDao.addGheVaoDSGhe();
-                chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau2, chuyenTauDao.chuyen1);
-                chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau1, chuyenTauDao.chuyen1);
+                ChuyenTauDAO chuyenTauDAO = null;
+                try {
+                    chuyenTauDAO = new ChuyenTauDAO();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
 
-                chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau1, chuyenTauDao.chuyen2);
-                chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau1, chuyenTauDao.chuyen2);
-                chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau1, chuyenTauDao.chuyen2);
-
-                chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau1, chuyenTauDao.chuyen3);
-                chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau1, chuyenTauDao.chuyen3);
-                chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau1, chuyenTauDao.chuyen3);
-                chuyenTauDao.themGheVaoDSGheTrenChuyenTau(chuyenTauDao.toaTau1, chuyenTauDao.chuyen3);
-
-                chuyenTauDao.setListChuyenTau();
-                ChuyenTau chuyenDuocSelect = chuyenTauDao.getChuyenTau(selectedChuyenTau.getMaChuyenTau());
+                ChuyenTau chuyenDuocSelect = null;
+                try {
+                    chuyenDuocSelect = chuyenTauDAO.getChuyenTauBangMa(selectedChuyenTau.getMaChuyenTau());
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 System.out.println(selectedChuyenTau.getMaChuyenTau());
-                ArrayList<ToaTau> dsToaTrenChuyen = chuyenTauDao.getListToaTheoChuyenTau(chuyenDuocSelect);
+                ToaTauDAO toaTauDAO = new ToaTauDAO();
+                ArrayList<ToaTau> dsToaTrenChuyen = null;
+                try {
+                    dsToaTrenChuyen = toaTauDAO.getListToaTauByMaCT(chuyenDuocSelect.getMaChuyenTau());
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
 
 
                 System.out.println(dsToaTrenChuyen.size());
@@ -978,11 +970,15 @@ public class ChonVe extends Application {
                         tenToaVaKhoang.setText("Toa số " +toaSo + ": " +selectedToa.getLoaiToaTau().getTenLoaiToaTau());
                         System.out.println("Toa được chọn: " + selectedToa.getLoaiToaTau().getTenLoaiToaTau());
 
-                        if(selectedToa.getLoaiToaTau().getMaLoaiToaTau().equals("GN01")){
+                        if(selectedToa.getLoaiToaTau().getMaLoaiToaTau().equals("LTToa01")){
                             khoangLbl.setText("");
                             danhSachGheGridPane.getChildren().clear();
-                            hienThiLayoutGhe(danhSachGheGridPane);
-                        }else if(selectedToa.getLoaiToaTau().getMaLoaiToaTau().equals("GN02")){
+                            try {
+                                hienThiLayoutGhe(danhSachGheGridPane, selectedToa.getMaToaTau(), selectedChuyenTau.getMaChuyenTau());
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }else if(selectedToa.getLoaiToaTau().getMaLoaiToaTau().equals("LTToa02")){
                             danhSachGheGridPane.getChildren().clear();
                             hienThiLayoutGiuong(khoangLbl, danhSachGheGridPane);
                         }
@@ -1058,12 +1054,13 @@ public class ChonVe extends Application {
         layout_button.getChildren().addAll(btn_trolai, btn_tieptuc);
         noiDungChinh.getChildren().add(layout_button);
     }
-    public void hienThiLayoutGhe(GridPane danhSachGheGridPane){
+    public void hienThiLayoutGhe(GridPane danhSachGheGridPane, String maToaTau, String maChuyen) throws SQLException {
         danhSachGheGridPane.getChildren().clear();
         int soGhe = 36;
         int soCot = 9;
         int soHang = 4;
         int thuTuGhe = 36;
+        GheNgoiDAO gheNgoiDAO = new GheNgoiDAO();
         for(int col=0; col<soCot; col++){
             for(int row=0; row<soHang; row++){
                 ImageView gheTrongImg =  new ImageView(getClass().getResource("/img/gheTrong.png").toExternalForm());
@@ -1105,6 +1102,37 @@ public class ChonVe extends Application {
                         gheTrongImg.setImage(new Image(getClass().getResource("/img/gheTrong.png").toExternalForm()));
                         System.out.println("Ghế số " + soGheH + " bỏ chọn");
                     }
+                });
+
+                GheTrenChuyenTau gtc = gheNgoiDAO.getGheTrenChuyenTau(soGheH,maToaTau,maChuyen);
+                gheTrongImg.setUserData(gtc);
+
+
+                Popup popup = new Popup();
+                Label popupLabel = new Label();
+                popupLabel.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-padding: 5; -fx-font-size: 13;");
+                popup.getContent().add(popupLabel);
+
+
+                ghePane.setOnMouseEntered(e -> {
+                    String content = String.format(
+                            "Loại: %s\nGiá ghế: %.1f",
+                            gtc.getGheNgoi().getLoaiGhe().getTenLoaiGhe(),
+                            gtc.getGiaTienGhe()
+
+                    );
+                    popupLabel.setText(content);
+                    popup.show(gheTrongImg, e.getScreenX() + 10, e.getScreenY() + 10);
+                });
+                // Vi tri cua chuot
+                ghePane.setOnMouseMoved(e -> {
+                    popup.setX(e.getScreenX() + 10);
+                    popup.setY(e.getScreenY() + 10);
+                });
+
+                // An khi roi khoi
+                ghePane.setOnMouseExited(e -> {
+                    popup.hide();
                 });
 
                 thuTuGhe--;
