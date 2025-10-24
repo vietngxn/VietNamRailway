@@ -154,7 +154,6 @@ CREATE TABLE GheNgoi (
     FOREIGN KEY (maLoaiGhe) REFERENCES LoaiGhe(maLoaiGhe),
     FOREIGN KEY (maKhoangTau) REFERENCES KhoangTau(maKhoangTau),
     FOREIGN KEY (maToaTau) REFERENCES ToaTau(maToaTau),
-    CONSTRAINT UQ_GheNgoi UNIQUE (maTang, soGhe)
 );
 
 CREATE TABLE GheTrenChuyenTau (
@@ -195,6 +194,10 @@ CREATE TABLE DoiTuongGiamGia (
 CREATE TABLE HoaDon (
     maHoaDon NVARCHAR(20) PRIMARY KEY,
     maNhanVien NVARCHAR(20) NOT NULL,
+	tenKhachHangThanhToan nvarchar(100) not null,
+	emailKhachHangThanhToan NVARCHAR(100) NOT NULL,
+    cccdKhachHangThanhToan NVARCHAR(15) not null,
+	sdtKhachHangThanhToan NVARCHAR(20) NOT NULL,
     ngayThanhToan DATETIME DEFAULT GETDATE() NOT NULL,
     tongTien DECIMAL(18,2) DEFAULT 0,
     FOREIGN KEY (maNhanVien) REFERENCES NhanVien(maNhanVien)
@@ -389,7 +392,7 @@ INSERT INTO GheNgoi (maGheNgoi, maTang, maLoaiGhe, maKhoangTau, maToaTau, soGhe,
 (N'Ghe010', N'T1', N'LG01', N'KT01', N'TT001', 9, 0, 0),
 (N'Ghe011', N'T1', N'LG02', N'KT01', N'TT001', 10, 50000, 0),
 (N'Ghe012', N'T2', N'LG03', N'KT02', N'TT002', 11, 150000, 0),
-(N'Ghe013', N'T1', N'LG01', N'KT01', N'TT001', 12, 0, 0),
+(N'Ghe013', N'T1', N'LG01', N'KT01', N'TT001', 12, 0, 0);
 
 -- Dữ liệu mẫu cho bảng GheTrenChuyenTau
 INSERT INTO GheTrenChuyenTau (maGheTrenChuyenTau, maChuyenTau, maGheNgoi, giaTienGhe, trangThaiGhe) VALUES
@@ -429,10 +432,11 @@ INSERT INTO DoiTuongGiamGia (maDoiTuongGiamGia, tenDoiTuongGiamGia, giaTriPhanTr
 (N'DT01', N'Học sinh – sinh viên', 5, N'kích hoạt'),
 (N'DT02', N'Người lớn tuổi', 10, N'kích hoạt');
 
--- Dữ liệu mẫu cho bảng HoaDon
-INSERT INTO HoaDon (maHoaDon, maNhanVien, ngayThanhToan, tongTien) VALUES
-(N'HD001', N'NV001', '2025‑10‑18 14:30:00', 500000),
-(N'HD002', N'NV002', '2025‑10‑18 15:00:00', 700000);
+-- Dữ liệu mẫu cho bảng HoaDon (đã thêm đầy đủ các trường)
+INSERT INTO HoaDon (maHoaDon, maNhanVien, tenKhachHangThanhToan, emailKhachHangThanhToan, cccdKhachHangThanhToan, sdtKhachHangThanhToan, ngayThanhToan, tongTien) VALUES
+(N'HD001', N'NV001', N'Nguyễn Văn A', N'nguyenvana@example.com', N'079123456789', N'0912345678', '2025-10-18 14:30:00', 500000),
+(N'HD002', N'NV002', N'Trần Thị B', N'tranthib@example.com', N'079987654321', N'0987654321', '2025-10-18 15:00:00', 700000);
+
 
 -- Dữ liệu mẫu cho bảng Ve
 INSERT INTO Ve (maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe, maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, maChuyenTau, maKhachHang, maKhuyenMai, maDoiTuongGiamGia) VALUES
@@ -443,7 +447,6 @@ INSERT INTO Ve (maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKh
 INSERT INTO ChiTietHoaDon (maChiTietHoaDon, maHoaDon, maVeTau, moTa, donGia, giaTriThueVAT, thanhTien) VALUES
 (N'CTHD001', N'HD001', N'V001', N'Ve Super Express 1 toa', 500000, 50000, 550000),
 (N'CTHD002', N'HD002', N'V002', N'Ve Night Dreamer VIP', 820000, 82000, 902000);
-
 
 -- Dữ liệu mẫu cho bảng LoaiTuongTacVe
 INSERT INTO LoaiTuongTacVe (maLoaiTuongTac, tenLoaiTuongTac) VALUES

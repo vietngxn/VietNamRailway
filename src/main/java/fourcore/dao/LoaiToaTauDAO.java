@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 import fourcore.DatabaseConnector.DatabaseConnector;
+import fourcore.Entity.LoaiTau;
 import fourcore.Entity.LoaiToaTau;
 
 public class LoaiToaTauDAO {
@@ -22,8 +23,7 @@ public class LoaiToaTauDAO {
 			while (rs.next()) {
 				String maLoaiToaTau = rs.getString("maLoaiToaTau");
 				String tenLoaiToaTau = rs.getString("tenLoaiToaTau");
-				double giaCuoc = rs.getDouble("giaCuoc");
-				LoaiToaTau ltt = new LoaiToaTau(maLoaiToaTau, tenLoaiToaTau, giaCuoc);
+				LoaiToaTau ltt = new LoaiToaTau(maLoaiToaTau, tenLoaiToaTau);
 				list.add(ltt);
 			}
 		} catch (Exception e) {

@@ -57,6 +57,97 @@ public class VeDAO {
 		return listVe;
 	}
 
+	public ArrayList<Ve> getListHoanVe() throws SQLException {
+		Statement st = database.connect();
+		String q = "SELECT * FROM Ve WHERE trangThaiVe = N'hoạt động' and ngayGioDi > GETDATE();";
+		ResultSet rs = st.executeQuery(q);
+		while (rs.next()) {
+			String maVeTau = rs.getString(1);
+			String gaDi = rs.getString(2);
+			String gaDen = rs.getString(3);
+			String tenTau = rs.getString(4);
+			// Timestamp -> LocalDateTime
+			LocalDateTime ngayGioDi = rs.getTimestamp("ngayGioDi").toLocalDateTime();
+			LocalDateTime ngayGioDen = rs.getTimestamp("ngayGioDen").toLocalDateTime();
+			int soToa = rs.getInt(7);
+			int soKhoang = rs.getInt(8);
+			int soTang = rs.getInt(9);
+			int soGhe = rs.getInt(10);
+			String loaiVe = rs.getString(11);
+			String maGiayTo = rs.getString(12);
+			double giaVe = rs.getDouble(13);
+			String ghiChu = rs.getString(14);
+			String trangThaiDoiVe = rs.getString(15);
+			String trangThaiVe = rs.getString(16);
+			String maChuyenTau = rs.getString(17);
+			String maKhachHang = rs.getString(18);
+			String maKhuyenMai = rs.getString(19);
+			String maDoiTuongGiamGia = rs.getString(20);
+
+			KhachHangDAO khDAO = new KhachHangDAO();
+			KhachHang kh = khDAO.getKhachHangByMa(maKhachHang);
+
+			DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
+			DoiTuongGiamGia dt = dtDAO.getDoiTuongGiamGiaBangMaDT(maDoiTuongGiamGia);
+
+			ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
+			KhuyenMai km = kmDAO.getKhuyenMaiBangMa(maKhuyenMai);
+			System.out.println(km.toString());
+			Ve v = new Ve();
+			v = new Ve(maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe,
+					maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, new ChuyenTau(maChuyenTau), kh, km, dt);
+
+			listVe.add(v);
+		}
+		return listVe;
+	}
+
+	public ArrayList<Ve> getListHoanVeTheoCCCDKhachHang(String cccd) throws SQLException {
+		Statement st = database.connect();
+		String q = "SELECT v.*\r\n" + "FROM Ve v\r\n" + "JOIN ChiTietHoaDon ct ON v.maVeTau = ct.maVeTau\r\n"
+				+ "join HoaDon hd on ct.maHoaDon = hd.maHoaDon\r\n" + "WHERE v.trangThaiVe = N'hoạt động'\r\n"
+				+ "  AND v.ngayGioDi > GETDATE()\r\n" + "  AND hd.cccdKhachHangThanhToan = " + "'" + cccd + "'";
+		ResultSet rs = st.executeQuery(q);
+		while (rs.next()) {
+			String maVeTau = rs.getString(1);
+			String gaDi = rs.getString(2);
+			String gaDen = rs.getString(3);
+			String tenTau = rs.getString(4);
+			// Timestamp -> LocalDateTime
+			LocalDateTime ngayGioDi = rs.getTimestamp("ngayGioDi").toLocalDateTime();
+			LocalDateTime ngayGioDen = rs.getTimestamp("ngayGioDen").toLocalDateTime();
+			int soToa = rs.getInt(7);
+			int soKhoang = rs.getInt(8);
+			int soTang = rs.getInt(9);
+			int soGhe = rs.getInt(10);
+			String loaiVe = rs.getString(11);
+			String maGiayTo = rs.getString(12);
+			double giaVe = rs.getDouble(13);
+			String ghiChu = rs.getString(14);
+			String trangThaiDoiVe = rs.getString(15);
+			String trangThaiVe = rs.getString(16);
+			String maChuyenTau = rs.getString(17);
+			String maKhachHang = rs.getString(18);
+			String maKhuyenMai = rs.getString(19);
+			String maDoiTuongGiamGia = rs.getString(20);
+
+			KhachHangDAO khDAO = new KhachHangDAO();
+			KhachHang kh = khDAO.getKhachHangByMa(maKhachHang);
+
+			DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
+			DoiTuongGiamGia dt = dtDAO.getDoiTuongGiamGiaBangMaDT(maDoiTuongGiamGia);
+
+			ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
+			KhuyenMai km = kmDAO.getKhuyenMaiBangMa(maKhuyenMai);
+			Ve v = new Ve();
+			v = new Ve(maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe,
+					maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, new ChuyenTau(maChuyenTau), kh, km, dt);
+
+			listVe.add(v);
+		}
+		return listVe;
+	}
+
 	public KhachHang getKhachHang(String maVeTau) throws SQLException {
 		KhachHang kh = new KhachHang();
 		listVe1 = getListVe();
@@ -99,15 +190,63 @@ public class VeDAO {
 
 			KhachHangDAO khDAO = new KhachHangDAO();
 			KhachHang kh = khDAO.getKhachHangByMa(maKhachHang);
-			
+
 			DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
 			DoiTuongGiamGia dt = dtDAO.getDoiTuongGiamGiaBangMaDT(maDoiTuongGiamGia);
-			
-			KhuyenMai_Dao kmDAO = new KhuyenMai_Dao();
+
+			ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
 			KhuyenMai km = kmDAO.getKhuyenMaiBangMa(maKhuyenMai);
 			v = new Ve(maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe,
-					maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, new ChuyenTau(maChuyenTau), kh,
-					km, dt);
+					maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, new ChuyenTau(maChuyenTau), kh, km, dt);
+			System.out.println("lấy dữ liệu vé thành công");
+		}
+
+		return v;
+	}
+	
+	public Ve getHoanVeBangMaVe(String maVe) throws SQLException {
+		Ve v = new Ve();
+		Statement myStmt = database.connect();
+		String query = "SELECT v.*\r\n"
+				+ "FROM Ve v\r\n"
+				+ "JOIN ChiTietHoaDon ct ON v.maVeTau = ct.maVeTau\r\n"
+				+ "WHERE v.trangThaiVe = N'hoạt động'\r\n"
+				+ "  AND v.ngayGioDi > GETDATE()\r\n"
+				+ "  AND v.maVeTau = '" + maVe + "'";
+		ResultSet rs = myStmt.executeQuery(query);
+		while (rs.next()) {
+			String maVeTau = rs.getString(1);
+			String gaDi = rs.getString(2);
+			String gaDen = rs.getString(3);
+			String tenTau = rs.getString(4);
+			// Timestamp -> LocalDateTime
+			LocalDateTime ngayGioDi = rs.getTimestamp("ngayGioDi").toLocalDateTime();
+			LocalDateTime ngayGioDen = rs.getTimestamp("ngayGioDen").toLocalDateTime();
+			int soToa = rs.getInt(7);
+			int soKhoang = rs.getInt(8);
+			int soTang = rs.getInt(9);
+			int soGhe = rs.getInt(10);
+			String loaiVe = rs.getString(11);
+			String maGiayTo = rs.getString(12);
+			double giaVe = rs.getDouble(13);
+			String ghiChu = rs.getString(14);
+			String trangThaiDoiVe = rs.getString(15);
+			String trangThaiVe = rs.getString(16);
+			String maChuyenTau = rs.getString(17);
+			String maKhachHang = rs.getString(18);
+			String maKhuyenMai = rs.getString(19);
+			String maDoiTuongGiamGia = rs.getString(20);
+
+			KhachHangDAO khDAO = new KhachHangDAO();
+			KhachHang kh = khDAO.getKhachHangByMa(maKhachHang);
+
+			DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
+			DoiTuongGiamGia dt = dtDAO.getDoiTuongGiamGiaBangMaDT(maDoiTuongGiamGia);
+
+			ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
+			KhuyenMai km = kmDAO.getKhuyenMaiBangMa(maKhuyenMai);
+			v = new Ve(maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe,
+					maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, new ChuyenTau(maChuyenTau), kh, km, dt);
 			System.out.println("lấy dữ liệu vé thành công");
 		}
 

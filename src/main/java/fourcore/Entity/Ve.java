@@ -219,4 +219,18 @@ public class Ve {
 	public void setDoiTuongGiamGia(DoiTuongGiamGia doiTuongGiamGia) {
 		this.doiTuongGiamGia = doiTuongGiamGia;
 	}
+
+	public double tinhThanhTien() {
+		double giamDT = this.getGiaVe() * this.getDoiTuongGiamGia().giaTriPhanTramGiamGia * 0.01;
+		double giamKM = this.getGiaVe() * this.getKhuyenMai().getGiaTriPhanTramKhuyenMai() * 0.01;
+		return this.getGiaVe() - giamDT - giamKM;
+	}
+
+	public double tinhPhiChenhLech(int x, double thanhtien, double phanTramChenhLech) {
+		if (x == 0) {
+			return thanhtien * phanTramChenhLech * 0.01;
+		}
+		return 0;
+
+	}
 }
