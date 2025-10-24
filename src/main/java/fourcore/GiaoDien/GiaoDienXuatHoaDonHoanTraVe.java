@@ -1,19 +1,13 @@
 package fourcore.GiaoDien;
 
 import java.io.InputStream;
-import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
-import fourcore.Entity.LichSuTuongTacVe;
-import fourcore.Entity.Ve;
-import fourcore.dao.LichSuTuongTacVe_Dao;
-import fourcore.dao.LoaiHoaDonDAO;
-import fourcore.dao.VeDAO;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -23,12 +17,17 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -41,7 +40,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class GiaoDienHoanTraVe extends Application {
+public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 
 	private VBox menuList;
 	private VBox noiDungChinh;
@@ -53,25 +52,6 @@ public class GiaoDienHoanTraVe extends Application {
 	private Label quanLiVeTauLabel;
 	private ImageView quanLiVeTauIconView;
 	private ImageView showMenuPhuIconView;
-	private Label lblHoanVe;
-	private Pane pnlHoanVe;
-	private HBox pnlTimKiem;
-	private Label colMaVe;
-	private Label colChuyen;
-	private Label colNgayKhoiHanh;
-	private Label colViTriGhe;
-	private Label colTrangThai;
-	private VBox pnlDataHoanTraVe;
-	private Label colGaDiGaDen;
-	private ScrollPane scrollPane;
-	private GridPane tableCol;
-	private StackPane paneCol1;
-	private StackPane paneCol2;
-	private StackPane paneCol3;
-	private StackPane paneCol4;
-	private StackPane paneCol5;
-	private StackPane paneCol6;
-	private HBox pnlCapNhatVe;
 	private HBox doiVeBox;
 	private HBox banVeBox;
 	private HBox hoanVeBox;
@@ -94,209 +74,48 @@ public class GiaoDienHoanTraVe extends Application {
 	private ImageView userIcon;
 	private Label userLabel;
 	private ImageView settingIcon;
-	private VBox layout_timkiem;
-	private HBox layout_lbl_timkiem;
-	private Label lbl_timkiem;
-	private VBox layout_txt_timkiem;
-	private TextField txt_timkiem;
-	private Button btnHoanVe;
-	private HBox pnlTimKiemBtn;
-	private Button btnTimKiemTheoMaVe;
-	private Button btnTimKiemTheoNguoiMua;
-	private VeDAO dao;
-	private ArrayList<Ve> list;
-	NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
-	int selected = 0;
-	private HBox pnlTongConglbl;
+	private Pane pnlDoiVelbl;
+	private Label lblDoiVe;
+	private Pane pnlThongTinlbl;
+	private Label lblThongTin;
+	private GridPane pnlThongTinNguoiMua;
+	private Pane pnlXuatHDlbl;
+	private Label lblXuatHD;
+	private GridPane pnlRadXuatHoaDon;
+	private RadioButton RadXuatHDCongTy;
+	private RadioButton RadXuatHDCaNhan;
+	private VBox pnlThongTinXuatHoaDonCongTy;
+	private Pane btnRong;
+	private HBox pnlTongCong;
 	private Label lblTongCong;
 	private Label lblTongCongValue;
-	private Label colLoaiHoaDon;
-	private StackPane paneCol7;
+	NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
+	private VBox pnlThanhToanButton;
+	private HBox pnlThanhToanButtonSub1;
+	private HBox pnlThanhToanButtonSub2;
+	private Double tongCongThanhTien = 5000000.0;
+	private Button btnTroLai;
+	private VBox pnlXuatHoaDonCanNhan;
+	private VBox pnlThongTinXuatHoaDonCaNhan;
+	private Button btnThanhToan;
+	private TextField txtHoTen;
+	private TextField txtEMail;
+	private TextField txtSoGiayTo;
+	private TextField txtSdt;
 
-	private static double tongCongPhiHoanTra;
-
-	public void loadLableTongCongValue(double tongCongThanhTien) {
-		lblTongCongValue.setText(nf.format(tongCongThanhTien));
-	}
-
-	public VBox taoDataChoTableHoanVe(String mave, String chuyen, String gaDiGaDen, String trangThai, String vitrighe,
-			String LoaiHoaDon, String ngayMua, String hoten, String doituong, String sogiayto, double giave,
-			String giamdoituong, String khuyenmai, double thanhtien, double phiHoanTra) {
-
-		VBox pnlReturn = new VBox();
-		VBox.setMargin(pnlReturn, new Insets(0, 30, 0, 30));
-
-		GridPane data = new GridPane();
-		pnlReturn.getChildren().add(data);
-
-		data.setHgap(10);
-		data.setAlignment(Pos.CENTER);
-		data.setMaxWidth(1330);
-		data.setPrefHeight(70);
-		data.setPadding(new Insets(0, 0, 0, 10));
-
-		String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
-		Label[] labels = { new Label(mave), new Label(chuyen), new Label(gaDiGaDen), new Label(trangThai),
-				new Label(vitrighe), new Label(LoaiHoaDon), new Label(ngayMua) };
-		double[] widths = { 200, 180, 250, 270, 220, 220, 200 };
-
-		for (int i = 0; i < labels.length; i++) {
-			Label lbl = labels[i];
-			lbl.setStyle(baseStyle);
-
-			if (i == 5) { // trạng thái
-				String text = lbl.getText().toLowerCase();
-				if (text.equals("sẵn sàng"))
-					lbl.setStyle(baseStyle + "-fx-font-size: 18px; -fx-text-fill: #009D75;");
-				else if (text.equals("đã khởi hành"))
-					lbl.setStyle(baseStyle + "-fx-font-size: 18px; -fx-text-fill: rgba(203, 0, 44, 0.83);");
-			}
-
-			StackPane pane = new StackPane(lbl);
-			pane.setPrefSize(widths[i], 70);
-			pane.setAlignment(Pos.CENTER);
-			data.add(pane, i, 0);
-		}
-
-		String normalStyle = """
-				    -fx-background-color: rgba(0, 186, 203, 0.3);
-				    -fx-background-radius: 15px;
-				    -fx-border-radius: 15px;
-				    -fx-border-color: #B6D0D3;
-				    -fx-border-width: 1px;
-				""";
-
-		String hoverStyle = """
-				    -fx-background-color: rgba(0, 186, 203);
-				    -fx-background-radius: 15px;
-				    -fx-border-radius: 15px;
-				    -fx-border-color: #00BACB;
-				    -fx-border-width: 1px;
-				    -fx-cursor: hand;
-				""";
-
-		data.setStyle(normalStyle);
-
-		// ======= THÔNG TIN CHI TIẾT =======
-		HBox pnlThongTinChiTiet = new HBox(50);
-		VBox.setMargin(pnlThongTinChiTiet, new Insets(5, 0, 0, 5));
-
-		// Panel 1 - thông tin cá nhân
-		GridPane pnlsubCT1 = new GridPane();
-		pnlsubCT1.setHgap(0);
-		pnlsubCT1.setVgap(5);
-		pnlsubCT1.setAlignment(Pos.CENTER);
-
-		String leftStyle = """
-				    -fx-background-color: #00BACB;
-				    -fx-background-radius: 10px 0 0 10px;
-				    -fx-border-radius: 10px 0 0 10px;
-				    -fx-border-color: #00BACB;
-				    -fx-alignment: center-left;
-				    -fx-font-weight: bold;
-				    -fx-font-family: "Kanit";
-				    -fx-padding: 8 12 8 12;
-				""";
-
-		String rightStyle = """
-				    -fx-background-color: #E0E0E0;
-				    -fx-background-radius: 0 10px 10px 0;
-				    -fx-border-radius: 0 10px 10px 0;
-				    -fx-border-color: #E0E0E0;
-				    -fx-alignment: center-left;
-				    -fx-font-weight: bold;
-				    -fx-font-family: "Kanit";
-				    -fx-padding: 8 12 8 12;
-				""";
-
-		pnlsubCT1.addRow(0, taoSubCT1("Họ tên", hoten, leftStyle, rightStyle));
-		pnlsubCT1.addRow(1, taoSubCT1("Đối tượng", doituong, leftStyle, rightStyle));
-		pnlsubCT1.addRow(2, taoSubCT1("Số giấy tờ", sogiayto, leftStyle, rightStyle));
-
-		// Các panel giá trị
-		String lblCTStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 18px;";
-		String lblValueCTStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 30px;";
-
-		VBox pnlsubCT2 = taoSubCT2("Giá vé", nf.format(giave), lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT3 = taoSubCT2("Giảm đối tượng", giamdoituong, lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT4 = taoSubCT2("Khuyến mãi", khuyenmai, lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT5 = taoSubCT2("Thành tiền", nf.format(thanhtien), lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT6 = taoSubCT2("Phí hoàn trả", nf.format(phiHoanTra), lblCTStyle, lblValueCTStyle);
-
-		pnlsubCT1.setPrefWidth(400);
-		for (Pane pnl : new Pane[] { pnlsubCT2, pnlsubCT3, pnlsubCT4, pnlsubCT5, pnlsubCT6 })
-			pnl.setPrefWidth(320);
-
-		pnlThongTinChiTiet.getChildren().addAll(pnlsubCT1, pnlsubCT2, pnlsubCT3, pnlsubCT4, pnlsubCT5, pnlsubCT6);
-		pnlReturn.getChildren().add(pnlThongTinChiTiet);
-
-		pnlThongTinChiTiet.setManaged(false);
-		pnlThongTinChiTiet.setVisible(false);
-
-		AtomicBoolean isSelected = new AtomicBoolean(false);
-
-		pnlReturn.setOnMouseClicked(event -> {
-			boolean check = pnlThongTinChiTiet.isVisible();
-			pnlThongTinChiTiet.setManaged(!check);
-			pnlThongTinChiTiet.setVisible(!check);
-
-			if (!isSelected.get()) {
-				data.setStyle(hoverStyle);
-				ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), data);
-				scaleUp.setToX(1.02);
-				scaleUp.setToY(1.02);
-				scaleUp.play();
-				isSelected.set(true);
-				tongCongPhiHoanTra += phiHoanTra;
-				loadLableTongCongValue(tongCongPhiHoanTra);
-				System.out.println(mave + " " + isSelected);
-			} else {
-				data.setStyle(normalStyle);
-				ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), data);
-				scaleDown.setToX(1);
-				scaleDown.setToY(1);
-				scaleDown.play();
-				isSelected.set(false);
-				tongCongPhiHoanTra -= phiHoanTra;
-				loadLableTongCongValue(tongCongPhiHoanTra);
-				System.out.println(mave + " " + isSelected);
-			}
-		});
-
-		return pnlReturn;
-	}
-
-	private HBox taoSubCT1(String label, String value, String leftStyle, String rightStyle) {
-		Label lblLeft = new Label(label);
-		lblLeft.setWrapText(true);
-		StackPane left = new StackPane(lblLeft);
-		Label lblRight = new Label(value);
-		lblRight.setWrapText(true);
-		StackPane right = new StackPane(lblRight);
-
-		left.setPrefWidth(100);
-		right.setPrefWidth(150);
-		left.setStyle(leftStyle);
-		right.setStyle(rightStyle);
-		left.setAlignment(Pos.CENTER);
-		right.setAlignment(Pos.CENTER);
-		return new HBox(left, right);
-	}
-
-	private VBox taoSubCT2(String title, String value, String labelStyle, String valueStyle) {
-		Label lblTitle = new Label(title);
-		lblTitle.setStyle(labelStyle);
-		Label lblValue = new Label(value);
-		lblValue.setStyle(valueStyle);
-		VBox box = new VBox(5, new StackPane(lblTitle), new StackPane(lblValue));
-		box.setAlignment(Pos.CENTER);
-		return box;
-
-	}
+	String hoTen;
+	String cccd;
+	String email;
+	String sdt;
+	private TextField lblRight;
+	private Label lblSoLuongVe;
+	private Label lblSoLuongVeValue;
+	private HBox pnlSoLuongVe;
 
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+
 			menuList = new VBox();
 			menuList.setStyle("-fx-background-color: #F7F7F7;");
 			menuList.setPrefWidth(500);
@@ -730,290 +549,193 @@ public class GiaoDienHoanTraVe extends Application {
 			noiDungChinh = new VBox();
 			noiDungChinh.setStyle("-fx-background-color: #F7F7F7;");
 			noiDungChinh.setPrefWidth(1300);
+
+			pnlDoiVelbl = new Pane();
+			lblDoiVe = new Label("Hoàn trả vé");
+			pnlDoiVelbl.getChildren().add(lblDoiVe);
+			lblDoiVe.setStyle("-fx-font-size: 40px;-fx-font-weight: bold;");
+			noiDungChinh.getChildren().add(pnlDoiVelbl);
+			VBox.setMargin(pnlDoiVelbl, new Insets(20, 0, 0, 50));
+
+			pnlThongTinlbl = new Pane();
+			lblThongTin = new Label("Thông tin người hoàn trả vé");
+			pnlThongTinlbl.getChildren().add(lblThongTin);
+			lblThongTin.setStyle("-fx-font-size: 25px;-fx-font-weight: bold;");
+			noiDungChinh.getChildren().add(pnlThongTinlbl);
+			VBox.setMargin(pnlThongTinlbl, new Insets(20, 0, 0, 50));
+
+			pnlThongTinNguoiMua = new GridPane();
+			VBox.setMargin(pnlThongTinNguoiMua, new Insets(30, 0, 0, 0));
+			pnlThongTinNguoiMua.setAlignment(Pos.CENTER);
+			pnlThongTinNguoiMua.setHgap(400);
+			pnlThongTinNguoiMua.setVgap(10);
+
+			String leftStyle = """
+					    -fx-background-color: #00BACB;
+					    -fx-background-radius: 10px 0 0 10px;
+					    -fx-border-radius: 10px 0 0 10px;
+					    -fx-border-color: black;
+					    -fx-alignment: center-left;
+					    -fx-font-weight: bold;
+					    -fx-font-family: "Kanit";
+					    -fx-padding: 8 12 8 12;
+					""";
+
+			String rightStyle = """
+					    -fx-background-color: #E0E0E0;
+					    -fx-background-radius: 0 10px 10px 0;
+					    -fx-border-radius: 0 10px 10px 0;
+					   -fx-border-color: black;
+					    -fx-alignment: center-left;
+					    -fx-font-weight: bold;
+					    -fx-font-family: "Kanit";
+					    -fx-padding: 8 12 8 12;
+					""";
+
+			pnlThongTinNguoiMua.add(taoSubPane("Họ tên", "Nguyễn Tiến Đạt", leftStyle, rightStyle, 1), 0, 0);
+			pnlThongTinNguoiMua.add(taoSubPane("Email", "abc@gmail.com", leftStyle, rightStyle, 2), 1, 0);
+			pnlThongTinNguoiMua.add(taoSubPane("Số giấy tờ", "096123123123", leftStyle, rightStyle, 3), 0, 1);
+			pnlThongTinNguoiMua.add(taoSubPane("SĐT", "0933345556", leftStyle, rightStyle, 4), 1, 1);
+			noiDungChinh.getChildren().add(pnlThongTinNguoiMua);
+
+			pnlXuatHDlbl = new Pane();
+			lblXuatHD = new Label("Xuất hóa đơn");
+			pnlXuatHDlbl.getChildren().add(lblXuatHD);
+			lblXuatHD.setStyle("-fx-font-size: 25px;-fx-font-weight: bold;");
+			noiDungChinh.getChildren().add(pnlXuatHDlbl);
+			VBox.setMargin(pnlXuatHDlbl, new Insets(20, 0, 0, 50));
+
+			pnlRadXuatHoaDon = new GridPane();
+			pnlRadXuatHoaDon.setAlignment(Pos.CENTER);
+			pnlRadXuatHoaDon.setHgap(400);
+			pnlRadXuatHoaDon.setVgap(10);
+			VBox.setMargin(pnlRadXuatHoaDon, new Insets(20, 0, 0, 0));
+
+			RadXuatHDCongTy = new RadioButton("Xuất hóa đơn cho công ty/đơn vị");
+			RadXuatHDCaNhan = new RadioButton("Xuất hóa đơn cho cá nhân");
+
+			String radStyle = """
+					    -fx-font-family: 'Inter';
+					    -fx-font-weight: bold;
+					    -fx-font-size: 18px;
+					    -fx-text-fill: #00BACB;
+					    -fx-mark-color: #00BACB;
+					""";
+
+			RadXuatHDCongTy.setStyle(radStyle);
+			RadXuatHDCaNhan.setStyle(radStyle);
+			ToggleGroup groupRad = new ToggleGroup();
+
+			RadXuatHDCongTy.setToggleGroup(groupRad);
+			RadXuatHDCaNhan.setToggleGroup(groupRad);
+
+			RadXuatHDCaNhan.setSelected(true);
+
+			pnlRadXuatHoaDon.add(RadXuatHDCongTy, 1, 0);
+			pnlRadXuatHoaDon.add(RadXuatHDCaNhan, 0, 0);
+
+			noiDungChinh.getChildren().add(pnlRadXuatHoaDon);
+
+			pnlThongTinXuatHoaDonCongTy = taoXuatHoaDonCongTyPane(leftStyle, rightStyle);
+			noiDungChinh.getChildren().add(pnlThongTinXuatHoaDonCongTy);
+
+			pnlThongTinXuatHoaDonCaNhan = taoXuatHoaDonCaNhanPane(leftStyle, rightStyle);
+			noiDungChinh.getChildren().add(pnlThongTinXuatHoaDonCaNhan);
+			VBox.setMargin(pnlThongTinXuatHoaDonCongTy, new Insets(20, 0, 100, 150));
+			VBox.setMargin(pnlThongTinXuatHoaDonCaNhan, new Insets(20, 0, 100, 150));
+
+			pnlThongTinXuatHoaDonCongTy.setVisible(false);
+			pnlThongTinXuatHoaDonCongTy.setManaged(false);
+
+			pnlThongTinXuatHoaDonCaNhan.setVisible(true);
+			pnlThongTinXuatHoaDonCaNhan.setManaged(true);
+
+			RadXuatHDCongTy.setOnAction(e -> {
+				if (RadXuatHDCongTy.isSelected()) {
+					System.out.println("Đã chọn: Xuất hóa đơn công ty");
+					pnlThongTinXuatHoaDonCongTy.setVisible(true);
+					pnlThongTinXuatHoaDonCongTy.setManaged(true);
+
+					pnlThongTinXuatHoaDonCaNhan.setVisible(false);
+					pnlThongTinXuatHoaDonCaNhan.setManaged(false);
+				}
+			});
+
+			RadXuatHDCaNhan.setOnAction(e -> {
+				if (RadXuatHDCaNhan.isSelected()) {
+					System.out.println("Đã chọn: Xuất hóa đơn cá nhân");
+					pnlThongTinXuatHoaDonCaNhan.setVisible(true);
+					pnlThongTinXuatHoaDonCaNhan.setManaged(true);
+
+					pnlThongTinXuatHoaDonCongTy.setVisible(false);
+					pnlThongTinXuatHoaDonCongTy.setManaged(false);
+				}
+			});
+
 			BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
 
-			pnlHoanVe = new Pane();
-			lblHoanVe = new Label("Hoàn trả vé");
-			pnlHoanVe.getChildren().add(lblHoanVe);
-			lblHoanVe.setStyle("-fx-font-size: 40px;-fx-font-weight: bold;");
-			VBox.setMargin(pnlHoanVe, new Insets(20, 0, 0, 50));
-			noiDungChinh.getChildren().add(pnlHoanVe);
+			pnlThanhToanButton = new VBox();
+			pnlThanhToanButtonSub1 = new HBox();
+			pnlThanhToanButtonSub2 = new HBox();
 
-			layout_timkiem = new VBox();
+			String btnRedStyle = "-fx-font-family: 'Inter';" + "-fx-font-size: 20px;" + "-fx-font-weight: bold;"
+					+ "-fx-text-fill:white;"
+					+ "-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #CB002C, #D498A5);"
+					+ "-fx-background-radius:15px;";
 
-			layout_lbl_timkiem = new HBox();
-			layout_lbl_timkiem.setPrefSize(1200, 40);
-			lbl_timkiem = new Label("Nhập mã vé");
-			lbl_timkiem.setTranslateX(10);
-			lbl_timkiem.setTranslateY(0);
-			lbl_timkiem.setStyle(
-					"-fx-font-family: 'Inter';-fx-font-weight:bold;-fx-font-size:18px;-fx-text-fill : #00BACB;");
+			String btnBlueStyle = "-fx-font-family: 'Inter';" + "-fx-font-size: 20px;" + "-fx-font-weight: bold;"
+					+ "-fx-text-fill:white;" + "-fx-background-color: linear-gradient(to top, #00BACB, #B6D0D3);"
+					+ "-fx-background-radius:15px;";
+			String lblStyle = "-fx-font-size: 36px;";
+			btnRong = new Pane();
+			;
 
-			ImageView img_timkiem = new ImageView(getClass().getResource("/images/copy/lookup.png").toExternalForm());
-			img_timkiem.setTranslateX(1050);
-			img_timkiem.setFitHeight(25);
-			img_timkiem.setFitWidth(25);
-
-			layout_lbl_timkiem.getChildren().addAll(lbl_timkiem, img_timkiem);
-			layout_lbl_timkiem.setTranslateY(48);
-			layout_timkiem.getChildren().add(layout_lbl_timkiem);
-
-			layout_txt_timkiem = new VBox();
-			txt_timkiem = new TextField();
-			txt_timkiem.setPrefHeight(40);
-			txt_timkiem.setMaxSize(1200, 45);
-			txt_timkiem.setPadding(new Insets(10));
-			txt_timkiem.setStyle(
-					"-fx-background-color: transparent;-fx-border-color: #00BACB;-fx-border-width: 0.5;-fx-border-radius: 15px;-fx-font-family: 'Inter';-fx-font-weight:bold;-fx-text-fill : #00BACB;-fx-font-size:15px;");
-			txt_timkiem.setFocusTraversable(false);
-			layout_txt_timkiem.getChildren().add(txt_timkiem);
-			layout_timkiem.getChildren().add(layout_txt_timkiem);
-
-			layout_timkiem.setTranslateX(100);
-
-			txt_timkiem.focusedProperty().addListener((obs, oval, nval) -> {
-				TranslateTransition tt = new TranslateTransition(Duration.millis(350), lbl_timkiem);
-				if (nval) {
-					tt.setToY(-40);
-				}
-				tt.play();
-			});
-
-			VBox.setMargin(layout_timkiem, new Insets(0, 0, 10, 0));
-			noiDungChinh.getChildren().add(layout_timkiem);
-
-			String btnStyle = """
-					      -fx-font-family: 'Inter';
-					   -fx-font-weight: bold;
-					   -fx-font-size: 22px;
-					   -fx-text-fill: white;
-					   -fx-background-color: linear-gradient(to top, #00BACB, #8EE6ED);
-					   -fx-background-radius: 10;
-					-fx-cursor: hand;
-					-fx-padding: 10 20 10 20;
-					""";
-			btnTimKiemTheoMaVe = new Button("Tìm kiếm theo mã vé");
-			btnTimKiemTheoMaVe.setMaxSize(350, 320);
-			btnTimKiemTheoMaVe.setStyle(btnStyle);
-
-			btnTimKiemTheoNguoiMua = new Button("Tìm kiếm theo người mua");
-			btnTimKiemTheoNguoiMua.setMaxSize(350, 320);
-			btnTimKiemTheoNguoiMua.setStyle(btnStyle);
-
-			pnlTimKiem = new HBox(100);
-			pnlTimKiem.setMaxSize(1200, 500);
-
-			pnlTimKiem.getChildren().addAll(btnTimKiemTheoMaVe, btnTimKiemTheoNguoiMua);
-			pnlTimKiem.setAlignment(Pos.CENTER);
-
-			btnTimKiemTheoMaVe.setAlignment(Pos.CENTER);
-			btnTimKiemTheoNguoiMua.setAlignment(Pos.CENTER);
-
-			VBox.setMargin(pnlTimKiem, new Insets(30, 0, 0, 0));
-			noiDungChinh.getChildren().add(pnlTimKiem);
-
-			// table
-			tableCol = new GridPane();
-			tableCol.setHgap(10);
-			tableCol.setVgap(20);
-			tableCol.setAlignment(Pos.CENTER);
-			tableCol.setMaxWidth(1330);
-			VBox.setMargin(tableCol, new Insets(30, 10, 10, 0));
-
-			String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 24px; -fx-font-weight: bold;";
-
-			colMaVe = new Label("Mã vé");
-			colMaVe.setStyle(styleHeader);
-			colChuyen = new Label("Chuyến");
-			colChuyen.setStyle(styleHeader);
-			colGaDiGaDen = new Label("Ga đi - Ga đến");
-			colGaDiGaDen.setStyle(styleHeader);
-			colNgayKhoiHanh = new Label("Ngày khởi hành");
-			colNgayKhoiHanh.setStyle(styleHeader);
-			colViTriGhe = new Label("Vị trí ghế");
-			colViTriGhe.setStyle(styleHeader);
-			colLoaiHoaDon = new Label("Loại hoá đơn");
-			colLoaiHoaDon.setStyle(styleHeader);
-			colTrangThai = new Label("Trạng thái");
-			colTrangThai.setStyle(styleHeader);
-
-			paneCol1 = new StackPane(colMaVe);
-			paneCol2 = new StackPane(colChuyen);
-			paneCol3 = new StackPane(colGaDiGaDen);
-			paneCol4 = new StackPane(colNgayKhoiHanh);
-			paneCol5 = new StackPane(colViTriGhe);
-			paneCol6 = new StackPane(colLoaiHoaDon);
-			paneCol7 = new StackPane(colTrangThai);
-
-			paneCol1.setPrefWidth(200);
-			paneCol2.setPrefWidth(180);
-			paneCol3.setPrefWidth(250);
-			paneCol4.setPrefWidth(270);
-			paneCol5.setPrefWidth(220);
-			paneCol6.setPrefWidth(220);
-			paneCol7.setPrefWidth(200);
-
-			paneCol1.setAlignment(Pos.CENTER);
-			paneCol2.setAlignment(Pos.CENTER);
-			paneCol3.setAlignment(Pos.CENTER);
-			paneCol4.setAlignment(Pos.CENTER);
-			paneCol5.setAlignment(Pos.CENTER);
-			paneCol6.setAlignment(Pos.CENTER);
-			paneCol7.setAlignment(Pos.CENTER);
-
-			tableCol.add(paneCol1, 0, 0);
-			tableCol.add(paneCol2, 1, 0);
-			tableCol.add(paneCol3, 2, 0);
-			tableCol.add(paneCol4, 3, 0);
-			tableCol.add(paneCol5, 4, 0);
-			tableCol.add(paneCol6, 5, 0);
-			tableCol.add(paneCol7, 6, 0);
-
-			noiDungChinh.getChildren().add(tableCol);
-
-			pnlDataHoanTraVe = new VBox(10);
-			pnlDataHoanTraVe.setAlignment(Pos.CENTER);
-			pnlDataHoanTraVe = loadDuLieuLenTable();
-
-			// === TẠO SCROLLPANE ===
-			scrollPane = new ScrollPane(pnlDataHoanTraVe);
-			scrollPane.setMaxHeight(500);
-			scrollPane.setFitToWidth(true);
-			scrollPane.setPannable(true);
-			scrollPane.setStyle("""
-					    -fx-background-color: transparent;
-					    -fx-border-color: transparent;
-					    -fx-border-width: 0;
-					""");
-
-			// Chỉ hiện thanh cuộn dọ
-			scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-			scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-			noiDungChinh.getChildren().add(scrollPane);
-
-			pnlTongConglbl = new HBox();
-			String lblStyle = "-fx-font-size: 36px;" + "-fx-font-weight: bold;";
-			lblTongCong = new Label("Tổng cộng: ");
-			lblTongCongValue = new Label();
+			pnlTongCong = new HBox();
+			pnlSoLuongVe = new HBox(5);
+			lblSoLuongVe = new Label("Số lượng vé:");
+			lblSoLuongVeValue = new Label("0");
+			lblSoLuongVe.setStyle(lblStyle);
+			lblSoLuongVeValue.setStyle(lblStyle + "-fx-font-weight: bold;");
+			pnlSoLuongVe.getChildren().addAll(lblSoLuongVe,lblSoLuongVeValue);
+			
+			lblTongCong = new Label("Tổng cộng:");
+			lblTongCong.setWrapText(true);
 			lblTongCong.setStyle(lblStyle);
-			lblTongCongValue.setStyle(lblStyle);
 
-			pnlTongConglbl.getChildren().addAll(lblTongCong, lblTongCongValue);
-			HBox.setMargin(lblTongCong, new Insets(0, 0, 0, 800));
-			noiDungChinh.getChildren().add(pnlTongConglbl);
+			lblTongCongValue = new Label(nf.format(tongCongThanhTien));
+			lblTongCongValue.setWrapText(true);
+			lblTongCongValue.setStyle(lblStyle + "-fx-font-weight: bold;");
 
-			pnlCapNhatVe = new HBox(30);
-			VBox.setMargin(pnlCapNhatVe, new Insets(30, 0, 0, 500));
-			pnlCapNhatVe.setAlignment(Pos.CENTER);
+			HBox.setMargin(lblTongCong, new Insets(0, 20, 0, 0));
+			pnlTongCong.setAlignment(Pos.CENTER);
 
-//			btnCapNhatTrangThaiVe = new Button("Cập nhật trạng thái vé");
-//			btnCapNhatTrangThaiVe.setPrefSize(350, 60);
-			btnHoanVe = new Button("Hoàn vé");
-			btnHoanVe.setPrefSize(350, 60);
-			btnHoanVe.setStyle(btnStyle);
-//			btnCapNhatTrangThaiVe.setStyle(btnStyle);
-			pnlCapNhatVe.getChildren().add(btnHoanVe);
-			noiDungChinh.getChildren().add(pnlCapNhatVe);
+			HBox.setMargin(pnlTongCong, new Insets(0, 0, 0, 150));
+			pnlTongCong.getChildren().addAll(pnlSoLuongVe,lblTongCong, lblTongCongValue);
+			HBox.setMargin(lblTongCong, new Insets(0,0,0,100));
+			HBox.setMargin(pnlSoLuongVe, new Insets(0,300,0,0));
+			pnlThanhToanButtonSub1.getChildren().addAll(btnRong, pnlTongCong);
 
-			// add su kien disable btn
-			btnTimKiemTheoMaVe.setOnMouseClicked(event -> {
-				String regex = "^V\\d{3}$";
-				String input = txt_timkiem.getText().trim();
+			btnTroLai = new Button("Trở lại");
+			btnTroLai.setStyle(btnRedStyle);
+			btnTroLai.setPrefSize(270, 50);
+			btnThanhToan = new Button("Thanh toán");
+			btnThanhToan.setStyle(btnBlueStyle);
+			btnThanhToan.setPrefSize(280, 50);
 
-				if (input.isEmpty() || !Pattern.matches(regex, input)) {
-					btnHoanVe.setDisable(true);
-					String eStyle = """
-							    -fx-font-size: 18px;
-							    -fx-background-color: rgba(203, 0, 44, 0.83);
-							    -fx-text-fill: white;
-							    -fx-background-radius: 10;
-							    -fx-cursor: hand;
-							    -fx-padding: 10 20 10 20;
-							""";
-					btnHoanVe.setStyle(eStyle);
+			pnlThanhToanButtonSub2.getChildren().addAll(btnTroLai, btnThanhToan);
+			HBox.setMargin(btnTroLai, new Insets(0, 750, 0, 0));
+			pnlThanhToanButton.getChildren().addAll(pnlThanhToanButtonSub1, pnlThanhToanButtonSub2);
+			VBox.setMargin(pnlThanhToanButtonSub1, new Insets(20, 0, 0, 0));
+			VBox.setMargin(pnlThanhToanButtonSub2, new Insets(50, 0, 0, 0));
+			noiDungChinh.getChildren().addAll(pnlThanhToanButton);
 
-					Alert alert = new Alert(Alert.AlertType.ERROR);
-					alert.setTitle("Lỗi định dạng");
-					alert.setHeaderText(null);
-					alert.setContentText("Mã vé không hợp lệ! (Định dạng hợp lệ: VX123)");
-					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-					alert.initOwner(stage);
-					alert.initModality(Modality.WINDOW_MODAL);
-					alert.showAndWait();
+			VBox.setMargin(pnlThanhToanButton, new Insets(0, 0, 0, 20));
+			hieuUngHover(btnThanhToan);
+			hieuUngHover(btnTroLai);
 
-				} else {
-					btnHoanVe.setDisable(false);
-					try {
-						pnlDataHoanTraVe.getChildren().clear();
-						Ve x = new Ve();
-						x = dao.getHoanVeBangMaVe(input);
-						LoaiHoaDonDAO lhdDao = new LoaiHoaDonDAO();
-						String tenloai = lhdDao.getLoaiHoaDonTheoMaVe(x.getMaVeTau());
-						pnlDataHoanTraVe.getChildren().add(taoDataChoTableHoanVe(x.getMaVeTau(),
-								x.getChuyenTau().getMaChuyenTau(), x.getGaDi() + " - " + x.getGaDen(),
-								x.getNgayGioDi().toLocalDate() + " - " + x.getNgayGioDi().toLocalTime(),
-								"Toa số " + x.getSoToa() + " chỗ " + x.getSoGhe(), tenloai, x.getTrangThaiVe(),
-								x.getKhachHang().getHoten(), x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
-								x.getKhachHang().getCccd(), x.getGiaVe(),
-								nf.format(x.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
-								nf.format(x.getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%", x.tinhThanhTien(),
-								x.tinhPhiHoanTra(x.getNgayGioDi(), x.tinhThanhTien(), tenloai)));
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-					btnHoanVe.setStyle(btnStyle);
-				}
-			});
-
-			btnTimKiemTheoNguoiMua.setOnMouseClicked(event -> {
-				String regex = "^\\d+$";
-				String input = txt_timkiem.getText().trim();
-
-				if (input.isEmpty() || !Pattern.matches(regex, input)) {
-					btnHoanVe.setDisable(true);
-					String eStyle = """
-							    -fx-font-size: 18px;
-							    -fx-background-color: rgba(203, 0, 44, 0.83);
-							    -fx-text-fill: white;
-							    -fx-background-radius: 10;
-							    -fx-cursor: hand;
-							    -fx-padding: 10 20 10 20;
-							""";
-					btnHoanVe.setStyle(eStyle);
-
-					Alert alert = new Alert(Alert.AlertType.ERROR);
-					alert.setTitle("Lỗi định dạng");
-					alert.setHeaderText(null);
-					alert.setContentText("Số giấy tờ của người mua không hợp lệ");
-					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-					alert.initOwner(stage);
-					alert.initModality(Modality.WINDOW_MODAL);
-					alert.showAndWait();
-
-				} else {
-					btnHoanVe.setDisable(false);
-					try {
-						pnlDataHoanTraVe.getChildren().clear();
-						list.removeAll(list);
-						list = dao.getListHoanVeTheoCCCDKhachHang(input);
-						for (Ve x : list) {
-							LoaiHoaDonDAO lhdDao = new LoaiHoaDonDAO();
-							String tenloai = lhdDao.getLoaiHoaDonTheoMaVe(x.getMaVeTau());
-							pnlDataHoanTraVe.getChildren().add(taoDataChoTableHoanVe(x.getMaVeTau(),
-									x.getChuyenTau().getMaChuyenTau(), x.getGaDi() + " - " + x.getGaDen(),
-									x.getNgayGioDi().toLocalDate() + " - " + x.getNgayGioDi().toLocalTime(),
-									"Toa số " + x.getSoToa() + " chỗ " + x.getSoGhe(), tenloai, x.getTrangThaiVe(),
-									x.getKhachHang().getHoten(), x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
-									x.getKhachHang().getCccd(), x.getGiaVe(),
-									nf.format(x.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
-									nf.format(x.getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%", x.tinhThanhTien(),
-									x.tinhPhiHoanTra(x.getNgayGioDi(), x.tinhThanhTien(), tenloai)));
-						}
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-					btnHoanVe.setStyle(btnStyle);
-				}
+			// sukien
+			btnThanhToan.setOnMouseClicked(event -> {
+				showConfirm(primaryStage, "Bạn muốn thanh toán hóa đơn này");
 			});
 
 			BorderPane root = new BorderPane();
@@ -1030,25 +752,199 @@ public class GiaoDienHoanTraVe extends Application {
 		}
 	}
 
-	public VBox loadDuLieuLenTable() throws SQLException {
-		dao = new VeDAO();
-		list = dao.getListHoanVe();
-		VBox box = new VBox(10);
-		for (Ve x : list) {
-			LoaiHoaDonDAO lhdDao = new LoaiHoaDonDAO();
-			String tenloai = lhdDao.getLoaiHoaDonTheoMaVe(x.getMaVeTau());
-			box.getChildren()
-					.add(taoDataChoTableHoanVe(x.getMaVeTau(), x.getChuyenTau().getMaChuyenTau(),
-							x.getGaDi() + " - " + x.getGaDen(),
-							x.getNgayGioDi().toLocalDate() + " - " + x.getNgayGioDi().toLocalTime(),
-							"Toa số " + x.getSoToa() + " chỗ " + x.getSoGhe(), tenloai, x.getTrangThaiVe(),
-							x.getKhachHang().getHoten(), x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
-							x.getKhachHang().getCccd(), x.getGiaVe(),
-							nf.format(x.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
-							nf.format(x.getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%", x.tinhThanhTien(),
-							x.tinhPhiHoanTra(x.getNgayGioDi(), x.tinhThanhTien(), tenloai)));
+	private boolean showConfirm(Stage parentStage, String message) {
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setTitle("Xác nhận");
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+		alert.initOwner(parentStage);
+		alert.initModality(Modality.WINDOW_MODAL);
+
+		ButtonType yes = new ButtonType("Yes");
+		ButtonType no = new ButtonType("No");
+		alert.getButtonTypes().setAll(yes, no);
+
+		Optional<ButtonType> result = alert.showAndWait();
+		return result.isPresent() && result.get() == yes;
+	}
+
+	public void hieuUngHover(Button btn) {
+		btn.setOnMouseEntered(e -> {
+			ScaleTransition scaleUp = new ScaleTransition(Duration.millis(150), btn);
+			scaleUp.setToX(1.1);
+			scaleUp.setToY(1.1);
+			scaleUp.play();
+		});
+
+		btn.setOnMouseExited(e -> {
+			ScaleTransition scaleDown = new ScaleTransition(Duration.millis(150), btn);
+			scaleDown.setToX(1.0);
+			scaleDown.setToY(1.0);
+			scaleDown.play();
+		});
+	}
+
+	private VBox taoXuatHoaDonCongTyPane(String leftstyle, String rightstyle) {
+
+		VBox pnl = new VBox(15);
+		pnl.setAlignment(Pos.CENTER);
+
+		pnl.getChildren().add(taoSubXuatHoaDonPane("Người mua", leftstyle, rightstyle));
+		pnl.getChildren().add(taoSubXuatHoaDonPane("Số giấy tờ", leftstyle, rightstyle));
+		pnl.getChildren().add(taoSubXuatHoaDonPane("Mã số thuế", leftstyle, rightstyle));
+		pnl.getChildren().add(taoSubXuatHoaDonPane("Tên Công Ty/ Đơn vị", leftstyle, rightstyle));
+		pnl.getChildren().add(taoSubXuatHoaDonPane("Địa chỉ", leftstyle, rightstyle));
+		return pnl;
+
+	}
+
+	private VBox taoXuatHoaDonCaNhanPane(String leftstyle, String rightstyle) {
+
+		VBox pnl = new VBox(15);
+		pnl.setAlignment(Pos.CENTER);
+
+		pnl.getChildren().add(taoSubXuatHoaDonPane("Người mua", leftstyle, rightstyle));
+		pnl.getChildren().add(taoSubXuatHoaDonPane("Số giấy tờ", leftstyle, rightstyle));
+		pnl.getChildren().add(taoSubXuatHoaDonPane("Passport", leftstyle, rightstyle));
+		pnl.getChildren().add(taoSubXuatHoaDonPane("Tên khách hàng", leftstyle, rightstyle));
+		pnl.getChildren().add(taoSubXuatHoaDonPane("Địa chỉ", leftstyle, rightstyle));
+
+		return pnl;
+
+	}
+
+	private HBox taoSubPane(String label, String value, String leftStyle, String rightStyle, int check) {
+		StackPane left = new StackPane(new Label(label));
+		StackPane right = new StackPane();
+		right.setPrefSize(200, 40);
+
+		if (check == 1) {
+			txtHoTen = new TextField();
+			txtHoTen.setPromptText("Nhập họ tên");
+			String regexHoten = "[a-zA-ZÀ-ỹ\\s]+$";
+			txtHoTen.setOnAction(event -> {
+				String input = txtHoTen.getText();
+				if (!input.matches(regexHoten)) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Lỗi định dạng");
+					alert.setHeaderText(null);
+					alert.setContentText("Họ tên không hợp lệ");
+					// Gắn vào Stage hiện tại (cực kỳ quan trọng)
+					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+					alert.initOwner(stage);
+
+					// Không cho resize, luôn ở giữa cửa sổ cha
+					alert.initModality(Modality.WINDOW_MODAL);
+					alert.showAndWait();
+				}
+				txtHoTen.setUserData(txtHoTen.getText());
+			});
+			txtHoTen.setStyle(rightStyle);
+			txtHoTen.setMaxWidth(Double.MAX_VALUE);
+			txtHoTen.setMaxHeight(Double.MAX_VALUE);
+			StackPane.setAlignment(txtHoTen, Pos.CENTER);
+			right.getChildren().add(txtHoTen);
+		} else if (check == 2) {
+			txtEMail = new TextField();
+			txtEMail.setPromptText("nhập email");
+			String regexHoten = "";
+//			txtEMail.setOnAction(event -> {
+//				String input = txtEMail.getText();
+//				if (!input.matches(regexHoten)) {
+//					Alert alert = new Alert(Alert.AlertType.ERROR);
+//					alert.setTitle("Lỗi định dạng");
+//					alert.setHeaderText(null);
+//					alert.setContentText("EMail không hợp lệ");
+//					alert.showAndWait();
+//				}
+//			});
+			txtEMail.setStyle(rightStyle);
+			txtEMail.setMaxWidth(Double.MAX_VALUE);
+			txtEMail.setMaxHeight(Double.MAX_VALUE);
+			StackPane.setAlignment(txtEMail, Pos.CENTER);
+			right.getChildren().add(txtEMail);
+		} else if (check == 3) {
+			txtSoGiayTo = new TextField();
+			txtSoGiayTo.setPromptText("Nhập số giấy tờ");
+			String regexSoGiayTo = "^[0-9]+$";
+			txtSoGiayTo.setOnAction(event -> {
+				String input = txtSoGiayTo.getText();
+				if (!input.matches(regexSoGiayTo)) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Lỗi định dạng");
+					alert.setHeaderText(null);
+					alert.setContentText("Số giấy tờ không hợp lệ");
+					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+					alert.initOwner(stage);
+					alert.initModality(Modality.WINDOW_MODAL);
+					alert.showAndWait();
+				}
+			});
+			txtSoGiayTo.setStyle(rightStyle);
+			txtSoGiayTo.setMaxWidth(Double.MAX_VALUE);
+			txtSoGiayTo.setMaxHeight(Double.MAX_VALUE);
+			StackPane.setAlignment(txtSoGiayTo, Pos.CENTER);
+			right.getChildren().add(txtSoGiayTo);
+		} else if (check == 4) {
+			txtSdt = new TextField();
+			txtSdt.setPromptText("Nhập SDT");
+			String regexSoGiayTo = "^[0-9]+$";
+			txtSdt.setOnAction(event -> {
+				String input = txtSdt.getText();
+				if (!input.matches(regexSoGiayTo)) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Lỗi định dạng");
+					alert.setHeaderText(null);
+					alert.setContentText("Số điện thoại không hợp lệ");
+					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+					alert.initOwner(stage);
+					alert.initModality(Modality.WINDOW_MODAL);
+					alert.showAndWait();
+				}
+			});
+			txtSdt.setStyle(rightStyle);
+			txtSdt.setMaxWidth(Double.MAX_VALUE);
+			txtSdt.setMaxHeight(Double.MAX_VALUE);
+			StackPane.setAlignment(txtSdt, Pos.CENTER);
+			right.getChildren().add(txtSdt);
 		}
-		return box;
+
+		left.setPrefWidth(100);
+		right.setPrefWidth(200);
+		left.setStyle(leftStyle);
+		left.setAlignment(Pos.CENTER);
+		right.setAlignment(Pos.CENTER);
+		return new HBox(left, right);
+	}
+
+	private HBox taoSubXuatHoaDonPane(String label, String leftStyle, String rightStyle) {
+		StackPane left = new StackPane(new Label(label));
+		StackPane right = new StackPane();
+		right.setPrefSize(200, 40);
+		TextField txtRight = new TextField();
+		txtRight.setStyle(rightStyle + " -fx-border-color: transparent;");
+		txtRight.setMaxWidth(Double.MAX_VALUE);
+		txtRight.setMaxHeight(Double.MAX_VALUE);
+		StackPane.setAlignment(txtRight, Pos.CENTER);
+		right.getChildren().add(txtRight);
+		if (label.equalsIgnoreCase("Người mua") || label.equalsIgnoreCase("Tên khách hàng")) {
+			txtHoTen.textProperty().addListener((obs, oldVal, newVal) -> {
+				txtRight.setText(newVal);
+			});
+		} else if (label.equalsIgnoreCase("Số giấy tờ")) {
+			txtSoGiayTo.textProperty().addListener((obs, oldVal, newVal) -> {
+				txtRight.setText(newVal);
+			});
+		}
+
+		left.setPrefSize(200, 50);
+		left.setAlignment(Pos.CENTER);
+		right.setPrefSize(1000, 50);
+		left.setStyle(leftStyle);
+		right.setStyle(rightStyle);
+
+		return new HBox(left, right);
+
 	}
 
 	public VBox getNoiDungChinhVe() {
@@ -1056,6 +952,6 @@ public class GiaoDienHoanTraVe extends Application {
 	}
 
 	public static void main(String[] args) {
-		Application.launch(GiaoDienHoanTraVe.class, args);
+		Application.launch(GiaoDienXuatHoaDonHoanTraVe.class, args);
 	}
 }

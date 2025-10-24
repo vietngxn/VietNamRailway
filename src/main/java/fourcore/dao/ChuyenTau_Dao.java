@@ -15,8 +15,8 @@ public class ChuyenTau_Dao {
 
 	}
 
-	public LoaiToaTau toaGheXoay = new LoaiToaTau("GN01", "Ghế xoay lên tầng vũ trụ", 0.0);
-	public LoaiToaTau toaGiuongNam = new LoaiToaTau("GN02", "Giường nằm phê pha", 0.0);
+	public LoaiToaTau toaGheXoay = new LoaiToaTau("GN01", "Ghế xoay lên tầng vũ trụ");
+	public LoaiToaTau toaGiuongNam = new LoaiToaTau("GN02", "Giường nằm phê pha");
 
 	public LoaiTau loaiTau1 = new LoaiTau("LT01", "TauHoaBacNam", 12000);
 	public Tau tau1 = new Tau("SE6", "TauHi", loaiTau1);
