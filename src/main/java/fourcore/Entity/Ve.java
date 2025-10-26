@@ -1,7 +1,11 @@
 package fourcore.Entity;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import javafx.util.converter.LocalDateStringConverter;
+import javafx.util.converter.LocalDateTimeStringConverter;
 
 public class Ve {
 	private String maVeTau;
@@ -218,4 +222,53 @@ public class Ve {
 	public void setDoiTuongGiamGia(DoiTuongGiamGia doiTuongGiamGia) {
 		this.doiTuongGiamGia = doiTuongGiamGia;
 	}
+
+	public double tinhThanhTien() {
+		double giamDT = this.getGiaVe() * this.getDoiTuongGiamGia().giaTriPhanTramGiamGia * 0.01;
+		double giamKM = this.getGiaVe() * this.getKhuyenMai().getGiaTriPhanTramKhuyenMai() * 0.01;
+		return this.getGiaVe() - giamDT - giamKM;
+	}
+
+	public double tinhPhiHoanTra(LocalDateTime thoiGianMuaVe, double thanhTien, String loaiVe) {
+		LocalDateTime ngayHienTai = LocalDateTime.now();
+		Duration duration = Duration.between(thoiGianMuaVe, ngayHienTai);
+		double soGioChenhLech = Math.abs(duration.toHours());
+
+		System.out.println("Số giờ chênh lệch: " + soGioChenhLech);
+
+		double phiHoanTra = 0;
+
+	    if (loaiVe == null) {
+	        System.out.println("⚠️ Loại vé null — không thể tính phí hoàn trả");
+	        return 0;
+	    }
+	    
+		if (loaiVe.equalsIgnoreCase("Vé cá nhân")) {
+			if (soGioChenhLech >= 4 && soGioChenhLech <= 24) {
+				phiHoanTra = thanhTien * 0.2;
+			} else if (soGioChenhLech > 24) {
+				phiHoanTra = thanhTien * 0.1;
+			} else { // < 4h
+				return 0;
+			}
+		} else if (loaiVe.equalsIgnoreCase("Vé cập thể")) {
+			if (soGioChenhLech >= 24 && soGioChenhLech <= 72) {
+				phiHoanTra = thanhTien * 0.2;
+			} else if (soGioChenhLech > 72) {
+				phiHoanTra = thanhTien * 0.1;
+			} else { // < 24h
+				return 0;
+			}
+		} else {
+			System.out.println("⚠️ Loại vé không hợp lệ: " + loaiVe);
+			return 0;
+		}
+
+		if (phiHoanTra > 0 && phiHoanTra < 10000) {
+			phiHoanTra = 10000;
+		}
+
+		return phiHoanTra;
+	}
+
 }

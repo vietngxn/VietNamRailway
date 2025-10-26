@@ -21,45 +21,42 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+public class Animation extends Label {
 
-public class Animation extends Label{
+    public Animation() {
+    };
 
-	public Animation () {};
-	public void scaleUp(Label lbl) {
-    	Timeline animation = new Timeline(
+    public void scaleUp(Label lbl) {
+        Timeline animation = new Timeline(
                 new KeyFrame(Duration.ZERO,
-                    new KeyValue(lbl.translateYProperty(), 0),
-                    new KeyValue(lbl.scaleXProperty(), 1.0),
-                    new KeyValue(lbl.scaleYProperty(), 1.0)
-                ),
+                        new KeyValue(lbl.translateYProperty(), 0),
+                        new KeyValue(lbl.scaleXProperty(), 1.0),
+                        new KeyValue(lbl.scaleYProperty(), 1.0)),
                 new KeyFrame(Duration.millis(200),
-                    new KeyValue(lbl.translateYProperty(), -24),
-                    new KeyValue(lbl.scaleXProperty(), 0.8),
-                    new KeyValue(lbl.scaleYProperty(), 0.8)	
-                )
-            );
-    	animation.play();
+                        new KeyValue(lbl.translateYProperty(), -24),
+                        new KeyValue(lbl.scaleXProperty(), 0.8),
+                        new KeyValue(lbl.scaleYProperty(), 0.8)));
+        animation.play();
     }
-	public void scaleDown(Label lbl) {
-		Timeline animation = new Timeline(
+
+    public void scaleDown(Label lbl) {
+        Timeline animation = new Timeline(
                 new KeyFrame(Duration.ZERO,
-                    new KeyValue(lbl.translateYProperty(), -24),
-                    new KeyValue(lbl.scaleXProperty(), 0.8),
-                    new KeyValue(lbl.scaleYProperty(), 0.8)
-                ),
+                        new KeyValue(lbl.translateYProperty(), -24),
+                        new KeyValue(lbl.scaleXProperty(), 0.8),
+                        new KeyValue(lbl.scaleYProperty(), 0.8)),
                 new KeyFrame(Duration.millis(200),
-                    new KeyValue(lbl.translateYProperty(), 0),
-                    new KeyValue(lbl.scaleXProperty(), 1.0),
-                    new KeyValue(lbl.scaleYProperty(), 1.0)
-                )
-            );
-            animation.play();
-	}
-	public ImageView taoImgGhe(String duongDan) {
-		ImageView img = new ImageView(new Image(getClass().getResource(duongDan).toExternalForm()));
-		img.setFitHeight(40);
-		img.setFitWidth(40);
-		return img;
-	}
-	
+                        new KeyValue(lbl.translateYProperty(), 0),
+                        new KeyValue(lbl.scaleXProperty(), 1.0),
+                        new KeyValue(lbl.scaleYProperty(), 1.0)));
+        animation.play();
+    }
+
+    public ImageView taoImgGhe(String duongDan) {
+        ImageView img = new ImageView(new Image(getClass().getResource(duongDan).toExternalForm()));
+        img.setFitHeight(40);
+        img.setFitWidth(40);
+        return img;
+    }
+
 }

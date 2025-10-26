@@ -6,7 +6,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class ThongKeChuyenTauControl {
-    public void handleMenuTrangChuSelect(BorderPane root){
+    public void handleMenuTrangChuSelect(BorderPane root) {
         QuanLiHoaDon gdQuanLiHoaDon = new QuanLiHoaDon();
         Stage quanLiHoaDonStage = new Stage();
         gdQuanLiHoaDon.start(quanLiHoaDonStage);

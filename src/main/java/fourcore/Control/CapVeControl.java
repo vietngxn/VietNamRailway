@@ -7,11 +7,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class CapVeControl {
-    public void handleMenuTrangChuSelect(BorderPane root){
+    public void handleMenuTrangChuSelect(BorderPane root) {
         GiaoDienCapLaiVe capVe = new GiaoDienCapLaiVe();
         Stage capVeStage = new Stage();
         capVe.start(capVeStage);
-        VBox giaoDienCapVe =   capVe.getNoiDungChinhVe();
+        VBox giaoDienCapVe = capVe.getNoiDungChinhVe();
         root.setCenter(giaoDienCapVe);
     }
 }

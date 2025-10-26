@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 import fourcore.DatabaseConnector.DatabaseConnector;
+import fourcore.Entity.LoaiTau;
 import fourcore.Entity.LoaiToaTau;
 import fourcore.Entity.ToaTau;
 

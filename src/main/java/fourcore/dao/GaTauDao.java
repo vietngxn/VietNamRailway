@@ -14,7 +14,6 @@ public class GaTauDao {
     ArrayList<Ga> danhSachGaTau = new ArrayList<>();
     ArrayList<String> danhSachTenGa = new ArrayList<>();
 
-
     public String getGaDi() throws SQLException {
         Statement myStmt = databaseConnector.connect();
         String query = "select tenGa from ga where cuLy=0";

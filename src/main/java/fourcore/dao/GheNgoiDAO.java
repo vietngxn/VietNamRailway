@@ -72,7 +72,6 @@ public class GheNgoiDAO {
         return listGheTrenChuyenTau;
     }
 
-
     public GheNgoi getGheBangMaGhe(String maGheInput) throws SQLException {
         for (GheNgoi g : listGheNgoi) {
             if (g.getMaGheNgoi().equals(maGheInput)) {
