@@ -3,6 +3,7 @@ package fourcore.Entity;
 public class LoaiToaTau {
 	private String maLoaiToaTau;
 	private String tenLoaiToaTau;
+	private double giaCuoc;
 
 	public String getMaLoaiToaTau() {
 		return maLoaiToaTau;
@@ -18,6 +19,20 @@ public class LoaiToaTau {
 
 	public void setTenLoaiToaTau(String tenLoaiToaTau) {
 		this.tenLoaiToaTau = tenLoaiToaTau;
+	}
+
+	public double getGiaCuoc() {
+		return giaCuoc;
+	}
+
+	public void setGiaCuoc(double giaCuoc) {
+		this.giaCuoc = giaCuoc;
+	}
+
+	public LoaiToaTau(String maLoaiToaTau, String tenLoaiToaTau, double giaCuoc) {
+		setMaLoaiToaTau(maLoaiToaTau);
+		setTenLoaiToaTau(tenLoaiToaTau);
+		setGiaCuoc(giaCuoc);
 	}
 
 	public LoaiToaTau(String maLoaiToaTau, String tenLoaiToaTau) {

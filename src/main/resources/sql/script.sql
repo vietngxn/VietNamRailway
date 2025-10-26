@@ -189,10 +189,17 @@ CREATE TABLE DoiTuongGiamGia (
 );
 
 -- ======================================
--- BẢNG HÓA ĐƠN
+-- BẢNG HÓA ĐƠN - Loại Hóa Dơn 
 -- ======================================
+CREATE TABLE LoaiHoaDon (
+    maLoaiHoaDon NVARCHAR(20) PRIMARY KEY,
+	tenLoaiHoaDon nvarchar(100) not null,
+	ghiChu nvarchar(100),
+);
+
 CREATE TABLE HoaDon (
     maHoaDon NVARCHAR(20) PRIMARY KEY,
+	maLoaiHoaDon nvarchar(20) not null,
     maNhanVien NVARCHAR(20) NOT NULL,
 	tenKhachHangThanhToan nvarchar(100) not null,
 	emailKhachHangThanhToan NVARCHAR(100) NOT NULL,
@@ -200,8 +207,10 @@ CREATE TABLE HoaDon (
 	sdtKhachHangThanhToan NVARCHAR(20) NOT NULL,
     ngayThanhToan DATETIME DEFAULT GETDATE() NOT NULL,
     tongTien DECIMAL(18,2) DEFAULT 0,
-    FOREIGN KEY (maNhanVien) REFERENCES NhanVien(maNhanVien)
+    FOREIGN KEY (maNhanVien) REFERENCES NhanVien(maNhanVien),
+	FOREIGN KEY (maLoaiHoaDon) REFERENCES LoaiHoaDon(maLoaiHoaDon),
 );
+
 
 -- ======================================
 -- BẢNG VÉ TÀU
@@ -432,10 +441,16 @@ INSERT INTO DoiTuongGiamGia (maDoiTuongGiamGia, tenDoiTuongGiamGia, giaTriPhanTr
 (N'DT01', N'Học sinh – sinh viên', 5, N'kích hoạt'),
 (N'DT02', N'Người lớn tuổi', 10, N'kích hoạt');
 
+INSERT INTO LoaiHoaDon (maLoaiHoaDon, tenLoaiHoaDon, ghiChu)
+VALUES
+(N'LHD01', N'Vé cá nhân', N'Áp dụng cho khách mua dưới 10 vé'),
+(N'LHD02', N'Vé tập thể', N'Áp dụng cho khách mua từ 10 vé trở lên');
+
+
 -- Dữ liệu mẫu cho bảng HoaDon (đã thêm đầy đủ các trường)
-INSERT INTO HoaDon (maHoaDon, maNhanVien, tenKhachHangThanhToan, emailKhachHangThanhToan, cccdKhachHangThanhToan, sdtKhachHangThanhToan, ngayThanhToan, tongTien) VALUES
-(N'HD001', N'NV001', N'Nguyễn Văn A', N'nguyenvana@example.com', N'079123456789', N'0912345678', '2025-10-18 14:30:00', 500000),
-(N'HD002', N'NV002', N'Trần Thị B', N'tranthib@example.com', N'079987654321', N'0987654321', '2025-10-18 15:00:00', 700000);
+INSERT INTO HoaDon (maHoaDon, maLoaiHoaDon, maNhanVien, tenKhachHangThanhToan, emailKhachHangThanhToan, cccdKhachHangThanhToan, sdtKhachHangThanhToan, ngayThanhToan, tongTien) VALUES
+(N'HD001',N'LHD01', N'NV001', N'Nguyễn Văn A', N'nguyenvana@example.com', N'079123456789', N'0912345678', '2025-10-18 14:30:00', 500000),
+(N'HD002',N'LHD02', N'NV002', N'Trần Thị B', N'tranthib@example.com', N'079987654321', N'0987654321', '2025-10-18 15:00:00', 700000);
 
 
 -- Dữ liệu mẫu cho bảng Ve

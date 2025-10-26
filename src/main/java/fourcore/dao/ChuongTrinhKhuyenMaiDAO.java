@@ -32,7 +32,7 @@ public class ChuongTrinhKhuyenMaiDAO {
 			KhuyenMai khuyenMai = new KhuyenMai(maKhuyenMai, tenChuongTrinh, trangThai, dieuKienApDung,
 					giaTriPhanTramKhuyenMai, ngayBatDau, ngayKetThuc);
 			listKhuyenMai.add(khuyenMai);
-//            	maKhuyenMai,tenChuongTrinh,trangThaiKhuyenMai,dieuKienApDung,iaTriPhanTramKhuyenMai,ngayBatDau,ngayKetThuc)
+			// maKhuyenMai,tenChuongTrinh,trangThaiKhuyenMai,dieuKienApDung,iaTriPhanTramKhuyenMai,ngayBatDau,ngayKetThuc)
 		}
 
 		return listKhuyenMai;

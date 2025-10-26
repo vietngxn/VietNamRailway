@@ -4,7 +4,6 @@ public class ToaTau {
     private String maToaTau;
     private String tenToaTau;
     private int soGhe;
-    private String trangThai;
     private LoaiToaTau loaiToaTau;
 
 
@@ -33,17 +32,12 @@ public class ToaTau {
     public void setSoGhe(int soGhe) {
         this.soGhe = soGhe;
     }
-    public String getTrangThai() {
-        return trangThai;
-    }
-    public void setTrangThai(String trangThai) {
-        this.trangThai = trangThai;
-    }
-    public ToaTau(String maToaTau, String tenToaTau, int soGhe,  String trangThai,LoaiToaTau loaiToaTau) {
+
+    public ToaTau(String maToaTau, String tenToaTau, int soGhe,LoaiToaTau loaiToaTau) {
         setMaToaTau(maToaTau);
         setTenToaTau(tenToaTau);
         setSoGhe(soGhe);
-        setTrangThai(trangThai);
+
         setLoaiToaTau(loaiToaTau);
     }
     public ToaTau() {

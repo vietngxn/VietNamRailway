@@ -1,8 +1,9 @@
 package fourcore.Entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class ChuyenTau {
+public class ChuyenTau implements Serializable {
     private String maChuyenTau;
     private Tau tau;
     private HanhTrinh hanhTrinh;

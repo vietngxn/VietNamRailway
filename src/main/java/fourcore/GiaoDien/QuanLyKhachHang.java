@@ -1,6 +1,11 @@
 package fourcore.GiaoDien;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -1164,6 +1169,40 @@ public class QuanLyKhachHang extends Application {
 			}
 		});
 		
+		btn_capnhat.setOnMouseClicked(e-> {
+			if(hangchon.size() ==0 || hangchon.size() > 1)
+			{
+				System.out.println("Lỗi");
+			}
+			else {
+				 GridPane selectedRow = hangchon.get(0);
+				 
+				 String maKH = ((Label)((StackPane)selectedRow.getChildren().get(0)).getChildren().get(0)).getText();
+			     String hoTen = ((Label)((StackPane)selectedRow.getChildren().get(1)).getChildren().get(0)).getText();
+			     String sdt = ((Label)((StackPane)selectedRow.getChildren().get(2)).getChildren().get(0)).getText();
+			     String email = ((Label)((StackPane)selectedRow.getChildren().get(3)).getChildren().get(0)).getText();
+			     String cccdPassport = ((Label)((StackPane)selectedRow.getChildren().get(4)).getChildren().get(0)).getText();
+			     String doiTuong = ((Label)((StackPane)selectedRow.getChildren().get(5)).getChildren().get(0)).getText();
+			     
+			     KhachHang kh = new KhachHang(maKH, hoTen, sdt, email, cccdPassport, cccdPassport, doiTuong);
+			     File file = new File("KhachHang.dat");
+			        if (file.exists()) {
+			            file.delete(); 
+			        }
+			     try {
+					ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("KhachHang.dat"));
+					oos.writeObject(kh);
+					
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			     
+			}
+		});
 		noiDungChinh.getChildren().add(layout_button);
 		
 	}

@@ -65,17 +65,21 @@ public class BanVe extends Application {
 	private VBox radio_layout1;
 	private VBox radio_layout2;
 	private RadioButton rb_motchieu;
-	private RadioButton rb_khuhoi;
+	public RadioButton rb_khuhoi;
 	private VBox layout_btn_timkiem = null;
 	private Button btn_timkiem;
-	private DatePicker date1;
+	public DatePicker date1;
 	private Font Font2;
-	private DatePicker date;
+    public DatePicker date;
 	private Stage window = new Stage();
     GaTauDao gaTauDao = new GaTauDao();
     ArrayList<String> dsTenGa = gaTauDao.getDanhSachTenGaTau();
     String gaDi = gaTauDao.getGaDi();
     BorderPane root = new BorderPane();
+    ComboBox<String> comboBox1 = new ComboBox<>();
+    ComboBox<String> comboBox2 = new ComboBox<>();
+    public ToggleGroup loaive = new ToggleGroup();
+    public Label thongBao =  new Label();
     public BanVe() throws SQLException {
     }
 
@@ -230,10 +234,13 @@ public class BanVe extends Application {
 		//btn TimKiem
 		layout_btn_timkiem = new VBox();
 		layout_btn_timkiem.setPrefSize(400, 50);
-        btn_timkiem = new Button("Tìm Kiếm");
+        btn_timkiem = new Button("Tìm kiếm");
         btn_timkiem.setPrefSize(200, 50);
         InputStream is1 = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-SemiBold.ttf");
-        Font font_timkiem = Font.loadFont(is1, 30);
+        InputStream is2 = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-SemiBold.ttf");
+        Font font_timkiem = Font.loadFont(is1, 20);
+        Font font_thongBao = Font.loadFont(is2, 15);
+
         btn_timkiem.setFont(font_timkiem);
 
         btn_timkiem.setPadding(new Insets(5));
@@ -244,6 +251,13 @@ public class BanVe extends Application {
                         "-fx-border-radius: 20px;"+
                         "-fx-cursor : hand;"
         );
+
+        thongBao = new Label("");
+        thongBao.setPrefSize(400, 50);
+        thongBao.setPadding(new Insets(5));
+        thongBao.setFont(font_thongBao);
+        thongBao.setStyle("");
+        layout_btn_timkiem.getChildren().add(thongBao);
         layout_btn_timkiem.getChildren().add(btn_timkiem);
         layout_btn_timkiem.setTranslateX(350);
         layout_btn_timkiem.setTranslateY(-100);
@@ -276,7 +290,7 @@ public class BanVe extends Application {
 		ObservableList<String> items = FXCollections.observableArrayList(gaDi);
 
 //		ComboBox<String> comboBox1 = createSearchableComboBox(items);
-        ComboBox<String> comboBox1 = new ComboBox(items);
+        comboBox1 = new ComboBox(items);
 	    comboBox1.setPromptText("Ga đi");
 	    comboBox1.setPrefWidth(300);
 	    //comboBox1.setStyle("-fx-background-color  : rgb(121,217,225)");
@@ -295,7 +309,7 @@ public class BanVe extends Application {
 
 
 //		ComboBox<String> combobox = createSearchableComboBox(item);
-        ComboBox<String> comboBox2 = new ComboBox(item);
+        comboBox2 = new ComboBox(item);
 
         comboBox2.setPromptText("Ga đến");
         comboBox2.setPrefWidth(300);
@@ -312,13 +326,12 @@ public class BanVe extends Application {
 		center_layout.getChildren().add(center_layout1);
 		noiDungChinh.getChildren().add(center_layout);
 	}
-    public void setDataForComboBox(ComboBox<String> comboBox, ArrayList<String> dataList) {
-        ObservableList<String> items = FXCollections.observableArrayList(dataList);
-        comboBox.setItems(items);
+    public ComboBox getComboBox1() {
+        return comboBox1;
     }
-
-
-
+    public ComboBox getComboBox2() {
+        return comboBox2;
+    }
 	public void create_combobox_layout2()
 	{
 		//combo 3
@@ -362,7 +375,7 @@ public class BanVe extends Application {
 	public void create_radio_box()
 	{
 		radio_layout = new HBox();
-		ToggleGroup loaive = new ToggleGroup();
+        loaive = new ToggleGroup();
 		
 		InputStream is = getClass().getResourceAsStream("/fonts/Inter/static/Inter_18pt-Bold.ttf");
 		Font font_combobox = Font.loadFont(is, 15);
@@ -370,6 +383,7 @@ public class BanVe extends Application {
 		radio_layout1 = new VBox();
 		
 		rb_motchieu = new RadioButton("Một Chiều");
+        rb_motchieu.setUserData("motchieu");
 		rb_motchieu.setPrefSize(150,30);
 		rb_motchieu.setStyle("-fx-font-size:15px;-fx-font-weight:bold;");
 		rb_motchieu.setToggleGroup(loaive);
@@ -381,6 +395,7 @@ public class BanVe extends Application {
 		radio_layout2 = new VBox();
 		
 		rb_khuhoi = new RadioButton("Khứ Hồi");
+        rb_khuhoi.setUserData("khuhoi");
 		rb_khuhoi.setFont(font_combobox);
 		rb_khuhoi.setPrefSize(150,30);
 		rb_khuhoi.setToggleGroup(loaive);

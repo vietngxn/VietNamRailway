@@ -144,7 +144,7 @@ public class GiaoDienHoanTraVe extends Application {
 			Label lbl = labels[i];
 			lbl.setStyle(baseStyle);
 
-			if (i == 5) { // trạng thái
+			if (i == 6) { // trạng thái
 				String text = lbl.getText().toLowerCase();
 				if (text.equals("sẵn sàng"))
 					lbl.setStyle(baseStyle + "-fx-font-size: 18px; -fx-text-fill: #009D75;");
@@ -873,6 +873,7 @@ public class GiaoDienHoanTraVe extends Application {
 
 			pnlDataHoanTraVe = new VBox(10);
 			pnlDataHoanTraVe.setAlignment(Pos.CENTER);
+			pnlDataHoanTraVe.getChildren().clear();
 			pnlDataHoanTraVe = loadDuLieuLenTable();
 
 			// === TẠO SCROLLPANE ===
@@ -1032,11 +1033,15 @@ public class GiaoDienHoanTraVe extends Application {
 
 	public VBox loadDuLieuLenTable() throws SQLException {
 		dao = new VeDAO();
-		list = dao.getListHoanVe();
+//		list = dao.getListHoanVe();
+//		list.removeAll(list);
+		list = dao.getListHoanVe(); 
+		
 		VBox box = new VBox(10);
 		for (Ve x : list) {
 			LoaiHoaDonDAO lhdDao = new LoaiHoaDonDAO();
 			String tenloai = lhdDao.getLoaiHoaDonTheoMaVe(x.getMaVeTau());
+			System.out.println(tenloai);
 			box.getChildren()
 					.add(taoDataChoTableHoanVe(x.getMaVeTau(), x.getChuyenTau().getMaChuyenTau(),
 							x.getGaDi() + " - " + x.getGaDen(),

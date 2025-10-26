@@ -67,7 +67,7 @@ public class TrangChu extends Application {
     private ImageView moTaDoanhThuIcon;
     private HBox xemLichSuVeBox;
     VBox noiDungWrapper = new VBox(10);
-
+    BanVeControl banVeControl = new BanVeControl();
     @Override
     public void start(Stage primaryStage) {
         try {
@@ -1012,8 +1012,9 @@ public class TrangChu extends Application {
                 lichSuVeControl.handleMenuTrangChuSelect(root);
             });
             banVeBox.setOnMouseClicked(event -> {
-                BanVeControl banVeControl = new BanVeControl();
+
                 banVeControl.handleMenuTrangChuSelect(root);
+                banVeControl.timKiemChuyenTauHandle(root);
             });
             quanLiKhachHangBox.setOnMouseClicked(event -> {
                 KhachHangControl khachHangControl = new KhachHangControl();

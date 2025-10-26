@@ -196,6 +196,7 @@ public class GiaoDienDoiVe extends Application {
 				    -fx-padding: 8 12 8 12;
 				""";
 
+		// -fx-padding: 8 12 8 12;
 		String rightStyle = """
 				    -fx-background-color: #E0E0E0;
 				    -fx-background-radius: 0 10px 10px 0;
@@ -280,17 +281,19 @@ public class GiaoDienDoiVe extends Application {
 
 			scrollPaneMenu = new ScrollPane();
 			danhSachMenuItem = new VBox();
-//	            Font labelFont = Font.loadFont(getClass().getResourceAsStream("/fonts/Inter/static/Inter_18pt-Bold.ttf"),20);
+			// Font labelFont =
+			// Font.loadFont(getClass().getResourceAsStream("/fonts/Inter/static/Inter_18pt-Bold.ttf"),20);
 
-//				======================
-//				||	QUAN LI VE TAU	||
-//				======================
+			// ======================
+			// || QUAN LI VE TAU ||
+			// ======================
 			quanLiVeTauMenu = new HBox();
 			quanLiVeTauMenu.setSpacing(102);
 			quanLiVeTauMenu.setPadding(new Insets(20, 95, 20, 20));
 			quanLiVeTauMenu.setStyle("-fx-alignment: center-left;");
 
-//				quanLiVeTauIcon = new Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
+			// quanLiVeTauIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
 			quanLiVeTauIconView = new ImageView(getClass().getResource("/img/ticket.png").toExternalForm());
 			quanLiVeTauIconView.setFitWidth(30);
 			quanLiVeTauIconView.setFitHeight(30);
@@ -311,7 +314,8 @@ public class GiaoDienDoiVe extends Application {
 				labelFont = Font.font("System", FontWeight.BOLD, 20); // fallback
 			}
 
-//				showMenuPhuIcon = new Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
+			// showMenuPhuIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
 			String showMenuPhuIconSource = "/img/chevron-down.png";
 			showMenuPhuIconView = new ImageView(getClass().getResource(showMenuPhuIconSource).toExternalForm());
 			showMenuPhuIconView.setFitWidth(20);
@@ -396,15 +400,16 @@ public class GiaoDienDoiVe extends Application {
 
 			});
 
-//					======================
-//					||QUAN LI KHACH HANG||
-//					======================
+			// ======================
+			// ||QUAN LI KHACH HANG||
+			// ======================
 			quanLiKhachHangMenu = new HBox();
 			quanLiKhachHangMenu.setSpacing(102);
 			quanLiKhachHangMenu.setPadding(new Insets(15, 95, 15, 20));
 			quanLiKhachHangMenu.setStyle("-fx-alignment: center-left;");
 
-//				quanLiVeTauIcon = new Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
+			// quanLiVeTauIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
 			quanLiKhachHangIconView = new ImageView(getClass().getResource("/img/user-group.png").toExternalForm());
 			quanLiKhachHangIconView.setFitWidth(30);
 			quanLiKhachHangIconView.setFitHeight(30);
@@ -423,20 +428,22 @@ public class GiaoDienDoiVe extends Application {
 				labelFont = Font.font("System", FontWeight.BOLD, 20); // fallback
 			}
 
-//				showMenuPhuIcon = new Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
+			// showMenuPhuIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
 			quanLiKhachHangMenu.getChildren().addAll(quanLiKhachHangIconView, quanLiKhachHangLabel);
 
 			danhSachMenuItem.getChildren().add(quanLiKhachHangMenu);
 
-//				======================
-//				||QUAN LI HOA DON   ||
-//				======================
+			// ======================
+			// ||QUAN LI HOA DON ||
+			// ======================
 			quanLiHoaDonMenu = new HBox();
 			quanLiHoaDonMenu.setSpacing(102);
 			quanLiHoaDonMenu.setPadding(new Insets(15, 95, 15, 20));
 			quanLiHoaDonMenu.setStyle("-fx-alignment: center-left;");
 
-//				quanLiVeTauIcon = new Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
+			// quanLiVeTauIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
 			quanLiHoaDonIconView = new ImageView(getClass().getResource("/img/receipt-tax.png").toExternalForm());
 			quanLiHoaDonIconView.setFitWidth(30);
 			quanLiHoaDonIconView.setFitHeight(30);
@@ -461,15 +468,16 @@ public class GiaoDienDoiVe extends Application {
 			danhSachMenuItem.getChildren().add(quanLiHoaDonMenu);
 			scrollPaneMenu.setContent(danhSachMenuItem);
 
-//				======================
-//				||QUAN LI THONG KE  ||
-//				======================
+			// ======================
+			// ||QUAN LI THONG KE ||
+			// ======================
 			quanLiThongKeMenu = new HBox();
 			quanLiThongKeMenu.setSpacing(102);
 			quanLiThongKeMenu.setPadding(new Insets(15, 95, 15, 20));
 			quanLiThongKeMenu.setStyle("-fx-alignment: center-left;");
 
-//				quanLiVeTauIcon = new Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
+			// quanLiVeTauIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
 			quanLiThongKeIconView = new ImageView(
 					getClass().getResource("/img/presentation-chart-bar.png").toExternalForm());
 			quanLiThongKeIconView.setFitWidth(30);
@@ -489,7 +497,8 @@ public class GiaoDienDoiVe extends Application {
 				labelFont = Font.font("System", FontWeight.BOLD, 20); // fallback
 			}
 
-//				showMenuPhuIcon = new Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
+			// showMenuPhuIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
 			showMenuPhuIconSource = "/img/chevron-down.png";
 			showMenuPhuIconView = new ImageView(getClass().getResource(showMenuPhuIconSource).toExternalForm());
 			showMenuPhuIconView.setFitWidth(20);
@@ -572,15 +581,16 @@ public class GiaoDienDoiVe extends Application {
 
 			});
 
-//				=======================
-//				||QUAN LI NHAN VIEN  ||
-//				=======================
+			// =======================
+			// ||QUAN LI NHAN VIEN ||
+			// =======================
 			quanLiNhanVienMenu = new HBox();
 			quanLiNhanVienMenu.setSpacing(102);
 			quanLiNhanVienMenu.setPadding(new Insets(15, 95, 15, 20));
 			quanLiNhanVienMenu.setStyle("-fx-alignment: center-left;");
 
-//				quanLiVeTauIcon = new Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
+			// quanLiVeTauIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
 			quanLiNhanVienIconView = new ImageView(getClass().getResource("/img/user-circle.png").toExternalForm());
 			quanLiNhanVienIconView.setFitWidth(30);
 			quanLiNhanVienIconView.setFitHeight(30);
@@ -599,21 +609,23 @@ public class GiaoDienDoiVe extends Application {
 				labelFont = Font.font("System", FontWeight.BOLD, 20); // fallback
 			}
 
-//				showMenuPhuIcon = new Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
+			// showMenuPhuIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
 			quanLiNhanVienMenu.getChildren().addAll(quanLiNhanVienIconView, quanLiNhanVienLabel);
 
 			danhSachMenuItem.getChildren().add(quanLiNhanVienMenu);
 			scrollPaneMenu.setContent(danhSachMenuItem);
 
-//				=======================
-//				||QUAN LI CTKM        ||
-//				=======================
+			// =======================
+			// ||QUAN LI CTKM ||
+			// =======================
 			quanLiCTKMMenu = new HBox();
 			quanLiCTKMMenu.setSpacing(102);
 			quanLiCTKMMenu.setPadding(new Insets(15, 95, 15, 20));
 			quanLiCTKMMenu.setStyle("-fx-alignment: center-left;");
 
-//			quanLiVeTauIcon = new Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
+			// quanLiVeTauIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
 			quanLiCTKMIconView = new ImageView(getClass().getResource("/img/tag.png").toExternalForm());
 			quanLiCTKMIconView.setFitWidth(30);
 			quanLiCTKMIconView.setFitHeight(30);
@@ -632,21 +644,23 @@ public class GiaoDienDoiVe extends Application {
 				labelFont = Font.font("System", FontWeight.BOLD, 20); // fallback
 			}
 
-//			showMenuPhuIcon = new Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
+			// showMenuPhuIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
 			quanLiCTKMMenu.getChildren().addAll(quanLiCTKMIconView, quanLiCTKMLabel);
 
 			danhSachMenuItem.getChildren().add(quanLiCTKMMenu);
 			scrollPaneMenu.setContent(danhSachMenuItem);
 
-//				=======================
-//				||QUAN LI CHUYEN TAU ||
-//				=======================
+			// =======================
+			// ||QUAN LI CHUYEN TAU ||
+			// =======================
 			quanLiChuyenTauMenu = new HBox();
 			quanLiChuyenTauMenu.setSpacing(102);
 			quanLiChuyenTauMenu.setPadding(new Insets(15, 95, 15, 20));
 			quanLiChuyenTauMenu.setStyle("-fx-alignment: center-left;");
 
-//			quanLiVeTauIcon = new Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
+			// quanLiVeTauIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
 			quanLiChuyenTauIconView = new ImageView(
 					getClass().getResource("/img/clipboard-check.png").toExternalForm());
 			quanLiChuyenTauIconView.setFitWidth(30);
@@ -666,7 +680,8 @@ public class GiaoDienDoiVe extends Application {
 				labelFont = Font.font("System", FontWeight.BOLD, 20); // fallback
 			}
 
-//			showMenuPhuIcon = new Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
+			// showMenuPhuIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
 			quanLiChuyenTauMenu.getChildren().addAll(quanLiChuyenTauIconView, quanLiChuyenTauLabel);
 
 			danhSachMenuItem.getChildren().add(quanLiChuyenTauMenu);
@@ -678,7 +693,7 @@ public class GiaoDienDoiVe extends Application {
 			scrollPaneMenu.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
 			menuList.getChildren().add(scrollPaneMenu);
-//	          USER BOX
+			// USER BOX
 
 			HBox userBox = new HBox();
 			userIcon = new ImageView(getClass().getResource("/img/user-circle.png").toExternalForm());
@@ -920,15 +935,6 @@ public class GiaoDienDoiVe extends Application {
 				}
 			});
 
-			BorderPane root = new BorderPane();
-			root.setLeft(menuList);
-			root.setCenter(noiDungChinh);
-
-			Scene scene = new Scene(root, 1800, 900);
-			primaryStage.setScene(scene);
-			primaryStage.setTitle("Hệ thống quản lý vé tàu");
-			primaryStage.setFullScreen(true);
-			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

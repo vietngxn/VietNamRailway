@@ -28,9 +28,8 @@ public class ChiTietHoaDonDAO {
 			double thueVAT = rs.getDouble(6);
 			double thanhTien = rs.getDouble(7);
 
-			HoaDonDAO hdDao = new HoaDonDAO();
-			HoaDon hd = hdDao.getHoaDonBangMaVe(maveTau);
-			listCTHoaDon.add(new ChiTietHoaDon(maCTHoaDon, hd, new Ve(maveTau), moTa, donGia, thueVAT, thanhTien));
+			listCTHoaDon.add(new ChiTietHoaDon(maCTHoaDon, new HoaDon(maHoaDon, null, null, maHoaDon, maHoaDon, maHoaDon, maHoaDon, null, 0.0), new Ve(maveTau), moTa, donGia, thueVAT,
+					thanhTien));
 		}
 
 		return listCTHoaDon;

@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 public class KhachHangControl {
 
-    public void handleMenuTrangChuSelect(BorderPane root){
+    public void handleMenuTrangChuSelect(BorderPane root) {
         QuanLyKhachHang gdQuanLyKhachHang = new QuanLyKhachHang();
         Stage quanLyKhachHangStage = new Stage();
         gdQuanLyKhachHang.start(quanLyKhachHangStage);

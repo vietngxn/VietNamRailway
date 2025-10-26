@@ -7,7 +7,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class NhanVienControl {
-    public void handleMenuTrangChuSelect(BorderPane root){
+    public void handleMenuTrangChuSelect(BorderPane root) {
         QuanLiNhanVien qlyNhanVien = new QuanLiNhanVien();
         Stage stage = new Stage();
         qlyNhanVien.start(stage);
