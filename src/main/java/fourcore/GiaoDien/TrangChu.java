@@ -68,6 +68,10 @@ public class TrangChu extends Application {
     private HBox xemLichSuVeBox;
     VBox noiDungWrapper = new VBox(10);
     BanVeControl banVeControl = new BanVeControl();
+
+    public TrangChu() throws SQLException {
+    }
+
     @Override
     public void start(Stage primaryStage) {
         try {
