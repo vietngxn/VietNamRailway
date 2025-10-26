@@ -110,8 +110,7 @@ public class GiaoDienCapLaiVe extends Application {
     private TextField txt_timkiem;
     private Button btnCapVe;
     private Pane pnlCapLaiVe;
-    private VeDAO vedao1;
-    private ArrayList<Ve> list;
+    private ArrayList<Ve> list = null;
     private Label lbl_tenTau;
     private Label lbl_ngaygiodi;
     private Label lbl_gadigaden;
@@ -127,6 +126,8 @@ public class GiaoDienCapLaiVe extends Application {
     private VBox layout_chiTiet;
     private Ve vechon = new Ve();
     private boolean dangCapNhatTrangThai = false;
+	private VeDAO vedao;
+	
 
     // private ArrayList<Ve> list = vedao.themNhieuVeTau();
 
@@ -249,8 +250,8 @@ public class GiaoDienCapLaiVe extends Application {
                     -fx-font-family: "Kanit";
                     -fx-padding: 8 12 8 12;
                 """;
-        vedao1 = new VeDAO();
-        Ve ve1 = vedao1.getVeBangMaVe(maVeTau);
+        
+        Ve ve1 = vedao.getVeBangMaVe(maVeTau);
         pnlsubCT1.addRow(0, taoSubCT1("Họ tên", ve1.getKhachHang().getHoten(), leftStyle, rightStyle));
         pnlsubCT1.addRow(1,
                 taoSubCT1("Đối tượng", ve1.getDoiTuongGiamGia().getTenDoiTuongGiamGia(), leftStyle, rightStyle));
@@ -324,34 +325,12 @@ public class GiaoDienCapLaiVe extends Application {
                             if (vechon.getTrangThaiVe().equalsIgnoreCase("Hoạt Động")) {
                                 s = "Kết Thúc";
                             }
-                            if (vedao1.ThayDoiTrangThaiVe(vechon.getMaVeTau(), s)) {
+                            if (vedao.ThayDoiTrangThaiVe(vechon.getMaVeTau(), s)) {
                                 System.out.println("Cập nhật thành công");
 
                                 // Refresh danh sách
                                 pnlDataDoiVe.getChildren().clear();
-                                list = vedao1.getListVe();
-                                for (Ve x : list) {
-                                    pnlDataDoiVe.getChildren().add(
-                                            taoDataChoTableCapLaiVe(
-                                                    x.getMaVeTau(),
-                                                    x.getChuyenTau().getMaChuyenTau(),
-                                                    x.getGaDi() + " - " + x.getGaDen(),
-                                                    x.getNgayGioDi(),
-                                                    x.getNgayGioDen(),
-                                                    x.getSoToa(),
-                                                    x.getSoTang(),
-                                                    x.getSoGhe(),
-                                                    x.getLoaiVe(),
-                                                    x.getKhachHang().getCccd(),
-                                                    x.getGiaVe(),
-                                                    x.getGhiChu(),
-                                                    x.getTrangThaiDoiVe(),
-                                                    x.getTrangThaiVe(),
-                                                    x.getChuyenTau().getMaChuyenTau(),
-                                                    x.getKhachHang().getMaKhachHang(),
-                                                    x.getKhuyenMai().getMaKhuyenMai(),
-                                                    x.getDoiTuongGiamGia().getMaDoiTuongGiamGia()));
-                                }
+                                hienThi();
 
                                 // Đóng layout_trangthai sau khi cập nhật
                                 if (layout_trangthai != null && layout_trangthai.getParent() != null) {
@@ -452,6 +431,8 @@ public class GiaoDienCapLaiVe extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
+        	vedao = new VeDAO();
+        	list = vedao.getListVe();
             menuList = new VBox();
             menuList.setStyle("-fx-background-color: #F7F7F7;");
             menuList.setPrefWidth(500);
@@ -1031,29 +1012,7 @@ public class GiaoDienCapLaiVe extends Application {
             pnlDataDoiVe = new VBox(10);
             pnlDataDoiVe.setAlignment(Pos.CENTER);
 
-            list = vedao1.getListVe();
-            for (Ve x : list) {
-                pnlDataDoiVe.getChildren().add(
-                        taoDataChoTableCapLaiVe(
-                                x.getMaVeTau(),
-                                x.getChuyenTau().getMaChuyenTau(),
-                                x.getGaDi() + " - " + x.getGaDen(),
-                                x.getNgayGioDi(), // ngayGioDi (LocalDateTime)
-                                x.getNgayGioDen(), // ngayGioDen (LocalDateTime)
-                                x.getSoToa(), // soToa
-                                x.getSoTang(), // soTang
-                                x.getSoGhe(), // soGhe
-                                x.getLoaiVe(), // loaiVe
-                                x.getKhachHang().getCccd(), // maGiayTo
-                                x.getGiaVe(), // giaVe
-                                x.getGhiChu(), // ghiChu
-                                x.getTrangThaiDoiVe(), // trangThaiDoiVe
-                                x.getTrangThaiVe(), // trangThaiVe
-                                x.getChuyenTau().getMaChuyenTau(), // maChuyenTau
-                                x.getKhachHang().getMaKhachHang(), // maKhachHang
-                                x.getKhuyenMai().getMaKhuyenMai(), // maKhuyenMai
-                                x.getDoiTuongGiamGia().getMaDoiTuongGiamGia()));
-            }
+            hienThi();
 
             // === TẠO SCROLLPANE ===
             scrollPane = new ScrollPane(pnlDataDoiVe);
@@ -1099,8 +1058,8 @@ public class GiaoDienCapLaiVe extends Application {
                     String viTriGhe = Integer.valueOf(vechon.getSoGhe()).toString();
                     String trangThai = vechon.getTrangThaiVe();
 
-                    LoaiTuongTac_Dao lttdao = new LoaiTuongTac_Dao();
                     try {
+                    	LoaiTuongTac_Dao lttdao = new LoaiTuongTac_Dao();
                         ArrayList<LoaiTuongTacVe> listloaitt = lttdao.getList();
 
                         LoaiTuongTacVe lttv1 = new LoaiTuongTacVe();
@@ -1114,12 +1073,12 @@ public class GiaoDienCapLaiVe extends Application {
                         int sl = listtt.size() + 1;
                         if (sl >= 0 && sl <= 9) {
                             s = "TT00" + sl;
-                        } else if (sl >= 100 && sl <= 99) {
+                        } else if (sl >= 10 && sl <= 99) {
                             s = "TT0" + sl;
                         } else
                             s = "TT" + sl;
 
-                        VeDAO vedao = new VeDAO();
+                        
                         Ve ve1 = vedao.getVeBangMaVe(mave);
                         LichSuTuongTacVe lstt = new LichSuTuongTacVe();
                         lstt.setMaTuongTac(s);
@@ -1187,6 +1146,32 @@ public class GiaoDienCapLaiVe extends Application {
         }
     }
 
+    public void hienThi() throws SQLException
+    {
+    	
+        for (Ve x : list) {
+            pnlDataDoiVe.getChildren().add(
+                    taoDataChoTableCapLaiVe(
+                            x.getMaVeTau(),
+                            x.getChuyenTau().getMaChuyenTau(),
+                            x.getGaDi() + " - " + x.getGaDen(),
+                            x.getNgayGioDi(), // ngayGioDi (LocalDateTime)
+                            x.getNgayGioDen(), // ngayGioDen (LocalDateTime)
+                            x.getSoToa(), // soToa
+                            x.getSoTang(), // soTang
+                            x.getSoGhe(), // soGhe
+                            x.getLoaiVe(), // loaiVe
+                            x.getKhachHang().getCccd(), // maGiayTo
+                            x.getGiaVe(), // giaVe
+                            x.getGhiChu(), // ghiChu
+                            x.getTrangThaiDoiVe(), // trangThaiDoiVe
+                            x.getTrangThaiVe(), // trangThaiVe
+                            x.getChuyenTau().getMaChuyenTau(), // maChuyenTau
+                            x.getKhachHang().getMaKhachHang(), // maKhachHang
+                            x.getKhuyenMai().getMaKhuyenMai(), // maKhuyenMai
+                            x.getDoiTuongGiamGia().getMaDoiTuongGiamGia()));
+        }
+    }
     public VBox getNoiDungChinhVe() {
         return this.noiDungChinh;
     }
