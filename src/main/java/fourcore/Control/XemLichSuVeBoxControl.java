@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 
 public class XemLichSuVeBoxControl {
 
-    public void handleMenuTrangChuSelect(BorderPane root){
+    public void handleMenuTrangChuSelect(BorderPane root) {
         GiaoDienLichSuMuaBanDoiVe lichSuMuaBanDoiVe = new GiaoDienLichSuMuaBanDoiVe();
         Stage lichSuMuaBanDoiVeStage = new Stage();
         lichSuMuaBanDoiVe.start(lichSuMuaBanDoiVeStage);

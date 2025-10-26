@@ -34,10 +34,11 @@ public class LoaiToaTau {
 		setTenLoaiToaTau(tenLoaiToaTau);
 		setGiaCuoc(giaCuoc);
 	}
-    public LoaiToaTau(String maLoaiToaTau, String tenLoaiToaTau) {
-        setMaLoaiToaTau(maLoaiToaTau);
-        setTenLoaiToaTau(tenLoaiToaTau);
-    }
+
+	public LoaiToaTau(String maLoaiToaTau, String tenLoaiToaTau) {
+		setMaLoaiToaTau(maLoaiToaTau);
+		setTenLoaiToaTau(tenLoaiToaTau);
+	}
 
 	public LoaiToaTau() {
 	}

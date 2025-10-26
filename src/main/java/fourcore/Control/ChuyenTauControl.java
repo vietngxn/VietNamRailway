@@ -7,7 +7,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class ChuyenTauControl {
-    public void handleMenuTrangChuSelect(BorderPane root){
+    public void handleMenuTrangChuSelect(BorderPane root) {
         QuanLyChuyenTau gdQuanLiChuyenTau = new QuanLyChuyenTau();
         Stage qlChuyenTauStage = new Stage();
         gdQuanLiChuyenTau.start(qlChuyenTauStage);

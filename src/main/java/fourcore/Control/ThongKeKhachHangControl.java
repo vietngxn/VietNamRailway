@@ -7,7 +7,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class ThongKeKhachHangControl {
-    public void handleMenuTrangChuSelect(BorderPane root){
+    public void handleMenuTrangChuSelect(BorderPane root) {
         QuanLiThongKeChuyenTau gdQuanLiThongKe = new QuanLiThongKeChuyenTau();
         gdQuanLiThongKe.setLoaiThongKe("ThongKeKhachHang");
         Stage thongKeKhachHangStage = new Stage();

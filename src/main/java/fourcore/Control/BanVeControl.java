@@ -29,7 +29,6 @@ public class BanVeControl {
     String loaiVeString;
     ChonVe gdChonve = new ChonVe();
 
-
     BanVe gdBanVe = null;
 
     public BanVeControl() throws SQLException {
@@ -89,7 +88,6 @@ public class BanVeControl {
                 }
             }
             if(loaiVeString.equals("khuhoi")){
-
                 dateMotChieu = gdBanVe.date.getValue();
                 dateKhuHoi = gdBanVe.date1.getValue();
                 if(dateMotChieu==null || dateKhuHoi == null){
@@ -131,13 +129,6 @@ public class BanVeControl {
                 try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("listChuyenTauFiltered.dat"))) {
                     oos.writeObject(listInsert);
                     System.out.println("Đã ghi ArrayList vào file thành công!");
-                    System.out.println("size list ghi: " + listInsert.size());
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-                try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("gaDen.dat"))) {
-                    oos.writeObject(gaDen);
-                    System.out.println("Ghi Ga den thanh cong");
                     System.out.println("size list ghi: " + listInsert.size());
                 } catch (IOException ex) {
                     ex.printStackTrace();

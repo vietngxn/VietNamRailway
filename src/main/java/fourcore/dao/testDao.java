@@ -21,16 +21,16 @@ public class testDao {
 //        }
 //    }
 
-//    LoaiTau_DAO ltDAO = new LoaiTau_DAO();
-//    ArrayList<LoaiTau> list;
-//
-//    public static void main(String[] args) throws SQLException {
-//        testDao test = new testDao();
-//        test.list = test.ltDAO.getList();
-//        for (LoaiTau kh : test.list) {
-//            System.out.println(kh.toString());
-//        }
-//    }
+    LoaiTau_DAO ltDAO = new LoaiTau_DAO();
+    ArrayList<LoaiTau> list;
+
+    public static void main(String[] args) throws SQLException {
+        testDao test = new testDao();
+        test.list = test.ltDAO.getList();
+        for (LoaiTau kh : test.list) {
+            System.out.println(kh.toString());
+        }
+    }
 
 //  Tau_DAO tDAO = new Tau_DAO();
 //  ArrayList<Tau> list;
@@ -54,14 +54,14 @@ public class testDao {
 //      }
 //  }
 
-	public static void main(String[] args) throws SQLException {
-		KhuyenMai_Dao dao = new KhuyenMai_Dao();
-		ArrayList<KhuyenMai> ds = dao.getList();
-
-		for (KhuyenMai km : ds) {
-			System.out.println(km.getMaKhuyenMai() + " | " + km.getTenChuongTrinh() + " | "
-					+ km.getGiaTriPhanTramKhuyenMai() + "% | " + km.getNgayBatDau() + " -> " + km.getNgayKetThuc());
-		}
-	}
+//	public static void main(String[] args) throws SQLException {
+////		KhuyenMai_Dao dao = new KhuyenMai_Dao();
+//		ArrayList<KhuyenMai> ds = dao.getList();
+//
+//		for (KhuyenMai km : ds) {
+//			System.out.println(km.getMaKhuyenMai() + " | " + km.getTenChuongTrinh() + " | "
+//					+ km.getGiaTriPhanTramKhuyenMai() + "% | " + km.getNgayBatDau() + " -> " + km.getNgayKetThuc());
+//		}
+//	}
 
 }

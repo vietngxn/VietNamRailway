@@ -13,6 +13,7 @@ public class GheNgoiDAO {
     ArrayList<GheNgoi> listGheNgoi =  new ArrayList<>();
     ArrayList<GheNgoi> listGheNgoiTrenChuyen =   new ArrayList<>();
     ArrayList<GheTrenChuyenTau> listGheTrenChuyenTau = new ArrayList<>();
+    GheNgoi gn;
     TangDAO tangDAO = new TangDAO();
     LoaiGheDAO loaiGheDAO = new LoaiGheDAO();
     KhoangTauDAO khoangTauDAO = new KhoangTauDAO();
@@ -21,10 +22,6 @@ public class GheNgoiDAO {
     public GheNgoiDAO() throws SQLException {
         getListGheNgoi();
         getListTrenChuyenTau();
-    }
-
-    public ArrayList<GheTrenChuyenTau> getListGheTrenChuyenTau() {
-        return listGheTrenChuyenTau;
     }
 
     public ArrayList<GheNgoi> getListGheNgoi() throws SQLException {
@@ -55,6 +52,11 @@ public class GheNgoiDAO {
         }
         return listGheNgoi;
     }
+
+    public ArrayList<GheTrenChuyenTau> getListGheTrenChuyenTau() {
+        return listGheTrenChuyenTau;
+    }
+
     public ArrayList<GheTrenChuyenTau> getListTrenChuyenTau() throws SQLException {
         Statement myStmt = databaseConnector.connect();
         String query = "select * from GheTrenChuyenTau";
@@ -76,7 +78,6 @@ public class GheNgoiDAO {
     }
 
 
-
     public GheNgoi getGheBangMaGhe(String maGheInput) throws SQLException {
         for (GheNgoi g : listGheNgoi) {
             if (g.getMaGheNgoi().equals(maGheInput)) {
@@ -86,6 +87,20 @@ public class GheNgoiDAO {
         return null;
     }
 
+    public ArrayList<GheNgoi> getListGheTrenChuyenByMaChuyen(String maChuyenTauInput) throws SQLException {
+        Statement myStmt = databaseConnector.connect();
+        String query = "select * from GheTrenChuyenTau where maChuyenTau ='" +maChuyenTauInput+"'";
+        ResultSet rs = myStmt.executeQuery(query);
+        while (rs.next()) {
+            String maGheTrenChuyenTau = rs.getString(1);
+            String maChuyenTau = rs.getString(2);
+            String maGheNgoi = rs.getString(3);
+            double giaTienGhe = rs.getDouble(4);
+            String trangThaiGhe = rs.getString(5);
+
+        }
+        return  listGheNgoiTrenChuyen;
+    }
     public GheNgoi getGheBangMaToaVaSoGhe(String maToaInput, int soGheInput) throws SQLException {
         Statement myStmt = databaseConnector.connect();
         String query = "  select * from GheNgoi where maToaTau = '" +maToaInput+"' and soGhe = "+soGheInput+ ";";

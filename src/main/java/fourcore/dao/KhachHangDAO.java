@@ -12,13 +12,12 @@ import java.util.ArrayList;
 public class KhachHangDAO {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
 	ArrayList<KhachHang> listKhachHang = new ArrayList<KhachHang>();
-	public ArrayList<KhachHang> getListKhachHang() throws SQLException
-	{
+
+	public ArrayList<KhachHang> getListKhachHang() throws SQLException {
 		Statement st = databaseConnector.connect();
 		String q = "select * from KhachHang";
 		ResultSet rs = st.executeQuery(q);
-		while(rs.next())
-		{
+		while (rs.next()) {
 			String makh = rs.getString(1);
 			String hoten = rs.getString(2);
 			String sdt = rs.getString(3);
@@ -31,11 +30,12 @@ public class KhachHangDAO {
 		}
 		return listKhachHang;
 	}
+
 	public KhachHang getKhachHangByMa(String maKhachHang) throws SQLException {
 		Statement st = databaseConnector.connect();
 		String q = "select * from KhachHang where maKhachHang = '" + maKhachHang + "'";
 		ResultSet rs = st.executeQuery(q);
-		
+
 		KhachHang kh = null;
 		if (rs.next()) {
 			String makh = rs.getString(1);
@@ -45,10 +45,10 @@ public class KhachHangDAO {
 			String cccd = rs.getString(5);
 			String pp = rs.getString(6);
 			String doiTuong = rs.getString(7);
-			
+
 			kh = new KhachHang(makh, hoten, sdt, email, cccd, pp, doiTuong);
 		}
-		
+
 		return kh;
 	}
 	public boolean themKhachHang(KhachHang kh) throws SQLException {
