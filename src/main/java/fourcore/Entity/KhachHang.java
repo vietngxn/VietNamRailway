@@ -1,6 +1,8 @@
 package fourcore.Entity;
 
-public class KhachHang {
+import java.io.Serializable;
+
+public class KhachHang implements Serializable{
 	private String maKhachHang;
 	private String hoTen;
 	private String sdt;

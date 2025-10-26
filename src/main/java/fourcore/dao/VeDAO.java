@@ -103,7 +103,7 @@ public class VeDAO {
 			DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
 			DoiTuongGiamGia dt = dtDAO.getDoiTuongGiamGiaBangMaDT(maDoiTuongGiamGia);
 			
-			KhuyenMai_Dao kmDAO = new KhuyenMai_Dao();
+			ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
 			KhuyenMai km = kmDAO.getKhuyenMaiBangMa(maKhuyenMai);
 			v = new Ve(maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe,
 					maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, new ChuyenTau(maChuyenTau), kh,
@@ -114,4 +114,11 @@ public class VeDAO {
 		return v;
 	}
 
+	public boolean ThayDoiTrangThaiVe(String mave,String trangthaimoi) throws SQLException
+	{
+		Statement st = database.connect();
+	    String q = "UPDATE Ve SET trangThaiVe = N'" + trangthaimoi + "' WHERE maVeTau = '" + mave + "'";
+	    int rows = st.executeUpdate(q);
+	    return rows > 0;
+	}
 }

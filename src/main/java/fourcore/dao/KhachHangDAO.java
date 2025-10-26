@@ -51,4 +51,39 @@ public class KhachHangDAO {
 		
 		return kh;
 	}
+	public boolean themKhachHang(KhachHang kh) throws SQLException {
+	    Statement st = databaseConnector.connect();
+	    String q = "INSERT INTO KhachHang VALUES ('" 
+	            + kh.getMaKhachHang() + "', N'" 
+	            + kh.getHoten() + "', '" 
+	            + kh.getSdt() + "', '" 
+	            + kh.getEmail() + "', '" 
+	            + kh.getCccd() + "', '" 
+	            + kh.getPassport() + "', N'" 
+	            + kh.getDoiTuong() + "')";
+	    
+	    int kq = st.executeUpdate(q);
+	    return kq > 0; 
+	}
+	
+	public boolean xoaKhachHang(String maKH) throws SQLException {
+	    Statement st = databaseConnector.connect();
+	    String sql = "DELETE FROM KhachHang WHERE maKhachHang = '" + maKH + "'";
+	    int kq = st.executeUpdate(sql);
+	    return kq > 0;
+	}
+	public boolean capNhatKhachHang(KhachHang kh) throws SQLException {
+	    Statement st = databaseConnector.connect();
+	    String q = "UPDATE KhachHang SET "
+	            + "hoTen = N'" + kh.getHoten() + "', "
+	            + "sdt = '" + kh.getSdt() + "', "
+	            + "email = '" + kh.getEmail() + "', "
+	            + "cccd = '" + kh.getCccd() + "', "
+	            + "passport = '" + kh.getPassport() + "', "
+	            + "doiTuong = N'" + kh.getDoiTuong() + "' "
+	            + "WHERE maKhachHang = '" + kh.getMaKhachHang() + "'";
+	    
+	    int kq = st.executeUpdate(q);
+	    return kq > 0; 
+	}
 }
