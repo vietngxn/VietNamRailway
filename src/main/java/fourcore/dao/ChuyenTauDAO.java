@@ -14,12 +14,11 @@ import java.util.ArrayList;
 
 public class ChuyenTauDAO {
     DatabaseConnector databaseConnector = new DatabaseConnector();
-    public ArrayList<ChuyenTau> listChuyenTau = new ArrayList<>();
+    public ArrayList<ChuyenTau> listChuyenTau =  new ArrayList<>();
     Tau_DAO tau_DAO = new Tau_DAO();
     ArrayList<Tau> listTau;
     HanhTrinh_DAO hanhTrinh_DAO = new HanhTrinh_DAO();
     ArrayList<HanhTrinh> listHanhTrinh;
-
     public ChuyenTauDAO() throws SQLException {
         getListChuyenTau();
     }
@@ -35,16 +34,15 @@ public class ChuyenTauDAO {
             String maTau = rs.getString(2);
             String maHanhTrinh = rs.getString(3);
             LocalDateTime ngayGioDi = rs.getTimestamp(4).toLocalDateTime();
-            LocalDateTime ngayGioDen = rs.getTimestamp(5).toLocalDateTime();
+            LocalDateTime ngayGioDen =  rs.getTimestamp(5).toLocalDateTime();
             double giaCuocTrenChuyen = rs.getDouble(6);
             Tau tau = tau_DAO.getTauByMaTau(maTau);
             HanhTrinh hanhTrinh = hanhTrinh_DAO.getById(maHanhTrinh);
-            ChuyenTau chuyenTau = new ChuyenTau(maChuyenTau, tau, hanhTrinh, ngayGioDi, ngayGioDen, giaCuocTrenChuyen);
+            ChuyenTau chuyenTau = new ChuyenTau(maChuyenTau,tau,hanhTrinh,ngayGioDi,ngayGioDen,giaCuocTrenChuyen);
             listChuyenTau.add(chuyenTau);
         }
         return listChuyenTau;
     }
-
     public ChuyenTau getChuyenTauBangMa(String maChuyenTauInput) throws SQLException {
         for (ChuyenTau c : listChuyenTau) {
             if (c.getMaChuyenTau().equals(maChuyenTauInput)) {

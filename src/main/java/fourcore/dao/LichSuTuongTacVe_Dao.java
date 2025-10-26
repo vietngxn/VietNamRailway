@@ -48,18 +48,19 @@ public class LichSuTuongTacVe_Dao {
 
 		return list;
 	}
-
-	public boolean themLichSuTuongTacVe(LichSuTuongTacVe lstt) throws SQLException {
+	
+	public boolean themLichSuTuongTacVe(LichSuTuongTacVe lstt) throws SQLException
+	{
 		Statement st = databaseConnector.connect();
 		LocalDateTime ngay = lstt.getNgayTuongTac();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		String ngayFormatted = ngay.format(formatter);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String ngayFormatted = ngay.format(formatter);
 		String query = "INSERT INTO LichSuTuongTacVe (maTuongTac, maLoaiTuongTac, maVeTau, giaTriChenhLech, ngayTuongTac) VALUES (N'"
-				+ lstt.getMaTuongTac() + "', N'"
-				+ lstt.getLoaiTuongTacVe().getMaLoaiTuongTac() + "', N'"
-				+ lstt.getVeTau().getMaVeTau() + "', "
-				+ lstt.getGiaTriChenhLech() + ", '"
-				+ ngayFormatted + "')";
+		        + lstt.getMaTuongTac() + "', N'"
+		        + lstt.getLoaiTuongTacVe().getMaLoaiTuongTac() + "', N'"
+		        + lstt.getVeTau().getMaVeTau()+ "', "
+		        + lstt.getGiaTriChenhLech() + ", '"
+		        + ngayFormatted + "')";
 		boolean check = st.execute(query);
 		return check;
 	}

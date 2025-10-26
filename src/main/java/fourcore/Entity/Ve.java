@@ -34,7 +34,6 @@ public class Ve {
 	}
 
 	public Ve(String maVeTau) {
-
 		this.maVeTau = maVeTau;
 	}
 

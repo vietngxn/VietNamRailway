@@ -2,6 +2,8 @@ package fourcore.Entity;
 
 import java.io.Serializable;
 
+import java.io.Serializable;
+
 public class LoaiTau implements Serializable {
     private String maLoaiTau;
     private String tenLoaiTau;

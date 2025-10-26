@@ -12,9 +12,9 @@ import java.util.ArrayList;
 public class ChuongTrinhKhuyenMaiDAO {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
 
+
 	public ChuongTrinhKhuyenMaiDAO() {
 	}
-
 	ArrayList<KhuyenMai> listKhuyenMai = new ArrayList<>();
 
 	public ArrayList<KhuyenMai> getListKhuyenMai() throws SQLException {
@@ -38,7 +38,8 @@ public class ChuongTrinhKhuyenMaiDAO {
 		return listKhuyenMai;
 	}
 
-	public KhuyenMai getKhuyenMaiBangMa(String maKhuyenMai) throws SQLException {
+
+    public KhuyenMai getKhuyenMaiBangMa(String maKhuyenMai) throws SQLException {
 		Statement myStmt = databaseConnector.connect();
 		KhuyenMai km = new KhuyenMai();
 		String query = "select * from KhuyenMai WHERE maKhuyenMai = " + "'" + maKhuyenMai + "'";

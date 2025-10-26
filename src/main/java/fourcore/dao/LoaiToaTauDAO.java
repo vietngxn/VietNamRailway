@@ -10,7 +10,7 @@ import fourcore.Entity.ToaTau;
 
 public class LoaiToaTauDAO {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
-	public ArrayList<LoaiToaTau> listLoaiToaTau = new ArrayList<>();
+    public ArrayList<LoaiToaTau> listLoaiToaTau = new ArrayList<>();
 
 	public LoaiToaTauDAO() {
 	}
@@ -22,26 +22,24 @@ public class LoaiToaTauDAO {
 			ResultSet rs = myStmt.executeQuery(query);
 
 			while (rs.next()) {
-
 				String maLoaiToaTau = rs.getString(1);
 				String tenLoaiToaTau = rs.getString(2);
 				LoaiToaTau ltt = new LoaiToaTau(maLoaiToaTau, tenLoaiToaTau);
-				listLoaiToaTau.add(ltt);
+                listLoaiToaTau.add(ltt);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return listLoaiToaTau;
 	}
-
-	public LoaiToaTau getLoaiToaTau(String maLoaiToaTau) {
-		getListLoaiToaTau();
-		for (int i = 0; i < listLoaiToaTau.size(); i++) {
-			if (listLoaiToaTau.get(i).getMaLoaiToaTau().equals(maLoaiToaTau)) {
-				return listLoaiToaTau.get(i);
-			}
-		}
-		return null;
-	}
+    public LoaiToaTau getLoaiToaTau(String maLoaiToaTau) {
+        getListLoaiToaTau();
+        for (int i = 0; i < listLoaiToaTau.size(); i++) {
+            if(listLoaiToaTau.get(i).getMaLoaiToaTau().equals(maLoaiToaTau)) {
+                return listLoaiToaTau.get(i);
+            }
+        }
+        return null;
+    }
 
 }

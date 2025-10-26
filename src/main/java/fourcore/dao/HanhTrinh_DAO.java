@@ -11,46 +11,44 @@ import fourcore.Entity.HanhTrinh;
 import fourcore.Entity.LoaiToaTau;
 
 public class HanhTrinh_DAO {
-    DatabaseConnector databaseConnector = new DatabaseConnector();
+	DatabaseConnector databaseConnector = new DatabaseConnector();
 
-    public HanhTrinh_DAO() {
-    }
+	public HanhTrinh_DAO() {
+	}
 
-    public ArrayList<HanhTrinh> getList() {
-        ArrayList<HanhTrinh> list = new ArrayList<>();
-        try {
-            Statement myStmt = databaseConnector.connect();
-            String query = "SELECT * FROM HanhTrinh";
-            ResultSet rs = myStmt.executeQuery(query);
+	public ArrayList<HanhTrinh> getList() {
+		ArrayList<HanhTrinh> list = new ArrayList<>();
+		try {
+			Statement myStmt = databaseConnector.connect();
+			String query = "SELECT * FROM HanhTrinh";
+			ResultSet rs = myStmt.executeQuery(query);
 
-            while (rs.next()) {
-                String maHanhTrinh = rs.getString("maHanhTrinh");
-                String tenHanhTrinh = rs.getString("tenHanhTrinh");
-
-                HanhTrinh ht = new HanhTrinh(maHanhTrinh, tenHanhTrinh, null);
-                list.add(ht);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
-    public HanhTrinh getById(String maHanhTrinh) throws SQLException {
-        for (HanhTrinh ht : getList()) {
-            if (ht.getMaHanhTrinh().equals(maHanhTrinh)) {
+			while (rs.next()) {
+				String maHanhTrinh = rs.getString("maHanhTrinh");
+				String tenHanhTrinh = rs.getString("tenHanhTrinh");
+				
+				HanhTrinh ht = new HanhTrinh(maHanhTrinh, tenHanhTrinh, null);
+				list.add(ht);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+    public HanhTrinh getById(String maHanhTrinh) throws SQLException
+    {
+        for(HanhTrinh ht : getList()){
+            if(ht.getMaHanhTrinh().equals(maHanhTrinh)){
                 return ht;
             }
         }
         return null;
     }
-
-    public ArrayList<Ga> getListGaByMaHanhTrinh(String maHanhTrinhInput) {
+    public ArrayList<Ga> getListGaByMaHanhTrinh(String maHanhTrinhInput){
         ArrayList<Ga> listGa = new ArrayList<>();
         try {
             Statement myStmt = databaseConnector.connect();
-            String query = "select htg.maGa, g.tenGa from HanhTrinhGa htg, Ga g where htg.maGa = g.maGa and htg.maHanhTrinh = '"
-                    + maHanhTrinhInput + "'";
+            String query = "select htg.maGa, g.tenGa from HanhTrinhGa htg, Ga g where htg.maGa = g.maGa and htg.maHanhTrinh = '" + maHanhTrinhInput + "'";
             ResultSet rs = myStmt.executeQuery(query);
 
             while (rs.next()) {
@@ -66,4 +64,7 @@ public class HanhTrinh_DAO {
         return listGa;
     }
 
+
+	
+	
 }
