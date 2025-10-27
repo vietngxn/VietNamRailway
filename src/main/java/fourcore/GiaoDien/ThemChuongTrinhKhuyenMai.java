@@ -714,41 +714,41 @@ public class ThemChuongTrinhKhuyenMai extends Application {
 		sceneThemCTKM.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 			
 		
-//		txtMaCT.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-//		    if (isNowFocused && txtMaCT.getText().trim().isEmpty()) {
-//		    	lblAnimation.scaleUp(lblMaCT);
-//		    } else {
-//		    	if(txtMaCT.getText().trim().isEmpty()) lblAnimation.scaleDown(lblMaCT);
-//		    }
-//		});
-//		txtTenCT.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-//		    if (isNowFocused && txtTenCT.getText().trim().isEmpty()) {
-//		    	lblAnimation.scaleUp(lblTenCT);
-//		    } else {
-//		    	if(txtTenCT.getText().trim().isEmpty()) lblAnimation.scaleDown(lblTenCT);
-//		    }
-//		});
-//		
-//		comboDoiTuong.valueProperty().addListener((obs, oldVal, newVal) -> {
-//			if(newVal != null) {
-//				if(txtcomboDoiTuong.getText().trim().isEmpty()) lblAnimation.scaleUp(lblcomboDoiTuong);
-//				txtcomboDoiTuong.setText(newVal.toString());
-//			}
-//		});
-//		
-//		ngayBatDau.valueProperty().addListener((obs, oldVal, newVal) -> {
-//			if(newVal != null) {
-//				if(txtSoDienThoai.getText().trim().isEmpty()) lblAnimation.scaleUp(lblNgayBatDau);
-//				txtSoDienThoai.setText(newVal.format(formatter));
-//			}
-//		});
-//		
-//		txtemail.valueProperty().addListener((obs, oldVal, newVal) -> {
-//			if(newVal != null) {
-//				if(txtNgayKetThuc.getText().trim().isEmpty()) lblAnimation.scaleUp(lblNgayKetThuc);
-//				txtNgayKetThuc.setText(newVal.format(formatter));
-//			}
-//		});
+		txtMaCT.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+		    if (isNowFocused && txtMaCT.getText().trim().isEmpty()) {
+		    	lblAnimation.scaleUp(lblMaCT);
+		    } else {
+		    	if(txtMaCT.getText().trim().isEmpty()) lblAnimation.scaleDown(lblMaCT);
+		    }
+		});
+		txtTenCT.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+		    if (isNowFocused && txtTenCT.getText().trim().isEmpty()) {
+		    	lblAnimation.scaleUp(lblTenCT);
+		    } else {
+		    	if(txtTenCT.getText().trim().isEmpty()) lblAnimation.scaleDown(lblTenCT);
+		    }
+		});
+		
+		comboDoiTuong.valueProperty().addListener((obs, oldVal, newVal) -> {
+			if(newVal != null) {
+				if(txtcomboDoiTuong.getText().trim().isEmpty()) lblAnimation.scaleUp(lblcomboDoiTuong);
+				txtcomboDoiTuong.setText(newVal.toString());
+			}
+		});
+		
+		ngayBatDau.valueProperty().addListener((obs, oldVal, newVal) -> {
+			if(newVal != null) {
+				if(txtNgayBatDau.getText().trim().isEmpty()) lblAnimation.scaleUp(lblNgayBatDau);
+				txtNgayBatDau.setText(newVal.format(formatter));
+			}
+		});
+		
+		ngayKetThuc.valueProperty().addListener((obs, oldVal, newVal) -> {
+			if(newVal != null) {
+				if(txtNgayKetThuc.getText().trim().isEmpty()) lblAnimation.scaleUp(lblNgayKetThuc);
+				txtNgayKetThuc.setText(newVal.format(formatter));
+			}
+		});
 
 
 		

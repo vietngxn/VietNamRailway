@@ -13,7 +13,8 @@ public class ChuongTrinhKhuyenMaiDAO {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
 
 
-	public ChuongTrinhKhuyenMaiDAO() {
+	public ChuongTrinhKhuyenMaiDAO() throws SQLException {
+		getListKhuyenMai();
 	}
 	ArrayList<KhuyenMai> listKhuyenMai = new ArrayList<>();
 

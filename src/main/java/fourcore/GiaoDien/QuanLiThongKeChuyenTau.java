@@ -108,8 +108,8 @@ public class QuanLiThongKeChuyenTau extends Application {
 	private VBox btn_layout;
 	private Button btn_xuatThongKe;
 	private GridPane tableCol;
-	private Label colmaGhe;
-	private Label coltenGhe;
+	private Label colmaChuyenTau;
+	private Label colmaTau;
 	private Label colsoLanSuDung;
 	private StackPane paneCol1;
 	private StackPane paneCol2;
@@ -629,7 +629,7 @@ try {
 			
 			create_btnlayout();
 			primaryStage.setFullScreen(true);
-//			primaryStage.show();
+			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -667,7 +667,7 @@ try {
 		button_thongKe3.setStyle(style);
 		button_thongKe3.setPrefSize(275, 50);
 		
-		layout_nutthongke.getChildren().addAll(button_thongKe1,button_thongKe2,button_thongKe3);
+		
 		
 		checks = new ArrayList<>(Arrays.asList(false, false, false));
 
@@ -767,7 +767,7 @@ try {
 		        checks.set(0, false);
 		        checks.set(1, false);
 		        checks.set(2, true);
-		        ObservableList<String> itemsThang = FXCollections.observableArrayList("BarChart", "PieChart");
+		        ObservableList<String> itemsThang = FXCollections.observableArrayList("BarChart", "Table");
 		        comboBox.setItems(itemsThang);
 		        comboBox.getSelectionModel().selectFirst();
 		        
@@ -855,7 +855,7 @@ try {
 		layout_combobox = new HBox();
 		layout_combobox.setTranslateY(20);
 		layout_combobox.setSpacing(30);
-		ObservableList<String> items = FXCollections.observableArrayList("BarChart","PieChart");
+		ObservableList<String> items = FXCollections.observableArrayList("BarChart","Table");
 		
 		String style1 = "-fx-font-family:'Inter';-fx-text-fill:#00BACB;-fx-font-size: 15px;";
 		comboBox = createComboBox(items);
@@ -895,8 +895,19 @@ try {
 		table_desc = new VBox();
 		table_desc.setPrefHeight(400);
 		comboBox.getSelectionModel().selectFirst();
-		create_barchart_thang();
-		
+		create_barchart_ghengoi();
+		comboBox.setOnAction(event  -> { 
+        	if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
+        		table_desc.getChildren().clear();
+        		create_barchart_ghengoi();
+        		noiDungChinh.getChildren().remove(layout_total);
+        	}
+        	else {
+        		table_desc.getChildren().clear();
+        		create_table();
+        		
+        	}
+        });
 		noiDungChinh.getChildren().add(table_desc);
 	}
 	
@@ -993,12 +1004,12 @@ try {
 	public void create_barchart_ghengoi()
 	{
 			CategoryAxis ca = new CategoryAxis();
-			ca.setLabel("Ghế");
+			ca.setLabel("Chuyến Tàu");
 			NumberAxis na = new NumberAxis();
-			na.setLabel("Số lượng ngồi");
+			na.setLabel("Số Chuyến Đi");
 			
 			BarChart<String, Number> barchart = new BarChart<String, Number>(ca, na);
-			barchart.setTitle("Thống kê top 10 ghế bán chạy nhất tháng");
+			barchart.setTitle("Thống kê top 10 chuyến tàu chạy nhiều nhất tháng");
 			barchart.setLegendVisible(false);
 			barchart.setAnimated(false);
 			
@@ -1053,13 +1064,13 @@ try {
 
 		String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 24px; -fx-font-weight: bold;";
 
-		colmaGhe = new Label("Mã Ghế");
-		colmaGhe.setTranslateX(-100);
-		colmaGhe.setStyle(styleHeader);
+		colmaChuyenTau = new Label("Mã Chuyến Tàu");
+		colmaChuyenTau.setTranslateX(-100);
+		colmaChuyenTau.setStyle(styleHeader);
 		
-		coltenGhe = new Label("Tên Ghế");
-		coltenGhe.setTranslateX(-100);
-		coltenGhe.setStyle(styleHeader);
+		colmaTau = new Label("Mã Tàu");
+		colmaTau.setTranslateX(-100);
+		colmaTau.setStyle(styleHeader);
 		
 		
 		
@@ -1068,8 +1079,8 @@ try {
 		colsoLanSuDung.setStyle(styleHeader);
 		
 		
-		paneCol1 = new StackPane(colmaGhe);
-		paneCol2 = new StackPane(coltenGhe);
+		paneCol1 = new StackPane(colmaChuyenTau);
+		paneCol2 = new StackPane(colmaTau);
 		paneCol3 = new StackPane(colsoLanSuDung);
 		
 		paneCol1.setPrefWidth(200);
@@ -1091,8 +1102,8 @@ try {
 		table_desc_layout = new VBox();
 		table_desc_layout.setSpacing(20);
 		
-		create_layout_dong("MG001","Ghe Nam", 15);
-		create_layout_dong("MG001","Ghe Nam", 25);
+		create_layout_dong("CT001","SE2", 15);
+		create_layout_dong("CT002","S1", 25);
 		
 		
 		table_layout.getChildren().add(table_desc_layout);
