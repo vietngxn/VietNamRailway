@@ -2,13 +2,16 @@ package fourcore.GiaoDien;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
+import fourcore.dao.ThongKeDAO;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -155,9 +158,15 @@ public class QuanLiThongKeDoanhThuTheoNam extends Application {
 		private Label lbl_desc;
 		private HBox layout_desc;
 		private String loaiThongKe;
+		private ThongKeDAO thongkedao;
+		private Map<Integer, Double> map;
+		private boolean namchon = false;
+		private double tongdoanhthu = 0;
 	@Override
 	public void start(Stage primaryStage) {
 try {
+			thongkedao = new ThongKeDAO();
+			
             BorderPane root = new BorderPane();
             Scene scene = new Scene(root,1920,1000);
             primaryStage.setScene(scene);
@@ -862,19 +871,7 @@ try {
 		comboBox.setPromptText("Kiểu Thống Kê");
 		comboBox.setStyle(comboBox.getStyle()+";"+style1);
 		comboBox.getSelectionModel().selectFirst();
-		
-		comboBox.setOnAction(event  -> { 
-        	if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
-        		table_desc.getChildren().clear();
-        		create_barchart_nam();
-        		
-//        		noiDungChinh.getChildren().remove(layout_total);
-        	}
-        	else {
-        		table_desc.getChildren().clear();
-        		create_piechart_nam();
-        	}
-        });
+		comboBox.setDisable(true);
 		
 		date = new DatePicker();
 		date.setPromptText("Thời Gian");
@@ -882,10 +879,70 @@ try {
 		
 		date.setPrefSize(400, 40);
 		date.getStyleClass().add("date-picker-custom");
+		
+		comboBox.setOnAction(event  -> { 
+		    if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
+		        table_desc.getChildren().clear();
+		        try {
+		            create_barchart_nam();
+		            
+		            // Kiểm tra layout_total đã tồn tại không
+		            if (noiDungChinh.getChildren().contains(layout_total)) {
+		                noiDungChinh.getChildren().remove(layout_total);
+		            }
+		            layout_total = null; // Reset
+		            create_layout_total();
+		            
+		        } catch (SQLException e1) {
+		            e1.printStackTrace();
+		        }
+		    }
+		    else {
+		        table_desc.getChildren().clear();
+		        create_piechart_nam();
+		        
+		        // Xóa layout_total nếu hiển thị pie chart
+		        if (noiDungChinh.getChildren().contains(layout_total)) {
+		            noiDungChinh.getChildren().remove(layout_total);
+		        }
+		    }
+		});
+		
+		date.setOnAction(e -> {
+		    if (date.getValue() != null) {
+		        comboBox.setDisable(false);
+		        
+		        try {
+		            table_desc.getChildren().clear();
+		            
+		            if (comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
+		                create_barchart_nam();
+		                
+		        
+		                if (noiDungChinh.getChildren().contains(layout_total)) {
+		                    noiDungChinh.getChildren().remove(layout_total);
+		                }
+		                layout_total = null;
+		                create_layout_total();
+		            } else if (comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("PieChart"))  {
+		                create_piechart_nam();
+		                
+		        
+		                if (noiDungChinh.getChildren().contains(layout_total)) {
+		                    noiDungChinh.getChildren().remove(layout_total);
+		                }
+		            }
+		        } catch (SQLException ex) {
+		            ex.printStackTrace();
+		        }
+		    }
+		});
+		
+		
 		layout_combobox.getChildren().addAll(date,comboBox);
 		
 		title_layout.getChildren().add(layout_combobox);
-		
+			
 		
 		
 		noiDungChinh.getChildren().add(title_layout);
@@ -904,16 +961,32 @@ try {
         return combobox;
     }
 	
-	public void create_table_desc()
+	public void create_table_desc() throws SQLException
 	{
 		table_desc = new VBox();
 		table_desc.setPrefHeight(400);
 		
-		comboBox.getSelectionModel().selectFirst();
+		
+		comboBox.getSelectionModel().clearSelection();
+		comboBox.setOnAction(event  -> { 
+        	if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
+        		table_desc.getChildren().clear();
+        		try {
+					create_barchart_nam();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+        		
+//        		noiDungChinh.getChildren().remove(layout_total);
+        	}
+        	else {
+        		table_desc.getChildren().clear();
+        		create_piechart_nam();
+        	}
+        });
 		
 		
-		create_barchart_nam();
-		create_layout_total();
 		noiDungChinh.getChildren().add(table_desc);
 	}
 	
@@ -930,7 +1003,7 @@ try {
 	    barChart.setLegendVisible(false);
 	    barChart.setAnimated(false);
 	    
-	    
+	   
 	    
 		// Dữ liệu cho BarChart
 	    XYChart.Series<String, Number> barData = new XYChart.Series<>();
@@ -967,7 +1040,7 @@ try {
 	}
 	
 	
-	public void create_barchart_nam()
+	public void create_barchart_nam() throws SQLException
 	{
 		CategoryAxis ca = new CategoryAxis();
 		ca.setLabel("Năm");
@@ -979,15 +1052,17 @@ try {
 		barchart.setLegendVisible(false);
 		barchart.setAnimated(false);
 		
-		XYChart.Series<String, Number> data = new XYChart.Series<String, Number>();
-		data.getData().add(new XYChart.Data<String, Number>("2017", 500));
-		data.getData().add(new XYChart.Data<String, Number>("2018", 600));
-		data.getData().add(new XYChart.Data<String, Number>("2019", 400));
-		data.getData().add(new XYChart.Data<String, Number>("2020", 300));
-		data.getData().add(new XYChart.Data<String, Number>("2021", 250));
-		data.getData().add(new XYChart.Data<String, Number>("2022", 450));
-		data.getData().add(new XYChart.Data<String, Number>("2023", 500));
-		data.getData().add(new XYChart.Data<String, Number>("2024", 600));
+		LocalDate data1 = date.getValue();
+		int nam = data1.getYear(); 
+		map = thongkedao.getDoanhThuTheoThang(nam);
+		
+		XYChart.Series<String, Number> data = new XYChart.Series<>();
+		
+		for (int thang = 1; thang <= 12; thang++) {
+		    double doanhThu = map.getOrDefault(thang, 0.0);
+		     tongdoanhthu += doanhThu;
+		    data.getData().add(new XYChart.Data<>(String.valueOf(thang), doanhThu));
+		}
 		
 		barchart.getData().add(data);
 		
@@ -1000,7 +1075,7 @@ try {
 		PieChart pieChart = new PieChart();
 	    pieChart.setTitle("Tỷ lệ doanh thu bán ra");
 
-	    pieChart.getData().add(new PieChart.Data("Doanh Thu", 90));
+	    pieChart.getData().add(new PieChart.Data("Doanh Thu", tongdoanhthu));
 	    pieChart.getData().add(new PieChart.Data("Thuế VAT", 10));
 	    
 	    
@@ -1178,6 +1253,9 @@ try {
 	}
 	public void create_layout_total()
 	{
+		if (layout_total != null && noiDungChinh.getChildren().contains(layout_total)) {
+	        noiDungChinh.getChildren().remove(layout_total);
+	    }	
 		layout_total = new VBox();
 		layout_total.setTranslateX(1100);
 		layout_total.setTranslateY(600);
