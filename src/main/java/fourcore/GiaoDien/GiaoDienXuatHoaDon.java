@@ -81,10 +81,6 @@ public class GiaoDienXuatHoaDon extends Application {
 	private GridPane pnlThongTinNguoiMua;
 	private Pane pnlXuatHDlbl;
 	private Label lblXuatHD;
-	private GridPane pnlRadXuatHoaDon;
-	private RadioButton RadXuatHDCongTy;
-	private RadioButton RadXuatHDCaNhan;
-	private VBox pnlThongTinXuatHoaDonCongTy;
 	private Pane btnRong;
 	private HBox pnlTongCong;
 	private Label lblTongCong;
@@ -96,7 +92,6 @@ public class GiaoDienXuatHoaDon extends Application {
 	private HBox pnlThanhToanButtonSub2;
 	private Double tongCongThanhTien = 5000000.0;
 	private Button btnTroLai;
-	private VBox pnlXuatHoaDonCanNhan;
 	private VBox pnlThongTinXuatHoaDonCaNhan;
 	private Button btnThanhToan;
 	private TextField txtHoTen;
@@ -603,73 +598,15 @@ public class GiaoDienXuatHoaDon extends Application {
 			noiDungChinh.getChildren().add(pnlXuatHDlbl);
 			VBox.setMargin(pnlXuatHDlbl, new Insets(20, 0, 0, 50));
 
-			pnlRadXuatHoaDon = new GridPane();
-			pnlRadXuatHoaDon.setAlignment(Pos.CENTER);
-			pnlRadXuatHoaDon.setHgap(400);
-			pnlRadXuatHoaDon.setVgap(10);
-			VBox.setMargin(pnlRadXuatHoaDon, new Insets(20, 0, 0, 0));
-
-			RadXuatHDCongTy = new RadioButton("Xuất hóa đơn cho công ty/đơn vị");
-			RadXuatHDCaNhan = new RadioButton("Xuất hóa đơn cho cá nhân");
-
-			String radStyle = """
-					    -fx-font-family: 'Inter';
-					    -fx-font-weight: bold;
-					    -fx-font-size: 18px;
-					    -fx-text-fill: #00BACB;
-					    -fx-mark-color: #00BACB;
-					""";
-
-			RadXuatHDCongTy.setStyle(radStyle);
-			RadXuatHDCaNhan.setStyle(radStyle);
-			ToggleGroup groupRad = new ToggleGroup();
-
-			RadXuatHDCongTy.setToggleGroup(groupRad);
-			RadXuatHDCaNhan.setToggleGroup(groupRad);
-
-			RadXuatHDCaNhan.setSelected(true);
-
-			pnlRadXuatHoaDon.add(RadXuatHDCongTy, 1, 0);
-			pnlRadXuatHoaDon.add(RadXuatHDCaNhan, 0, 0);
-
-			noiDungChinh.getChildren().add(pnlRadXuatHoaDon);
-
-			pnlThongTinXuatHoaDonCongTy = taoXuatHoaDonCongTyPane("", "", "", "", "", leftStyle, rightStyle);
-			noiDungChinh.getChildren().add(pnlThongTinXuatHoaDonCongTy);
 
 			pnlThongTinXuatHoaDonCaNhan = taoXuatHoaDonCaNhanPane("", "", "0962051111111", "Nguyễn Thị Kiều Trinh",
 					"180A, absn,bnbcm, nacn", leftStyle, rightStyle);
 			noiDungChinh.getChildren().add(pnlThongTinXuatHoaDonCaNhan);
-			VBox.setMargin(pnlThongTinXuatHoaDonCongTy, new Insets(20, 0, 100, 150));
-			VBox.setMargin(pnlThongTinXuatHoaDonCaNhan, new Insets(20, 0, 100, 150));
 
-			pnlThongTinXuatHoaDonCongTy.setVisible(false);
-			pnlThongTinXuatHoaDonCongTy.setManaged(false);
+			VBox.setMargin(pnlThongTinXuatHoaDonCaNhan, new Insets(20, 0, 100, 150));
 
 			pnlThongTinXuatHoaDonCaNhan.setVisible(true);
 			pnlThongTinXuatHoaDonCaNhan.setManaged(true);
-
-			RadXuatHDCongTy.setOnAction(e -> {
-				if (RadXuatHDCongTy.isSelected()) {
-					System.out.println("Đã chọn: Xuất hóa đơn công ty");
-					pnlThongTinXuatHoaDonCongTy.setVisible(true);
-					pnlThongTinXuatHoaDonCongTy.setManaged(true);
-
-					pnlThongTinXuatHoaDonCaNhan.setVisible(false);
-					pnlThongTinXuatHoaDonCaNhan.setManaged(false);
-				}
-			});
-
-			RadXuatHDCaNhan.setOnAction(e -> {
-				if (RadXuatHDCaNhan.isSelected()) {
-					System.out.println("Đã chọn: Xuất hóa đơn cá nhân");
-					pnlThongTinXuatHoaDonCaNhan.setVisible(true);
-					pnlThongTinXuatHoaDonCaNhan.setManaged(true);
-
-					pnlThongTinXuatHoaDonCongTy.setVisible(false);
-					pnlThongTinXuatHoaDonCongTy.setManaged(false);
-				}
-			});
 
 			BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
 
@@ -775,20 +712,20 @@ public class GiaoDienXuatHoaDon extends Application {
 		});
 	}
 
-	private VBox taoXuatHoaDonCongTyPane(String hoten, String sogiayto, String msthue, String tencty, String diachi,
-			String leftstyle, String rightstyle) {
-
-		VBox pnl = new VBox(15);
-		pnl.setAlignment(Pos.CENTER);
-
-		pnl.getChildren().add(taoSubXuatHoaDonPane("Người mua", hoten, leftstyle, rightstyle));
-		pnl.getChildren().add(taoSubXuatHoaDonPane("Số giấy tờ", sogiayto, leftstyle, rightstyle));
-		pnl.getChildren().add(taoSubXuatHoaDonPane("Mã số thuế", msthue, leftstyle, rightstyle));
-		pnl.getChildren().add(taoSubXuatHoaDonPane("Tên Công Ty/ Đơn vị", tencty, leftstyle, rightstyle));
-		pnl.getChildren().add(taoSubXuatHoaDonPane("Địa chỉ", diachi, leftstyle, rightstyle));
-		return pnl;
-
-	}
+//	private VBox taoXuatHoaDonCongTyPane(String hoten, String sogiayto, String msthue, String tencty, String diachi,
+//			String leftstyle, String rightstyle) {
+//
+//		VBox pnl = new VBox(15);
+//		pnl.setAlignment(Pos.CENTER);
+//
+//		pnl.getChildren().add(taoSubXuatHoaDonPane("Người mua", hoten, leftstyle, rightstyle));
+//		pnl.getChildren().add(taoSubXuatHoaDonPane("Số giấy tờ", sogiayto, leftstyle, rightstyle));
+//		pnl.getChildren().add(taoSubXuatHoaDonPane("Mã số thuế", msthue, leftstyle, rightstyle));
+//		pnl.getChildren().add(taoSubXuatHoaDonPane("Tên Công Ty/ Đơn vị", tencty, leftstyle, rightstyle));
+//		pnl.getChildren().add(taoSubXuatHoaDonPane("Địa chỉ", diachi, leftstyle, rightstyle));
+//		return pnl;
+//
+//	}
 
 	private VBox taoXuatHoaDonCaNhanPane(String hoten, String sogiayto, String passport, String tenkh, String diachi,
 			String leftstyle, String rightstyle) {
