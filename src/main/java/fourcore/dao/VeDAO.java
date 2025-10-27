@@ -33,49 +33,88 @@ public class VeDAO {
 	private ArrayList<Ve> listVe1;
 
 	public ArrayList<Ve> getListVe() throws SQLException {
-
-		Statement st = database.connect();
-		String q = "select * from Ve";
-		ResultSet rs = st.executeQuery(q);
-		ArrayList<Ve> listVe2 = new ArrayList<Ve>();
-		while (rs.next()) {
-			String maVeTau = rs.getString(1);
-			String gaDi = rs.getString(2);
-			String gaDen = rs.getString(3);
-			String tenTau = rs.getString(4);
-			// Timestamp -> LocalDateTime
-			LocalDateTime ngayGioDi = rs.getTimestamp("ngayGioDi").toLocalDateTime();
-			LocalDateTime ngayGioDen = rs.getTimestamp("ngayGioDen").toLocalDateTime();
-			int soToa = rs.getInt(7);
-			int soKhoang = rs.getInt(8);
-			int soTang = rs.getInt(9);
-			int soGhe = rs.getInt(10);
-			String loaiVe = rs.getString(11);
-			String maGiayTo = rs.getString(12);
-			double giaVe = rs.getDouble(13);
-			String ghiChu = rs.getString(14);
-			String trangThaiDoiVe = rs.getString(15);
-			String trangThaiVe = rs.getString(16);
-			String maChuyenTau = rs.getString(17);
-			String maKhachHang = rs.getString(18);
-			String maKhuyenMai = rs.getString(19);
-			String maDoiTuongGiamGia = rs.getString(20);
-
-			KhachHangDAO khDAO = new KhachHangDAO();
-			KhachHang kh = khDAO.getKhachHangByMa(maKhachHang);
-
-			DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
-			DoiTuongGiamGia dt = dtDAO.getDoiTuongGiamGiaBangMaDT(maDoiTuongGiamGia);
-
-			ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
-			KhuyenMai km = kmDAO.getKhuyenMaiBangMa(maKhuyenMai);
-
-			Ve ve = new Ve(maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe,
-					maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, new ChuyenTau(maChuyenTau), kh, km, dt);
-
-			listVe2.add(ve);
-		}
-		return listVe2;
+	    Statement st = database.connect();
+	    String query = "SELECT \r\n"
+	    		+ "    ve.maVeTau, ve.gaDi, ve.gaDen, ve.tenTau, ve.ngayGioDi, ve.ngayGioDen,\r\n"
+	    		+ "    ve.soToa, ve.soKhoang, ve.soTang, ve.soGhe, ve.loaiVe, ve.maGiayTo,\r\n"
+	    		+ "    ve.giaVe, ve.ghiChu, ve.trangThaiDoiVe, ve.trangThaiVe,\r\n"
+	    		+ "    ct.maChuyenTau,\r\n"
+	    		+ "    kh.maKhachHang, kh.hoTen, kh.sdt, kh.email, kh.cccd, kh.passport, kh.doiTuong,\r\n"
+	    		+ "    km.maKhuyenMai, km.tenChuongTrinh, km.trangThaiKhuyenMai, \r\n"
+	    		+ "    km.dieuKienApDungKhuyenMai, km.giaTriPhanTramKhuyenMai, km.ngayBatDau, km.ngayKetThuc,\r\n"
+	    		+ "    dt.maDoiTuongGiamGia, dt.tenDoiTuongGiamGia, dt.giaTriPhanTramGiamGia, dt.trangThaiGiamGia\r\n"
+	    		+ "FROM Ve ve\r\n"
+	    		+ "JOIN KhachHang kh ON ve.maKhachHang = kh.maKhachHang\r\n"
+	    		+ "JOIN ChuyenTau ct ON ve.maChuyenTau = ct.maChuyenTau\r\n"
+	    		+ "LEFT JOIN DoiTuongGiamGia dt ON ve.maDoiTuongGiamGia = dt.maDoiTuongGiamGia\r\n"
+	    		+ "LEFT JOIN KhuyenMai km ON ve.maKhuyenMai = km.maKhuyenMai;";
+	    
+	    ResultSet rs = st.executeQuery(query);
+	    ArrayList<Ve> listVe = new ArrayList<>();
+	    
+	    while (rs.next()) {
+	        // Lấy dữ liệu Ve
+	        String maVeTau = rs.getString("maVeTau");
+	        String gaDi = rs.getString("gaDi");
+	        String gaDen = rs.getString("gaDen");
+	        String tenTau = rs.getString("tenTau");
+	        LocalDateTime ngayGioDi = rs.getTimestamp("ngayGioDi").toLocalDateTime();
+	        LocalDateTime ngayGioDen = rs.getTimestamp("ngayGioDen").toLocalDateTime();
+	        int soToa = rs.getInt("soToa");
+	        int soKhoang = rs.getInt("soKhoang");
+	        int soTang = rs.getInt("soTang");
+	        int soGhe = rs.getInt("soGhe");
+	        String loaiVe = rs.getString("loaiVe");
+	        String maGiayTo = rs.getString("maGiayTo");
+	        double giaVe = rs.getDouble("giaVe");
+	        String ghiChu = rs.getString("ghiChu");
+	        String trangThaiDoiVe = rs.getString("trangThaiDoiVe");
+	        String trangThaiVe = rs.getString("trangThaiVe");
+	        String maChuyenTau = rs.getString("maChuyenTau");
+	        String maKhachHang = rs.getString("maKhachHang");
+	        String maKhuyenMai = rs.getString("maKhuyenMai");
+	        String maDoiTuongGiamGia = rs.getString("maDoiTuongGiamGia");
+	        
+	        // Tạo object ChuyenTau
+	        ChuyenTau chuyenTau = new ChuyenTau(maChuyenTau);
+	        
+	        KhachHang kh = new KhachHang(
+	                maKhachHang,
+	                rs.getString("hoTen") != null ? rs.getString("hoTen") : "",
+	                rs.getString("sdt") != null ? rs.getString("sdt") : "",
+	                rs.getString("email") != null ? rs.getString("email") : "",
+	                rs.getString("cccd") != null ? rs.getString("cccd") : "",
+	                rs.getString("passport") != null ? rs.getString("passport") : "",
+	                rs.getString("doiTuong") != null ? rs.getString("doiTuong") : ""
+	            );
+	            
+	            // Tạo object KhuyenMai
+	            KhuyenMai km = new KhuyenMai(
+	                maKhuyenMai,
+	                rs.getString("tenChuongTrinh") != null ? rs.getString("tenChuongTrinh") : "",
+	                rs.getString("trangThaiKhuyenMai") != null ? rs.getString("trangThaiKhuyenMai") : "",
+	                rs.getString("dieuKienApDungKhuyenMai") != null ? rs.getString("dieuKienApDungKhuyenMai") : "",
+	                rs.getDouble("giaTriPhanTramKhuyenMai"),
+	                rs.getTimestamp("ngayBatDau") != null ? rs.getTimestamp("ngayBatDau").toLocalDateTime() : LocalDateTime.now(),
+	                rs.getTimestamp("ngayKetThuc") != null ? rs.getTimestamp("ngayKetThuc").toLocalDateTime() : LocalDateTime.now()
+	            );
+	            
+	            // Tạo object DoiTuongGiamGia
+	            DoiTuongGiamGia dt = new DoiTuongGiamGia(
+	                maDoiTuongGiamGia,
+	                rs.getString("tenDoiTuongGiamGia") != null ? rs.getString("tenDoiTuongGiamGia") : "",
+	                		rs.getString("trangThaiGiamGia") != null ? rs.getString("trangThaiGiamGia") : "",
+	                rs.getDouble("giaTriPhanTramGiamGia")
+	            );
+	        
+	        // Tạo object Ve
+	        Ve ve = new Ve(maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, 
+	                      soToa, soKhoang, soTang, soGhe, loaiVe, maGiayTo, giaVe, 
+	                      ghiChu, trangThaiDoiVe, trangThaiVe, chuyenTau, kh, km, dt);
+	        listVe.add(ve);
+	    }
+	    
+	    return listVe;
 	}
 
 	public ArrayList<Ve> getListHoanVe() throws SQLException {

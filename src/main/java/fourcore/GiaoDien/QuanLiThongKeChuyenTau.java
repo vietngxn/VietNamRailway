@@ -747,7 +747,7 @@ try {
 	                create_barchart_thang();
 	                noiDungChinh.getChildren().remove(layout_total);
 	                create_layout_total();
-	            } else {
+	            } else  if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("Table")) {
 	            	table_desc.getChildren().clear();
 	                create_piechart_thang();
 	                noiDungChinh.getChildren().remove(layout_total);
