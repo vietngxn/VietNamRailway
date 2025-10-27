@@ -1,16 +1,21 @@
 package fourcore.GiaoDien;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+import fourcore.Control.HoanTraVeControl;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Modality;
@@ -74,6 +79,7 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 	private ImageView userIcon;
 	private Label userLabel;
 	private ImageView settingIcon;
+	
 	private Pane pnlDoiVelbl;
 	private Label lblDoiVe;
 	private Pane pnlThongTinlbl;
@@ -88,12 +94,11 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 	private Pane btnRong;
 	private HBox pnlTongCong;
 	private Label lblTongCong;
-	private Label lblTongCongValue;
+	Label lblTongCongValue = new Label();;
 	NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
 	private VBox pnlThanhToanButton;
 	private HBox pnlThanhToanButtonSub1;
 	private HBox pnlThanhToanButtonSub2;
-	private Double tongCongThanhTien = 5000000.0;
 	private Button btnTroLai;
 	private VBox pnlXuatHoaDonCanNhan;
 	private VBox pnlThongTinXuatHoaDonCaNhan;
@@ -109,11 +114,13 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 	String sdt;
 	private TextField lblRight;
 	private Label lblSoLuongVe;
-	private Label lblSoLuongVeValue;
+	Label lblSoLuongVeValue = new Label();
 	private HBox pnlSoLuongVe;
 
+	Map<String, Double> list = new HashMap<String, Double>();
+
 	@Override
-	public void start(Stage primaryStage) {
+	public void start(Stage primaryStage) throws IOException {
 		try {
 
 			menuList = new VBox();
@@ -693,16 +700,15 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 			pnlTongCong = new HBox();
 			pnlSoLuongVe = new HBox(5);
 			lblSoLuongVe = new Label("Số lượng vé:");
-			lblSoLuongVeValue = new Label("0");
+
 			lblSoLuongVe.setStyle(lblStyle);
 			lblSoLuongVeValue.setStyle(lblStyle + "-fx-font-weight: bold;");
-			pnlSoLuongVe.getChildren().addAll(lblSoLuongVe,lblSoLuongVeValue);
-			
+			pnlSoLuongVe.getChildren().addAll(lblSoLuongVe, lblSoLuongVeValue);
+
 			lblTongCong = new Label("Tổng cộng:");
 			lblTongCong.setWrapText(true);
 			lblTongCong.setStyle(lblStyle);
 
-			lblTongCongValue = new Label(nf.format(tongCongThanhTien));
 			lblTongCongValue.setWrapText(true);
 			lblTongCongValue.setStyle(lblStyle + "-fx-font-weight: bold;");
 
@@ -710,9 +716,9 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 			pnlTongCong.setAlignment(Pos.CENTER);
 
 			HBox.setMargin(pnlTongCong, new Insets(0, 0, 0, 150));
-			pnlTongCong.getChildren().addAll(pnlSoLuongVe,lblTongCong, lblTongCongValue);
-			HBox.setMargin(lblTongCong, new Insets(0,0,0,100));
-			HBox.setMargin(pnlSoLuongVe, new Insets(0,300,0,0));
+			pnlTongCong.getChildren().addAll(pnlSoLuongVe, lblTongCong, lblTongCongValue);
+			HBox.setMargin(lblTongCong, new Insets(0, 0, 0, 100));
+			HBox.setMargin(pnlSoLuongVe, new Insets(0, 300, 0, 0));
 			pnlThanhToanButtonSub1.getChildren().addAll(btnRong, pnlTongCong);
 
 			btnTroLai = new Button("Trở lại");
@@ -736,6 +742,17 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 			// sukien
 			btnThanhToan.setOnMouseClicked(event -> {
 				showConfirm(primaryStage, "Bạn muốn thanh toán hóa đơn này");
+			});
+
+			btnTroLai.setOnMouseClicked(event -> {
+			    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+			    Scene previousScene = (Scene) stage.getUserData();
+			    if (previousScene != null) {
+			        stage.setScene(previousScene);
+			    } else {
+			    	System.out.println("null");
+			    }
+				
 			});
 
 			BorderPane root = new BorderPane();
@@ -915,6 +932,7 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 		left.setAlignment(Pos.CENTER);
 		right.setAlignment(Pos.CENTER);
 		return new HBox(left, right);
+
 	}
 
 	private HBox taoSubXuatHoaDonPane(String label, String leftStyle, String rightStyle) {

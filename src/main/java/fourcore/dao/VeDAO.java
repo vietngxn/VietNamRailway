@@ -36,6 +36,10 @@ public class VeDAO {
 		Statement st = database.connect();
 		String q = "select * from Ve";
 		ResultSet rs = st.executeQuery(q);
+		KhachHangDAO khDAO = new KhachHangDAO();
+		DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
+		ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
+
 		while (rs.next()) {
 			String maVeTau = rs.getString(1);
 			String gaDi = rs.getString(2);
@@ -59,13 +63,8 @@ public class VeDAO {
 			String maKhuyenMai = rs.getString(19);
 			String maDoiTuongGiamGia = rs.getString(20);
 
-			KhachHangDAO khDAO = new KhachHangDAO();
 			KhachHang kh = khDAO.getKhachHangByMa(maKhachHang);
-
-			DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
 			DoiTuongGiamGia dt = dtDAO.getDoiTuongGiamGiaBangMaDT(maDoiTuongGiamGia);
-
-			ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
 			KhuyenMai km = kmDAO.getKhuyenMaiBangMa(maKhuyenMai);
 
 			Ve ve = new Ve(maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe,
@@ -95,6 +94,9 @@ public class VeDAO {
 								""";
 
 		ResultSet rs = st.executeQuery(q);
+		KhachHangDAO khDAO = new KhachHangDAO();
+		DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
+		ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
 		while (rs.next()) {
 			String maVeTau = rs.getString(1);
 			String gaDi = rs.getString(2);
@@ -118,13 +120,8 @@ public class VeDAO {
 			String maKhuyenMai = rs.getString(19);
 			String maDoiTuongGiamGia = rs.getString(20);
 
-			KhachHangDAO khDAO = new KhachHangDAO();
 			KhachHang kh = khDAO.getKhachHangByMa(maKhachHang);
-
-			DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
 			DoiTuongGiamGia dt = dtDAO.getDoiTuongGiamGiaBangMaDT(maDoiTuongGiamGia);
-
-			ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
 			KhuyenMai km = kmDAO.getKhuyenMaiBangMa(maKhuyenMai);
 
 			System.out.println(km.toString());
@@ -155,6 +152,9 @@ public class VeDAO {
 		;
 
 		ResultSet rs = st.executeQuery(q);
+		KhachHangDAO khDAO = new KhachHangDAO();
+		DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
+		ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
 		while (rs.next()) {
 			String maVeTau = rs.getString(1);
 			String gaDi = rs.getString(2);
@@ -178,13 +178,8 @@ public class VeDAO {
 			String maKhuyenMai = rs.getString(19);
 			String maDoiTuongGiamGia = rs.getString(20);
 
-			KhachHangDAO khDAO = new KhachHangDAO();
 			KhachHang kh = khDAO.getKhachHangByMa(maKhachHang);
-
-			DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
 			DoiTuongGiamGia dt = dtDAO.getDoiTuongGiamGiaBangMaDT(maDoiTuongGiamGia);
-
-			ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
 			KhuyenMai km = kmDAO.getKhuyenMaiBangMa(maKhuyenMai);
 			Ve v = new Ve();
 			v = new Ve(maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe,
@@ -214,6 +209,9 @@ public class VeDAO {
 				+ "WHERE v.trangThaiVe = N'hoạt động'\r\n" + "  AND v.ngayGioDi > GETDATE()\r\n" + "  AND v.maVeTau = '"
 				+ maVe + "'";
 		ResultSet rs = myStmt.executeQuery(query);
+		KhachHangDAO khDAO = new KhachHangDAO();
+		DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
+		ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
 		while (rs.next()) {
 			String maVeTau = rs.getString(1);
 			String gaDi = rs.getString(2);
@@ -237,13 +235,8 @@ public class VeDAO {
 			String maKhuyenMai = rs.getString(19);
 			String maDoiTuongGiamGia = rs.getString(20);
 
-			KhachHangDAO khDAO = new KhachHangDAO();
 			KhachHang kh = khDAO.getKhachHangByMa(maKhachHang);
-
-			DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
 			DoiTuongGiamGia dt = dtDAO.getDoiTuongGiamGiaBangMaDT(maDoiTuongGiamGia);
-
-			ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
 			KhuyenMai km = kmDAO.getKhuyenMaiBangMa(maKhuyenMai);
 
 			System.out.println(maChuyenTau);
@@ -251,7 +244,6 @@ public class VeDAO {
 					maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, new ChuyenTau(maChuyenTau), kh, km, dt);
 			System.out.println("lấy dữ liệu vé thành công");
 		}
-
 		return v;
 	}
 
