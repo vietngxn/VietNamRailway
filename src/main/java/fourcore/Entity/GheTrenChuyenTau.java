@@ -7,7 +7,9 @@ public class GheTrenChuyenTau implements Serializable {
     private String trangThaiGhe;
     private double giaTienGhe;
     private ChuyenTau chuyenTau;
-    private GheNgoi gheNgoi;
+
+
+	private GheNgoi gheNgoi;
 
     public GheTrenChuyenTau(String maGheTrenChuyenTau, String trangThaiGhe, double giaTienGhe, ChuyenTau chuyenTau, GheNgoi gheNgoi) {
         setMaGheTrenChuyenTau(maGheTrenChuyenTau);
@@ -59,4 +61,6 @@ public class GheTrenChuyenTau implements Serializable {
     public void setGheNgoi(GheNgoi gheNgoi) {
         this.gheNgoi = gheNgoi;
     }
+    
+
 }
