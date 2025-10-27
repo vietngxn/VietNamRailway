@@ -2,13 +2,17 @@ package fourcore.GiaoDien;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
+import fourcore.Entity.Tau;
+import fourcore.dao.ThongKeDAO;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -108,16 +112,16 @@ public class QuanLiThongKeChuyenTau extends Application {
 	private VBox btn_layout;
 	private Button btn_xuatThongKe;
 	private GridPane tableCol;
-	private Label colmaGhe;
-	private Label coltenGhe;
+	private Label colmaChuyenTau;
+	private Label colmaTau;
 	private Label colsoLanSuDung;
 	private StackPane paneCol1;
 	private StackPane paneCol2;
 	private StackPane paneCol3;
 	private VBox table_desc_layout;
-	private Label lbl_maGhe;
+	private Label lbl_maTau;
 	private Label lbl_soLanSuDung;
-	private Label lbl_tenGhe;
+	private Label lbl_tenTau;
 	    private HBox banVeBox;
 	    private HBox doiVeBox;
 	    private HBox hoanVeBox;
@@ -155,9 +159,13 @@ public class QuanLiThongKeChuyenTau extends Application {
 		private Label lbl_desc;
 		private HBox layout_desc;
 		private String loaiThongKe;
+		private ThongKeDAO thongkeDAO;
+		private Map<Tau, Integer> map;
 	@Override
 	public void start(Stage primaryStage) {
 try {
+			thongkeDAO = new ThongKeDAO();
+			map = thongkeDAO.getTauVaSoLanDi();
             BorderPane root = new BorderPane();
             Scene scene = new Scene(root,1920,1000);
             primaryStage.setScene(scene);
@@ -629,7 +637,7 @@ try {
 			
 			create_btnlayout();
 			primaryStage.setFullScreen(true);
-//			primaryStage.show();
+			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -667,7 +675,7 @@ try {
 		button_thongKe3.setStyle(style);
 		button_thongKe3.setPrefSize(275, 50);
 		
-		layout_nutthongke.getChildren().addAll(button_thongKe1,button_thongKe2,button_thongKe3);
+		
 		
 		checks = new ArrayList<>(Arrays.asList(false, false, false));
 
@@ -687,7 +695,12 @@ try {
 		        comboBox.getSelectionModel().selectFirst();
 		        if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
 	        		table_desc.getChildren().clear();
-	        		create_barchart_ghengoi();
+	        		try {
+						create_barchart_chuyentau();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 	        		noiDungChinh.getChildren().remove(layout_total);
 	        	}
 	        	else {
@@ -699,7 +712,12 @@ try {
 		        comboBox.setOnAction(event  -> { 
 		        	if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
 		        		table_desc.getChildren().clear();
-		        		create_barchart_ghengoi();
+		        		try {
+							create_barchart_chuyentau();
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 		        		noiDungChinh.getChildren().remove(layout_total);
 		        	}
 		        	else {
@@ -767,7 +785,7 @@ try {
 		        checks.set(0, false);
 		        checks.set(1, false);
 		        checks.set(2, true);
-		        ObservableList<String> itemsThang = FXCollections.observableArrayList("BarChart", "PieChart");
+		        ObservableList<String> itemsThang = FXCollections.observableArrayList("BarChart", "Table");
 		        comboBox.setItems(itemsThang);
 		        comboBox.getSelectionModel().selectFirst();
 		        
@@ -855,7 +873,7 @@ try {
 		layout_combobox = new HBox();
 		layout_combobox.setTranslateY(20);
 		layout_combobox.setSpacing(30);
-		ObservableList<String> items = FXCollections.observableArrayList("BarChart","PieChart");
+		ObservableList<String> items = FXCollections.observableArrayList("BarChart","Table");
 		
 		String style1 = "-fx-font-family:'Inter';-fx-text-fill:#00BACB;-fx-font-size: 15px;";
 		comboBox = createComboBox(items);
@@ -868,7 +886,7 @@ try {
 		
 		date.setPrefSize(400, 40);
 		date.getStyleClass().add("date-picker-custom");
-		layout_combobox.getChildren().addAll(date,comboBox);
+		layout_combobox.getChildren().addAll(comboBox);
 		
 		title_layout.getChildren().add(layout_combobox);
 		
@@ -894,9 +912,24 @@ try {
 	{
 		table_desc = new VBox();
 		table_desc.setPrefHeight(400);
-		comboBox.getSelectionModel().selectFirst();
-		create_barchart_thang();
 		
+		comboBox.setOnAction(event  -> { 
+        	if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
+        		table_desc.getChildren().clear();
+        		try {
+					create_barchart_chuyentau();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        		noiDungChinh.getChildren().remove(layout_total);
+        	}
+        	else {
+        		table_desc.getChildren().clear();
+        		create_table();
+        		
+        	}
+        });
 		noiDungChinh.getChildren().add(table_desc);
 	}
 	
@@ -990,30 +1023,32 @@ try {
 	    table_desc.getChildren().add(pieChart);
 	}
 	
-	public void create_barchart_ghengoi()
+	public void create_barchart_chuyentau() throws SQLException
 	{
+			
 			CategoryAxis ca = new CategoryAxis();
-			ca.setLabel("Ghế");
+			ca.setLabel("Chuyến Tàu");
 			NumberAxis na = new NumberAxis();
-			na.setLabel("Số lượng ngồi");
+			
+			
+			na.setLabel("Số Chuyến Đi");
+
 			
 			BarChart<String, Number> barchart = new BarChart<String, Number>(ca, na);
-			barchart.setTitle("Thống kê top 10 ghế bán chạy nhất tháng");
+			barchart.setTitle("Thống kê top 10 chuyến tàu chạy nhiều nhất");
 			barchart.setLegendVisible(false);
 			barchart.setAnimated(false);
 			
+			
 			ArrayList<XYChart.Data<String, Number>> listdata = new ArrayList<>();
 			
-			listdata.add(new XYChart.Data<>("GN001", 10));
-			listdata.add(new XYChart.Data<>("GN002", 20));
-			listdata.add(new XYChart.Data<String, Number>("GN003", 30));
-			listdata.add(new XYChart.Data<String, Number>("GN004", 40));
-			listdata.add(new XYChart.Data<String, Number>("GN005", 50));
-			listdata.add(new XYChart.Data<String, Number>("GN006", 60));
-			listdata.add(new XYChart.Data<String, Number>("GN007", 70));
-			listdata.add(new XYChart.Data<String, Number>("GN008", 80));
-			listdata.add(new XYChart.Data<String, Number>("GN009", 90));
-			listdata.add(new XYChart.Data<String, Number>("GN010", 100));
+			for(Map.Entry<Tau, Integer> x : map.entrySet())
+			{
+				Tau tau = x.getKey();
+				int soLan = x.getValue();
+				listdata.add(new XYChart.Data<>(tau.getTenTau(),soLan));
+			}
+			
 			
 			for(int i = 0; i < listdata.size() - 1;i++)
 			{
@@ -1027,6 +1062,11 @@ try {
 					}
 				}
 			}
+			double max = listdata.get(0).getYValue().doubleValue();
+			na.setTickUnit(1);
+			na.setAutoRanging(false);
+			na.setLowerBound(0);
+			na.setUpperBound(max + 1);
 			
 			XYChart.Series<String, Number> list = new XYChart.Series<String, Number>();
 			
@@ -1053,23 +1093,23 @@ try {
 
 		String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 24px; -fx-font-weight: bold;";
 
-		colmaGhe = new Label("Mã Ghế");
-		colmaGhe.setTranslateX(-100);
-		colmaGhe.setStyle(styleHeader);
+		colmaChuyenTau = new Label("Mã Chuyến Tàu");
+		colmaChuyenTau.setTranslateX(-250);
+		colmaChuyenTau.setStyle(styleHeader);
 		
-		coltenGhe = new Label("Tên Ghế");
-		coltenGhe.setTranslateX(-100);
-		coltenGhe.setStyle(styleHeader);
+		colmaTau = new Label("Mã Tàu");
+		colmaTau.setTranslateX(-150);
+		colmaTau.setStyle(styleHeader);
 		
 		
 		
 		colsoLanSuDung = new Label("Tổng");
-		colsoLanSuDung.setTranslateX(100);
+		colsoLanSuDung.setTranslateX(300);
 		colsoLanSuDung.setStyle(styleHeader);
 		
 		
-		paneCol1 = new StackPane(colmaGhe);
-		paneCol2 = new StackPane(coltenGhe);
+		paneCol1 = new StackPane(colmaChuyenTau);
+		paneCol2 = new StackPane(colmaTau);
 		paneCol3 = new StackPane(colsoLanSuDung);
 		
 		paneCol1.setPrefWidth(200);
@@ -1091,8 +1131,12 @@ try {
 		table_desc_layout = new VBox();
 		table_desc_layout.setSpacing(20);
 		
-		create_layout_dong("MG001","Ghe Nam", 15);
-		create_layout_dong("MG001","Ghe Nam", 25);
+		for(Map.Entry<Tau, Integer> x : map.entrySet())
+		{
+			Tau tau = x.getKey();
+			int solan = x .getValue();
+			create_layout_dong(tau.getMaTau(), tau.getTenTau(), solan);
+		}
 		
 		
 		table_layout.getChildren().add(table_desc_layout);
@@ -1100,7 +1144,7 @@ try {
 		
 	}
 	
-	public void create_layout_dong(String maGhe,String tenGhe,int soLanSuuDung)
+	public void create_layout_dong(String maTau,String tenTau,int soLanSuuDung)
 	{
 		
 		GridPane data = new GridPane();
@@ -1113,14 +1157,14 @@ try {
 		data.setPadding(new Insets(0, 0, 0, 10));
 		
 		String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
-		Label[] labels = {lbl_maGhe = new Label(maGhe),lbl_tenGhe =  new Label(tenGhe),lbl_soLanSuDung =new Label(Integer.toString(soLanSuuDung))};
+		Label[] labels = {lbl_maTau = new Label(maTau),lbl_tenTau =  new Label(tenTau),lbl_soLanSuDung =new Label(Integer.toString(soLanSuuDung))};
 		double[] widths = {200, 200,400};
-		lbl_maGhe.setTranslateX(-410);
-		lbl_tenGhe.setTranslateX(-210);
-		lbl_soLanSuDung.setTranslateX(320);
+		lbl_maTau.setTranslateX(-560);
+		lbl_tenTau.setTranslateX(-250);
+		lbl_soLanSuDung.setTranslateX(550);
 		
-		lbl_maGhe.setStyle(baseStyle);
-		lbl_tenGhe.setStyle(baseStyle);
+		lbl_maTau.setStyle(baseStyle);
+		lbl_tenTau.setStyle(baseStyle);
 		lbl_soLanSuDung.setStyle(baseStyle);
 		
 		String normalStyle = """

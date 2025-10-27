@@ -12,23 +12,25 @@ import fourcore.Entity.LoaiTuongTacVe;
 
 public class LoaiTuongTac_Dao {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
+	ArrayList<LoaiTuongTacVe> list = getList();
 
-	public LoaiTuongTac_Dao() {
+	public LoaiTuongTac_Dao() throws SQLException {
+		getList();
 	}
 
-	ArrayList<LoaiTuongTacVe> list = new ArrayList<>();
 
 	public ArrayList<LoaiTuongTacVe> getList() throws SQLException {
 		Statement myStmt = databaseConnector.connect();
+		ArrayList<LoaiTuongTacVe> list1 = new ArrayList<LoaiTuongTacVe>();
 		String query = "select * from LoaiTuongTacVe";
 		ResultSet rs = myStmt.executeQuery(query);
 		while (rs.next()) {
 			String maLoai = rs.getString(1);
 			String tenLoai = rs.getString(2);
 			LoaiTuongTacVe lt = new LoaiTuongTacVe(maLoai, tenLoai);
-			list.add(lt);
+			list1.add(lt);
 		}
-		return list;
+		return list1;
 	}
 
 	public LoaiTuongTacVe getLoaiTheoMa(String maTuongTac) throws SQLException {

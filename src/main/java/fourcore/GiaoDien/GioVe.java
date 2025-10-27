@@ -649,7 +649,12 @@ public class GioVe extends Application {
                 cmbCTKM.setPromptText("Chọn chương trình");
 
                 // Lấy danh sách CTKM từ DB
-                ChuongTrinhKhuyenMaiDAO ctkmDAO = new ChuongTrinhKhuyenMaiDAO();
+                ChuongTrinhKhuyenMaiDAO ctkmDAO = null;
+                try {
+                    ctkmDAO = new ChuongTrinhKhuyenMaiDAO();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 ArrayList<KhuyenMai> listCTKM;
                 try {
                     listCTKM = ctkmDAO.getListKhuyenMai();
