@@ -11,17 +11,17 @@ import fourcore.Entity.KhuyenMai;
 
 public class KhuyenMai_Dao {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
-
+	ArrayList<KhuyenMai> list = getList();
 	public KhuyenMai_Dao() throws SQLException {
         getList();
 	}
 
-	ArrayList<KhuyenMai> list = new ArrayList<>();
 
 	public ArrayList<KhuyenMai> getList() throws SQLException {
 		Statement myStmt = databaseConnector.connect();
 		String query = "select * from KhuyenMai";
 		ResultSet rs = myStmt.executeQuery(query);
+		ArrayList<KhuyenMai> list1 = new ArrayList<>();
 		while (rs.next()) {
 			String ma = rs.getString("maKhuyenMai");
 			String ten = rs.getString("tenChuongTrinh");
@@ -31,10 +31,10 @@ public class KhuyenMai_Dao {
 			LocalDateTime ngayBD = rs.getTimestamp("ngayBatDau").toLocalDateTime();
 			LocalDateTime ngayKT = rs.getTimestamp("ngayKetThuc").toLocalDateTime();
 
-			list.add(new KhuyenMai(ma, ten, trangThai, dieuKien, phanTram, ngayBD, ngayKT));
+			list1.add(new KhuyenMai(ma, ten, trangThai, dieuKien, phanTram, ngayBD, ngayKT));
 			System.out.println("Lấy dữ liệu thành công");
 		}
-		return list;
+		return list1;
 	}
 
 	public KhuyenMai getKhuyenMaiBangMa(String maKhuyenMai) throws SQLException {
