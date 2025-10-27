@@ -64,4 +64,6 @@ public class LichSuTuongTacVe_Dao {
 		boolean check = st.execute(query);
 		return check;
 	}
+	
+
 }

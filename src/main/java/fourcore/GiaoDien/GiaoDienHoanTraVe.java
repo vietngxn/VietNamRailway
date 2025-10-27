@@ -118,6 +118,8 @@ public class GiaoDienHoanTraVe extends Application {
 	private StackPane paneCol7;
 
 	Map<String, Double> listVeThanhToan = new HashMap<>();
+	private BorderPane root;
+	private HoanTraVeControl ctrl = new HoanTraVeControl();
 	private static double tongCongPhiHoanTra;
 
 	public void loadLableTongCongValue(double tongCongThanhTien) {
@@ -273,9 +275,7 @@ public class GiaoDienHoanTraVe extends Application {
 		return pnlReturn;
 	}
 
-	public Map<String, Double> traVeDanhSachThanhToanChoControl() {
-		return listVeThanhToan;
-	}
+
 
 	private HBox taoSubCT1(String label, String value, String leftStyle, String rightStyle) {
 		Label lblLeft = new Label(label);
@@ -1028,34 +1028,24 @@ public class GiaoDienHoanTraVe extends Application {
 				}
 			});
 
-			BorderPane root = new BorderPane();
-			root.setLeft(menuList);
-			root.setCenter(noiDungChinh);
+//			root = new BorderPane();
+//			root.setLeft(menuList);
+//			root.setCenter(noiDungChinh);
 
-			btnHoanVe.setOnMouseClicked(event -> {
-				HoanTraVeControl ctrl = new HoanTraVeControl();
-				try {
-					ctrl.traVeGiaoDien(root, listVeThanhToan);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-			});
-
-			Scene scene = new Scene(root, 1800, 900);
-			primaryStage.setScene(scene);
-			primaryStage.setTitle("Hệ thống quản lý vé tàu");
-			primaryStage.setFullScreen(true);
-			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	public Button traVeNutHoanVe() {
+		return this.btnHoanVe;
+	}
+	
+	public Map<String, Double> traVeListVeThanhToan(){
+		return this.listVeThanhToan;
+	}
 	public VBox loadDuLieuLenTable() throws SQLException {
 		dao = new VeDAO();
-//		list = dao.getListHoanVe();
-//		list.removeAll(list);
 		list = dao.getListHoanVe();
 
 		VBox box = new VBox(10);

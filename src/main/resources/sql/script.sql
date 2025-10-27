@@ -232,7 +232,7 @@ CREATE TABLE Ve (
     ghiChu NVARCHAR(255),
     trangThaiDoiVe NVARCHAR(10) DEFAULT N'chưa đổi'
         CHECK (trangThaiDoiVe IN (N'đã đổi', N'chưa đổi')),
-    trangThaiVe NVARCHAR(10) DEFAULT N'hoạt động'
+    trangThaiVe NVARCHAR(20) DEFAULT N'hoạt động'
         CHECK (trangThaiVe IN (N'hoạt động', N'đã hoàn trả', N'kết thúc')),
     maChuyenTau NVARCHAR(20) NOT NULL,
     maKhachHang NVARCHAR(20) NOT NULL,
@@ -485,7 +485,7 @@ INSERT INTO Ve (maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKh
 
 INSERT INTO Ve (maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe, maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, maChuyenTau, maKhachHang, maKhuyenMai, maDoiTuongGiamGia) VALUES
 (N'V005', N'Hà Nội', N'TP HCM', N'Super Express', '2025‑11‑20 08:00:00', '2025‑10‑20 18:00:00', 1, 1, 1, 1, N'Một chiều', NULL, 550000, NULL, N'chưa đổi', N'hoạt động', N'CT001', N'KH001', N'KM01', N'DT02'),
-(N'V006', N'Đà Nẵng', N'Nha Trang', N'Night Dreamer', '2025‑11‑21 22:00:00', '2025‑10‑22 06:00:00', 2, 1, 2, 1, N'Khứ hồi', NULL, 820000, NULL, N'chưa đổi', N'hoạt- động', N'CT002', N'KH002', NULL, N'DT01'),
+(N'V006', N'Đà Nẵng', N'Nha Trang', N'Night Dreamer', '2025‑11‑21 22:00:00', '2025‑10‑22 06:00:00', 2, 1, 2, 1, N'Khứ hồi', NULL, 820000, NULL, N'chưa đổi', N'hoạt động', N'CT002', N'KH002', NULL, N'DT01'),
 (N'V007', N'Hà Nội', N'TP HCM', N'Super Express', '2025‑11‑20 08:00:00', '2025‑10‑20 18:00:00', 1, 1, 1, 1, N'Một chiều', NULL, 550000, NULL, N'chưa đổi', N'hoạt động', N'CT001', N'KH001', N'KM01', N'DT02'),
 (N'V008', N'Đà Nẵng', N'Nha Trang', N'Night Dreamer', '2025‑11‑21 22:00:00', '2025‑10‑22 06:00:00', 2, 1, 2, 1, N'Khứ hồi', NULL, 820000, NULL, N'chưa đổi', N'hoạt động', N'CT002', N'KH002', NULL, N'DT01');
 
