@@ -57,18 +57,6 @@ public class HoanTraVeControl {
 		});
 	}
 
-//	public void quayLaiGiaoDienGioVe(BorderPane root) {
-//		if (giaoDienGioVeHoanTra != null) {
-//			root.setCenter(giaoDienGioVeHoanTra);
-//		} else {
-//			System.out.println("⚠ previousContent bị null");
-//		}
-//	}
-
-//	public Map<String, Double> loadDanhSachLenGiaoDienThanhToan() {
-//		return mapVe;
-//	}
-
 	public void loadDuLieuThanhToan(Map<String, Double> listVe, Label lblTongCong, Label lblSoLuong) {
 		double tongcong = 0;
 		int cnt = 0;

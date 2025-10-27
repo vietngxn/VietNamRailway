@@ -29,6 +29,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -103,7 +104,7 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 	private VBox pnlThanhToanButton;
 	private HBox pnlThanhToanButtonSub1;
 	private HBox pnlThanhToanButtonSub2;
-	private Button btnTroLai;
+	private Button btnTroLai = new Button("Trở lại");
 	private VBox pnlXuatHoaDonCanNhan;
 	private VBox pnlThongTinXuatHoaDonCaNhan;
 	private Button btnThanhToan;
@@ -564,225 +565,10 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 			userBox.setTranslateY(70);
 			userBox.getChildren().addAll(userIcon, userLabel, settingIcon);
 			menuList.getChildren().add(userBox);
-			noiDungChinh = new VBox();
-			noiDungChinh.setStyle("-fx-background-color: #F7F7F7;");
-			noiDungChinh.setPrefWidth(1300);
 
-			pnlDoiVelbl = new Pane();
-			lblDoiVe = new Label("Hoàn trả vé");
-			pnlDoiVelbl.getChildren().add(lblDoiVe);
-			lblDoiVe.setStyle("-fx-font-size: 40px;-fx-font-weight: bold;");
-			noiDungChinh.getChildren().add(pnlDoiVelbl);
-			VBox.setMargin(pnlDoiVelbl, new Insets(20, 0, 0, 50));
-
-			pnlThongTinlbl = new Pane();
-			lblThongTin = new Label("Thông tin người hoàn trả vé");
-			pnlThongTinlbl.getChildren().add(lblThongTin);
-			lblThongTin.setStyle("-fx-font-size: 25px;-fx-font-weight: bold;");
-			noiDungChinh.getChildren().add(pnlThongTinlbl);
-			VBox.setMargin(pnlThongTinlbl, new Insets(20, 0, 0, 50));
-
-			pnlThongTinNguoiMua = new GridPane();
-			VBox.setMargin(pnlThongTinNguoiMua, new Insets(30, 0, 0, 0));
-			pnlThongTinNguoiMua.setAlignment(Pos.CENTER);
-			pnlThongTinNguoiMua.setHgap(400);
-			pnlThongTinNguoiMua.setVgap(10);
-
-			String leftStyle = """
-					    -fx-background-color: #00BACB;
-					    -fx-background-radius: 10px 0 0 10px;
-					    -fx-border-radius: 10px 0 0 10px;
-					    -fx-border-color: black;
-					    -fx-alignment: center-left;
-					    -fx-font-weight: bold;
-					    -fx-font-family: "Kanit";
-					    -fx-padding: 8 12 8 12;
-					""";
-
-			String rightStyle = """
-					    -fx-background-color: #E0E0E0;
-					    -fx-background-radius: 0 10px 10px 0;
-					    -fx-border-radius: 0 10px 10px 0;
-					   -fx-border-color: black;
-					    -fx-alignment: center-left;
-					    -fx-font-weight: bold;
-					    -fx-font-family: "Kanit";
-					    -fx-padding: 8 12 8 12;
-					""";
-
-			pnlThongTinNguoiMua.add(taoSubPane("Họ tên", "Nguyễn Tiến Đạt", leftStyle, rightStyle, 1), 0, 0);
-			pnlThongTinNguoiMua.add(taoSubPane("Email", "abc@gmail.com", leftStyle, rightStyle, 2), 1, 0);
-			pnlThongTinNguoiMua.add(taoSubPane("Số giấy tờ", "096123123123", leftStyle, rightStyle, 3), 0, 1);
-			pnlThongTinNguoiMua.add(taoSubPane("SĐT", "0933345556", leftStyle, rightStyle, 4), 1, 1);
-			noiDungChinh.getChildren().add(pnlThongTinNguoiMua);
-
-			pnlXuatHDlbl = new Pane();
-			lblXuatHD = new Label("Xuất hóa đơn");
-			pnlXuatHDlbl.getChildren().add(lblXuatHD);
-			lblXuatHD.setStyle("-fx-font-size: 25px;-fx-font-weight: bold;");
-			noiDungChinh.getChildren().add(pnlXuatHDlbl);
-			VBox.setMargin(pnlXuatHDlbl, new Insets(20, 0, 0, 50));
-
-			pnlRadXuatHoaDon = new GridPane();
-			pnlRadXuatHoaDon.setAlignment(Pos.CENTER);
-			pnlRadXuatHoaDon.setHgap(400);
-			pnlRadXuatHoaDon.setVgap(10);
-			VBox.setMargin(pnlRadXuatHoaDon, new Insets(20, 0, 0, 0));
-
-			RadXuatHDCongTy = new RadioButton("Xuất hóa đơn cho công ty/đơn vị");
-			RadXuatHDCaNhan = new RadioButton("Xuất hóa đơn cho cá nhân");
-
-			String radStyle = """
-					    -fx-font-family: 'Inter';
-					    -fx-font-weight: bold;
-					    -fx-font-size: 18px;
-					    -fx-text-fill: #00BACB;
-					    -fx-mark-color: #00BACB;
-					""";
-
-			RadXuatHDCongTy.setStyle(radStyle);
-			RadXuatHDCaNhan.setStyle(radStyle);
-			ToggleGroup groupRad = new ToggleGroup();
-
-			RadXuatHDCongTy.setToggleGroup(groupRad);
-			RadXuatHDCaNhan.setToggleGroup(groupRad);
-
-			RadXuatHDCaNhan.setSelected(true);
-
-			pnlRadXuatHoaDon.add(RadXuatHDCongTy, 1, 0);
-			pnlRadXuatHoaDon.add(RadXuatHDCaNhan, 0, 0);
-
-			noiDungChinh.getChildren().add(pnlRadXuatHoaDon);
-
-			pnlThongTinXuatHoaDonCongTy = taoXuatHoaDonCongTyPane(leftStyle, rightStyle);
-			noiDungChinh.getChildren().add(pnlThongTinXuatHoaDonCongTy);
-
-			pnlThongTinXuatHoaDonCaNhan = taoXuatHoaDonCaNhanPane(leftStyle, rightStyle);
-			noiDungChinh.getChildren().add(pnlThongTinXuatHoaDonCaNhan);
-			VBox.setMargin(pnlThongTinXuatHoaDonCongTy, new Insets(20, 0, 100, 150));
-			VBox.setMargin(pnlThongTinXuatHoaDonCaNhan, new Insets(20, 0, 100, 150));
-
-			pnlThongTinXuatHoaDonCongTy.setVisible(false);
-			pnlThongTinXuatHoaDonCongTy.setManaged(false);
-
-			pnlThongTinXuatHoaDonCaNhan.setVisible(true);
-			pnlThongTinXuatHoaDonCaNhan.setManaged(true);
-
-			RadXuatHDCongTy.setOnAction(e -> {
-				if (RadXuatHDCongTy.isSelected()) {
-					System.out.println("Đã chọn: Xuất hóa đơn công ty");
-					pnlThongTinXuatHoaDonCongTy.setVisible(true);
-					pnlThongTinXuatHoaDonCongTy.setManaged(true);
-
-					pnlThongTinXuatHoaDonCaNhan.setVisible(false);
-					pnlThongTinXuatHoaDonCaNhan.setManaged(false);
-				}
-			});
-
-			RadXuatHDCaNhan.setOnAction(e -> {
-				if (RadXuatHDCaNhan.isSelected()) {
-					System.out.println("Đã chọn: Xuất hóa đơn cá nhân");
-					pnlThongTinXuatHoaDonCaNhan.setVisible(true);
-					pnlThongTinXuatHoaDonCaNhan.setManaged(true);
-
-					pnlThongTinXuatHoaDonCongTy.setVisible(false);
-					pnlThongTinXuatHoaDonCongTy.setManaged(false);
-				}
-			});
-
-			BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
-
-			pnlThanhToanButton = new VBox();
-			pnlThanhToanButtonSub1 = new HBox();
-			pnlThanhToanButtonSub2 = new HBox();
-
-			String btnRedStyle = "-fx-font-family: 'Inter';" + "-fx-font-size: 20px;" + "-fx-font-weight: bold;"
-					+ "-fx-text-fill:white;"
-					+ "-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #CB002C, #D498A5);"
-					+ "-fx-background-radius:15px;";
-
-			String btnBlueStyle = "-fx-font-family: 'Inter';" + "-fx-font-size: 20px;" + "-fx-font-weight: bold;"
-					+ "-fx-text-fill:white;" + "-fx-background-color: linear-gradient(to top, #00BACB, #B6D0D3);"
-					+ "-fx-background-radius:15px;";
-			String lblStyle = "-fx-font-size: 36px;";
-			btnRong = new Pane();
-			;
-
-			pnlTongCong = new HBox();
-			pnlSoLuongVe = new HBox(5);
-			lblSoLuongVe = new Label("Số lượng vé:");
-
-			lblSoLuongVe.setStyle(lblStyle);
-			lblSoLuongVeValue.setStyle(lblStyle + "-fx-font-weight: bold;");
-			pnlSoLuongVe.getChildren().addAll(lblSoLuongVe, lblSoLuongVeValue);
-
-			lblTongCong = new Label("Tổng cộng:");
-			lblTongCong.setWrapText(true);
-			lblTongCong.setStyle(lblStyle);
-
-			lblTongCongValue.setWrapText(true);
-			lblTongCongValue.setStyle(lblStyle + "-fx-font-weight: bold;");
-
-			HBox.setMargin(lblTongCong, new Insets(0, 20, 0, 0));
-			pnlTongCong.setAlignment(Pos.CENTER);
-
-			HBox.setMargin(pnlTongCong, new Insets(0, 0, 0, 150));
-			pnlTongCong.getChildren().addAll(pnlSoLuongVe, lblTongCong, lblTongCongValue);
-			HBox.setMargin(lblTongCong, new Insets(0, 0, 0, 100));
-			HBox.setMargin(pnlSoLuongVe, new Insets(0, 300, 0, 0));
-			pnlThanhToanButtonSub1.getChildren().addAll(btnRong, pnlTongCong);
-
-			btnTroLai = new Button("Trở lại");
-			btnTroLai.setStyle(btnRedStyle);
-			btnTroLai.setPrefSize(270, 50);
-			btnThanhToan = new Button("Thanh toán");
-			btnThanhToan.setStyle(btnBlueStyle);
-			btnThanhToan.setPrefSize(280, 50);
-
-			pnlThanhToanButtonSub2.getChildren().addAll(btnTroLai, btnThanhToan);
-			HBox.setMargin(btnTroLai, new Insets(0, 750, 0, 0));
-			pnlThanhToanButton.getChildren().addAll(pnlThanhToanButtonSub1, pnlThanhToanButtonSub2);
-			VBox.setMargin(pnlThanhToanButtonSub1, new Insets(20, 0, 0, 0));
-			VBox.setMargin(pnlThanhToanButtonSub2, new Insets(50, 0, 0, 0));
-			noiDungChinh.getChildren().addAll(pnlThanhToanButton);
-
-			VBox.setMargin(pnlThanhToanButton, new Insets(0, 0, 0, 20));
-			hieuUngHover(btnThanhToan);
-			hieuUngHover(btnTroLai);
-			btnThanhToan.setOnMouseClicked(event -> {
-				showConfirm("Bạn muốn thanh toán hóa đơn này");
-				for (Map.Entry<String, Double> entry : listVeThanhToan.entrySet()) {
-					String key = entry.getKey();
-					try {
-						System.out.println(vedao.ThayDoiTrangThaiVe(key, "đã hoàn trả"));
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
-				}
-			});
-
-			ctrl.loadDuLieuThanhToan(listVeThanhToan, lblTongCongValue, lblSoLuongVeValue);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public boolean showConfirm(String message) {
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setTitle("Xác nhận");
-		alert.setHeaderText(null);
-		alert.setContentText(message);
-		// 👉 Lấy Stage hiện tại từ Node
-		Stage stage = (Stage) root.getScene().getWindow();
-		alert.initOwner(stage);
-		alert.initModality(Modality.WINDOW_MODAL);
-
-		ButtonType yes = new ButtonType("Yes");
-		ButtonType no = new ButtonType("No");
-		alert.getButtonTypes().setAll(yes, no);
-
-		Optional<ButtonType> result = alert.showAndWait();
-		return result.isPresent() && result.get() == yes;
 	}
 
 	public void hieuUngHover(Button btn) {
@@ -1135,7 +921,6 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 			HBox.setMargin(pnlSoLuongVe, new Insets(0, 300, 0, 0));
 			pnlThanhToanButtonSub1.getChildren().addAll(btnRong, pnlTongCong);
 
-			btnTroLai = new Button("Trở lại");
 			btnTroLai.setStyle(btnRedStyle);
 			btnTroLai.setPrefSize(270, 50);
 			btnThanhToan = new Button("Thanh toán");
@@ -1153,7 +938,14 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 			hieuUngHover(btnThanhToan);
 			hieuUngHover(btnTroLai);
 			btnThanhToan.setOnMouseClicked(event -> {
-				showConfirm("Bạn muốn thanh toán hóa đơn này");
+				Alert thongbao = new Alert(AlertType.CONFIRMATION);
+
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("Xác nhận");
+				alert.setHeaderText("Bạn có muốn thanh toán cho hóa đơn hoàn trả vé này?");
+				alert.setContentText("Hãy chọn OK để xác nhận hoặc Cancel để hủy.");
+
+				Optional<ButtonType> result = alert.showAndWait();
 				for (Map.Entry<String, Double> entry : listVeThanhToan.entrySet()) {
 					String key = entry.getKey();
 					try {
