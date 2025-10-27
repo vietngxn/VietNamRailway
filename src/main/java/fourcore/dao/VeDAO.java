@@ -33,7 +33,7 @@ public class VeDAO {
 	private ArrayList<Ve> listVe1;
 
 	public ArrayList<Ve> getListVe() throws SQLException {
-		
+
 		Statement st = database.connect();
 		String q = "select * from Ve";
 		ResultSet rs = st.executeQuery(q);
@@ -80,7 +80,7 @@ public class VeDAO {
 
 	public ArrayList<Ve> getListHoanVe() throws SQLException {
 		ArrayList<Ve> listVe3 = new ArrayList<Ve>();
-		
+
 		Statement st = database.connect();
 		String q = """
 				SELECT v.*

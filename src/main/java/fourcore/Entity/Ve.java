@@ -238,11 +238,11 @@ public class Ve {
 
 		double phiHoanTra = 0;
 
-	    if (loaiVe == null) {
-	        System.out.println("⚠️ Loại vé null — không thể tính phí hoàn trả");
-	        return 0;
-	    }
-	    
+		if (loaiVe == null) {
+			System.out.println("⚠️ Loại vé null — không thể tính phí hoàn trả");
+			return 0;
+		}
+
 		if (loaiVe.equalsIgnoreCase("Vé cá nhân")) {
 			if (soGioChenhLech >= 4 && soGioChenhLech <= 24) {
 				phiHoanTra = thanhTien * 0.2;
@@ -251,7 +251,7 @@ public class Ve {
 			} else { // < 4h
 				return 0;
 			}
-		} else if (loaiVe.equalsIgnoreCase("Vé cập thể")) {
+		} else if (loaiVe.equalsIgnoreCase("Vé tập thể")) {
 			if (soGioChenhLech >= 24 && soGioChenhLech <= 72) {
 				phiHoanTra = thanhTien * 0.2;
 			} else if (soGioChenhLech > 72) {
@@ -269,6 +269,12 @@ public class Ve {
 		}
 
 		return phiHoanTra;
+	}
+
+	public double tinhThanhTienThanhToanHoanTra(double phihoantra) {
+		double giamDT = this.getGiaVe() * this.getDoiTuongGiamGia().giaTriPhanTramGiamGia * 0.01;
+		double giamKM = this.getGiaVe() * this.getKhuyenMai().getGiaTriPhanTramKhuyenMai() * 0.01;
+		return this.getGiaVe() - giamDT - giamKM - phihoantra;
 	}
 
 }

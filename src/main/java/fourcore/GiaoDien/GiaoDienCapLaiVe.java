@@ -126,10 +126,7 @@ public class GiaoDienCapLaiVe extends Application {
     private VBox layout_chiTiet;
     private Ve vechon = new Ve();
     private boolean dangCapNhatTrangThai = false;
-	private VeDAO vedao;
-	
-
-    // private ArrayList<Ve> list = vedao.themNhieuVeTau();
+    private VeDAO vedao;
 
     public VBox taoDataChoTableCapLaiVe(String maVeTau, String tenTau, String gaDigaDen, LocalDateTime ngayGioDi,
             LocalDateTime ngayGioDen, int soToa, int soTang, int soGhe, String loaiVe, String maGiayTo, double giaVe,
@@ -250,7 +247,7 @@ public class GiaoDienCapLaiVe extends Application {
                     -fx-font-family: "Kanit";
                     -fx-padding: 8 12 8 12;
                 """;
-        
+
         Ve ve1 = vedao.getVeBangMaVe(maVeTau);
         pnlsubCT1.addRow(0, taoSubCT1("Họ tên", ve1.getKhachHang().getHoten(), leftStyle, rightStyle));
         pnlsubCT1.addRow(1,
@@ -431,8 +428,8 @@ public class GiaoDienCapLaiVe extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-        	vedao = new VeDAO();
-        	list = vedao.getListVe();
+            vedao = new VeDAO();
+            list = vedao.getListVe();
             menuList = new VBox();
             menuList.setStyle("-fx-background-color: #F7F7F7;");
             menuList.setPrefWidth(500);
@@ -1059,7 +1056,7 @@ public class GiaoDienCapLaiVe extends Application {
                     String trangThai = vechon.getTrangThaiVe();
 
                     try {
-                    	LoaiTuongTac_Dao lttdao = new LoaiTuongTac_Dao();
+                        LoaiTuongTac_Dao lttdao = new LoaiTuongTac_Dao();
                         ArrayList<LoaiTuongTacVe> listloaitt = lttdao.getList();
 
                         LoaiTuongTacVe lttv1 = new LoaiTuongTacVe();
@@ -1078,7 +1075,6 @@ public class GiaoDienCapLaiVe extends Application {
                         } else
                             s = "TT" + sl;
 
-                        
                         Ve ve1 = vedao.getVeBangMaVe(mave);
                         LichSuTuongTacVe lstt = new LichSuTuongTacVe();
                         lstt.setMaTuongTac(s);
@@ -1146,9 +1142,8 @@ public class GiaoDienCapLaiVe extends Application {
         }
     }
 
-    public void hienThi() throws SQLException
-    {
-    	
+    public void hienThi() throws SQLException {
+
         for (Ve x : list) {
             pnlDataDoiVe.getChildren().add(
                     taoDataChoTableCapLaiVe(
@@ -1172,6 +1167,7 @@ public class GiaoDienCapLaiVe extends Application {
                             x.getDoiTuongGiamGia().getMaDoiTuongGiamGia()));
         }
     }
+
     public VBox getNoiDungChinhVe() {
         return this.noiDungChinh;
     }

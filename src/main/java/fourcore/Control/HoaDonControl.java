@@ -7,6 +7,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class HoaDonControl {
+	
     public void handleMenuTrangChuSelect(BorderPane root){
         QuanLiHoaDon gdQuanLiHoaDon = new QuanLiHoaDon();
         Stage quanLiHoaDonStage = new Stage();
@@ -14,4 +15,5 @@ public class HoaDonControl {
         VBox gdQLHD = gdQuanLiHoaDon.getQuanLiHoaDon();
         root.setCenter(gdQLHD);
     }
+    
 }
