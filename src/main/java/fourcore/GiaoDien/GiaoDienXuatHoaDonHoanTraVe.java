@@ -92,10 +92,6 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 	private GridPane pnlThongTinNguoiMua;
 	private Pane pnlXuatHDlbl;
 	private Label lblXuatHD;
-	private GridPane pnlRadXuatHoaDon;
-	private RadioButton RadXuatHDCongTy;
-	private RadioButton RadXuatHDCaNhan;
-	private VBox pnlThongTinXuatHoaDonCongTy;
 	private Pane btnRong;
 	private HBox pnlTongCong;
 	private Label lblTongCong;
@@ -104,8 +100,7 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 	private VBox pnlThanhToanButton;
 	private HBox pnlThanhToanButtonSub1;
 	private HBox pnlThanhToanButtonSub2;
-	private Button btnTroLai = new Button("Trở lại");
-	private VBox pnlXuatHoaDonCanNhan;
+	private Button btnTroLai = new Button("Trở lại");;
 	private VBox pnlThongTinXuatHoaDonCaNhan;
 	private Button btnThanhToan;
 	private TextField txtHoTen;
@@ -587,19 +582,6 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 		});
 	}
 
-	public VBox taoXuatHoaDonCongTyPane(String leftstyle, String rightstyle) {
-
-		VBox pnl = new VBox(15);
-		pnl.setAlignment(Pos.CENTER);
-
-		pnl.getChildren().add(taoSubXuatHoaDonPane("Người mua", leftstyle, rightstyle));
-		pnl.getChildren().add(taoSubXuatHoaDonPane("Số giấy tờ", leftstyle, rightstyle));
-		pnl.getChildren().add(taoSubXuatHoaDonPane("Mã số thuế", leftstyle, rightstyle));
-		pnl.getChildren().add(taoSubXuatHoaDonPane("Tên Công Ty/ Đơn vị", leftstyle, rightstyle));
-		pnl.getChildren().add(taoSubXuatHoaDonPane("Địa chỉ", leftstyle, rightstyle));
-		return pnl;
-
-	}
 
 	public VBox taoXuatHoaDonCaNhanPane(String leftstyle, String rightstyle) {
 
@@ -812,72 +794,10 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 			noiDungChinh.getChildren().add(pnlXuatHDlbl);
 			VBox.setMargin(pnlXuatHDlbl, new Insets(20, 0, 0, 50));
 
-			pnlRadXuatHoaDon = new GridPane();
-			pnlRadXuatHoaDon.setAlignment(Pos.CENTER);
-			pnlRadXuatHoaDon.setHgap(400);
-			pnlRadXuatHoaDon.setVgap(10);
-			VBox.setMargin(pnlRadXuatHoaDon, new Insets(20, 0, 0, 0));
-
-			RadXuatHDCongTy = new RadioButton("Xuất hóa đơn cho công ty/đơn vị");
-			RadXuatHDCaNhan = new RadioButton("Xuất hóa đơn cho cá nhân");
-
-			String radStyle = """
-					    -fx-font-family: 'Inter';
-					    -fx-font-weight: bold;
-					    -fx-font-size: 18px;
-					    -fx-text-fill: #00BACB;
-					    -fx-mark-color: #00BACB;
-					""";
-
-			RadXuatHDCongTy.setStyle(radStyle);
-			RadXuatHDCaNhan.setStyle(radStyle);
-			ToggleGroup groupRad = new ToggleGroup();
-
-			RadXuatHDCongTy.setToggleGroup(groupRad);
-			RadXuatHDCaNhan.setToggleGroup(groupRad);
-
-			RadXuatHDCaNhan.setSelected(true);
-
-			pnlRadXuatHoaDon.add(RadXuatHDCongTy, 1, 0);
-			pnlRadXuatHoaDon.add(RadXuatHDCaNhan, 0, 0);
-
-			noiDungChinh.getChildren().add(pnlRadXuatHoaDon);
-
-			pnlThongTinXuatHoaDonCongTy = taoXuatHoaDonCongTyPane(leftStyle, rightStyle);
-			noiDungChinh.getChildren().add(pnlThongTinXuatHoaDonCongTy);
-
 			pnlThongTinXuatHoaDonCaNhan = taoXuatHoaDonCaNhanPane(leftStyle, rightStyle);
 			noiDungChinh.getChildren().add(pnlThongTinXuatHoaDonCaNhan);
-			VBox.setMargin(pnlThongTinXuatHoaDonCongTy, new Insets(20, 0, 100, 150));
 			VBox.setMargin(pnlThongTinXuatHoaDonCaNhan, new Insets(20, 0, 100, 150));
 
-			pnlThongTinXuatHoaDonCongTy.setVisible(false);
-			pnlThongTinXuatHoaDonCongTy.setManaged(false);
-
-			pnlThongTinXuatHoaDonCaNhan.setVisible(true);
-			pnlThongTinXuatHoaDonCaNhan.setManaged(true);
-
-			RadXuatHDCongTy.setOnAction(e -> {
-				if (RadXuatHDCongTy.isSelected()) {
-					System.out.println("Đã chọn: Xuất hóa đơn công ty");
-					pnlThongTinXuatHoaDonCongTy.setVisible(true);
-					pnlThongTinXuatHoaDonCongTy.setManaged(true);
-
-					pnlThongTinXuatHoaDonCaNhan.setVisible(false);
-					pnlThongTinXuatHoaDonCaNhan.setManaged(false);
-				}
-			});
-
-			RadXuatHDCaNhan.setOnAction(e -> {
-				if (RadXuatHDCaNhan.isSelected()) {
-					System.out.println("Đã chọn: Xuất hóa đơn cá nhân");
-					pnlThongTinXuatHoaDonCaNhan.setVisible(true);
-					pnlThongTinXuatHoaDonCaNhan.setManaged(true);
-
-					pnlThongTinXuatHoaDonCongTy.setVisible(false);
-					pnlThongTinXuatHoaDonCongTy.setManaged(false);
-				}
-			});
 
 			BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
 
