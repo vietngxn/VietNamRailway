@@ -1,11 +1,15 @@
 package fourcore.Entity;
 
-public class GheTrenChuyenTau {
+import java.io.Serializable;
+
+public class GheTrenChuyenTau implements Serializable {
     private String maGheTrenChuyenTau;
     private String trangThaiGhe;
     private double giaTienGhe;
     private ChuyenTau chuyenTau;
-    private GheNgoi gheNgoi;
+
+
+	private GheNgoi gheNgoi;
 
     public GheTrenChuyenTau(String maGheTrenChuyenTau, String trangThaiGhe, double giaTienGhe, ChuyenTau chuyenTau, GheNgoi gheNgoi) {
         setMaGheTrenChuyenTau(maGheTrenChuyenTau);
@@ -57,4 +61,6 @@ public class GheTrenChuyenTau {
     public void setGheNgoi(GheNgoi gheNgoi) {
         this.gheNgoi = gheNgoi;
     }
+    
+
 }

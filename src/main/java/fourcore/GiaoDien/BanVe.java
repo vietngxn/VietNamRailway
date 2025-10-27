@@ -436,6 +436,8 @@ public class BanVe extends Application {
     public Button getBtn_timkiem(){
         return this.btn_timkiem;
     }
+
+
     public static void main(String[] args) {
 		launch(args);
 //		Application.launch(BanVe.class, args);

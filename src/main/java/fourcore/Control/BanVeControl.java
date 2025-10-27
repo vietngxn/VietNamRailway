@@ -137,6 +137,7 @@ public class BanVeControl {
             gdChonve.start(gdChonVeStage);
             VBox gdChonVeMain = gdChonve.getGdChonVe();
             root.setCenter(gdChonVeMain);
+            troLaiGDBanVe(root);
 
             ;
 
@@ -146,6 +147,13 @@ public class BanVeControl {
 
         });
     }
+    public void troLaiGDBanVe(BorderPane root){
+        gdChonve.getTrolaiBtn().setOnMouseClicked(e -> {
+            root.setCenter(gdBanVe.getGDBanVe());
+        });
+    }
+
+
     public ArrayList<ChuyenTau> getListChuyenTau() throws SQLException {
             ChuyenTauDAO chuyenTauDAO = new ChuyenTauDAO();
 
@@ -178,4 +186,5 @@ public class BanVeControl {
     public ArrayList<ChuyenTau> getListChuyenTauFiltered() {
             return listChuyenTauFiltered;
     }
+
 }

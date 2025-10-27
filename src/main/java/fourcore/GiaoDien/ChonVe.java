@@ -10,10 +10,12 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -21,10 +23,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.sql.Array;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -33,6 +32,7 @@ import java.util.*;
 
 
 public class ChonVe extends Application {
+    private  BanVe banVe = new BanVe();
     private BorderPane manHinhChinh;
     private VBox menuList;
     private VBox noiDungChinh;
@@ -92,13 +92,19 @@ public class ChonVe extends Application {
     String gaDen;
     GheNgoiDAO gheNgoiDAO = new GheNgoiDAO();
     ArrayList<ToaTau> dsToaTrenChuyen = null;
+    final List<GheTrenChuyenTau> gheDangChonList = new ArrayList<>();
+    Button btn_trolai = new Button("Trở lại");
 
     public ChonVe() throws SQLException {
-    }
 
+    }
+    public ChonVe(BanVe banVe) throws SQLException {
+        this.banVe = banVe;
+    }
     @Override
     public void start(Stage primaryStage) {
         try {
+            clearFileGheDangChon();
             System.out.println("Run Chon ve");
             System.out.println("Get list:....");
 
@@ -792,7 +798,7 @@ public class ChonVe extends Application {
             noiDungChinh.setPrefWidth(1200);
 
 
-            tao_button();
+            tao_button(root);
             BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
             root.setLeft(menuList);
             root.setCenter(noiDungChinh);
@@ -864,7 +870,8 @@ public class ChonVe extends Application {
             VBox slChoDatBox = new VBox();
             Label slChoDatLabel = new Label("SL chỗ đặt");
             slChoDatLabel.setFont(interRegular13);
-            Label soChoDat = new Label("120");
+            int soChoDaDat = gheNgoiDAO.tongSoGheTrenChuyen(c.getMaChuyenTau())- gheNgoiDAO.soGheTrongTrenChuyen(c.getMaChuyenTau());
+            Label soChoDat = new Label(""+ soChoDaDat);
             soChoDat.setTranslateX(20);
             soChoDat.setFont(interBold13);
             slChoDatBox.getChildren().addAll( slChoDatLabel, soChoDat);
@@ -874,7 +881,7 @@ public class ChonVe extends Application {
             VBox slChoTrongBox = new VBox();
             Label slChoTrongLabel = new Label("Trống");
             slChoTrongLabel.setFont(interRegular13);
-            Label soChoTrong = new Label("8");
+            Label soChoTrong = new Label(""+ gheNgoiDAO.soGheTrongTrenChuyen(c.getMaChuyenTau()));
             soChoTrong.setTranslateX(20);
             soChoTrong.setFont(interBold13);
             slChoTrongBox.getChildren().addAll( slChoTrongLabel, soChoTrong);
@@ -978,40 +985,46 @@ public class ChonVe extends Application {
                         popup.hide();
                     });
                     // Gán sự kiện click
+                    int index = i;
                     toaImg.setOnMouseClicked(toaEvent -> {
-                        for (ImageView iv : toaImageViews) {
+                        // Đặt lại hình cho tất cả toa theo trạng thái thực tế
+                        for (int j = 0; j < toaImageViews.size(); j++) {
+                            ImageView iv = toaImageViews.get(j);
+                            ToaTau toaKhac = (ToaTau) iv.getUserData();
 
-                            iv.setImage(new Image(getClass().getResource("/img/thantautrong.png").toExternalForm()));
+                            try {
+                                if (checkToaTrong(toaKhac.getMaToaTau())) {
+                                    iv.setImage(new Image(getClass().getResource("/img/thantaukin.png").toExternalForm()));
+                                } else {
+                                    iv.setImage(new Image(getClass().getResource("/img/thantautrong.png").toExternalForm()));
+                                }
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
 
-
+                        // Đổi hình cho toa đang chọn
                         toaImg.setImage(new Image(getClass().getResource("/img/toaDangChon.png").toExternalForm()));
 
-                        // Xử lý logic sau khi chọn toa
+                        // Lấy thông tin toa được chọn
                         ToaTau selectedToa = (ToaTau) toaImg.getUserData();
                         System.out.println("Toa được chọn: " + selectedToa.getMaToaTau());
-                        tenToaVaKhoang.setText("Toa số " +toaSo + ": " +selectedToa.getLoaiToaTau().getTenLoaiToaTau());
-                        System.out.println("Toa được chọn: " + selectedToa.getLoaiToaTau().getTenLoaiToaTau());
+                        tenToaVaKhoang.setText("Toa số " + toaSo + ": " + selectedToa.getLoaiToaTau().getTenLoaiToaTau());
 
-                        if(selectedToa.getLoaiToaTau().getMaLoaiToaTau().equals("LTToa01")){
-                            khoangLbl.setText("");
-                            danhSachGheGridPane.getChildren().clear();
-                            try {
+                        // Xử lý hiển thị layout
+                        danhSachGheGridPane.getChildren().clear();
+                        try {
+                            if (selectedToa.getLoaiToaTau().getMaLoaiToaTau().equals("LTToa01")) {
+                                khoangLbl.setText("");
                                 hienThiLayoutGhe(danhSachGheGridPane, selectedToa.getMaToaTau(), selectedChuyenTau.getMaChuyenTau());
-                            } catch (SQLException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }else if(selectedToa.getLoaiToaTau().getMaLoaiToaTau().equals("LTToa02")){
-                            danhSachGheGridPane.getChildren().clear();
-                            try {
+                            } else if (selectedToa.getLoaiToaTau().getMaLoaiToaTau().equals("LTToa02")) {
                                 hienThiLayoutGiuong(danhSachGheGridPane, selectedToa.getMaToaTau(), selectedChuyenTau.getMaChuyenTau());
-                            } catch (SQLException e) {
-                                throw new RuntimeException(e);
                             }
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
                         }
-
-
                     });
+
 
                     // Thêm vào danh sách hiển thị
                     danhSachToaTauBox.getChildren().add(toaImg);
@@ -1056,7 +1069,10 @@ public class ChonVe extends Application {
 
 
     }
-    public void tao_button() {
+    public Button getTrolaiBtn(){
+        return btn_trolai;
+    }
+    public void tao_button(BorderPane root) {
 
         layout_button = new HBox();
         layout_button.setPrefSize(1000, 100);
@@ -1064,7 +1080,7 @@ public class ChonVe extends Application {
         layout_button.setTranslateX(800);
 
 
-        Button btn_trolai = new Button("Trở lại");
+
         btn_trolai.setPrefSize(150, 50);
         btn_trolai.setTranslateY(-90);
         btn_trolai.setTranslateX(150);
@@ -1092,6 +1108,20 @@ public class ChonVe extends Application {
             st.play();
         });
 
+        btn_trolai.setOnMouseClicked(e -> {
+            BanVe gdBanVe = null;
+            try {
+                gdBanVe = new BanVe();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+            Stage gdBanVeStage = new Stage();
+            gdBanVe.start(gdBanVeStage);
+            VBox gdBanVeMain = gdBanVe.getGDBanVe();
+            root.setCenter(gdBanVeMain);
+            System.out.println("click click");
+        });
+
         btn_tieptuc.hoverProperty().addListener((obs, oval, nval) -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(200), btn_tieptuc);
             if (nval) {
@@ -1105,10 +1135,46 @@ public class ChonVe extends Application {
             }
             st.play();
         });
+        btn_tieptuc.setOnAction(event -> {
+            try {
+                if (gheDangChonList.isEmpty()) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Thông báo");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Vui lòng chọn ít nhất một ghế trước khi tiếp tục!");
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    alert.initOwner(stage);
+                    alert.initModality(Modality.WINDOW_MODAL);
+                    alert.showAndWait();
 
+                    return;
+                }
+
+                // Ghi danh sách ghế ra file
+                File file = new File("ds_ghe_dang_chon.dat");
+                try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+                    oos.writeObject(gheDangChonList);
+                }
+                System.out.println("✅ Đã ghi " + gheDangChonList.size() + " ghế vào file: " + file.getAbsolutePath());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
         layout_button.getChildren().addAll(btn_trolai, btn_tieptuc);
         noiDungChinh.getChildren().add(layout_button);
     }
+
+
+    private void clearFileGheDangChon() {
+        File file = new File("ds_ghe_dang_chon.dat");
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            System.out.println("🧹 Đã xóa nội dung file danh sách ghế: " + file.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void hienThiLayoutGhe(GridPane danhSachGheGridPane, String maToaTau, String maChuyen) throws SQLException {
         danhSachGheGridPane.getChildren().clear();
         int soGhe = 36;
@@ -1158,19 +1224,22 @@ public class ChonVe extends Application {
                             isSelected[0] = !isSelected[0]; // Toggle chọn / hủy chọn
 
                             if (isSelected[0]) {
-                                // Đổi sang ảnh ghế đang chọn
+                                // Chọn ghế
                                 gheTrongImg.setImage(new Image(getClass().getResource("/img/gheDangChon.png").toExternalForm()));
+                                gheDangChonList.add(gtc); // ➕ thêm vào danh sách chọn
                                 System.out.println("Ghế số " + soGheH + " đã chọn");
                             } else {
-                                if(gtc.getGheNgoi().isLuuDong() == true){
+                                // Bỏ chọn
+                                gheDangChonList.removeIf(g -> g.getGheNgoi().getSoGhe() == gtc.getGheNgoi().getSoGhe());
+                                if (gtc.getGheNgoi().isLuuDong()) {
                                     gheTrongImg.setImage(new Image(getClass().getResource("/img/gheluudong.png").toExternalForm()));
-                                }else {
+                                } else {
                                     gheTrongImg.setImage(new Image(getClass().getResource("/img/gheTrong.png").toExternalForm()));
-                                    System.out.println("Ghế số " + soGheH + " bỏ chọn");
                                 }
-
+                                System.out.println("Ghế số " + soGheH + " bỏ chọn");
                             }
                         });
+
                     }
 
 
@@ -1246,17 +1315,18 @@ public class ChonVe extends Application {
                             isSelected[0] = !isSelected[0]; // Toggle chọn / hủy chọn
 
                             if (isSelected[0]) {
-                                // Đổi sang ảnh ghế đang chọn
+                                // Chọn ghế
                                 gheTrongImg.setImage(new Image(getClass().getResource("/img/gheDangChon.png").toExternalForm()));
+                                gheDangChonList.add(gtc); // ➕ thêm vào danh sách chọn
                                 System.out.println("Ghế số " + soGheH + " đã chọn");
                             } else {
-                                if(gtc.getGheNgoi().isLuuDong() == true){
+                                gheDangChonList.removeIf(g -> g.getGheNgoi().getSoGhe() == gtc.getGheNgoi().getSoGhe());
+                                if (gtc.getGheNgoi().isLuuDong()) {
                                     gheTrongImg.setImage(new Image(getClass().getResource("/img/gheluudong.png").toExternalForm()));
-                                }else {
+                                } else {
                                     gheTrongImg.setImage(new Image(getClass().getResource("/img/gheTrong.png").toExternalForm()));
-                                    System.out.println("Ghế số " + soGheH + " bỏ chọn");
                                 }
-
+                                System.out.println("Ghế số " + soGheH + " bỏ chọn");
                             }
                         });
                     }
@@ -1354,8 +1424,11 @@ public class ChonVe extends Application {
                             if (isSelected[0]) {
                                 // Đổi sang ảnh ghế đang chọn
                                 gheTrongImg.setImage(new Image(getClass().getResource("/img/giuongDangChon.png").toExternalForm()));
+                                gheDangChonList.add(gtc); // ➕ thêm vào danh sách chọn
+
                                 System.out.println("Ghế số " + soGheH + " đã chọn");
                             } else {
+                                gheDangChonList.removeIf(g -> g.getGheNgoi().getSoGhe() == gtc.getGheNgoi().getSoGhe());
                                 if(gtc.getGheNgoi().isLuuDong() == true){
                                     gheTrongImg.setImage(new Image(getClass().getResource("/img/ghegiuongnamluudong.png").toExternalForm()));
                                 }else {
@@ -1437,8 +1510,11 @@ public class ChonVe extends Application {
                             if (isSelected[0]) {
                                 // Đổi sang ảnh ghế đang chọn
                                 gheTrongImg.setImage(new Image(getClass().getResource("/img/giuongDangChon.png").toExternalForm()));
+                                gheDangChonList.add(gtc); // ➕ thêm vào danh sách chọn
+
                                 System.out.println("Ghế số " + soGheH + " đã chọn");
                             } else {
+                                gheDangChonList.removeIf(g -> g.getGheNgoi().getSoGhe() == gtc.getGheNgoi().getSoGhe());
                                 if(gtc.getGheNgoi().isLuuDong() == true){
                                     gheTrongImg.setImage(new Image(getClass().getResource("/img/ghegiuongnamluudong.png").toExternalForm()));
                                 }else {

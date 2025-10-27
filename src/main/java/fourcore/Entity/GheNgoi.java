@@ -1,6 +1,8 @@
 package fourcore.Entity;
 
-public class GheNgoi {
+import java.io.Serializable;
+
+public class GheNgoi implements Serializable {
     private String maGheNgoi;
     private LoaiGhe loaiGhe;
     private Tang tang;

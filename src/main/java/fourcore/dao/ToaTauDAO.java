@@ -15,6 +15,8 @@ import java.util.ArrayList;
 public class ToaTauDAO {
     DatabaseConnector databaseConnector = new DatabaseConnector();
     ArrayList<ToaTau> listToaTau =  new ArrayList<>();
+    LoaiToaTauDAO loaiToaTauDAO = new LoaiToaTauDAO();
+
     public ArrayList<ToaTau> getListToaTau() throws SQLException {
         Statement myStmt = databaseConnector.connect();
         String query = "select * from ToaTau";
@@ -49,7 +51,6 @@ public class ToaTauDAO {
         String tenToaTau = rs.getString(2);
         int soToaTau = Integer.parseInt(rs.getString(3));
         String maLoaiToa = rs.getString(4);
-        LoaiToaTauDAO loaiToaTauDAO = new LoaiToaTauDAO();
         LoaiToaTau ltt = loaiToaTauDAO.getLoaiToaTau(maLoaiToa);
         System.out.println("Loại tàu import: " + ltt.getTenLoaiToaTau());
         ToaTau tt = new ToaTau(maToaTau, tenToaTau,soToaTau, ltt);

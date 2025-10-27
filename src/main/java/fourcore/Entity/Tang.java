@@ -1,6 +1,8 @@
 package fourcore.Entity;
 
-public class Tang {
+import java.io.Serializable;
+
+public class Tang implements Serializable {
     private String maTang;
     private int soTang;
     private double giaTang;

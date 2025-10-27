@@ -11,6 +11,12 @@ public class KhachHang implements Serializable {
 	private String passport;
 	private String doiTuong;
 
+	public KhachHang(String hoTen, String maGiayTo, String doiTuong) {
+		setHoten(hoTen);
+		setCccd(maGiayTo);
+		setDoiTuong(doiTuong);
+	}
+
 	public String getMaKhachHang() {
 		return maKhachHang;
 	}
@@ -90,6 +96,10 @@ public class KhachHang implements Serializable {
 	public String toString() {
 		return "KhachHang [maKhachHang=" + maKhachHang + ", hoten=" + hoTen + ", sdt=" + sdt + ", email=" + email
 				+ ", cccd=" + cccd + ", passport=" + passport + ", DoiTuong=" + doiTuong + "]";
+	}
+
+	public String toString2() {
+		return hoTen + " " + cccd + " " + doiTuong;
 	}
 
 }
