@@ -11,6 +11,10 @@ public class KhachHang implements Serializable {
 	private String passport;
 	private String doiTuong;
 
+    public KhachHang(String hoTen, String maGiayTo, String doiTuong){
+
+    }
+
 	public String getMaKhachHang() {
 		return maKhachHang;
 	}

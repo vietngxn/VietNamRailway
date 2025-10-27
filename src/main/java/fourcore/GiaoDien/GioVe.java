@@ -1,31 +1,35 @@
 package fourcore.GiaoDien;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.net.URL;
+import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
+import java.util.*;
 
+import fourcore.Entity.*;
+import fourcore.dao.ChuongTrinhKhuyenMaiDAO;
+import fourcore.dao.DoiTuongGiamGiaDAO;
+import fourcore.dao.ToaTauDAO;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -91,10 +95,22 @@ public class GioVe extends Application {
 	private ImageView userIcon;
 	private Label userLabel;
 	private ImageView settingIcon;
+    ToaTauDAO toaTauDAO = new ToaTauDAO();
+    ArrayList<ToaTau> listToaTauTrenChuyen;
+    public ArrayList<GheTrenChuyenTau> listGheSelected = new ArrayList<>();
+    DoiTuongGiamGiaDAO dtggDAO = new DoiTuongGiamGiaDAO();
+    public ArrayList<DoiTuongGiamGia> listDoiTuongGiamGia = dtggDAO.getListDoiTuongGiamGia();
+    Map<GheTrenChuyenTau, Double> mapTienGhe = new LinkedHashMap<>();
+    Map<GheTrenChuyenTau, KhachHang> mapChuyenTauVaUser = new LinkedHashMap<>();
 
-	private static double tongCongThanhTien;
+    double phanTramGG = 0;
+    double tongCongThanhTien;
+    private Label lblTrangThaiApDung;
+    KhuyenMai khuyenMaiSelect;
+    public GioVe() throws SQLException {
+    }
 
-	@Override
+    @Override
 	public void start(Stage primaryStage) {
 		try {
 			BorderPane root = new BorderPane();
@@ -547,17 +563,19 @@ public class GioVe extends Application {
 			pnlDataGioVe = new VBox(10);
 			pnlDataGioVe.setAlignment(Pos.CENTER);
 
-			pnlDataGioVe.getChildren().add(taoDataChoTableGioVe("SE2", "Sài Gòn - Hà Nội", "27/09/2025  -  08:40",
-					"Toa số 3 chỗ 23", "Nguyễn Tiến Đạt G", "Con cặc", "093636363636", 1400000, 0, 0, 1400000));
+//			pnlDataGioVe.getChildren().add(taoDataChoTableGioVe("SE2", "Sài Gòn - Hà Nội", "27/09/2025  -  08:40",
+//					"Toa số 3 chỗ 23", "Nguyễn Tiến Đạt G", "Con cặc", "093636363636", 1400000, 0, 0, 1400000));
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("ds_ghe_dang_chon.dat"))) {
+                listGheSelected = (ArrayList<GheTrenChuyenTau>) ois.readObject();
+                System.out.println("Dữ liệu đọc được: " + listGheSelected);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            for(int i = 0; i < listGheSelected.size(); i++){
+                pnlDataGioVe.getChildren().add(taoDataChoTableGioVe(listGheSelected.get(i)));
 
-			pnlDataGioVe.getChildren().add(taoDataChoTableGioVe("SE2", "Sài Gòn - Hà Nội", "27/09/2025  -  08:40",
-					"Toa số 3 chỗ 23", "Nguyễn Thị Kiều Trinh", "Trẻ em", "093636363636", 1400000, 0, 0, 1400000));
 
-			pnlDataGioVe.getChildren().add(taoDataChoTableGioVe("SE2", "Sài Gòn - Hà Nội", "27/09/2025  -  08:40",
-					"Toa số 3 chỗ 23", "Nguyễn Tiến Đạt G", "Con cặc", "093636363636", 1400000, 0, 0, 1400000));
-
-			pnlDataGioVe.getChildren().add(taoDataChoTableGioVe("SE2", "Sài Gòn - Hà Nội", "27/09/2025  -  08:40",
-					"Toa số 3 chỗ 23", "Nguyễn Tiến Đạt G", "Con cặc", "093636363636", 1400000, 0, 0, 1400000));
+            }
 
 			scrollPane = new ScrollPane();
 			scrollPane.setContent(pnlDataGioVe);
@@ -594,6 +612,8 @@ public class GioVe extends Application {
 			btnApDungChuongTrinhKhuyenMai = new Button("Áp dụng CTKM");
 			btnApDungChuongTrinhKhuyenMai.setStyle(btnBlueStyle);
 			btnApDungChuongTrinhKhuyenMai.setPrefSize(280, 50);
+            lblTrangThaiApDung = new Label();
+
 
 			pnlTongCong = new HBox();
 			lblTongCong = new Label("Tổng cộng:");
@@ -609,8 +629,86 @@ public class GioVe extends Application {
 
 			HBox.setMargin(pnlTongCong, new Insets(0, 0, 0, 650));
 			pnlTongCong.getChildren().addAll(lblTongCong, lblTongCongValue);
+            btnApDungChuongTrinhKhuyenMai.setOnAction(event -> {
+                Stage popupStage = new Stage();
+                popupStage.initOwner(primaryStage);
+                popupStage.initModality(Modality.APPLICATION_MODAL); // chặn thao tác ở main stage
+                popupStage.initStyle(StageStyle.UTILITY);            // hiển thị dạng popup gọn
+                popupStage.setAlwaysOnTop(true);
+                popupStage.setTitle("Chọn chương trình khuyến mãi");
 
-			pnlGioVeButtonSub1.getChildren().addAll(btnApDungChuongTrinhKhuyenMai, pnlTongCong);
+                // Nội dung popup
+                VBox root1 = new VBox(20);
+                root1.setPadding(new Insets(20));
+                root1.setAlignment(Pos.CENTER);
+
+                Label lbl = new Label("Chọn chương trình khuyến mãi");
+                lbl.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+
+                ComboBox<String> cmbCTKM = new ComboBox<>();
+                cmbCTKM.setPromptText("Chọn chương trình");
+
+                // Lấy danh sách CTKM từ DB
+                ChuongTrinhKhuyenMaiDAO ctkmDAO = new ChuongTrinhKhuyenMaiDAO();
+                ArrayList<KhuyenMai> listCTKM;
+                try {
+                    listCTKM = ctkmDAO.getListKhuyenMai();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    new Alert(Alert.AlertType.ERROR, "Không thể tải danh sách CTKM!").show();
+                    return;
+                }
+
+                ArrayList<String> tenChuongTrinhKhuyenMai = new ArrayList<>();
+                for (KhuyenMai km : listCTKM) {
+                    tenChuongTrinhKhuyenMai.add(km.getTenChuongTrinh());
+                }
+                cmbCTKM.getItems().addAll(tenChuongTrinhKhuyenMai);
+
+                Button btnApDung = new Button("Áp dụng");
+                btnApDung.setStyle("-fx-font-size: 16px; -fx-background-color: #00BACB; -fx-text-fill: white;");
+                btnApDung.setPrefWidth(120);
+
+                btnApDung.setOnAction(e -> {
+                    String selected = cmbCTKM.getValue();
+                    if (selected == null) {
+                        Alert alert = new Alert(Alert.AlertType.WARNING, "Vui lòng chọn chương trình khuyến mãi!", ButtonType.OK);
+                        alert.initOwner(popupStage);
+                        alert.showAndWait();
+                        return;
+                    }else{
+                        khuyenMaiSelect= new KhuyenMai();
+                        for (KhuyenMai km : listCTKM) {
+                            if(km.getTenChuongTrinh().equals(selected)){
+                                khuyenMaiSelect = km;
+                                break;
+                            }
+                        }
+                        double phanTramGG = khuyenMaiSelect.getGiaTriPhanTramKhuyenMai();
+                         tongCongThanhTien = 0.0;
+                        for(Double gia : mapTienGhe.values()){
+                            tongCongThanhTien += gia;
+                        }
+                        tongCongThanhTien=tongCongThanhTien - ((tongCongThanhTien*phanTramGG)/100);
+                        loadLableTongCongValue(tongCongThanhTien);
+
+
+                        lblTrangThaiApDung.setText("Chương trình đang áp dụng: "+ khuyenMaiSelect.getTenChuongTrinh()+" với ưu đãi "+khuyenMaiSelect.getGiaTriPhanTramKhuyenMai()+"%");
+                        popupStage.close();
+                    }
+
+                });
+
+                root1.getChildren().addAll(lbl, cmbCTKM, btnApDung);
+                Scene scene1 = new Scene(root1, 400, 200);
+                popupStage.setScene(scene1);
+                popupStage.showAndWait(); // show modal trong fullscreen, không tạo cửa sổ thứ 2
+            });
+            lblTrangThaiApDung.setTranslateX(400);
+            lblTrangThaiApDung.setTranslateY(-130);
+            lblTrangThaiApDung.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+            lblTrangThaiApDung.setStyle("-fx-text-fill: #43A047");
+            pnlGioVeButtonSub1.getChildren().addAll(btnApDungChuongTrinhKhuyenMai, pnlTongCong);
 
 			btnTroLai = new Button("Trở lại");
 			btnTroLai.setStyle(btnRedStyle);
@@ -619,12 +717,15 @@ public class GioVe extends Application {
 			btnTiepTuc.setStyle(btnBlueStyle);
 			btnTiepTuc.setPrefSize(280, 50);
 
+
+
+
 			pnlGioVeButtonSub2.getChildren().addAll(btnTroLai, btnTiepTuc);
 			HBox.setMargin(btnTroLai, new Insets(0, 750, 0, 0));
 			pnlGioVeButton.getChildren().addAll(pnlGioVeButtonSub1, pnlGioVeButtonSub2);
 			VBox.setMargin(pnlGioVeButtonSub1, new Insets(20, 0, 0, 0));
 			VBox.setMargin(pnlGioVeButtonSub2, new Insets(50, 0, 0, 0));
-			noiDungChinh.getChildren().addAll(pnlGioVeButton);
+			noiDungChinh.getChildren().addAll(pnlGioVeButton,lblTrangThaiApDung);
 
 			VBox.setMargin(pnlGioVeButton, new Insets(0, 0, 0, 20));
 			hieuUngHover(btnApDungChuongTrinhKhuyenMai);
@@ -654,9 +755,11 @@ public class GioVe extends Application {
 		});
 	}
 
-	public VBox taoDataChoTableGioVe(String matau, String gaDiGaDen, String ngayKhoiHanh, String vitrighe, String hoten,
-			String doituong, String sogiayto, double giave, double giamdoituong, double khuyenmai, double thanhtien) {
-
+	public VBox taoDataChoTableGioVe(GheTrenChuyenTau gheTrenChuyenTau) throws SQLException {
+        Label lblGiamDoiTuongValue = new Label("0");
+        Label lblKhuyenMaiValue = new Label("0");
+        Label lblThanhTienValue = new Label(String.valueOf(gheTrenChuyenTau.getGiaTienGhe()));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
 		VBox pnlReturn = new VBox();
 		VBox.setMargin(pnlReturn, new Insets(0, 30, 0, 30));
 		// ======= DÒNG DỮ LIỆU CHÍNH =======
@@ -668,10 +771,23 @@ public class GioVe extends Application {
 		data.setMaxWidth(1330);
 		data.setPrefHeight(70);
 		data.setPadding(new Insets(0, 0, 0, 10));
-
+        String gaDen="";
 		String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
-
-		Label[] labels = { new Label(matau), new Label(gaDiGaDen), new Label(ngayKhoiHanh), new Label(vitrighe) };
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("gaDen.dat"))) {
+            gaDen = ois.readObject().toString();
+            System.out.println("Dữ liệu ga den đọc được: " + gaDen);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        int soToa=0;
+        listToaTauTrenChuyen = toaTauDAO.getListToaTauByMaCT(gheTrenChuyenTau.getChuyenTau().getMaChuyenTau());
+        for (int i = 0; i < listToaTauTrenChuyen.size(); i++) {
+            if(listToaTauTrenChuyen.get(i).getMaToaTau().equals(gheTrenChuyenTau.getGheNgoi().getToaTau().getMaToaTau())){
+                soToa = i+1;
+                break;
+            }
+        }
+		Label[] labels = { new Label(gheTrenChuyenTau.getChuyenTau().getMaChuyenTau()), new Label("TPHCM - "+gaDen), new Label(gheTrenChuyenTau.getChuyenTau().getNgayGioDi().format(formatter)), new Label("Ghế số: "+gheTrenChuyenTau.getGheNgoi().getSoGhe() + " Toa số: "+ soToa) };
 		double[] widths = { 200, 200, 200, 200 };
 
 		for (int i = 0; i < labels.length; i++) {
@@ -769,27 +885,29 @@ public class GioVe extends Application {
 				    -fx-padding: 8 12 8 12;
 				""";
 
-		pnlsubCT1.addRow(0, taoSubCT1("Họ tên", hoten, leftStyle, rightStyle, 1));
-		pnlsubCT1.addRow(1, taoSubCT1("Đối tượng", doituong, leftStyle, rightStyle, 2));
-		pnlsubCT1.addRow(2, taoSubCT1("Số giấy tờ", sogiayto, leftStyle, rightStyle, 3));
+        pnlsubCT1.addRow(0, taoSubCT1("Họ tên", "", leftStyle, rightStyle, 1));
+        pnlsubCT1.addRow(1, taoSubCT1("Đối tượng", "", leftStyle, rightStyle, 2, gheTrenChuyenTau.getGiaTienGhe(), lblGiamDoiTuongValue, lblThanhTienValue,gheTrenChuyenTau));
+
+        pnlsubCT1.addRow(2, taoSubCT1("Số giấy tờ", "", leftStyle, rightStyle, 3));
 
 		// Các panel giá trị
 		String lblCTStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 18px;";
 		String lblValueCTStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 30px;";
 
-		VBox pnlsubCT2 = taoSubCT2("Giá vé", nf.format(giave), lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT3 = taoSubCT2("Giảm đối tượng", nf.format(giamdoituong), lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT4 = taoSubCT2("Khuyến mãi", nf.format(khuyenmai), lblCTStyle, lblValueCTStyle);
-		VBox pnlsubCT5 = taoSubCT2("Thành tiền", nf.format(thanhtien), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT2 = taoSubCT2("Giá vé", +gheTrenChuyenTau.getGiaTienGhe(), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT3 = taoSubCT2WithLabel("Giảm đối tượng", lblGiamDoiTuongValue, lblCTStyle, lblValueCTStyle);
+        VBox pnlsubCT5 = taoSubCT2WithLabel("Thành tiền", lblThanhTienValue, lblCTStyle, lblValueCTStyle);
 
-		pnlReturn.setUserData(thanhtien);
-		tongCongThanhTien += thanhtien;
+		pnlReturn.setUserData("");
+        double giaGheHienTai = gheTrenChuyenTau.getGiaTienGhe();
+        mapTienGhe.put(gheTrenChuyenTau,giaGheHienTai);
+		tongCongThanhTien += gheTrenChuyenTau.getGiaTienGhe();
 
 		pnlsubCT1.setPrefWidth(400);
-		for (Pane pnl : new Pane[] { pnlsubCT2, pnlsubCT3, pnlsubCT4, pnlsubCT5 })
+		for (Pane pnl : new Pane[] { pnlsubCT2, pnlsubCT3, pnlsubCT5 })
 			pnl.setPrefWidth(320);
 
-		pnlThongTinChiTiet.getChildren().addAll(pnlsubCT1, pnlsubCT2, pnlsubCT3, pnlsubCT4, pnlsubCT5);
+		pnlThongTinChiTiet.getChildren().addAll(pnlsubCT1, pnlsubCT2, pnlsubCT3, pnlsubCT5);
 		pnlReturn.getChildren().add(pnlThongTinChiTiet);
 
 		pnlThongTinChiTiet.setManaged(false);
@@ -809,15 +927,28 @@ public class GioVe extends Application {
 		img_xoa.setOnMouseExited(e -> img_xoa.setOpacity(1.0));
 
 		img_xoa.setOnMouseClicked(e -> {
+            listGheSelected.remove(gheTrenChuyenTau);
+            System.out.println(listGheSelected.size());
+            mapTienGhe.remove(gheTrenChuyenTau);
 			((VBox) pnlReturn.getParent()).getChildren().remove(pnlReturn);
-			tongCongThanhTien -= thanhtien;
+            tongCongThanhTien = 0.0;
+            for (Double gia : mapTienGhe.values()) {
+                tongCongThanhTien += gia;
+            }
 			loadLableTongCongValue(tongCongThanhTien);
-			System.out.println("Đã xóa vé: " + matau);
+			System.out.println("Đã xóa vé: " + gheTrenChuyenTau.getMaGheTrenChuyenTau());
 		});
 
 		return pnlReturn;
 	}
-
+    private VBox taoSubCT2WithLabel(String title, Label lblValue, String labelStyle, String valueStyle) {
+        Label lblTitle = new Label(title);
+        lblTitle.setStyle(labelStyle);
+        lblValue.setStyle(valueStyle);
+        VBox box = new VBox(5, new StackPane(lblTitle), new StackPane(lblValue));
+        box.setAlignment(Pos.CENTER);
+        return box;
+    }
 	private HBox taoSubCT1(String label, String value, String leftStyle, String rightStyle, int check) {
 		StackPane left = new StackPane(new Label(label));
 		StackPane right = new StackPane();
@@ -829,6 +960,7 @@ public class GioVe extends Application {
 			String regexHoten = "[a-zA-ZÀ-ỹ\\s]+$";
 			txtHoTen.setOnAction(event -> {
 				String input = txtHoTen.getText();
+                System.out.println(input);
 				if (!input.matches(regexHoten)) {
 					Alert alert = new Alert(Alert.AlertType.ERROR);
 					alert.setTitle("Lỗi định dạng");
@@ -847,34 +979,6 @@ public class GioVe extends Application {
 			txtHoTen.setMaxHeight(Double.MAX_VALUE);
 			StackPane.setAlignment(txtHoTen, Pos.CENTER);
 			right.getChildren().add(txtHoTen);
-		} else if (check == 2) {
-			ComboBox<String> cmbDoiTuong = new ComboBox<>();
-			cmbDoiTuong.getItems().addAll("Người lớn", "Trẻ em");
-			cmbDoiTuong.setStyle(rightStyle);
-			cmbDoiTuong.setMaxWidth(Double.MAX_VALUE);
-			cmbDoiTuong.setMaxHeight(Double.MAX_VALUE);
-			StackPane.setAlignment(cmbDoiTuong, Pos.CENTER);
-			cmbDoiTuong.setOnAction(event -> {
-				String giaTriCmb = cmbDoiTuong.getValue();
-
-				if (giaTriCmb == null || giaTriCmb.isEmpty()) {
-					Alert alert = new Alert(Alert.AlertType.ERROR);
-					alert.setTitle("Lỗi");
-					alert.setHeaderText(null);
-					alert.setContentText("Chưa chọn đối tượng!");
-					// Gắn vào Stage hiện tại (cực kỳ quan trọng)
-					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-					alert.initOwner(stage);
-
-					// Không cho resize, luôn ở giữa cửa sổ cha
-					alert.initModality(Modality.WINDOW_MODAL);
-					alert.showAndWait();
-				} else {
-					System.out.println("Đã chọn: " + giaTriCmb);
-				}
-			});
-
-			right.getChildren().add(cmbDoiTuong);
 		} else if (check == 3) {
 			TextField txtSoGiayTo = new TextField();
 			txtSoGiayTo.setPromptText("Nhập số giấy tờ");
@@ -901,7 +1005,6 @@ public class GioVe extends Application {
 			StackPane.setAlignment(txtSoGiayTo, Pos.CENTER);
 			right.getChildren().add(txtSoGiayTo);
 		}
-
 		left.setPrefWidth(100);
 		right.setPrefWidth(200);
 		left.setStyle(leftStyle);
@@ -909,11 +1012,71 @@ public class GioVe extends Application {
 		right.setAlignment(Pos.CENTER);
 		return new HBox(left, right);
 	}
+    private HBox taoSubCT1(String label, String value, String leftStyle, String rightStyle, int check,
+                           double giaTienGhe, Label lblGiamDoiTuongValue, Label lblThanhTienValue, GheTrenChuyenTau gtc) {
+        StackPane left = new StackPane(new Label(label));
+        StackPane right = new StackPane();
+        right.setPrefSize(200, 40);
 
-	private VBox taoSubCT2(String title, String value, String labelStyle, String valueStyle) {
+        if (check == 2) {
+            ComboBox<String> cmbDoiTuong = new ComboBox<>();
+            cmbDoiTuong.setPromptText("Chọn đối tượng");
+
+            ArrayList<String> listTenDoiTuong = new ArrayList<>();
+            for (DoiTuongGiamGia doiTuong : listDoiTuongGiamGia) {
+                listTenDoiTuong.add(doiTuong.getTenDoiTuongGiamGia());
+            }
+            cmbDoiTuong.getItems().addAll(listTenDoiTuong);
+            cmbDoiTuong.setStyle(rightStyle);
+            cmbDoiTuong.setMaxWidth(Double.MAX_VALUE);
+            cmbDoiTuong.setMaxHeight(Double.MAX_VALUE);
+            StackPane.setAlignment(cmbDoiTuong, Pos.CENTER);
+
+            cmbDoiTuong.setOnAction(event -> {
+                String tenDoiTuong = cmbDoiTuong.getValue();
+                if (tenDoiTuong == null) return;
+
+                DoiTuongGiamGia doiTuong = listDoiTuongGiamGia.stream()
+                        .filter(dt -> dt.getTenDoiTuongGiamGia().equals(tenDoiTuong))
+                        .findFirst()
+                        .orElse(null);
+
+                if (doiTuong != null) {
+                    double phanTramGiam = doiTuong.getGiaTriPhanTramGiamGia();
+                    double tienGiam = giaTienGhe * phanTramGiam / 100.0;
+                    double thanhTienMoi = giaTienGhe - tienGiam;
+                    mapTienGhe.put(gtc, thanhTienMoi);
+                    tongCongThanhTien = 0;
+                    for (Double gia : mapTienGhe.values()) {
+                        tongCongThanhTien += gia;
+                    }
+                    lblTrangThaiApDung.setText("");
+                    loadLableTongCongValue(tongCongThanhTien);
+                    lblGiamDoiTuongValue.setText(String.format("%.0f", tienGiam));
+                    lblThanhTienValue.setText(String.format("%.0f", thanhTienMoi));
+
+
+                }
+            });
+
+            right.getChildren().add(cmbDoiTuong);
+        }
+
+        left.setPrefWidth(100);
+        right.setPrefWidth(200);
+        left.setStyle(leftStyle);
+        left.setAlignment(Pos.CENTER);
+        right.setAlignment(Pos.CENTER);
+
+        return new HBox(left, right);
+    }
+
+
+
+	private VBox taoSubCT2(String title, double value, String labelStyle, String valueStyle) {
 		Label lblTitle = new Label(title);
 		lblTitle.setStyle(labelStyle);
-		Label lblValue = new Label(value);
+		Label lblValue = new Label(""+value);
 		lblValue.setStyle(valueStyle);
 		VBox box = new VBox(5, new StackPane(lblTitle), new StackPane(lblValue));
 		box.setAlignment(Pos.CENTER);
@@ -923,6 +1086,10 @@ public class GioVe extends Application {
 	public void loadLableTongCongValue(double tongCongThanhTien) {
 		lblTongCongValue.setText(nf.format(tongCongThanhTien));
 	}
+
+
+
+
 
 	public static void main(String[] args) {
 		launch(args);

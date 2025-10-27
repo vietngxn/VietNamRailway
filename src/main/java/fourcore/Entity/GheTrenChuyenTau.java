@@ -1,6 +1,8 @@
 package fourcore.Entity;
 
-public class GheTrenChuyenTau {
+import java.io.Serializable;
+
+public class GheTrenChuyenTau implements Serializable {
     private String maGheTrenChuyenTau;
     private String trangThaiGhe;
     private double giaTienGhe;

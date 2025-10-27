@@ -56,6 +56,27 @@ public class GheNgoiDAO {
     public ArrayList<GheTrenChuyenTau> getListGheTrenChuyenTau() {
         return listGheTrenChuyenTau;
     }
+    public int tongSoGheTrenChuyen(String maChuyenTau){
+        int count=0;
+        for (int i = 0; i < listGheTrenChuyenTau.size(); i++) {
+            if(listGheTrenChuyenTau.get(i).getChuyenTau().getMaChuyenTau().equals(maChuyenTau)){
+                count++;
+            }
+        }
+        return count;
+    }
+    public int soGheTrongTrenChuyen(String maChuyenTau){
+        int tongSoGhe = tongSoGheTrenChuyen(maChuyenTau);
+        int count=0;
+        for (int i = 0; i < listGheTrenChuyenTau.size(); i++) {
+            if(listGheTrenChuyenTau.get(i).getChuyenTau().getMaChuyenTau().equals(maChuyenTau)){
+                if(listGheTrenChuyenTau.get(i).getTrangThaiGhe().equals("đã bán")){
+                    count++;
+                }
+            }
+        }
+        return tongSoGhe-count;
+    }
 
     public ArrayList<GheTrenChuyenTau> getListTrenChuyenTau() throws SQLException {
         Statement myStmt = databaseConnector.connect();

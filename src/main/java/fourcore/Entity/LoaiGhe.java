@@ -1,6 +1,8 @@
 package fourcore.Entity;
 
-public class LoaiGhe {
+import java.io.Serializable;
+
+public class LoaiGhe implements Serializable {
     private String maLoaiGhe;
     private String tenLoaiGhe;
     private double giaLoaiGhe;

@@ -1,6 +1,8 @@
 package fourcore.Entity;
 
-public class LoaiToaTau {
+import java.io.Serializable;
+
+public class LoaiToaTau implements Serializable {
 	private String maLoaiToaTau;
 	private String tenLoaiToaTau;
 	private double giaCuoc;
