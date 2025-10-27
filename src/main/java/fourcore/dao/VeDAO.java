@@ -15,7 +15,7 @@ import fourcore.Entity.Ve;
 
 public class VeDAO {
 	DatabaseConnector database = new DatabaseConnector();
-	ArrayList<Ve> listVe = new ArrayList<Ve>();
+	ArrayList<Ve> listVe = getListVe();
 
 	public VeDAO() throws SQLException {
 		getListVe();
@@ -33,13 +33,11 @@ public class VeDAO {
 	private ArrayList<Ve> listVe1;
 
 	public ArrayList<Ve> getListVe() throws SQLException {
+
 		Statement st = database.connect();
 		String q = "select * from Ve";
 		ResultSet rs = st.executeQuery(q);
-		KhachHangDAO khDAO = new KhachHangDAO();
-		DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
-		ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
-
+		ArrayList<Ve> listVe2 = new ArrayList<Ve>();
 		while (rs.next()) {
 			String maVeTau = rs.getString(1);
 			String gaDi = rs.getString(2);
@@ -63,21 +61,26 @@ public class VeDAO {
 			String maKhuyenMai = rs.getString(19);
 			String maDoiTuongGiamGia = rs.getString(20);
 
+			KhachHangDAO khDAO = new KhachHangDAO();
 			KhachHang kh = khDAO.getKhachHangByMa(maKhachHang);
+
+			DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
 			DoiTuongGiamGia dt = dtDAO.getDoiTuongGiamGiaBangMaDT(maDoiTuongGiamGia);
+
+			ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
 			KhuyenMai km = kmDAO.getKhuyenMaiBangMa(maKhuyenMai);
 
 			Ve ve = new Ve(maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe,
 					maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, new ChuyenTau(maChuyenTau), kh, km, dt);
 
-			listVe.add(ve);
-			System.out.println("aaa");
+			listVe2.add(ve);
 		}
-		return listVe;
+		return listVe2;
 	}
 
 	public ArrayList<Ve> getListHoanVe() throws SQLException {
-		listVe.removeAll(listVe);
+		ArrayList<Ve> listVe3 = new ArrayList<Ve>();
+
 		Statement st = database.connect();
 		String q = """
 				SELECT v.*
@@ -94,9 +97,6 @@ public class VeDAO {
 								""";
 
 		ResultSet rs = st.executeQuery(q);
-		KhachHangDAO khDAO = new KhachHangDAO();
-		DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
-		ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
 		while (rs.next()) {
 			String maVeTau = rs.getString(1);
 			String gaDi = rs.getString(2);
@@ -120,8 +120,13 @@ public class VeDAO {
 			String maKhuyenMai = rs.getString(19);
 			String maDoiTuongGiamGia = rs.getString(20);
 
+			KhachHangDAO khDAO = new KhachHangDAO();
 			KhachHang kh = khDAO.getKhachHangByMa(maKhachHang);
+
+			DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
 			DoiTuongGiamGia dt = dtDAO.getDoiTuongGiamGiaBangMaDT(maDoiTuongGiamGia);
+
+			ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
 			KhuyenMai km = kmDAO.getKhuyenMaiBangMa(maKhuyenMai);
 
 			System.out.println(km.toString());
@@ -129,13 +134,14 @@ public class VeDAO {
 			v = new Ve(maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe,
 					maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, new ChuyenTau(maChuyenTau), kh, km, dt);
 
-			listVe.add(v);
+			listVe3.add(v);
 		}
-		return listVe;
+		return listVe3;
 	}
 
 	public ArrayList<Ve> getListHoanVeTheoCCCDKhachHang(String cccd) throws SQLException {
 		Statement st = database.connect();
+		ArrayList<Ve> listVe4 = new ArrayList<Ve>();
 		String q = """
 				SELECT v.*
 				FROM Ve AS v
@@ -152,9 +158,6 @@ public class VeDAO {
 		;
 
 		ResultSet rs = st.executeQuery(q);
-		KhachHangDAO khDAO = new KhachHangDAO();
-		DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
-		ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
 		while (rs.next()) {
 			String maVeTau = rs.getString(1);
 			String gaDi = rs.getString(2);
@@ -178,22 +181,26 @@ public class VeDAO {
 			String maKhuyenMai = rs.getString(19);
 			String maDoiTuongGiamGia = rs.getString(20);
 
+			KhachHangDAO khDAO = new KhachHangDAO();
 			KhachHang kh = khDAO.getKhachHangByMa(maKhachHang);
+
+			DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
 			DoiTuongGiamGia dt = dtDAO.getDoiTuongGiamGiaBangMaDT(maDoiTuongGiamGia);
+
+			ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
 			KhuyenMai km = kmDAO.getKhuyenMaiBangMa(maKhuyenMai);
 			Ve v = new Ve();
 			v = new Ve(maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe,
 					maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, new ChuyenTau(maChuyenTau), kh, km, dt);
 
-			listVe.add(v);
+			listVe4.add(v);
 		}
-		return listVe;
+		return listVe4;
 	}
 
 	public KhachHang getKhachHang(String maVeTau) throws SQLException {
 		KhachHang kh = new KhachHang();
-		listVe1 = getListVe();
-		for (Ve ve : listVe1) {
+		for (Ve ve : listVe) {
 			if (ve.getMaVeTau().equalsIgnoreCase(maVeTau)) {
 				kh = ve.getKhachHang();
 				break;
@@ -209,9 +216,6 @@ public class VeDAO {
 				+ "WHERE v.trangThaiVe = N'hoạt động'\r\n" + "  AND v.ngayGioDi > GETDATE()\r\n" + "  AND v.maVeTau = '"
 				+ maVe + "'";
 		ResultSet rs = myStmt.executeQuery(query);
-		KhachHangDAO khDAO = new KhachHangDAO();
-		DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
-		ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
 		while (rs.next()) {
 			String maVeTau = rs.getString(1);
 			String gaDi = rs.getString(2);
@@ -235,8 +239,13 @@ public class VeDAO {
 			String maKhuyenMai = rs.getString(19);
 			String maDoiTuongGiamGia = rs.getString(20);
 
+			KhachHangDAO khDAO = new KhachHangDAO();
 			KhachHang kh = khDAO.getKhachHangByMa(maKhachHang);
+
+			DoiTuongGiamGia_DAO dtDAO = new DoiTuongGiamGia_DAO();
 			DoiTuongGiamGia dt = dtDAO.getDoiTuongGiamGiaBangMaDT(maDoiTuongGiamGia);
+
+			ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
 			KhuyenMai km = kmDAO.getKhuyenMaiBangMa(maKhuyenMai);
 
 			System.out.println(maChuyenTau);
@@ -244,6 +253,7 @@ public class VeDAO {
 					maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, new ChuyenTau(maChuyenTau), kh, km, dt);
 			System.out.println("lấy dữ liệu vé thành công");
 		}
+
 		return v;
 	}
 

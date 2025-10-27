@@ -37,7 +37,6 @@ public class ToaTau {
         setMaToaTau(maToaTau);
         setTenToaTau(tenToaTau);
         setSoGhe(soGhe);
-
         setLoaiToaTau(loaiToaTau);
     }
     public ToaTau() {

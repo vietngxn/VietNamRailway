@@ -68,6 +68,10 @@ public class TrangChu extends Application {
 	VBox noiDungWrapper = new VBox(10);
 	BanVeControl banVeControl = new BanVeControl();
 
+	public TrangChu() throws SQLException {
+	}
+
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -89,17 +93,19 @@ public class TrangChu extends Application {
 
 			scrollPaneMenu = new ScrollPane();
 			danhSachMenuItem = new VBox();
-//            Font labelFont = Font.loadFont(getClass().getResourceAsStream("/fonts/Inter/static/Inter_18pt-Bold.ttf"),20);
+			// Font labelFont =
+			// Font.loadFont(getClass().getResourceAsStream("/fonts/Inter/static/Inter_18pt-Bold.ttf"),20);
 
-//			======================
-//			||	QUAN LI VE TAU	||
-//			======================
+			// ======================
+			// || QUAN LI VE TAU ||
+			// ======================
 			quanLiVeTauMenu = new HBox();
 			quanLiVeTauMenu.setSpacing(102);
 			quanLiVeTauMenu.setPadding(new Insets(20, 95, 20, 20));
 			quanLiVeTauMenu.setStyle("-fx-alignment: center-left;");
 
-//			quanLiVeTauIcon = new Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
+			// quanLiVeTauIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
 			quanLiVeTauIconView = new ImageView(getClass().getResource("/img/ticket.png").toExternalForm());
 			quanLiVeTauIconView.setFitWidth(30);
 			quanLiVeTauIconView.setFitHeight(30);
@@ -120,7 +126,8 @@ public class TrangChu extends Application {
 				labelFont = Font.font("System", FontWeight.BOLD, 20); // fallback
 			}
 
-//			showMenuPhuIcon = new Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
+			// showMenuPhuIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
 			String showMenuPhuIconSource = "/img/chevron-down.png";
 			showMenuPhuIconView = new ImageView(getClass().getResource(showMenuPhuIconSource).toExternalForm());
 			showMenuPhuIconView.setFitWidth(20);
@@ -207,15 +214,16 @@ public class TrangChu extends Application {
 
 			});
 
-//				======================
-//				||QUAN LI KHACH HANG||
-//				======================
+			// ======================
+			// ||QUAN LI KHACH HANG||
+			// ======================
 			quanLiKhachHangMenu = new HBox();
 			quanLiKhachHangMenu.setSpacing(102);
 			quanLiKhachHangMenu.setPadding(new Insets(15, 95, 15, 20));
 			quanLiKhachHangMenu.setStyle("-fx-alignment: center-left;");
 
-//			quanLiVeTauIcon = new Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
+			// quanLiVeTauIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
 			quanLiKhachHangIconView = new ImageView(getClass().getResource("/img/user-group.png").toExternalForm());
 			quanLiKhachHangIconView.setFitWidth(30);
 			quanLiKhachHangIconView.setFitHeight(30);
@@ -256,9 +264,10 @@ public class TrangChu extends Application {
 			quanLiKhachHangBox.getChildren().add(quanLiKhachHangLabel);
 			thongKeKhachHang.getChildren().add(thongKeKhachHangLabel);
 
-//
-//            InputStream interSemiBold = getClass().getResourceAsStream("/fonts/Inter/static/Inter_18pt-SemiBold.ttf");
-//            Font labelMenuPhu = Font.loadFont(interSemiBold,15);
+			//
+			// InputStream interSemiBold =
+			// getClass().getResourceAsStream("/fonts/Inter/static/Inter_18pt-SemiBold.ttf");
+			// Font labelMenuPhu = Font.loadFont(interSemiBold,15);
 
 			for (Label label : new Label[] { quanLiKhachHangLabel, thongKeKhachHangLabel }) {
 				label.setStyle("-fx-background-color: #D2EEF0;");
@@ -311,15 +320,16 @@ public class TrangChu extends Application {
 
 			});
 
-//			======================
-//			||QUAN LI HOA DON   ||
-//			======================
+			// ======================
+			// ||QUAN LI HOA DON ||
+			// ======================
 			quanLiHoaDonMenu = new HBox();
 			quanLiHoaDonMenu.setSpacing(102);
 			quanLiHoaDonMenu.setPadding(new Insets(15, 95, 15, 20));
 			quanLiHoaDonMenu.setStyle("-fx-alignment: center-left;");
 
-//			quanLiVeTauIcon = new Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
+			// quanLiVeTauIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
 			quanLiHoaDonIconView = new ImageView(getClass().getResource("/img/receipt-tax.png").toExternalForm());
 			quanLiHoaDonIconView.setFitWidth(30);
 			quanLiHoaDonIconView.setFitHeight(30);
@@ -361,9 +371,10 @@ public class TrangChu extends Application {
 			quanLiHoaDonBox.getChildren().add(quanLiHoaDonLabel);
 			thongKeDoanhThuBox.getChildren().add(thongKeDoanhThuTheoNamLabel);
 
-//
-//            InputStream interSemiBold = getClass().getResourceAsStream("/fonts/Inter/static/Inter_18pt-SemiBold.ttf");
-//            Font labelMenuPhu = Font.loadFont(interSemiBold,15);
+			//
+			// InputStream interSemiBold =
+			// getClass().getResourceAsStream("/fonts/Inter/static/Inter_18pt-SemiBold.ttf");
+			// Font labelMenuPhu = Font.loadFont(interSemiBold,15);
 
 			for (Label label : new Label[] { quanLiHoaDonLabel, thongKeDoanhThuTheoNamLabel }) {
 				label.setStyle("-fx-background-color: #D2EEF0;");
@@ -416,15 +427,16 @@ public class TrangChu extends Application {
 
 			});
 
-//			=======================
-//			||QUAN LI NHAN VIEN  ||
-//			=======================
+			// =======================
+			// ||QUAN LI NHAN VIEN ||
+			// =======================
 			quanLiNhanVienMenu = new HBox();
 			quanLiNhanVienMenu.setSpacing(102);
 			quanLiNhanVienMenu.setPadding(new Insets(15, 95, 15, 20));
 			quanLiNhanVienMenu.setStyle("-fx-alignment: center-left;");
 
-//			quanLiVeTauIcon = new Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
+			// quanLiVeTauIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
 			quanLiNhanVienIconView = new ImageView(getClass().getResource("/img/user-circle.png").toExternalForm());
 			quanLiNhanVienIconView.setFitWidth(30);
 			quanLiNhanVienIconView.setFitHeight(30);
@@ -443,22 +455,24 @@ public class TrangChu extends Application {
 				labelFont = Font.font("System", FontWeight.BOLD, 20); // fallback
 			}
 
-//			showMenuPhuIcon = new Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
+			// showMenuPhuIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
 			quanLiNhanVienMenu.getChildren().addAll(quanLiNhanVienIconView, quanLiNhanVienLabel);
 
 			danhSachMenuItem.getChildren().add(quanLiNhanVienMenu);
 			scrollPaneMenu.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 			scrollPaneMenu.setContent(danhSachMenuItem);
 
-//			=======================
-//			||QUAN LI CTKM        ||
-//			=======================
+			// =======================
+			// ||QUAN LI CTKM ||
+			// =======================
 			quanLiCTKMMenu = new HBox();
 			quanLiCTKMMenu.setSpacing(102);
 			quanLiCTKMMenu.setPadding(new Insets(15, 95, 15, 20));
 			quanLiCTKMMenu.setStyle("-fx-alignment: center-left;");
 
-//		quanLiVeTauIcon = new Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
+			// quanLiVeTauIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
 			quanLiCTKMIconView = new ImageView(getClass().getResource("/img/tag.png").toExternalForm());
 			quanLiCTKMIconView.setFitWidth(30);
 			quanLiCTKMIconView.setFitHeight(30);
@@ -477,21 +491,23 @@ public class TrangChu extends Application {
 				labelFont = Font.font("System", FontWeight.BOLD, 20); // fallback
 			}
 
-//		showMenuPhuIcon = new Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
+			// showMenuPhuIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
 			quanLiCTKMMenu.getChildren().addAll(quanLiCTKMIconView, quanLiCTKMLabel);
 
 			danhSachMenuItem.getChildren().add(quanLiCTKMMenu);
 			scrollPaneMenu.setContent(danhSachMenuItem);
 
-//			=======================
-//			||QUAN LI CHUYEN TAU ||
-//			=======================
+			// =======================
+			// ||QUAN LI CHUYEN TAU ||
+			// =======================
 			quanLiChuyenTauMenu = new HBox();
 			quanLiChuyenTauMenu.setSpacing(102);
 			quanLiChuyenTauMenu.setPadding(new Insets(15, 95, 15, 20));
 			quanLiChuyenTauMenu.setStyle("-fx-alignment: center-left;");
 
-//		quanLiVeTauIcon = new Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
+			// quanLiVeTauIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/ticket.png"));
 			quanLiChuyenTauIconView = new ImageView(
 					getClass().getResource("/img/clipboard-check.png").toExternalForm());
 			quanLiChuyenTauIconView.setFitWidth(30);
@@ -514,7 +530,8 @@ public class TrangChu extends Application {
 			showMenuPhuIcon1.setFitWidth(20);
 			showMenuPhuIcon1.setFitHeight(20);
 			showMenuPhuIcon1.setTranslateX(50);
-//		showMenuPhuIcon = new Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
+			// showMenuPhuIcon = new
+			// Image(clazz.getResourceAsStream("/resources/images/chevron-up.png"));
 			quanLiChuyenTauMenu.getChildren().addAll(quanLiChuyenTauIconView, quanLiChuyenTauLabel, showMenuPhuIcon1);
 
 			danhSachMenuItem.getChildren().add(quanLiChuyenTauMenu);
@@ -533,9 +550,10 @@ public class TrangChu extends Application {
 			quanLiChuyenTauBox.getChildren().add(quanLiChuyenTauuLabel);
 			thongKeLoaiGhe.getChildren().add(thongKeLoaiTauBest);
 
-//
-//            InputStream interSemiBold = getClass().getResourceAsStream("/fonts/Inter/static/Inter_18pt-SemiBold.ttf");
-//            Font labelMenuPhu = Font.loadFont(interSemiBold,15);
+			//
+			// InputStream interSemiBold =
+			// getClass().getResourceAsStream("/fonts/Inter/static/Inter_18pt-SemiBold.ttf");
+			// Font labelMenuPhu = Font.loadFont(interSemiBold,15);
 
 			for (Label label : new Label[] { quanLiChuyenTauuLabel, thongKeLoaiTauBest }) {
 				label.setStyle("-fx-background-color: #D2EEF0;");
@@ -589,14 +607,14 @@ public class TrangChu extends Application {
 
 			scrollPaneMenu.setContent(danhSachMenuItem);
 
-//----------------------------------------------------------------------------------------------------------------------
+			// ----------------------------------------------------------------------------------------------------------------------
 			scrollPaneMenu.setPrefHeight(600);
 			scrollPaneMenu.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
 
 			scrollPaneMenu.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
 			menuList.getChildren().add(scrollPaneMenu);
-//          USER BOX
+			// USER BOX
 
 			HBox userBox = new HBox();
 			userIcon = new ImageView(getClass().getResource("/img/user-circle.png").toExternalForm());
@@ -631,9 +649,9 @@ public class TrangChu extends Application {
 			HBox thongKeCoBanContainer = new HBox();
 			thongKeCoBanContainer.setMinWidth(1000);
 
-//			=======================
-//			||THONG KE 01        ||
-//			=======================
+			// =======================
+			// ||THONG KE 01 ||
+			// =======================
 			VBox thongKeDoanhThu = new VBox();
 			thongKeDoanhThu.setStyle("-fx-background-color: #9EFFFF; -fx-background-radius: 12px;");
 			thongKeDoanhThu.setMinWidth(250);
@@ -677,9 +695,9 @@ public class TrangChu extends Application {
 			thongKeDoanhThu.getChildren().addAll(thongKeDoanhThuLabel, tongSoTienBox, moTaDoanhThuBox);
 			thongKeCoBanContainer.getChildren().add(thongKeDoanhThu);
 
-//			=======================
-//			||THONG KE 02        ||
-//			=======================
+			// =======================
+			// ||THONG KE 02 ||
+			// =======================
 			VBox thongKeSoVe = new VBox();
 			thongKeSoVe.setStyle("-fx-background-color: #FFDED9; -fx-background-radius: 12px;");
 			thongKeSoVe.setMinWidth(250);
@@ -723,9 +741,9 @@ public class TrangChu extends Application {
 			thongKeSoVe.getChildren().addAll(thongKeP2Label, tongSoVeBox, moTaLuongVeBan);
 			thongKeCoBanContainer.getChildren().add(thongKeSoVe);
 
-//			=======================
-//			||THONG KE 03        ||
-//			=======================
+			// =======================
+			// ||THONG KE 03 ||
+			// =======================
 
 			VBox thongKe3 = new VBox();
 			thongKe3.setStyle("-fx-background-color: #F1C8FF; -fx-background-radius: 12px;");
@@ -770,9 +788,9 @@ public class TrangChu extends Application {
 			thongKe3.getChildren().addAll(thongKep3Label, thongKeP3SoLuongBox, moTa);
 			thongKeCoBanContainer.getChildren().add(thongKe3);
 
-//			=======================
-//			||THONG KE 04        ||
-//			=======================
+			// =======================
+			// ||THONG KE 04 ||
+			// =======================
 
 			VBox thongKe4 = new VBox();
 			thongKe4.setStyle("-fx-background-color: #FFBCBC; -fx-background-radius: 12px;");
@@ -817,17 +835,17 @@ public class TrangChu extends Application {
 			thongKe4.getChildren().addAll(thongKe4Label, thongKe4SoLuongBox, moTa4);
 			thongKeCoBanContainer.getChildren().add(thongKe4);
 
-//			=========================
-//			||CHART + LICH SU       ||
-//			=========================
+			// =========================
+			// ||CHART + LICH SU ||
+			// =========================
 
 			HBox chartVaLichSuBanContainer = new HBox();
 			chartVaLichSuBanContainer.setTranslateY(140);
 			chartVaLichSuBanContainer.setTranslateX(30);
 
-//			=========================
-//			||        CHART        ||
-//			=========================
+			// =========================
+			// || CHART ||
+			// =========================
 			VBox chartContainer = new VBox();
 			Label thongKeLabel = new Label("Thống kê doanh thu");
 			InputStream interBoldFontLoad = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Bold.ttf");
@@ -870,9 +888,9 @@ public class TrangChu extends Application {
 			chartBox.setTranslateY(50);
 			chartContainer.getChildren().add(chartBox);
 
-//			=========================
-//			||        LICH SU       ||
-//			=========================
+			// =========================
+			// || LICH SU ||
+			// =========================
 			VBox lichSuCont = new VBox();
 			Label lichSuLabel = new Label("Lịch sử bán vé");
 			InputStream interBoldFontLoad1 = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Bold.ttf");
@@ -920,7 +938,8 @@ public class TrangChu extends Application {
 			hienNoiDungCheckBox.setTranslateX(1100);
 			hienNoiDungCheckBox.setTranslateY(10);
 
-//          noiDungChinh.getChildren().addAll(tongQuanLabel ,thongKeCoBanContainer,chartVaLichSuBanContainer);
+			// noiDungChinh.getChildren().addAll(tongQuanLabel
+			// ,thongKeCoBanContainer,chartVaLichSuBanContainer);
 			noiDungChinh.setVisible(true);
 			ImageView background = new ImageView(getClass().getResource("/img/background.png").toExternalForm());
 			background.setTranslateY(120);
@@ -937,9 +956,9 @@ public class TrangChu extends Application {
 			});
 
 			noiDungWrapper.getChildren().addAll(hienNoiDungCheckBox, noiDungChinh);
-//			=========================
-//			||      HUNG SU KIEN    ||
-//			=========================
+			// =========================
+			// || HUNG SU KIEN ||
+			// =========================
 			capVeBox.setOnMouseClicked(event -> {
 				CapVeControl capVeControl = new CapVeControl();
 				capVeControl.handleMenuTrangChuSelect(root);
@@ -997,7 +1016,7 @@ public class TrangChu extends Application {
 				chuyenTauControl.handleMenuTrangChuSelect(root);
 			});
 
-//------------------------------------------------------------------------------------------------------
+			// ------------------------------------------------------------------------------------------------------
 			BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
 			root.setLeft(menuList);
 			root.setCenter(noiDungWrapper);

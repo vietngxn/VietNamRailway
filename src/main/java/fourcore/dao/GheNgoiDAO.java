@@ -52,6 +52,11 @@ public class GheNgoiDAO {
         }
         return listGheNgoi;
     }
+
+    public ArrayList<GheTrenChuyenTau> getListGheTrenChuyenTau() {
+        return listGheTrenChuyenTau;
+    }
+
     public ArrayList<GheTrenChuyenTau> getListTrenChuyenTau() throws SQLException {
         Statement myStmt = databaseConnector.connect();
         String query = "select * from GheTrenChuyenTau";
@@ -71,6 +76,7 @@ public class GheNgoiDAO {
         }
         return listGheTrenChuyenTau;
     }
+
 
     public GheNgoi getGheBangMaGhe(String maGheInput) throws SQLException {
         for (GheNgoi g : listGheNgoi) {

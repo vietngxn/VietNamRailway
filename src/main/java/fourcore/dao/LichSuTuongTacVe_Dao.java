@@ -21,16 +21,18 @@ import fourcore.Entity.Ve;
 
 public class LichSuTuongTacVe_Dao {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
+	ArrayList<LichSuTuongTacVe> list = getList();
 
-	public LichSuTuongTacVe_Dao() {
+	public LichSuTuongTacVe_Dao() throws SQLException {
+		getList();
 	}
 
-	ArrayList<LichSuTuongTacVe> list = new ArrayList<>();
 
 	public ArrayList<LichSuTuongTacVe> getList() throws SQLException {
 		LoaiTuongTac_Dao lttDao = new LoaiTuongTac_Dao();
 		VeDAO veDao = new VeDAO();
 		Statement myStmt = databaseConnector.connect();
+		ArrayList<LichSuTuongTacVe> list1 = new ArrayList<LichSuTuongTacVe>();
 		String query = "select * from LichSuTuongTacVe";
 		ResultSet rs = myStmt.executeQuery(query);
 		while (rs.next()) {
@@ -42,11 +44,11 @@ public class LichSuTuongTacVe_Dao {
 			LoaiTuongTacVe tt = lttDao.getLoaiTheoMa(maLoaiTuongTac);
 			Ve v = veDao.getVeBangMaVe(maVeTau);
 			LichSuTuongTacVe ls = new LichSuTuongTacVe(maTuongTac, tt, v, giaTriChenhLech, ngayTuongTac);
-			list.add(ls);
+			list1.add(ls);
 			System.out.println("Lấy dữ liệu thành công");
 		}
 
-		return list;
+		return list1;
 	}
 	
 	public boolean themLichSuTuongTacVe(LichSuTuongTacVe lstt) throws SQLException
