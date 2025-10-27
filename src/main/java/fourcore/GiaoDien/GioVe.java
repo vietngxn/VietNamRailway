@@ -577,6 +577,7 @@ public class GioVe extends Application {
 //					"Toa số 3 chỗ 23", "Nguyễn Tiến Đạt G", "Con cặc", "093636363636", 1400000, 0, 0, 1400000));
 
 			try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("ds_ghe_dang_chon.dat"))) {
+                listGheSelected.clear();
 				listGheSelected = (ArrayList<GheTrenChuyenTau>) ois.readObject();
 				System.out.println("Dữ liệu đọc được: " + listGheSelected);
 			} catch (IOException | ClassNotFoundException e) {

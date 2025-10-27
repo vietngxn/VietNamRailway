@@ -126,7 +126,14 @@ public class GiaoDienCapLaiVe extends Application {
     private VBox layout_chiTiet;
     private Ve vechon = new Ve();
     private boolean dangCapNhatTrangThai = false;
-    private VeDAO vedao;
+	private VeDAO vedao;
+	private LoaiTuongTac_Dao lttdao;
+	private LichSuTuongTacVe_Dao lsttdao;
+	private ArrayList<LichSuTuongTacVe> listtt;
+	private ArrayList<LoaiTuongTacVe> listloaitt;
+	
+
+    // private ArrayList<Ve> list = vedao.themNhieuVeTau();
 
     public VBox taoDataChoTableCapLaiVe(String maVeTau, String tenTau, String gaDigaDen, LocalDateTime ngayGioDi,
             LocalDateTime ngayGioDen, int soToa, int soTang, int soGhe, String loaiVe, String maGiayTo, double giaVe,
@@ -247,7 +254,7 @@ public class GiaoDienCapLaiVe extends Application {
                     -fx-font-family: "Kanit";
                     -fx-padding: 8 12 8 12;
                 """;
-
+        
         Ve ve1 = vedao.getVeBangMaVe(maVeTau);
         pnlsubCT1.addRow(0, taoSubCT1("Họ tên", ve1.getKhachHang().getHoten(), leftStyle, rightStyle));
         pnlsubCT1.addRow(1,
@@ -303,7 +310,7 @@ public class GiaoDienCapLaiVe extends Application {
 
                     // lbl_trangthai2.setStyle(baseStyle + "-fx-font-size: 18px; -fx-text-fill:
                     // #009D75;");
-
+                    pnlReturn.getChildren().remove(layout_trangthai);
                     layout_trangthai = taolayout_trangthai();
                     layout_trangthai.setTranslateY(-100);
                     layout_trangthai.setTranslateX(1113);
@@ -428,8 +435,12 @@ public class GiaoDienCapLaiVe extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            vedao = new VeDAO();
-            list = vedao.getListVe();
+        	vedao = new VeDAO();
+        	lttdao = new LoaiTuongTac_Dao();
+        	listloaitt = lttdao.getList();
+        	lsttdao = new LichSuTuongTacVe_Dao();
+            listtt = lsttdao.getList();
+            
             menuList = new VBox();
             menuList.setStyle("-fx-background-color: #F7F7F7;");
             menuList.setPrefWidth(500);
@@ -944,7 +955,7 @@ public class GiaoDienCapLaiVe extends Application {
             btnTimKiem.setStyle(btnStyle);
             pnlTimKiem = new StackPane();
             pnlTimKiem.setMaxSize(1200, 400);
-
+           
             pnlTimKiem.getChildren().add(btnTimKiem);
             btnTimKiem.setAlignment(Pos.CENTER);
 
@@ -1056,16 +1067,15 @@ public class GiaoDienCapLaiVe extends Application {
                     String trangThai = vechon.getTrangThaiVe();
 
                     try {
-                        LoaiTuongTac_Dao lttdao = new LoaiTuongTac_Dao();
-                        ArrayList<LoaiTuongTacVe> listloaitt = lttdao.getList();
-
-                        LoaiTuongTacVe lttv1 = new LoaiTuongTacVe();
+                    	
+                        
+                    	LoaiTuongTacVe lttv1 = new LoaiTuongTacVe();
+                        
 
                         lttv1.setMaLoaiTuongTac("LT04");
                         lttv1.setTenLoaiTuongTac("Cấp Vé");
 
-                        LichSuTuongTacVe_Dao lsttdao = new LichSuTuongTacVe_Dao();
-                        ArrayList<LichSuTuongTacVe> listtt = lsttdao.getList();
+                        
                         String s = "";
                         int sl = listtt.size() + 1;
                         if (sl >= 0 && sl <= 9) {
@@ -1075,6 +1085,7 @@ public class GiaoDienCapLaiVe extends Application {
                         } else
                             s = "TT" + sl;
 
+                        
                         Ve ve1 = vedao.getVeBangMaVe(mave);
                         LichSuTuongTacVe lstt = new LichSuTuongTacVe();
                         lstt.setMaTuongTac(s);
@@ -1105,9 +1116,12 @@ public class GiaoDienCapLaiVe extends Application {
 
             // add su kien disable btn
             btnTimKiem.setOnMouseClicked(event -> {
-                String regex = "^VX\\d{3}$";
+                String regex = "^V\\d{3}$";
                 String input = txt_timkiem.getText().trim();
-
+                String maVe = txt_timkiem.getText();
+            	
+               
+                
                 if (input.isEmpty() || !Pattern.matches(regex, input)) {
                     btnCapVe.setDisable(true);
                     btnCapNhatTrangThaiVe.setDisable(true);
@@ -1131,10 +1145,37 @@ public class GiaoDienCapLaiVe extends Application {
                 } else {
                     btnCapVe.setDisable(false);
                     btnCapNhatTrangThaiVe.setDisable(false);
-
+                    try {
+    					Ve x = vedao.getVeBangMaVe(maVe);
+    					pnlDataDoiVe.getChildren().clear();
+    					pnlDataDoiVe.getChildren().add(
+    		                    taoDataChoTableCapLaiVe(
+    		                            x.getMaVeTau(),
+    		                            x.getChuyenTau().getMaChuyenTau(),
+    		                            x.getGaDi() + " - " + x.getGaDen(),
+    		                            x.getNgayGioDi(), // ngayGioDi (LocalDateTime)
+    		                            x.getNgayGioDen(), // ngayGioDen (LocalDateTime)
+    		                            x.getSoToa(), // soToa
+    		                            x.getSoTang(), // soTang
+    		                            x.getSoGhe(), // soGhe
+    		                            x.getLoaiVe(), // loaiVe
+    		                            x.getKhachHang().getCccd(), // maGiayTo
+    		                            x.getGiaVe(), // giaVe
+    		                            x.getGhiChu(), // ghiChu
+    		                            x.getTrangThaiDoiVe(), // trangThaiDoiVe
+    		                            x.getTrangThaiVe(), // trangThaiVe
+    		                            x.getChuyenTau().getMaChuyenTau(), // maChuyenTau
+    		                            x.getKhachHang().getMaKhachHang(), // maKhachHang
+    		                            x.getKhuyenMai().getMaKhuyenMai(), // maKhuyenMai
+    		                            x.getDoiTuongGiamGia().getMaDoiTuongGiamGia()));
+    				} catch (SQLException e1) {
+    					// TODO Auto-generated catch block
+    					e1.printStackTrace();
+    				}
                     btnCapNhatTrangThaiVe.setStyle(btnStyle);
                     btnCapVe.setStyle(btnStyle);
                 }
+                
             });
 
         } catch (Exception e) {
@@ -1142,8 +1183,10 @@ public class GiaoDienCapLaiVe extends Application {
         }
     }
 
-    public void hienThi() throws SQLException {
-
+    public void hienThi() throws SQLException
+    {
+    	pnlDataDoiVe.getChildren().clear();	
+    	list = vedao.getListVe();
         for (Ve x : list) {
             pnlDataDoiVe.getChildren().add(
                     taoDataChoTableCapLaiVe(
@@ -1167,7 +1210,6 @@ public class GiaoDienCapLaiVe extends Application {
                             x.getDoiTuongGiamGia().getMaDoiTuongGiamGia()));
         }
     }
-
     public VBox getNoiDungChinhVe() {
         return this.noiDungChinh;
     }

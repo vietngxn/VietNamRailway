@@ -20,9 +20,13 @@ public class HoaDonDAO {
 	public ArrayList<HoaDon> getListHoaDon() throws SQLException {
 		Statement st = database.connect();
 		String q = "SELECT hd.maHoaDon, kh.hoTen , kh.sdt , hd.ngayThanhToan , hd.tongTien\r\n"
-				+ "FROM [dbo].[HoaDon] hd, [dbo].[ChiTietHoaDon] chd , [dbo].[Ve] ve , [dbo].[KhachHang] kh\r\n"
-				+ "WHERE hd.MaHoaDon = chd.MaHoaDon\r\n" + "and\r\n" + "chd.maVeTau = ve.maVeTau\r\n" + "and\r\n"
-				+ "ve.maKhachHang = kh.maKhachHang";
+				+ "				FROM [dbo].[HoaDon] hd, [dbo].[ChiTietHoaDon] chd , [dbo].[Ve] ve , [dbo].[KhachHang] kh\r\n"
+				+ "				WHERE hd.MaHoaDon = chd.MaHoaDon \r\n"
+				+ "				and\r\n"
+				+ "				chd.maVeTau = ve.maVeTau\r\n"
+				+ "				and\r\n"
+				+ "				ve.maKhachHang = kh.maKhachHang\r\n"
+				+ "				Group by hd.maHoaDon, kh.hoTen , kh.sdt , hd.ngayThanhToan , hd.tongTien";
 		ResultSet rs = st.executeQuery(q);
 		while (rs.next()) {
 			String mahd = rs.getString(1);
@@ -31,6 +35,7 @@ public class HoaDonDAO {
 			HoaDon hd = new HoaDon(mahd, null, null, mahd, mahd, mahd, mahd, ngaythanhtoan, TongTien);
 			listHoaDon.add(hd);
 		}
+		
 		return listHoaDon;
 	}
 
