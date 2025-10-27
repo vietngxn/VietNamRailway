@@ -91,6 +91,9 @@ public class GioVe extends Application {
 	private ImageView userIcon;
 	private Label userLabel;
 	private ImageView settingIcon;
+	private TextField txtHoTen;
+	private ComboBox<String> cmbDoiTuong;
+	private TextField txtSoGiayTo;
 
 	private static double tongCongThanhTien;
 
@@ -631,6 +634,12 @@ public class GioVe extends Application {
 			hieuUngHover(btnTiepTuc);
 			hieuUngHover(btnTroLai);
 
+			btnTiepTuc.setOnMouseClicked(event -> {
+				if (txtHoTen != null && !txtHoTen.getText().trim().isEmpty()) {
+					
+				}
+			});
+
 			primaryStage.setFullScreen(true);
 			primaryStage.show();
 		} catch (Exception e) {
@@ -824,7 +833,7 @@ public class GioVe extends Application {
 		right.setPrefSize(200, 40);
 
 		if (check == 1) {
-			TextField txtHoTen = new TextField();
+			txtHoTen = new TextField();
 			txtHoTen.setPromptText("Nhập họ tên");
 			String regexHoten = "[a-zA-ZÀ-ỹ\\s]+$";
 			txtHoTen.setOnAction(event -> {
@@ -848,7 +857,7 @@ public class GioVe extends Application {
 			StackPane.setAlignment(txtHoTen, Pos.CENTER);
 			right.getChildren().add(txtHoTen);
 		} else if (check == 2) {
-			ComboBox<String> cmbDoiTuong = new ComboBox<>();
+			cmbDoiTuong = new ComboBox<>();
 			cmbDoiTuong.getItems().addAll("Người lớn", "Trẻ em");
 			cmbDoiTuong.setStyle(rightStyle);
 			cmbDoiTuong.setMaxWidth(Double.MAX_VALUE);
@@ -876,7 +885,7 @@ public class GioVe extends Application {
 
 			right.getChildren().add(cmbDoiTuong);
 		} else if (check == 3) {
-			TextField txtSoGiayTo = new TextField();
+			txtSoGiayTo = new TextField();
 			txtSoGiayTo.setPromptText("Nhập số giấy tờ");
 			String regexSoGiayTo = "^[0-9]+$";
 			txtSoGiayTo.setOnAction(event -> {

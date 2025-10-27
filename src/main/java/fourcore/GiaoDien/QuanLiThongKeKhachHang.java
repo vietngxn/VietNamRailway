@@ -8,7 +8,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
+import fourcore.Entity.KhachHang;
+import fourcore.dao.ThongKeDAO;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -20,6 +23,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableArrayBase;
 import javafx.collections.ObservableList;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
@@ -44,6 +48,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -155,9 +160,13 @@ public class QuanLiThongKeKhachHang extends Application {
 		private Label lbl_desc;
 		private HBox layout_desc;
 		private String loaiThongKe;
+		private ThongKeDAO thongkeDAO;
+		private Map<KhachHang, Integer> map;
 	@Override
 	public void start(Stage primaryStage) {
 try {
+			thongkeDAO = new ThongKeDAO();
+			map = thongkeDAO.getKhachHangvaSoLanDi();
             BorderPane root = new BorderPane();
             Scene scene = new Scene(root,1920,1000);
             primaryStage.setScene(scene);
@@ -881,7 +890,7 @@ try {
 		
 		date.setPrefSize(400, 40);
 		date.getStyleClass().add("date-picker-custom");
-		layout_combobox.getChildren().addAll(date,comboBox);
+		layout_combobox.getChildren().addAll(comboBox);
 		
 		title_layout.getChildren().add(layout_combobox);
 		
@@ -908,10 +917,20 @@ try {
 		table_desc = new VBox();
 		table_desc.setPrefHeight(400);
 		
-		comboBox.getSelectionModel().selectFirst();
+		comboBox.getSelectionModel().clearSelection();
+		comboBox.setOnAction(event  -> { 
+        	if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
+        		table_desc.getChildren().clear();
+        		create_barchart_khachHang();
+        		noiDungChinh.getChildren().remove(layout_total);
+        	}
+        	else {
+        		table_desc.getChildren().clear();
+        		create_table();
+        	}
+        });
 		
 		
-		create_barchart_khachHang();
 		noiDungChinh.getChildren().add(table_desc);
 	}
 	
@@ -1019,16 +1038,12 @@ try {
 			
 			ArrayList<XYChart.Data<String, Number>> listdata = new ArrayList<>();
 			
-			listdata.add(new XYChart.Data<>("KH001", 10));
-			listdata.add(new XYChart.Data<>("KH002", 20));
-			listdata.add(new XYChart.Data<String, Number>("KH003", 30));
-			listdata.add(new XYChart.Data<String, Number>("KH004", 40));
-			listdata.add(new XYChart.Data<String, Number>("KH005", 50));
-			listdata.add(new XYChart.Data<String, Number>("KH006", 60));
-			listdata.add(new XYChart.Data<String, Number>("KH007", 70));
-			listdata.add(new XYChart.Data<String, Number>("KH008", 80));
-			listdata.add(new XYChart.Data<String, Number>("KH009", 90));
-			listdata.add(new XYChart.Data<String, Number>("KH010", 100));
+			for(Map.Entry<KhachHang, Integer> x : map.entrySet())
+			{
+				KhachHang kh = x.getKey();
+				int soLan = x.getValue();
+				listdata.add(new XYChart.Data<>(kh.getHoten(),soLan));
+			}
 			
 			for(int i = 0; i < listdata.size() - 1;i++)
 			{
@@ -1042,6 +1057,13 @@ try {
 					}
 				}
 			}
+			double  max = listdata.get(0).getYValue().doubleValue();
+			na.setAutoRanging(false);
+			na.setLowerBound(0);
+			na.setUpperBound(max+1);
+			na.setTickUnit(1);
+
+			na.setMinorTickVisible(false);
 			
 			XYChart.Series<String, Number> list = new XYChart.Series<String, Number>();
 			
@@ -1069,17 +1091,17 @@ try {
 		String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 24px; -fx-font-weight: bold;";
 
 		colmaKhachHang = new Label("Mã Khách Hàng");
-		colmaKhachHang.setTranslateX(-100);
+		colmaKhachHang.setTranslateX(-250);
 		colmaKhachHang.setStyle(styleHeader);
 		
 		coltenKhachHang = new Label("Tên Khách Hàng");
-		coltenKhachHang.setTranslateX(-100);
+		coltenKhachHang.setTranslateX(-80);
 		coltenKhachHang.setStyle(styleHeader);
 		
 		
 		
 		colsoLanSuDung = new Label("Số lần đi");
-		colsoLanSuDung.setTranslateX(100);
+		colsoLanSuDung.setTranslateX(250);
 		colsoLanSuDung.setStyle(styleHeader);
 		
 		
@@ -1106,32 +1128,57 @@ try {
 		table_desc_layout = new VBox();
 		table_desc_layout.setSpacing(20);
 		
-		create_layout_dong("KH001","Tien Dat", 15);
-		create_layout_dong("KH001","Tien Dat", 25);
+		for(Map.Entry<KhachHang, Integer> x : map.entrySet())
+		{
+			KhachHang kh = x.getKey();
+			int solan = x.getValue();
+			create_layout_dong(kh.getMaKhachHang(),kh.getHoten(), solan);
+		}
 		
 		
 		table_layout.getChildren().add(table_desc_layout);
 		table_desc.getChildren().add(table_layout);
 	}
 	
-	public void create_layout_dong(String maGhe,String tenGhe,int soLanSuuDung)
+	public void create_layout_dong(String maKH,String tenKH,int soLanSuuDung)
 	{
 		
 		GridPane data = new GridPane();
-		
+	    data.setHgap(10);
+	    data.setAlignment(Pos.CENTER);
+	    data.setMaxWidth(1330);
+	    data.setPrefHeight(70);
+	    data.setPadding(new Insets(0, 20, 0, 20));
 
-		data.setHgap(10);
-		data.setAlignment(Pos.CENTER);
-		data.setMaxWidth(1330);
-		data.setPrefHeight(70);
-		data.setPadding(new Insets(0, 0, 0, 10));
+	    // Thiết lập 3 cột có độ rộng tương đối
+	    ColumnConstraints col1 = new ColumnConstraints();
+	    col1.setPercentWidth(30); // Mã KH
+	    ColumnConstraints col2 = new ColumnConstraints();
+	    col2.setPercentWidth(40); // Tên KH
+	    ColumnConstraints col3 = new ColumnConstraints();
+	    col3.setPercentWidth(30); // Số lần sử dụng
+
+	    data.getColumnConstraints().addAll(col1, col2, col3);
 		
+	    
 		String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
-		Label[] labels = {lbl_maGhe = new Label(maGhe),lbl_tenGhe =  new Label(tenGhe),lbl_soLanSuDung =new Label(Integer.toString(soLanSuuDung))};
-		double[] widths = {200, 200,400};
-		lbl_maGhe.setTranslateX(-410);
-		lbl_tenGhe.setTranslateX(-210);
-		lbl_soLanSuDung.setTranslateX(320);
+		
+		
+		lbl_maGhe = new Label(maKH);
+	    lbl_tenGhe = new Label(tenKH);
+	    lbl_soLanSuDung = new Label(Integer.toString(soLanSuuDung));
+
+	    lbl_maGhe.setStyle(baseStyle);
+	    lbl_tenGhe.setStyle(baseStyle);
+	    lbl_soLanSuDung.setStyle(baseStyle);
+	    lbl_maGhe.setTranslateX(50);
+	    lbl_soLanSuDung.setAlignment(Pos.CENTER_RIGHT);
+	    GridPane.setHalignment(lbl_soLanSuDung, HPos.CENTER);
+
+	    // Thêm vào grid đúng cột
+	    data.add(lbl_maGhe, 0, 0);
+	    data.add(lbl_tenGhe, 1, 0);
+	    data.add(lbl_soLanSuDung, 2, 0);
 		
 		lbl_maGhe.setStyle(baseStyle);
 		lbl_tenGhe.setStyle(baseStyle);
@@ -1199,7 +1246,8 @@ try {
 	        scaleDown.setToY(1.0);
 	        scaleDown.play();
 	    });
-		data.getChildren().addAll(labels);
+	    
+		
 		table_desc_layout.getChildren().add(data);
 	}
 	public void create_layout_total()
