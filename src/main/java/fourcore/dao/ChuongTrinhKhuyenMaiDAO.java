@@ -12,11 +12,14 @@ import java.util.ArrayList;
 public class ChuongTrinhKhuyenMaiDAO {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
 
+    public ArrayList<KhuyenMai> listKhuyenMai = new ArrayList<>();
 
 	public ChuongTrinhKhuyenMaiDAO() throws SQLException {
-		getListKhuyenMai();
+
 	}
-	ArrayList<KhuyenMai> listKhuyenMai = new ArrayList<>();
+    public ArrayList<KhuyenMai> getListCTKM(){
+        return listKhuyenMai;
+    }
 
 	public ArrayList<KhuyenMai> getListKhuyenMai() throws SQLException {
 		Statement myStmt = databaseConnector.connect();

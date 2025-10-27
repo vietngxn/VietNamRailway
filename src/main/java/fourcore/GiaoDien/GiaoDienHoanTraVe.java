@@ -1036,7 +1036,7 @@ public class GiaoDienHoanTraVe extends Application {
 //		list = dao.getListHoanVe();
 //		list.removeAll(list);
 		list = dao.getListHoanVe(); 
-		
+		System.out.println(list.size());
 		VBox box = new VBox(10);
 		for (Ve x : list) {
 			LoaiHoaDonDAO lhdDao = new LoaiHoaDonDAO();

@@ -116,7 +116,6 @@ public class GioVe extends Application {
 
 	private TextField txtHoTen;
 	private TextField txtSoGiayTo;
-	private ComboBox<String> cmbDoiTuong;
 
 	public GioVe() throws SQLException {
 	}
@@ -662,19 +661,16 @@ public class GioVe extends Application {
 				ChuongTrinhKhuyenMaiDAO ctkmDAO = null;
 				try {
 					ctkmDAO = new ChuongTrinhKhuyenMaiDAO();
+                    ctkmDAO.getListCTKM();
 				} catch (SQLException e) {
 					throw new RuntimeException(e);
 				}
 				ArrayList<KhuyenMai> listCTKM;
-				try {
-					listCTKM = ctkmDAO.getListKhuyenMai();
-				} catch (SQLException e) {
-					e.printStackTrace();
-					new Alert(Alert.AlertType.ERROR, "Không thể tải danh sách CTKM!").show();
-					return;
-				}
+					listCTKM = ctkmDAO.getListCTKM();
+
 
 				ArrayList<String> tenChuongTrinhKhuyenMai = new ArrayList<>();
+                tenChuongTrinhKhuyenMai.clear();
 				for (KhuyenMai km : listCTKM) {
 					tenChuongTrinhKhuyenMai.add(km.getTenChuongTrinh());
 				}
@@ -729,7 +725,7 @@ public class GioVe extends Application {
 			btnTroLai = new Button("Trở lại");
 			btnTroLai.setStyle(btnRedStyle);
 			btnTroLai.setPrefSize(270, 50);
-
+            btnTiepTuc.setText("Tiếp tục");
 			btnTiepTuc.setStyle(btnBlueStyle);
 			btnTiepTuc.setPrefSize(280, 50);
 
@@ -746,7 +742,22 @@ public class GioVe extends Application {
 			hieuUngHover(btnTroLai);
 
 			btnTiepTuc.setOnMouseClicked(event -> {
+                mapChuyenTauVaUser.clear();
 				for (int i = 0; i < listTxtHoTen.size(); i++) {
+                    if(listTxtHoTen.get(i).getText()==null || listTxtSoGiayTo.get(i).getText().trim().isEmpty() ||  listCmbDoiTuong.get(i).getValue()==null){
+                        System.out.println("so giay to: " + listTxtSoGiayTo.get(i).getText());
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Lỗi");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Vui lòng nhập đầy đủ thông tin!");
+                        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                        alert.initOwner(stage);
+                        alert.initModality(Modality.WINDOW_MODAL);
+                        alert.showAndWait();
+                        break;
+                    }
+                    System.out.println("so giay to: " + listTxtSoGiayTo.get(i).getText());
+
 					KhachHang kh = new KhachHang(listTxtHoTen.get(i).getText(), listTxtSoGiayTo.get(i).getText(),
 							listCmbDoiTuong.get(i).getValue());
 					GheTrenChuyenTau ghe = new GheTrenChuyenTau();
@@ -754,6 +765,13 @@ public class GioVe extends Application {
 					mapChuyenTauVaUser.put(ghe, kh);
 			        System.out.println("Thêm vào map: " + ghe + " -> " + kh.toString2());
 				}
+                if(mapChuyenTauVaUser.size()<listGheSelected.size()) {
+
+                }else if(mapChuyenTauVaUser.size()==listGheSelected.size()) {
+
+
+                }
+
 			});
 
 			primaryStage.setFullScreen(true);
@@ -1053,7 +1071,7 @@ public class GioVe extends Application {
 		right.setPrefSize(200, 40);
 
 		if (check == 2) {
-			cmbDoiTuong = new ComboBox<>();
+            ComboBox<String> cmbDoiTuong = new ComboBox<>();
 			cmbDoiTuong.setPromptText("Chọn đối tượng");
 
 			ArrayList<String> listTenDoiTuong = new ArrayList<>();
@@ -1070,11 +1088,13 @@ public class GioVe extends Application {
 				String tenDoiTuong = cmbDoiTuong.getValue();
 				if (tenDoiTuong == null)
 					return;
-
-				DoiTuongGiamGia doiTuong = listDoiTuongGiamGia.stream()
-						.filter(dt -> dt.getTenDoiTuongGiamGia().equals(tenDoiTuong)).findFirst().orElse(null);
-
-				if (doiTuong != null) {
+                DoiTuongGiamGia doiTuong = null;
+				for(DoiTuongGiamGia dt :  listDoiTuongGiamGia) {
+                    if(dt.getTenDoiTuongGiamGia().equals(tenDoiTuong)) {
+                        doiTuong = dt;
+                    }
+                }
+                    System.out.println("click combobox");
 					double phanTramGiam = doiTuong.getGiaTriPhanTramGiamGia();
 					double tienGiam = giaTienGhe * phanTramGiam / 100.0;
 					double thanhTienMoi = giaTienGhe - tienGiam;
@@ -1088,7 +1108,7 @@ public class GioVe extends Application {
 					lblGiamDoiTuongValue.setText(String.format("%.0f", tienGiam));
 					lblThanhTienValue.setText(String.format("%.0f", thanhTienMoi));
 
-				}
+
 			});
 
 			right.getChildren().add(cmbDoiTuong);
