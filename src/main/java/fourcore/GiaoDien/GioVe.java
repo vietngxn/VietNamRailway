@@ -661,7 +661,7 @@ public class GioVe extends Application {
 				ChuongTrinhKhuyenMaiDAO ctkmDAO = null;
 				try {
 					ctkmDAO = new ChuongTrinhKhuyenMaiDAO();
-                    ctkmDAO.getListCTKM();
+                    ctkmDAO.getListKhuyenMai();
 				} catch (SQLException e) {
 					throw new RuntimeException(e);
 				}

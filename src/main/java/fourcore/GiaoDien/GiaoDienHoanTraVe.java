@@ -1,14 +1,19 @@
 package fourcore.GiaoDien;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
+import fourcore.Control.HoanTraVeControl;
+import fourcore.Control.ThongKeKhachHangControl;
 import fourcore.Entity.LichSuTuongTacVe;
 import fourcore.Entity.Ve;
 import fourcore.dao.LichSuTuongTacVe_Dao;
@@ -100,7 +105,6 @@ public class GiaoDienHoanTraVe extends Application {
 	private VBox layout_txt_timkiem;
 	private TextField txt_timkiem;
 	private Button btnHoanVe;
-	private HBox pnlTimKiemBtn;
 	private Button btnTimKiemTheoMaVe;
 	private Button btnTimKiemTheoNguoiMua;
 	private VeDAO dao;
@@ -113,6 +117,9 @@ public class GiaoDienHoanTraVe extends Application {
 	private Label colLoaiHoaDon;
 	private StackPane paneCol7;
 
+	Map<String, Double> listVeThanhToan = new HashMap<>();
+	private BorderPane root;
+	private HoanTraVeControl ctrl = new HoanTraVeControl();
 	private static double tongCongPhiHoanTra;
 
 	public void loadLableTongCongValue(double tongCongThanhTien) {
@@ -250,6 +257,7 @@ public class GiaoDienHoanTraVe extends Application {
 				tongCongPhiHoanTra += phiHoanTra;
 				loadLableTongCongValue(tongCongPhiHoanTra);
 				System.out.println(mave + " " + isSelected);
+				listVeThanhToan.put(mave, phiHoanTra);
 			} else {
 				data.setStyle(normalStyle);
 				ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), data);
@@ -260,11 +268,14 @@ public class GiaoDienHoanTraVe extends Application {
 				tongCongPhiHoanTra -= phiHoanTra;
 				loadLableTongCongValue(tongCongPhiHoanTra);
 				System.out.println(mave + " " + isSelected);
+				listVeThanhToan.remove(mave);
 			}
 		});
 
 		return pnlReturn;
 	}
+
+
 
 	private HBox taoSubCT1(String label, String value, String leftStyle, String rightStyle) {
 		Label lblLeft = new Label(label);
@@ -1017,41 +1028,40 @@ public class GiaoDienHoanTraVe extends Application {
 				}
 			});
 
-			BorderPane root = new BorderPane();
-			root.setLeft(menuList);
-			root.setCenter(noiDungChinh);
+//			root = new BorderPane();
+//			root.setLeft(menuList);
+//			root.setCenter(noiDungChinh);
 
-			Scene scene = new Scene(root, 1800, 900);
-			primaryStage.setScene(scene);
-			primaryStage.setTitle("Hệ thống quản lý vé tàu");
-			primaryStage.setFullScreen(true);
-			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	public Button traVeNutHoanVe() {
+		return this.btnHoanVe;
+	}
+	
+	public Map<String, Double> traVeListVeThanhToan(){
+		return this.listVeThanhToan;
+	}
 	public VBox loadDuLieuLenTable() throws SQLException {
 		dao = new VeDAO();
-//		list = dao.getListHoanVe();
-//		list.removeAll(list);
-		list = dao.getListHoanVe(); 
-		System.out.println(list.size());
+		list = dao.getListHoanVe();
+
 		VBox box = new VBox(10);
 		for (Ve x : list) {
 			LoaiHoaDonDAO lhdDao = new LoaiHoaDonDAO();
 			String tenloai = lhdDao.getLoaiHoaDonTheoMaVe(x.getMaVeTau());
 			System.out.println(tenloai);
-			box.getChildren()
-					.add(taoDataChoTableHoanVe(x.getMaVeTau(), x.getChuyenTau().getMaChuyenTau(),
-							x.getGaDi() + " - " + x.getGaDen(),
-							x.getNgayGioDi().toLocalDate() + " - " + x.getNgayGioDi().toLocalTime(),
-							"Toa số " + x.getSoToa() + " chỗ " + x.getSoGhe(), tenloai, x.getTrangThaiVe(),
-							x.getKhachHang().getHoten(), x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
-							x.getKhachHang().getCccd(), x.getGiaVe(),
-							nf.format(x.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
-							nf.format(x.getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%", x.tinhThanhTien(),
-							x.tinhPhiHoanTra(x.getNgayGioDi(), x.tinhThanhTien(), tenloai)));
+			box.getChildren().add(taoDataChoTableHoanVe(x.getMaVeTau(), x.getChuyenTau().getMaChuyenTau(),
+					x.getGaDi() + " - " + x.getGaDen(),
+					x.getNgayGioDi().toLocalDate() + " - " + x.getNgayGioDi().toLocalTime(),
+					"Toa số " + x.getSoToa() + " chỗ " + x.getSoGhe(), tenloai, x.getTrangThaiVe(),
+					x.getKhachHang().getHoten(), x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
+					x.getKhachHang().getCccd(), x.getGiaVe(),
+					nf.format(x.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
+					nf.format(x.getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%", x.tinhThanhTien(),
+					x.tinhThanhTienThanhToanHoanTra(x.tinhPhiHoanTra(x.getNgayGioDi(), x.tinhThanhTien(), tenloai))));
 		}
 		return box;
 	}
