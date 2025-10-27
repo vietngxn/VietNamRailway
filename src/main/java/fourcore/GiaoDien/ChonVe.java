@@ -94,7 +94,7 @@ public class ChonVe extends Application {
     ArrayList<ToaTau> dsToaTrenChuyen = null;
     final List<GheTrenChuyenTau> gheDangChonList = new ArrayList<>();
     Button btn_trolai = new Button("Trở lại");
-
+    Button btn_tieptuc = new Button("Tiếp Tục");
     public ChonVe() throws SQLException {
 
     }
@@ -1087,7 +1087,7 @@ public class ChonVe extends Application {
 
         btn_trolai.setStyle(
                 "-fx-font-family: 'Inter';-fx-font-size: 20px;-fx-font-weight: bold;-fx-text-fill:white;-fx-background-color: linear-gradient(to top, #CB002C, #D498A5);-fx-background-radius:15px;");
-        Button btn_tieptuc = new Button("Tiếp Tục");
+
         btn_tieptuc.setPrefSize(150, 50);
         btn_tieptuc.setStyle(
                 "-fx-font-family: 'Inter';-fx-font-size: 20px;-fx-font-weight: bold;-fx-text-fill:white;-fx-background-color: linear-gradient(to top, #00BACB, #B6D0D3);-fx-background-radius:15px;");
@@ -1174,7 +1174,9 @@ public class ChonVe extends Application {
             e.printStackTrace();
         }
     }
-
+    public Button getTiepTucBtn(){
+        return btn_tieptuc;
+    }
     public void hienThiLayoutGhe(GridPane danhSachGheGridPane, String maToaTau, String maChuyen) throws SQLException {
         danhSachGheGridPane.getChildren().clear();
         int soGhe = 36;
@@ -1184,7 +1186,7 @@ public class ChonVe extends Application {
         for(int col=0; col<soCot; col++){
             for(int row=0; row<soHang; row++){
                 if(gaDen.equals("TP HCM")){
-
+                    System.out.println("Khong luu dong");
                     ImageView gheTrongImg =  new ImageView(getClass().getResource("/img/gheTrong.png").toExternalForm());
 
                     final int soGheH = thuTuGhe;
@@ -1276,6 +1278,7 @@ public class ChonVe extends Application {
                     thuTuGhe--;
                 }
                 else {
+                    System.out.println("Luu dong");
                     ImageView gheTrongImg =  new ImageView(getClass().getResource("/img/gheluudong.png").toExternalForm());
 
                     final int soGheH = thuTuGhe;

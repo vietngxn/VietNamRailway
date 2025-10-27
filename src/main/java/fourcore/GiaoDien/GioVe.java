@@ -71,7 +71,7 @@ public class GioVe extends Application {
 	private Label lblTongCong;
 	private Label lblTongCongValue;
 	private HBox pnlTongCong;
-	private Button btnTroLai;
+	private Button btnTroLai= new Button("Trở lại");;
 	Button btnTiepTuc = new Button();
 	private HBox banVeBox;
 	private HBox doiVeBox;
@@ -722,7 +722,6 @@ public class GioVe extends Application {
 			lblTrangThaiApDung.setStyle("-fx-text-fill: #43A047");
 			pnlGioVeButtonSub1.getChildren().addAll(btnApDungChuongTrinhKhuyenMai, pnlTongCong);
 
-			btnTroLai = new Button("Trở lại");
 			btnTroLai.setStyle(btnRedStyle);
 			btnTroLai.setPrefSize(270, 50);
             btnTiepTuc.setText("Tiếp tục");
@@ -775,11 +774,20 @@ public class GioVe extends Application {
 			});
 
 			primaryStage.setFullScreen(true);
-			primaryStage.show();
+//			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+    public Button getGioVeTroLaiBtn(){
+        return btnTroLai;
+    }
+    public Button getGioVeTiepTucBtn(){
+        return btnTiepTuc;
+    }
+    public VBox getGDGioVe(){
+        return noiDungChinh;
+    }
 
 	public void hieuUngHover(Button btn) {
 		btn.setOnMouseEntered(e -> {

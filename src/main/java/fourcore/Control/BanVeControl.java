@@ -5,6 +5,7 @@ import fourcore.Entity.Ga;
 import fourcore.GiaoDien.BanVe;
 import fourcore.GiaoDien.ChonVe;
 import fourcore.GiaoDien.GiaoDienLichSuMuaBanDoiVe;
+import fourcore.GiaoDien.GioVe;
 import fourcore.dao.ChuyenTauDAO;
 import fourcore.dao.GheNgoiDAO;
 import fourcore.dao.HanhTrinh_DAO;
@@ -28,7 +29,7 @@ public class BanVeControl {
     public String gaDen = "";
     String loaiVeString;
     ChonVe gdChonve = new ChonVe();
-
+    GioVe gdGiove = null;
     BanVe gdBanVe = null;
 
     public BanVeControl() throws SQLException {
@@ -138,8 +139,15 @@ public class BanVeControl {
             VBox gdChonVeMain = gdChonve.getGdChonVe();
             root.setCenter(gdChonVeMain);
             troLaiGDBanVe(root);
+            gdChonve.getTiepTucBtn().setOnMouseClicked(event -> {
+                try {
+                    tiepDenGDGioVe(root);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
 
-            ;
+
 
             System.out.println(gaDi);
             System.out.println(gaDen);
@@ -152,6 +160,25 @@ public class BanVeControl {
             root.setCenter(gdBanVe.getGDBanVe());
         });
     }
+    public void troLaiGDChonVe(BorderPane root){
+        if(gdGiove != null && gdChonve != null){
+            gdGiove.getGioVeTroLaiBtn().setOnMouseClicked(e -> {
+                // Hiển thị lại giao diện ChonVe
+                root.setCenter(gdChonve.getGdChonVe());
+            });
+        }
+    }
+
+    public void tiepDenGDGioVe(BorderPane root) throws SQLException {
+        gdGiove = new GioVe();
+        Stage gdGioVeStage = new Stage();
+        gdGiove.start(gdGioVeStage);
+        root.setCenter(gdGiove.getGDGioVe());
+
+        // Bind nút trở lại
+        troLaiGDChonVe(root);
+    }
+
 
 
     public ArrayList<ChuyenTau> getListChuyenTau() throws SQLException {
@@ -169,6 +196,11 @@ public class BanVeControl {
         ArrayList<ChuyenTau> listChuyenTauFiltered = new ArrayList<>();
         HanhTrinh_DAO hanhTrinh_DAO = new HanhTrinh_DAO();
         System.out.println("ga den" +  gaDen);
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("gaden.dat"))) {
+            oos.writeObject(gaDen);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
         System.out.println(dateMotChieu.toString());
             //FILTER THEO GA DEN + THEO NGAY
         for(ChuyenTau chuyenTau : listChuyenTau){

@@ -127,7 +127,7 @@ public class QuanLiHoaDon extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			hddao = new HoaDonDAO();
-//			listhd = hddao.getListHoaDon();
+			listhd = hddao.getListHoaDon();
 			vedao = new VeDAO();
             BorderPane root = new BorderPane();
             Scene scene = new Scene(root,1920,1000);
