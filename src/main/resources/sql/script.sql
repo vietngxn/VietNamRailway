@@ -220,7 +220,8 @@ CREATE TABLE HoaDon (
 	FOREIGN KEY (maLoaiHoaDon) REFERENCES LoaiHoaDon(maLoaiHoaDon),
 );
 
-
+ALTER TABLE HoaDon
+ADD diaChiKhachHangThanhToan NVARCHAR(255);
 -- ======================================
 -- BẢNG VÉ TÀU
 -- ======================================
@@ -459,10 +460,11 @@ VALUES
 (N'LHD03', N'đổi vé', N'Áp dụng cho hóa đơn đổi vé');
 
 -- Dữ liệu mẫu cho bảng HoaDon (đã thêm đầy đủ các trường)
-INSERT INTO HoaDon (maHoaDon, maLoaiHoaDon, maNhanVien, tenKhachHangThanhToan, emailKhachHangThanhToan, cccdKhachHangThanhToan, sdtKhachHangThanhToan, ngayThanhToan, tongTien) VALUES
-(N'HD001',N'LHD01', N'NV001', N'Nguyễn Văn A', N'nguyenvana@example.com', N'079123456789', N'0912345678', '2025-10-18 14:30:00', 500000),
-(N'HD002',N'LHD01', N'NV002', N'Trần Thị B', N'tranthib@example.com', N'079987654321', N'0987654321', '2025-10-18 15:00:00', 700000),
-(N'HD003',N'LHD03', N'NV002', N'Trần Thị B', N'tranthib@example.com', N'079987654321', N'0987654321', '2025-10-18 15:00:00', 700000);
+INSERT INTO HoaDon (maHoaDon, maLoaiHoaDon, maNhanVien, tenKhachHangThanhToan,emailKhachHangThanhToan, cccdKhachHangThanhToan, sdtKhachHangThanhToan,diaChiKhachHangThanhToan,ngayThanhToan,tongTien)
+VALUES
+(N'HD001', N'LHD01', N'NV001', N'Nguyễn Văn A', N'nguyenvana@example.com', N'079123456789', N'0912345678', N'183A đường Trung An, Xã Trung An, Huyện Củ Chi, TPHCM', '2025-10-18 14:30:00', 500000),
+(N'HD002', N'LHD01', N'NV002', N'Trần Thị B', N'tranthib@example.com', N'079987654321', N'0987654321', N'12 Đường Phan Xích Long, Phường 3, Quận Phú Nhuận, TPHCM', '2025-10-18 15:00:00', 700000),
+(N'HD003', N'LHD03', N'NV002', N'Trần Thị B', N'tranthib@example.com', N'079987654321', N'0987654321', N'45 Nguyễn Văn Cừ, Phường 1, Quận 5, TPHCM', '2025-10-18 15:00:00', 700000);
 
 -- Dữ liệu mẫu cho bảng LoaiTuongTacVe
 INSERT INTO LoaiTuongTacVe (maLoaiTuongTac, tenLoaiTuongTac) VALUES
