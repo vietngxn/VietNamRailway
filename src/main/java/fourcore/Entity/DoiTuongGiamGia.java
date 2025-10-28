@@ -1,8 +1,9 @@
 package fourcore.Entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class DoiTuongGiamGia {
+public class DoiTuongGiamGia implements Serializable {
 	String maDoiTuongGiamGia, tenDoiTuongGiamGia, trangThaiGiamGia;
 	double giaTriPhanTramGiamGia;
 	public String getMaDoiTuongGiamGia() {

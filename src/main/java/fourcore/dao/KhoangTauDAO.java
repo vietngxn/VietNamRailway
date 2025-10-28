@@ -12,7 +12,9 @@ import java.util.ArrayList;
 public class KhoangTauDAO {
     DatabaseConnector databaseConnector = new DatabaseConnector();
     public ArrayList<KhoangTau> listKhoangTau = new ArrayList<>();
-
+    public KhoangTauDAO() throws SQLException {
+        getListKhoangTau();
+    }
     public ArrayList<KhoangTau> getListKhoangTau() throws SQLException {
         Statement myStmt = databaseConnector.connect();
         String query = "  SELECT * FROM KhoangTau";

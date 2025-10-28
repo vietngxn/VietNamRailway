@@ -38,7 +38,8 @@ public class ChuongTrinhKhuyenMaiDAO {
 			listKhuyenMai.add(khuyenMai);
 			// maKhuyenMai,tenChuongTrinh,trangThaiKhuyenMai,dieuKienApDung,iaTriPhanTramKhuyenMai,ngayBatDau,ngayKetThuc)
 		}
-
+        rs.close();
+        myStmt.close();
 		return listKhuyenMai;
 	}
 

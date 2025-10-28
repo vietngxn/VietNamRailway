@@ -4,15 +4,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.sql.SQLException;
 import java.text.NumberFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import fourcore.Entity.DoiTuongGiamGia;
-import fourcore.Entity.GheTrenChuyenTau;
-import fourcore.Entity.KhachHang;
-import fourcore.Entity.KhuyenMai;
-import fourcore.dao.DoiTuongGiamGiaDAO;
+import fourcore.Entity.*;
+import fourcore.dao.*;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -104,6 +103,7 @@ public class GiaoDienXuatHoaDon extends Application {
 	private TextField txtEMail;
 	private TextField txtSoGiayTo;
 	private TextField txtSdt;
+    ArrayList<TextField> listTxtFieldHoaDon = new ArrayList<>();
     Map<GheTrenChuyenTau, KhachHang> mapChuyenTauVaUser = new LinkedHashMap<>();
     KhuyenMai ctkmSelected=null;
 	String hoTen;
@@ -688,7 +688,45 @@ public class GiaoDienXuatHoaDon extends Application {
 
 			// sukien
 			btnThanhToan.setOnMouseClicked(event -> {
-				showConfirm(primaryStage, "Bạn muốn thanh toán hóa đơn này");
+                boolean flag = true;
+                System.out.println(listTxtFieldHoaDon.size());
+                if (txtEMail.getText().isEmpty() || txtSdt.getText().isEmpty() || txtHoTen.getText().isEmpty() || txtSoGiayTo.getText().isEmpty()){
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Lỗi");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Vui lòng nhập đầy đủ thông tin!");
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    alert.initOwner(stage);
+                    alert.initModality(Modality.WINDOW_MODAL);
+                    alert.showAndWait();
+                    flag = false;
+
+                }else{
+                    for(TextField tf : listTxtFieldHoaDon){
+
+                        if(tf.getText().isEmpty()){
+                            Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                            alert2.setTitle("Lỗi");
+                            alert2.setHeaderText(null);
+                            alert2.setContentText("Vui lòng nhập đầy đủ thông tin!");
+                            Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                            alert2.initOwner(stage2);
+                            alert2.initModality(Modality.WINDOW_MODAL);
+                            alert2.showAndWait();
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if(flag == true){
+                        try {
+                            showConfirm(primaryStage, "Bạn muốn thanh toán hóa đơn này");
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+
+                }
 			});
 
 			BorderPane root = new BorderPane();
@@ -714,8 +752,8 @@ public class GiaoDienXuatHoaDon extends Application {
             double phanTramKhuyenMai = 0;
             double phanTramGiamDoiTuong = 0;
             for(int x=0; x<listDoiTuongGiamGia.size(); x++){
-                if(listDoiTuongGiamGia.get(i).getTenDoiTuongGiamGia().equals(tenDoiTuong)){
-                    phanTramGiamDoiTuong = listDoiTuongGiamGia.get(i).getGiaTriPhanTramGiamGia();
+                if(listDoiTuongGiamGia.get(x).getTenDoiTuongGiamGia().equals(tenDoiTuong)){
+                    phanTramGiamDoiTuong = listDoiTuongGiamGia.get(x).getGiaTriPhanTramGiamGia();
                     break;
                 }
             }
@@ -728,7 +766,7 @@ public class GiaoDienXuatHoaDon extends Application {
         }
         tongCongThanhTien = tienTruocVAT * 1.08;
     }
-	private boolean showConfirm(Stage parentStage, String message) {
+	private boolean showConfirm(Stage parentStage, String message) throws SQLException {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Xác nhận");
 		alert.setHeaderText(null);
@@ -739,8 +777,43 @@ public class GiaoDienXuatHoaDon extends Application {
 		ButtonType yes = new ButtonType("Yes");
 		ButtonType no = new ButtonType("No");
 		alert.getButtonTypes().setAll(yes, no);
-
 		Optional<ButtonType> result = alert.showAndWait();
+
+        if(result.get() == yes) {
+            System.out.println("ClickYes");
+            BanVeDAO banVeDAO = new BanVeDAO();
+            banVeDAO.themVe();
+            String txtHoTenValue = txtHoTen.getText();
+            String txtSoGiayToValue = txtSoGiayTo.getText();
+            String txtEmailValue = txtEMail.getText();
+            String txtSDTValue = txtSdt.getText();
+            String txtDiaChiaValue = listTxtFieldHoaDon.get(2).getText();
+            LoaiHoaDonDAO loaiHoaDonDAO = new LoaiHoaDonDAO();
+            LoaiHoaDon loaiHoaDon = new LoaiHoaDon();
+            loaiHoaDon = loaiHoaDonDAO.getLoaiHoaDonTheoMa("LHD01");
+            NhanVienDAO nhanVienDAO = new NhanVienDAO();
+            NhanVien nhanVien = nhanVienDAO.getNhanVienByMa("NV001");
+            double tongTien = tongCongThanhTien;
+            LocalDateTime ngayThanhToan = LocalDateTime.now();
+            System.out.println(ngayThanhToan.toString());
+            HoaDon hoaDon = new HoaDon(nhanVien,loaiHoaDon,txtHoTenValue,txtEmailValue,txtSoGiayToValue,txtSDTValue,txtDiaChiaValue,ngayThanhToan,tongTien);
+            HoaDon hoaDon2 = banVeDAO.themHoaDon(hoaDon);
+
+            Ve veTau = new Ve();
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("veTau.dat"))) {
+                veTau = (Ve) ois.readObject();
+                System.out.println("vé đã đọc: " + veTau);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            for(int i =0 ; i< banVeDAO.listGheTrenChuyenTau.size();i++){
+                banVeDAO.themCTHoaDon(hoaDon2,veTau,banVeDAO.listGheTrenChuyenTau.get(i),banVeDAO.ctkmSelected);
+                banVeDAO.themLichSuTuongTacVe(veTau,ctkmSelected,banVeDAO.listGheTrenChuyenTau.get(i));
+                System.out.println("them lich su ");
+            }
+
+        }
+
 		return result.isPresent() && result.get() == yes;
 	}
 
@@ -780,7 +853,6 @@ public class GiaoDienXuatHoaDon extends Application {
 
 		VBox pnl = new VBox(15);
 		pnl.setAlignment(Pos.CENTER);
-
 		pnl.getChildren().add(taoSubXuatHoaDonPane("Người mua", hoten, leftstyle, rightstyle));
 		pnl.getChildren().add(taoSubXuatHoaDonPane("Số giấy tờ", sogiayto, leftstyle, rightstyle));
 		pnl.getChildren().add(taoSubXuatHoaDonPane("Địa chỉ", diachi, leftstyle, rightstyle));
@@ -904,6 +976,7 @@ public class GiaoDienXuatHoaDon extends Application {
 		txtRight.setStyle(rightStyle + " -fx-border-color: transparent;");
 		txtRight.setMaxWidth(Double.MAX_VALUE);
 		txtRight.setMaxHeight(Double.MAX_VALUE);
+        listTxtFieldHoaDon.add(txtRight);
 		StackPane.setAlignment(txtRight, Pos.CENTER);
 		right.getChildren().add(txtRight);
 		if (label.equalsIgnoreCase("Người mua") || label.equalsIgnoreCase("Tên khách hàng")) {

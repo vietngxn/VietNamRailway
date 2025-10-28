@@ -92,7 +92,7 @@ public class ChonVe extends Application {
     String gaDen;
     GheNgoiDAO gheNgoiDAO = new GheNgoiDAO();
     ArrayList<ToaTau> dsToaTrenChuyen = null;
-    final List<GheTrenChuyenTau> gheDangChonList = new ArrayList<>();
+    public final List<GheTrenChuyenTau> gheDangChonList = new ArrayList<>();
     Button btn_trolai = new Button("Trở lại");
     Button btn_tieptuc = new Button("Tiếp Tục");
     public ChonVe() throws SQLException {
@@ -1581,7 +1581,7 @@ public class ChonVe extends Application {
     public HBox getChuyenTauMenu() {
         return this.chuyenTauMenu;
     }
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         Application.launch(ChonVe.class, args);
 
     }

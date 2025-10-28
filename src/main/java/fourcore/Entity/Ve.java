@@ -1,5 +1,6 @@
 package fourcore.Entity;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -7,7 +8,7 @@ import java.time.LocalDateTime;
 import javafx.util.converter.LocalDateStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
 
-public class Ve {
+public class Ve implements Serializable {
 	private String maVeTau;
 	private String gaDi;
 	private String gaDen;
@@ -29,7 +30,7 @@ public class Ve {
 	private KhuyenMai khuyenMai;
 	private DoiTuongGiamGia doiTuongGiamGia;
 
-	public Ve() {
+	public Ve()  {
 
 	}
 

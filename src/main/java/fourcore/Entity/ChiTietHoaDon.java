@@ -10,6 +10,16 @@ public class ChiTietHoaDon {
 	private double thanhTien;
 	private String LoaiHoaDonChoVe;
 
+    public ChiTietHoaDon(HoaDon hoaDon, Ve ve, String moTa, double donGia, double thueVAT, double thanhTien, String LoaiHoaDonChoVe) {
+        setHoaDon(hoaDon);
+        setVeTau(ve);
+        setMoTa(moTa);
+        setDonGia(donGia);
+        setThueVAT(thueVAT);
+        setThanhTien(thanhTien);
+        setLoaiHoaDonChoVe(LoaiHoaDonChoVe);
+    }
+
 	public String getMaChiTietHoaDon() {
 		return maChiTietHoaDon;
 	}

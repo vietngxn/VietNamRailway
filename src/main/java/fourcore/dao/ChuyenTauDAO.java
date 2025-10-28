@@ -27,7 +27,6 @@ public class ChuyenTauDAO {
         Statement myStmt = databaseConnector.connect();
         String query = "select * from ChuyenTau";
         ResultSet rs = myStmt.executeQuery(query);
-        listTau = tau_DAO.getList();
         listHanhTrinh = hanhTrinh_DAO.getList();
         while (rs.next()) {
             String maChuyenTau = rs.getString(1);

@@ -210,6 +210,16 @@ public class BanVeControl {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("gadi.dat"))) {
+            oos.writeObject(gaDi);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("loaiVe.dat"))) {
+            oos.writeObject(loaiVeString);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
         System.out.println(dateMotChieu.toString());
             //FILTER THEO GA DEN + THEO NGAY
         for(ChuyenTau chuyenTau : listChuyenTau){

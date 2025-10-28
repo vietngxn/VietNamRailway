@@ -16,6 +16,12 @@ public class KhachHang implements Serializable {
 		setCccd(maGiayTo);
 		setDoiTuong(doiTuong);
 	}
+    public KhachHang(String maKhachHang, String hoTen, String maGiayTo,String doiTuong) {
+        setMaKhachHang(maKhachHang);
+        setHoten(hoTen);
+        setCccd(maGiayTo);
+        setDoiTuong(doiTuong);
+    }
 
 	public String getMaKhachHang() {
 		return maKhachHang;
