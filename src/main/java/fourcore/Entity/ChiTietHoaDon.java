@@ -94,6 +94,18 @@ public class ChiTietHoaDon {
 		setLoaiHoaDonChoVe(loaiHoaDon);
 	}
 
+
+	public ChiTietHoaDon(String maChiTietHoaDon, HoaDon hoaDon, Ve veTau, String moTa, double dongia, double thueVAT,
+			double thanhTien) {
+		setMaChiTietHoaDon(maChiTietHoaDon);
+		setHoaDon(hoaDon);
+		setVeTau(veTau);
+		setMoTa(moTa);
+		setDongia(dongia);
+		setThueVAT(thueVAT);
+		setThanhTien(thanhTien);
+	}
+
 	public ChiTietHoaDon() {
 	}
 
