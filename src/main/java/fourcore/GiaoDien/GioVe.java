@@ -1,9 +1,6 @@
 package fourcore.GiaoDien;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.NumberFormat;
@@ -12,6 +9,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import fourcore.Control.BanVeControl;
 import fourcore.Entity.*;
 import fourcore.dao.ChuongTrinhKhuyenMaiDAO;
 import fourcore.dao.DoiTuongGiamGiaDAO;
@@ -112,7 +110,7 @@ public class GioVe extends Application {
 	double phanTramGG = 0;
 	double tongCongThanhTien;
 	private Label lblTrangThaiApDung;
-	KhuyenMai khuyenMaiSelect;
+	KhuyenMai khuyenMaiSelect = null;
 
 	private TextField txtHoTen;
 	private TextField txtSoGiayTo;
@@ -690,7 +688,6 @@ public class GioVe extends Application {
 						alert.showAndWait();
 						return;
 					} else {
-						khuyenMaiSelect = new KhuyenMai();
 						for (KhuyenMai km : listCTKM) {
 							if (km.getTenChuongTrinh().equals(selected)) {
 								khuyenMaiSelect = km;
@@ -740,7 +737,7 @@ public class GioVe extends Application {
 			hieuUngHover(btnApDungChuongTrinhKhuyenMai);
 			hieuUngHover(btnTiepTuc);
 			hieuUngHover(btnTroLai);
-
+            BanVeControl banVeControl = new BanVeControl();
 			btnTiepTuc.setOnMouseClicked(event -> {
                 mapChuyenTauVaUser.clear();
 				for (int i = 0; i < listTxtHoTen.size(); i++) {
@@ -760,16 +757,48 @@ public class GioVe extends Application {
 
 					KhachHang kh = new KhachHang(listTxtHoTen.get(i).getText(), listTxtSoGiayTo.get(i).getText(),
 							listCmbDoiTuong.get(i).getValue());
-					GheTrenChuyenTau ghe = new GheTrenChuyenTau();
+					GheTrenChuyenTau ghe;
 					ghe = listGheSelected.get(i);
 					mapChuyenTauVaUser.put(ghe, kh);
 			        System.out.println("Thêm vào map: " + ghe + " -> " + kh.toString2());
 				}
-                if(mapChuyenTauVaUser.size()<listGheSelected.size()) {
-
-                }else if(mapChuyenTauVaUser.size()==listGheSelected.size()) {
-
-
+                if(mapChuyenTauVaUser.size()==listGheSelected.size()) {
+                    // Ghi danh sách ghế ra file
+                    File file = new File("mapGheVaKhachHang.dat");
+                    try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+                        oos.writeObject(mapChuyenTauVaUser);
+                        System.out.println("✅ Đã ghi " + mapChuyenTauVaUser.size() + " ghế và khách hàng vào file: " + file.getAbsolutePath());
+                    }
+                    catch (IOException e) {
+                    e.printStackTrace();
+                }
+                    if(khuyenMaiSelect != null){
+                        File file2 = new File("KMSelected.dat");
+                        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file2))) {
+                            oos.writeObject(khuyenMaiSelect);
+                            System.out.println("✅ Đã ghi khuyen mai: "+khuyenMaiSelect.getTenChuongTrinh()+" vào file: " + file.getAbsolutePath());
+                        }
+                        catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }else{
+                        File file2 = new File("KMSelected.dat");
+                        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file2))) {
+                            oos.writeObject(null);
+                            System.out.println("✅ Đã ghi khuyen mai null vào file: " + file.getAbsolutePath());
+                        }
+                        catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (banVeControl != null) {
+                        try {
+                            BorderPane root2 = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+                            banVeControl.tiepDenGDXuatHoaDon(root2);
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    }
                 }
 
 			});

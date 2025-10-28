@@ -1,13 +1,18 @@
 package fourcore.GiaoDien;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Pattern;
 
+import fourcore.Entity.DoiTuongGiamGia;
+import fourcore.Entity.GheTrenChuyenTau;
+import fourcore.Entity.KhachHang;
+import fourcore.Entity.KhuyenMai;
+import fourcore.dao.DoiTuongGiamGiaDAO;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -84,13 +89,14 @@ public class GiaoDienXuatHoaDon extends Application {
 	private Pane btnRong;
 	private HBox pnlTongCong;
 	private Label lblTongCong;
-
+    DoiTuongGiamGiaDAO dtggDAO = new DoiTuongGiamGiaDAO();
+    double tienTruocVAT=0;
 	private Label lblTongCongValue;
 	NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
 	private VBox pnlThanhToanButton;
 	private HBox pnlThanhToanButtonSub1;
 	private HBox pnlThanhToanButtonSub2;
-	private Double tongCongThanhTien = 5000000.0;
+	private double tongCongThanhTien=0.0;
 	private Button btnTroLai;
 	private VBox pnlThongTinXuatHoaDonCaNhan;
 	private Button btnThanhToan;
@@ -98,17 +104,31 @@ public class GiaoDienXuatHoaDon extends Application {
 	private TextField txtEMail;
 	private TextField txtSoGiayTo;
 	private TextField txtSdt;
-
+    Map<GheTrenChuyenTau, KhachHang> mapChuyenTauVaUser = new LinkedHashMap<>();
+    KhuyenMai ctkmSelected=null;
 	String hoTen;
 	String cccd;
 	String email;
 	String sdt;
 	private TextField lblRight;
-
+    public ArrayList<DoiTuongGiamGia> listDoiTuongGiamGia;
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 
+            listDoiTuongGiamGia = dtggDAO.getListDoiTuongGiamGia();
+
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("mapGheVaKhachHang.dat"))) {
+                mapChuyenTauVaUser = (Map<GheTrenChuyenTau, KhachHang>) ois.readObject();
+                System.out.println("map đã đọc: " + mapChuyenTauVaUser);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("KMSelected.dat"))) {
+                ctkmSelected = (KhuyenMai) ois.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
 			menuList = new VBox();
 			menuList.setStyle("-fx-background-color: #F7F7F7;");
 			menuList.setPrefWidth(500);
@@ -622,7 +642,7 @@ public class GiaoDienXuatHoaDon extends Application {
 			String btnBlueStyle = "-fx-font-family: 'Inter';" + "-fx-font-size: 20px;" + "-fx-font-weight: bold;"
 					+ "-fx-text-fill:white;" + "-fx-background-color: linear-gradient(to top, #00BACB, #B6D0D3);"
 					+ "-fx-background-radius:15px;";
-			String lblStyle = "-fx-font-size: 36px;";
+			String lblStyle = "-fx-font-size: 25px;";
 			btnRong = new Pane();
 			;
 
@@ -630,8 +650,13 @@ public class GiaoDienXuatHoaDon extends Application {
 			lblTongCong = new Label("Tổng cộng:");
 			lblTongCong.setWrapText(true);
 			lblTongCong.setStyle(lblStyle);
+            for(int i=0; i< mapChuyenTauVaUser.size();i++){
 
-			lblTongCongValue = new Label(nf.format(tongCongThanhTien));
+            }
+            tinhThongThanhTien();
+            System.out.println(mapChuyenTauVaUser.size());
+            System.out.println(tongCongThanhTien);
+			lblTongCongValue = new Label(nf.format(tienTruocVAT) + "đ   (+8% VAT) = " + nf.format(tongCongThanhTien) + "đ");
 			lblTongCongValue.setWrapText(true);
 			lblTongCongValue.setStyle(lblStyle + "-fx-font-weight: bold;");
 
@@ -674,12 +699,35 @@ public class GiaoDienXuatHoaDon extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Hệ thống quản lý vé tàu");
 			primaryStage.setFullScreen(true);
-			primaryStage.show();
+//			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
+    public void tinhThongThanhTien(){
+        ArrayList<GheTrenChuyenTau> listGheTrenChuyenTau = new ArrayList<>(mapChuyenTauVaUser.keySet());
+        tongCongThanhTien = 0;
+        tienTruocVAT =0;
+        for (int i=0; i<mapChuyenTauVaUser.size();i++){
+            double giaGhe = listGheTrenChuyenTau.get(i).getGiaTienGhe();
+            String tenDoiTuong = mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getDoiTuong();
+            double phanTramKhuyenMai = 0;
+            double phanTramGiamDoiTuong = 0;
+            for(int x=0; x<listDoiTuongGiamGia.size(); x++){
+                if(listDoiTuongGiamGia.get(i).getTenDoiTuongGiamGia().equals(tenDoiTuong)){
+                    phanTramGiamDoiTuong = listDoiTuongGiamGia.get(i).getGiaTriPhanTramGiamGia();
+                    break;
+                }
+            }
+            if(ctkmSelected!=null){
+                phanTramKhuyenMai = ctkmSelected.getGiaTriPhanTramKhuyenMai();
+            }
+            double giaTong  = giaGhe*((100-phanTramKhuyenMai)/100);
+            giaTong = giaTong*((100-phanTramGiamDoiTuong)/100);
+            tienTruocVAT += giaTong;
+        }
+        tongCongThanhTien = tienTruocVAT * 1.08;
+    }
 	private boolean showConfirm(Stage parentStage, String message) {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Xác nhận");
@@ -877,6 +925,7 @@ public class GiaoDienXuatHoaDon extends Application {
 		return new HBox(left, right);
 
 	}
+
 
 	public VBox getNoiDungChinhVe() {
 		return this.noiDungChinh;

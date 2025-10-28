@@ -2,10 +2,7 @@ package fourcore.Control;
 
 import fourcore.Entity.ChuyenTau;
 import fourcore.Entity.Ga;
-import fourcore.GiaoDien.BanVe;
-import fourcore.GiaoDien.ChonVe;
-import fourcore.GiaoDien.GiaoDienLichSuMuaBanDoiVe;
-import fourcore.GiaoDien.GioVe;
+import fourcore.GiaoDien.*;
 import fourcore.dao.ChuyenTauDAO;
 import fourcore.dao.GheNgoiDAO;
 import fourcore.dao.HanhTrinh_DAO;
@@ -28,14 +25,14 @@ public class BanVeControl {
     String gaDi ="";
     public String gaDen = "";
     String loaiVeString;
-    ChonVe gdChonve = new ChonVe();
+    ChonVe gdChonve = null;
     GioVe gdGiove = null;
     BanVe gdBanVe = null;
-
+    GiaoDienXuatHoaDon gdXuatHoaDon = new GiaoDienXuatHoaDon();
     public BanVeControl() throws SQLException {
     }
 
-    public void handleMenuTrangChuSelect(BorderPane root){
+    public void handleMenuTrangChuSelect(BorderPane root) throws SQLException {
             try {
                 gdBanVe = new BanVe();
             } catch (SQLException e) {
@@ -47,7 +44,11 @@ public class BanVeControl {
             root.setCenter(gdBanVeShow);
 
         }
-    public void timKiemChuyenTauHandle(BorderPane root){
+        public void initChonVe() throws SQLException {
+            gdChonve = new ChonVe();
+
+        }
+    public void timKiemChuyenTauHandle(BorderPane root) throws SQLException {
             System.out.println("Tim kiem chuyen tau handle");
             handleMenuTrangChuSelect(root);
             gdBanVe.getBtn_timkiem().setOnMouseClicked(e -> {
@@ -149,6 +150,7 @@ public class BanVeControl {
 
 
 
+
             System.out.println(gaDi);
             System.out.println(gaDen);
             System.out.println(loaiVeString);
@@ -158,6 +160,7 @@ public class BanVeControl {
     public void troLaiGDBanVe(BorderPane root){
         gdChonve.getTrolaiBtn().setOnMouseClicked(e -> {
             root.setCenter(gdBanVe.getGDBanVe());
+
         });
     }
     public void troLaiGDChonVe(BorderPane root){
@@ -177,6 +180,12 @@ public class BanVeControl {
 
         // Bind nút trở lại
         troLaiGDChonVe(root);
+    }
+    public void tiepDenGDXuatHoaDon(BorderPane root) throws SQLException {
+        gdXuatHoaDon = new GiaoDienXuatHoaDon();
+        Stage stage = new Stage();
+        gdXuatHoaDon.start(stage);
+        root.setCenter(gdXuatHoaDon.getNoiDungChinhVe());
     }
 
 

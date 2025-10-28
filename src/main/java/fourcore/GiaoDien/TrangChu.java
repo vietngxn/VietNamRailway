@@ -967,10 +967,19 @@ public class TrangChu extends Application {
 				XemLichSuVeBoxControl lichSuVeControl = new XemLichSuVeBoxControl();
 				lichSuVeControl.handleMenuTrangChuSelect(root);
 			});
+            banVeControl.initChonVe();
 			banVeBox.setOnMouseClicked(event -> {
-				banVeControl.handleMenuTrangChuSelect(root);
-				banVeControl.timKiemChuyenTauHandle(root);
-			});
+                try {
+                    banVeControl.handleMenuTrangChuSelect(root);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                try {
+                    banVeControl.timKiemChuyenTauHandle(root);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            });
 			hoanVeBox.setOnMouseClicked(event -> {
 				HoanTraVeControl hoanVeCtrl = new HoanTraVeControl();
 				hoanVeCtrl.handleMenuTrangChuSelect(root);

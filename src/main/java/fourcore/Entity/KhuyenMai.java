@@ -1,9 +1,10 @@
 package fourcore.Entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class KhuyenMai {
+public class KhuyenMai implements Serializable {
 
 	private String maKhuyenMai, tenChuongTrinh, trangThaiKhuyenMai, dieuKienApDung;
 	private  double giaTriPhanTramKhuyenMai;
