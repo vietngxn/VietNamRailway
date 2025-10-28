@@ -257,6 +257,7 @@ public class VeDAO {
 		return v;
 	}
 
+	
 	public boolean ThayDoiTrangThaiVe(String mave, String trangthaimoi) throws SQLException {
 		Statement st = database.connect();
 		String q = "UPDATE Ve SET trangThaiVe = N'" + trangthaimoi + "' WHERE maVeTau = '" + mave + "'";

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.text.NumberFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,6 +15,9 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 import fourcore.Control.HoanTraVeControl;
+import fourcore.Entity.LichSuTuongTacVe;
+import fourcore.Entity.LoaiTuongTacVe;
+import fourcore.dao.LichSuTuongTacVe_Dao;
 import fourcore.dao.VeDAO;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -122,11 +126,12 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 	private HoanTraVeControl ctrl = new HoanTraVeControl();
 	private Window anyNodeInScene;
 	private VeDAO vedao;
-
+	private LichSuTuongTacVe_Dao lsttDao;
 	Map<String, Double> listVeThanhToan;
 
 	public GiaoDienXuatHoaDonHoanTraVe(Map<String, Double> list) {
 		listVeThanhToan = list;
+		ctrl.loadDuLieuThanhToan(list, lblTongCong, lblSoLuongVe);
 	}
 
 	public void start(Stage primaryStage, Map<String, Double> list) throws IOException {
@@ -582,7 +587,6 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 		});
 	}
 
-
 	public VBox taoXuatHoaDonCaNhanPane(String leftstyle, String rightstyle) {
 
 		VBox pnl = new VBox(15);
@@ -798,7 +802,6 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 			noiDungChinh.getChildren().add(pnlThongTinXuatHoaDonCaNhan);
 			VBox.setMargin(pnlThongTinXuatHoaDonCaNhan, new Insets(20, 0, 100, 150));
 
-
 			BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
 
 			pnlThanhToanButton = new VBox();
@@ -859,24 +862,29 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 			hieuUngHover(btnTroLai);
 			btnThanhToan.setOnMouseClicked(event -> {
 				Alert thongbao = new Alert(AlertType.CONFIRMATION);
-
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setTitle("Xác nhận");
 				alert.setHeaderText("Bạn có muốn thanh toán cho hóa đơn hoàn trả vé này?");
 				alert.setContentText("Hãy chọn OK để xác nhận hoặc Cancel để hủy.");
-
 				Optional<ButtonType> result = alert.showAndWait();
+
 				for (Map.Entry<String, Double> entry : listVeThanhToan.entrySet()) {
 					String key = entry.getKey();
+					System.out.println(key);
+					double value = entry.getValue();
+					System.out.print(value);
 					try {
 						System.out.println(vedao.ThayDoiTrangThaiVe(key, "đã hoàn trả"));
+						lsttDao.themLichSuTuongTacVe(
+								new LichSuTuongTacVe("TT" + key, new LoaiTuongTacVe("LT02", "hoàn trả"),
+										vedao.getVeBangMaVe(key), value, LocalDateTime.now()));
 					} catch (SQLException e1) {
 						e1.printStackTrace();
 					}
 				}
 			});
 
-			ctrl.loadDuLieuThanhToan(listVeThanhToan, lblTongCongValue, lblSoLuongVeValue);
+//			ctrl.loadDuLieuThanhToan(listVeThanhToan, lblTongCongValue, lblSoLuongVeValue);
 		}
 		return noiDungChinh;
 	}
