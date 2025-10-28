@@ -735,8 +735,6 @@ public class GiaoDienXuatHoaDon extends Application {
 
 		pnl.getChildren().add(taoSubXuatHoaDonPane("Người mua", hoten, leftstyle, rightstyle));
 		pnl.getChildren().add(taoSubXuatHoaDonPane("Số giấy tờ", sogiayto, leftstyle, rightstyle));
-		pnl.getChildren().add(taoSubXuatHoaDonPane("Passport", passport, leftstyle, rightstyle));
-		pnl.getChildren().add(taoSubXuatHoaDonPane("Tên khách hàng", tenkh, leftstyle, rightstyle));
 		pnl.getChildren().add(taoSubXuatHoaDonPane("Địa chỉ", diachi, leftstyle, rightstyle));
 
 		return pnl;
