@@ -1,10 +1,7 @@
 package fourcore.GiaoDien;
 
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 
@@ -812,19 +809,37 @@ public class CapNhatThongTinKhachHang extends Application {
 		        txtcomboDoiTuong.setText(kh.getDoiTuong());
 		        lblAnimation.scaleUp(lblcomboDoiTuong);
 		    }
-		     buttoncapNhat.setOnAction(e-> {
-		    	 try {
-					if(khdao.capNhatKhachHang(kh)) {
-						 System.out.println("Cập nhật thành công");
-					 }
-				 } catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				 }
-		     });
-		} catch (IOException | ClassNotFoundException e) {
-		    e.printStackTrace();
-		}
+            buttoncapNhat.setOnAction(e-> {
+                try {
+                    String tenKH = txtTenKH.getText().trim();
+                    String sdt = txtSoDienThoai.getText().trim();
+                    String email = txtemail.getText().trim();
+                    String cccd = txtCCCD.getText().trim();
+                    String doiTuong = (String) comboDoiTuong.getValue();
+                    kh.setHoten(tenKH);
+                    kh.setSdt(sdt);
+                    kh.setEmail(email);
+                    kh.setCccd(cccd);
+                    kh.setDoiTuong(doiTuong);
+                    if(khdao.capNhatKhachHang(kh)) {
+                        System.out.println("Cập nhật thành công");
+                        ObjectOutputStream oos;
+                        try {
+                            oos = new ObjectOutputStream(new FileOutputStream("KhachHang.dat"));
+                            oos.writeObject(kh);
+                        } catch (IOException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                    }
+                } catch (SQLException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            });
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 		
 		root.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 		
