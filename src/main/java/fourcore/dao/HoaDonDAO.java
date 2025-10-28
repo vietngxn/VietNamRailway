@@ -66,13 +66,13 @@ public class HoaDonDAO {
 		return hd;
 	}
 
-	public KhachHang getKH(String mahd) throws SQLException {
-
-		ChiTietHoaDonDAO cthddao = new ChiTietHoaDonDAO();
-		ArrayList<ChiTietHoaDon> ct2 = cthddao.getHD(mahd);
-		String s = ct2.get(0).getVeTau().getMaVeTau().toString();
-		KhachHang kh1 = cthddao.getKhachHang(s);
-		return kh1;
-	}
+//	public KhachHang getKH(String mahd) throws SQLException {
+//
+//		ChiTietHoaDonDAO cthddao = new ChiTietHoaDonDAO();
+//		ArrayList<ChiTietHoaDon> ct2 = cthddao.getHD(mahd);
+//		String s = ct2.get(0).getVeTau().getMaVeTau().toString();
+//		KhachHang kh1 = cthddao.getKhachHang(s);
+//		return kh1;
+//	}
 
 }

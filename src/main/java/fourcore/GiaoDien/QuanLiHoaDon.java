@@ -1029,14 +1029,14 @@ public class QuanLiHoaDon extends Application {
 	    table_desc.setSpacing(20);
 	    
 	    
-	    for(HoaDon hd : listhd) {
-	        KhachHang kh = hddao.getKH(hd.getMaHoaDon());
-	        
-	        
-	        create_layout_dong(hd.getMaHoaDon(), kh.getHoten(), kh.getSdt(), hd.getNgayThanhToan(), hd.getTongTien());
-	        
-	    }
-	    
+//	    for(HoaDon hd : listhd) {
+//	        KhachHang kh = hddao.getKH(hd.getMaHoaDon());
+//	        
+//	        
+//	        create_layout_dong(hd.getMaHoaDon(), kh.getHoten(), kh.getSdt(), hd.getNgayThanhToan(), hd.getTongTien());
+//	        
+//	    }
+//	    
 	    
 	    scrollPane = new ScrollPane();
 	    scrollPane.setContent(table_desc);

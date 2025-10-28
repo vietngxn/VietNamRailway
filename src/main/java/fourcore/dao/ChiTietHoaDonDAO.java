@@ -14,25 +14,38 @@ import fourcore.Entity.Ve;
 public class ChiTietHoaDonDAO {
 	DatabaseConnector db = new DatabaseConnector();
 
-	public ArrayList<ChiTietHoaDon> getListChiTietHoaDon() throws SQLException {
+//	public ArrayList<ChiTietHoaDon> getListChiTietHoaDon() throws SQLException {
+//		Statement st = db.connect();
+//		String q = "select * from ChiTietHoaDon";
+//		ResultSet rs = st.executeQuery(q);
+//		ArrayList<ChiTietHoaDon> listCTHoaDon = new ArrayList<ChiTietHoaDon>();
+//		while (rs.next()) {
+//			String maCTHoaDon = rs.getString(1);
+//			String maHoaDon = rs.getString(2);
+//			String maveTau = rs.getString(3);
+//			String moTa = rs.getString(4);
+//			double donGia = rs.getDouble(5);
+//			double thueVAT = rs.getDouble(6);
+//			double thanhTien = rs.getDouble(7);
+//
+//			listCTHoaDon.add(new ChiTietHoaDon(maCTHoaDon, new HoaDon(maHoaDon, null, null, maHoaDon, maHoaDon, maHoaDon, maHoaDon, null, 0.0), new Ve(maveTau), moTa, donGia, thueVAT,
+//					thanhTien));
+//		}
+//
+//		return listCTHoaDon;
+//	}
+//	
+
+	public String getLoaiHoaDonChoVeTau(String mave) throws SQLException {
 		Statement st = db.connect();
-		String q = "select * from ChiTietHoaDon";
+		String q = "select loaiHoaDonChoVeTau from ChiTietHoaDon where maVeTau = '" + mave + "'";
 		ResultSet rs = st.executeQuery(q);
 		ArrayList<ChiTietHoaDon> listCTHoaDon = new ArrayList<ChiTietHoaDon>();
 		while (rs.next()) {
-			String maCTHoaDon = rs.getString(1);
-			String maHoaDon = rs.getString(2);
-			String maveTau = rs.getString(3);
-			String moTa = rs.getString(4);
-			double donGia = rs.getDouble(5);
-			double thueVAT = rs.getDouble(6);
-			double thanhTien = rs.getDouble(7);
-
-			listCTHoaDon.add(new ChiTietHoaDon(maCTHoaDon, new HoaDon(maHoaDon, null, null, maHoaDon, maHoaDon, maHoaDon, maHoaDon, null, 0.0), new Ve(maveTau), moTa, donGia, thueVAT,
-					thanhTien));
+			String loai = rs.getString("loaiHoaDonChoVeTau");
+			return loai;
 		}
-
-		return listCTHoaDon;
+		return null;
 	}
 
 	public KhachHang getKhachHang(String maveTau) throws SQLException {
@@ -42,16 +55,16 @@ public class ChiTietHoaDonDAO {
 		return kh1;
 	}
 
-	public ArrayList<ChiTietHoaDon> getHD(String maHoaDon) throws SQLException {
-		ArrayList<ChiTietHoaDon> cthd1 = new ArrayList<ChiTietHoaDon>();
-		ArrayList<ChiTietHoaDon> listCTHoaDon = getListChiTietHoaDon();
-		for (ChiTietHoaDon cthd : listCTHoaDon) {
-			if (cthd.getHoaDon().getMaHoaDon().equalsIgnoreCase(maHoaDon)) {
-				cthd1.add(cthd);
-			}
-		}
-
-		return cthd1;
-	}
+//	public ArrayList<ChiTietHoaDon> getHD(String maHoaDon) throws SQLException {
+//		ArrayList<ChiTietHoaDon> cthd1 = new ArrayList<ChiTietHoaDon>();
+//		ArrayList<ChiTietHoaDon> listCTHoaDon = getListChiTietHoaDon();
+//		for (ChiTietHoaDon cthd : listCTHoaDon) {
+//			if (cthd.getHoaDon().getMaHoaDon().equalsIgnoreCase(maHoaDon)) {
+//				cthd1.add(cthd);
+//			}
+//		}
+//
+//		return cthd1;
+//	}
 
 }
