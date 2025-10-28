@@ -1,29 +1,29 @@
 package fourcore.dao;
 
+import fourcore.DatabaseConnector.DBConfig;
 import fourcore.DatabaseConnector.DatabaseConnector;
 import fourcore.Entity.KhuyenMai;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class ChuongTrinhKhuyenMaiDAO {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
 
-    public ArrayList<KhuyenMai> listKhuyenMai = new ArrayList<>();
+    
 
 	public ChuongTrinhKhuyenMaiDAO() throws SQLException {
 
 	}
-    public ArrayList<KhuyenMai> getListCTKM(){
-        return listKhuyenMai;
-    }
 
 	public ArrayList<KhuyenMai> getListKhuyenMai() throws SQLException {
 		Statement myStmt = databaseConnector.connect();
 		String query = "select * from KhuyenMai";
+		ArrayList<KhuyenMai> listKhuyenMai = new ArrayList<>();
 		ResultSet rs = myStmt.executeQuery(query);
 		while (rs.next()) {
 			String maKhuyenMai = rs.getString(1);
@@ -62,4 +62,61 @@ public class ChuongTrinhKhuyenMaiDAO {
 		}
 		return km;
 	}
+    
+    public boolean themKhuyenMai(KhuyenMai km) throws SQLException
+    {
+    	Statement st = databaseConnector.connect();
+    	String q = "INSERT INTO KhuyenMai VALUES ('" 
+    		    + km.getMaKhuyenMai() + "', N'" 
+    		    + km.getTenChuongTrinh() + "', " 
+    		    + km.getGiaTriPhanTramKhuyenMai() + ", '" 
+    		    + Timestamp.valueOf(km.getNgayBatDau()) + "', '" 
+    		    + Timestamp.valueOf(km.getNgayKetThuc()) + "', N'" 
+    		    + km.getTrangThaiKhuyenMai() + "', N'" 
+    		    + km.getDieuKienApDung() + "')";
+    	int kq = st.executeUpdate(q);
+    	return kq > 0;
+    }
+    
+    public boolean xoaKhuyenMai(String maKhuyenMai) throws SQLException {
+        Statement st = databaseConnector.connect();
+
+        String q = "DELETE FROM KhuyenMai WHERE maKhuyenMai = '" + maKhuyenMai + "'";
+
+        int rows = st.executeUpdate(q);
+        return rows > 0;
+    }
+
+    public boolean capNhatKhuyenMai(KhuyenMai km) throws SQLException {
+        Statement st = databaseConnector.connect();
+
+        String q = "UPDATE KhuyenMai SET "
+            + "tenChuongTrinh = N'" + km.getTenChuongTrinh() + "', "
+            + "giaTriPhanTramKhuyenMai = " + km.getGiaTriPhanTramKhuyenMai() + ", "
+            + "ngayBatDau = '" + Timestamp.valueOf(km.getNgayBatDau()) + "', "
+            + "ngayKetThuc = '" + Timestamp.valueOf(km.getNgayKetThuc()) + "', "
+            + "trangThaiKhuyenMai = N'" + km.getTrangThaiKhuyenMai() + "', "
+            + "dieuKienApDungKhuyenMai = N'" + km.getDieuKienApDung() + "' "
+            + "WHERE maKhuyenMai = '" + km.getMaKhuyenMai() + "'";
+
+        int rows = st.executeUpdate(q);
+        return rows > 0;
+    }
+    
+    public double getPhanTramKhuyenMai(String makm) throws SQLException
+    {
+    	double phanTram = 0;
+    	Statement st = databaseConnector.connect();
+    	String q = "SELECT km.giaTriPhanTramKhuyenMai " +
+                "FROM KhuyenMai km " +
+                "WHERE km.maKhuyenMai = '" + makm + "'";;
+    	ResultSet rs = st.executeQuery(q);
+    	while(rs.next())
+    	{
+    		phanTram = rs.getDouble(1);
+    	}
+    	return phanTram;
+    	
+    }
+
 }
