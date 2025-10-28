@@ -2,9 +2,16 @@ package fourcore.GiaoDien;
 
 
 import java.io.InputStream;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
+import fourcore.Entity.KhuyenMai;
 import fourcore.animation.Animation;
+import fourcore.dao.ChuongTrinhKhuyenMaiDAO;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -14,6 +21,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -98,8 +107,17 @@ public class ThemChuongTrinhKhuyenMai extends Application {
 	private ImageView userIcon;
 	private Labeled userLabel;
 	private ImageView settingIcon;
+	private ChuongTrinhKhuyenMaiDAO ctkmDAO;
+	private ArrayList<KhuyenMai> listCTKM;
+	private Label lblGiaTriKhuyenMai;
+	private TextField txtGiaTriKhuyenMai;
+	private StackPane spGiaTriKhuyenMai;
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		
+		
+		ctkmDAO = new ChuongTrinhKhuyenMaiDAO();
+		listCTKM = ctkmDAO.getListKhuyenMai();
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		lblAnimation = new Animation();
@@ -714,13 +732,6 @@ public class ThemChuongTrinhKhuyenMai extends Application {
 		sceneThemCTKM.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 			
 		
-		txtMaCT.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-		    if (isNowFocused && txtMaCT.getText().trim().isEmpty()) {
-		    	lblAnimation.scaleUp(lblMaCT);
-		    } else {
-		    	if(txtMaCT.getText().trim().isEmpty()) lblAnimation.scaleDown(lblMaCT);
-		    }
-		});
 		txtTenCT.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
 		    if (isNowFocused && txtTenCT.getText().trim().isEmpty()) {
 		    	lblAnimation.scaleUp(lblTenCT);
@@ -750,6 +761,13 @@ public class ThemChuongTrinhKhuyenMai extends Application {
 			}
 		});
 
+		txtGiaTriKhuyenMai.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+			if (isNowFocused && txtGiaTriKhuyenMai.getText().trim().isEmpty()) {
+				lblAnimation.scaleUp(lblGiaTriKhuyenMai);
+			} else {
+				if(txtGiaTriKhuyenMai.getText().trim().isEmpty()) lblAnimation.scaleDown(lblGiaTriKhuyenMai);
+			}
+		});
 
 		
 		root.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
@@ -767,26 +785,14 @@ public class ThemChuongTrinhKhuyenMai extends Application {
 		
 		//grid chứa các cái cần nhập
 		gridThemCTKM = new GridPane();
+		gridThemCTKM.getChildren().clear();
 		gridThemCTKM.setHgap(80);
 		gridThemCTKM.setVgap(50);
 		gridThemCTKM.setPadding(new Insets(70, 0, 0, 0));
 		gridThemCTKM.setAlignment(Pos.CENTER);
 		
 		
-		//hàng đầu tiên chứa mã chương trình và tên chương trình
-		lblMaCT = new Label("Mã chương trình");
-		lblMaCT.setId("lbl_TextField");
-
-		
-		txtMaCT = new TextField();
-		txtMaCT.setPrefWidth(600);
-		txtMaCT.setPrefHeight(40);
-		txtMaCT.setId("txt_CapNhatChuyenTau");
-		
-		spMaCT = new StackPane();
-		spMaCT.getChildren().addAll(lblMaCT, txtMaCT);
-		spMaCT.setAlignment(lblMaCT, Pos.CENTER_LEFT);
-		
+		//hàng đầu tiên chứa tên chương trình
 		lblTenCT = new Label("Tên chương trình");
 		lblTenCT.setId("lbl_TextField");
 		
@@ -799,7 +805,7 @@ public class ThemChuongTrinhKhuyenMai extends Application {
 		spTenCT.getChildren().addAll(lblTenCT, txtTenCT);
 		spTenCT.setAlignment(lblTenCT, Pos.CENTER_LEFT);
 		
-	
+
 		ngayBatDau = new DatePicker();
 		ngayBatDau.setPrefWidth(30);
 		ngayBatDau.setPrefHeight(40);
@@ -895,6 +901,19 @@ public class ThemChuongTrinhKhuyenMai extends Application {
 		spcomboDoiTuong.setAlignment(lblcomboDoiTuong, Pos.CENTER_LEFT);
 		
 		
+		lblGiaTriKhuyenMai = new Label("Giá trị khuyến mãi");
+		lblGiaTriKhuyenMai.setId("lbl_TextField");
+		
+		txtGiaTriKhuyenMai = new TextField();
+		txtGiaTriKhuyenMai.setPrefWidth(600);
+		txtGiaTriKhuyenMai.setPrefHeight(40);
+		txtGiaTriKhuyenMai.setId("txt_CapNhatChuyenTau");
+		
+		spGiaTriKhuyenMai = new StackPane();
+		spGiaTriKhuyenMai.getChildren().addAll(lblGiaTriKhuyenMai, txtGiaTriKhuyenMai);
+		spGiaTriKhuyenMai.setAlignment(lblGiaTriKhuyenMai, Pos.CENTER_LEFT);
+		
+		
 		buttonThemCTKMBox = new HBox(10); //thay doi 10
 //		buttonThemCTKMBox.setPrefWidth(1350);
 		buttonThemCTKMBox.setMaxWidth(1600);
@@ -906,6 +925,9 @@ public class ThemChuongTrinhKhuyenMai extends Application {
 		buttonThem.setPrefHeight(50);
 		buttonThem.setId("button_Blue");
 		
+		
+		
+		
 		buttonThoat = new Button();
 		buttonThoat.setText("Thoát");
 		buttonThoat.setPrefWidth(150);
@@ -916,12 +938,64 @@ public class ThemChuongTrinhKhuyenMai extends Application {
 		buttonThemCTKMBox.setAlignment(Pos.BOTTOM_RIGHT);
 		buttonThemCTKMBox.setPadding(new Insets(200, 40, 20, 0));
 		
-		gridThemCTKM.add(spMaCT, 0, 0);
-		gridThemCTKM.add(spTenCT, 1, 0);
-		gridThemCTKM.add(spNgayBatDau, 0, 1);
-		gridThemCTKM.add(spNgayKetThuc, 1, 1);
-		gridThemCTKM.add(spcomboDoiTuong, 0, 2);
+		gridThemCTKM.add(spTenCT, 0, 0);
+		gridThemCTKM.add(spNgayBatDau, 1, 0);
+		gridThemCTKM.add(spNgayKetThuc, 0, 1);
+		gridThemCTKM.add(spcomboDoiTuong, 1, 1);
+		gridThemCTKM.add(spGiaTriKhuyenMai, 0, 2);
 		
+		buttonThem.setOnAction(e-> {
+			String ma = "";
+			int n = listCTKM.size()+1;
+			System.out.println(n);
+			if(n>= 0 && n <=9)
+			{
+				ma = "KM0"+n;
+			}
+			else if(n >= 10 && n <= 99)
+			{
+				ma = "KM"+n;
+			}
+			
+			String tenCTKM = txtTenCT.getText();
+			LocalDate nbd = ngayBatDau.getValue();
+			LocalDate nkt = ngayKetThuc.getValue();
+			LocalDate hienTai = LocalDate.now();
+			String trangThai = "";
+			double giaTri = Double.valueOf(txtGiaTriKhuyenMai.getText());
+			if(hienTai.isAfter(nkt) && hienTai.isBefore(nbd))
+			{
+				trangThai = "Kích Hoạt";
+			}
+			else {
+				trangThai ="Kết Thúc";
+			}
+			
+			
+			
+			String doiTuong = txtcomboDoiTuong.getText();
+			String giaTriKM = txtGiaTriKhuyenMai.getText();
+			
+			LocalDateTime nbd1 = nbd.atStartOfDay();
+		    LocalDateTime nkt1 = nkt.atStartOfDay();
+		    
+		    
+		    
+			try {
+				if(ctkmDAO.themKhuyenMai(new KhuyenMai(ma, tenCTKM, trangThai, doiTuong, giaTri, nbd1, nkt1)))
+				{
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Thông Báo");
+					alert.setHeaderText(null);
+					alert.setContentText("Thêm CTKM Thành Công");
+					alert.showAndWait();
+				}
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		    
+		});
 		
 		layoutThemCTKM.getChildren().addAll(lblThemCTKM, gridThemCTKM, buttonThemCTKMBox);
 		layoutThemCTKM.setAlignment(Pos.CENTER);

@@ -114,7 +114,8 @@ public class GioVe extends Application {
 
 	private TextField txtHoTen;
 	private TextField txtSoGiayTo;
-
+	ArrayList<KhuyenMai> listCTKM;
+	
 	public GioVe() throws SQLException {
 	}
 
@@ -664,8 +665,13 @@ public class GioVe extends Application {
 				} catch (SQLException e) {
 					throw new RuntimeException(e);
 				}
-				ArrayList<KhuyenMai> listCTKM;
-					listCTKM = ctkmDAO.getListCTKM();
+				
+					try {
+						listCTKM = ctkmDAO.getListKhuyenMai();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 
 
 				ArrayList<String> tenChuongTrinhKhuyenMai = new ArrayList<>();

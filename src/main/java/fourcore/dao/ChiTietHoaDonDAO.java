@@ -35,6 +35,21 @@ public class ChiTietHoaDonDAO {
 		return listCTHoaDon;
 	}
 
+
+	public String getLoaiHoaDonChoVeTau(String mave) throws SQLException {
+		Statement st = db.connect();
+		String q = "select loaiHoaDonChoVeTau from ChiTietHoaDon where maVeTau = '" + mave + "'";
+		ResultSet rs = st.executeQuery(q);
+		ArrayList<ChiTietHoaDon> listCTHoaDon = new ArrayList<ChiTietHoaDon>();
+		while (rs.next()) {
+			String loai = rs.getString("loaiHoaDonChoVeTau");
+			return loai;
+		}
+		return null;
+	}
+	
+	
+
 	public KhachHang getKhachHang(String maveTau) throws SQLException {
 		VeDAO vedao = new VeDAO();
 		KhachHang kh1 = vedao.getKhachHang(maveTau);

@@ -1,11 +1,20 @@
 package fourcore.GiaoDien;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import fourcore.Entity.KhachHang;
 import fourcore.Entity.KhuyenMai;
 import fourcore.dao.ChuongTrinhKhuyenMaiDAO;
 import javafx.animation.FadeTransition;
@@ -111,14 +120,16 @@ public class QuanLyCTKM extends Application {
     private ImageView moTaDoanhThuIcon;
     private HBox xemLichSuVeBox;
     private ArrayList<KhuyenMai> listKhuyenMai;
+	private ChuongTrinhKhuyenMaiDAO ctkmDAO;
 
     @Override
 	public void start(Stage primaryStage) {
 		try {
+			
 //			======================
 //			||     GET DATA     ||
 //			======================
-            ChuongTrinhKhuyenMaiDAO ctkmDAO = new ChuongTrinhKhuyenMaiDAO();
+            ctkmDAO = new ChuongTrinhKhuyenMaiDAO();
             listKhuyenMai = ctkmDAO.getListKhuyenMai();
 
 //----------------------------------------------------------------------------------------------------------------------------------------
@@ -891,7 +902,7 @@ public class QuanLyCTKM extends Application {
 			
 			create_layout_button();
 			primaryStage.setFullScreen(true);
-//			primaryStage.show();
+			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -992,6 +1003,7 @@ public class QuanLyCTKM extends Application {
 	    
 	    lbl_title_trangthai = new Label("Trạng Thái");
 	    lbl_title_trangthai.setStyle(styleHeader);
+	    
 	    
 	    lbl_title_maCTKM.setTranslateX(-150);
 	    lbl_title_tenCTKM.setTranslateX(-100);
@@ -1100,6 +1112,20 @@ public class QuanLyCTKM extends Application {
 				ArrayList<GridPane> dsxoa = new ArrayList<GridPane>(hangchon);
 				for(GridPane x : dsxoa)
 				{					
+					String maCTKM = ((Label) ((StackPane) x.getChildren().get(0)).getChildren().get(0)).getText();
+					try {
+						if(ctkmDAO.xoaKhuyenMai(maCTKM))
+						{
+							Alert alert = new Alert(AlertType.INFORMATION);
+							alert.setTitle("Thông Báo");
+							alert.setHeaderText(null);
+							alert.setContentText("Xóa CTKM Thành Công");
+							alert.showAndWait();
+						}
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					FadeTransition ft = new FadeTransition(Duration.millis(300),x);
 					ft.setFromValue(1.0);
 					ft.setToValue(0);
@@ -1143,6 +1169,64 @@ public class QuanLyCTKM extends Application {
 			}
 		});
 		
+		btn_capnhat.setOnMouseClicked(e-> {
+			if(hangchon.size() ==0 || hangchon.size() > 1)
+			{
+				System.out.println("Lỗi");
+			}
+			else {
+				 GridPane selectedRow = hangchon.get(0);
+				 
+				 String maKM = ((Label)((StackPane)selectedRow.getChildren().get(0)).getChildren().get(0)).getText();
+			     String tenKM = ((Label)((StackPane)selectedRow.getChildren().get(1)).getChildren().get(0)).getText();
+			     String ngayBatDau = ((Label)((StackPane)selectedRow.getChildren().get(2)).getChildren().get(0)).getText();
+			     String ngayKetThuc = ((Label)((StackPane)selectedRow.getChildren().get(3)).getChildren().get(0)).getText();
+			     String dieuKienApDung = ((Label)((StackPane)selectedRow.getChildren().get(4)).getChildren().get(0)).getText();
+			     String trangThai = ((Label)((StackPane)selectedRow.getChildren().get(5)).getChildren().get(0)).getText();
+			     System.out.println(ngayBatDau);
+			     
+			     System.out.println(ngayKetThuc);
+			     
+			     LocalDate nbd = LocalDate.parse(ngayBatDau);
+			     LocalDate nkt = LocalDate.parse(ngayKetThuc);
+			     
+			     LocalDateTime nbd1 = nbd.atStartOfDay();
+			     LocalDateTime nkt1 = nkt.atStartOfDay();
+			     
+			     
+			     try {
+					double phantram = ctkmDAO.getPhanTramKhuyenMai(maKM);
+					KhuyenMai KM = new KhuyenMai(maKM, tenKM, trangThai, dieuKienApDung, phantram, nbd1, nkt1);
+				     
+				     File file = new File("KhuyenMai.dat");
+				        if (file.exists()) {
+				            file.delete(); 
+				        }
+				     try {
+						ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("KhuyenMai.dat"));
+						oos.writeObject(KM);
+						oos.flush();
+						oos.close();
+						System.out.println("Ghi Thành Công");
+						
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			     
+			     
+			     
+			}
+		});
+		
+		
 		noiDungChinh.getChildren().add(layout_button);
 		
 	}
@@ -1164,7 +1248,7 @@ public class QuanLyCTKM extends Application {
 	    Label lblNgayKT = new Label(ngayketthuc.toString());
 	    Label lbldieuKienApDung = new Label(doituong);
 	    
-	    Label lblTrangThai = new Label(trangthai ? "Sẵn Sàng" : "Đã Kết Thúc");
+	    Label lblTrangThai = new Label(trangthai ? "kích hoạt" : "kết thúc");
 	    String colorStyle = trangthai ? "-fx-text-fill: green;" : "-fx-text-fill: red;";
 	    
 	    lblMaCT.setStyle(baseStyle);

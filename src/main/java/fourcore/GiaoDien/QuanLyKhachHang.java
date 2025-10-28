@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -907,7 +908,7 @@ public class QuanLyKhachHang extends Application {
 			
 			create_layout_button();
 			primaryStage.setFullScreen(true);
-//			primaryStage.show();
+			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -1127,6 +1128,21 @@ public class QuanLyKhachHang extends Application {
 				ArrayList<GridPane> dsxoa = new ArrayList<GridPane>(hangchon);
 				for(GridPane x : dsxoa)
 				{					
+					String maKH = ((Label) ((StackPane) x.getChildren().get(0)).getChildren().get(0)).getText();
+					try {
+						if(khdao.xoaKhachHang(maKH))
+						{
+							Alert alert = new Alert(AlertType.INFORMATION);
+							alert.setTitle("Thông Báo");
+							alert.setHeaderText(null);
+							alert.setContentText("Xóa Khách Hàng Thành Công");
+							alert.showAndWait();
+							
+						}
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					FadeTransition ft = new FadeTransition(Duration.millis(300),x);
 					ft.setFromValue(1.0);
 					ft.setToValue(0);
