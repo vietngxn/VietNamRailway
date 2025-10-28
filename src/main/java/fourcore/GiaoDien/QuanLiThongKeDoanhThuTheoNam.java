@@ -890,7 +890,7 @@ try {
 		            if (noiDungChinh.getChildren().contains(layout_total)) {
 		                noiDungChinh.getChildren().remove(layout_total);
 		            }
-		            layout_total = null; // Reset
+		            
 		            create_layout_total();
 		            
 		        } catch (SQLException e1) {
@@ -901,10 +901,6 @@ try {
 		        table_desc.getChildren().clear();
 		        create_piechart_nam();
 		        
-		        // Xóa layout_total nếu hiển thị pie chart
-		        if (noiDungChinh.getChildren().contains(layout_total)) {
-		            noiDungChinh.getChildren().remove(layout_total);
-		        }
 		    }
 		});
 		
@@ -922,7 +918,7 @@ try {
 		                if (noiDungChinh.getChildren().contains(layout_total)) {
 		                    noiDungChinh.getChildren().remove(layout_total);
 		                }
-		                layout_total = null;
+		                
 		                create_layout_total();
 		            } else if (comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("PieChart"))  {
 		                create_piechart_nam();
@@ -973,6 +969,7 @@ try {
         		table_desc.getChildren().clear();
         		try {
 					create_barchart_nam();
+					create_layout_total();
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -983,6 +980,7 @@ try {
         	else {
         		table_desc.getChildren().clear();
         		create_piechart_nam();
+        		create_layout_total();
         	}
         });
 		
@@ -1075,7 +1073,7 @@ try {
 		PieChart pieChart = new PieChart();
 	    pieChart.setTitle("Tỷ lệ doanh thu bán ra");
 
-	    pieChart.getData().add(new PieChart.Data("Doanh Thu", tongdoanhthu));
+	    pieChart.getData().add(new PieChart.Data("Doanh Thu", 90));
 	    pieChart.getData().add(new PieChart.Data("Thuế VAT", 10));
 	    
 	    
@@ -1258,7 +1256,6 @@ try {
 	    }	
 		layout_total = new VBox();
 		layout_total.setTranslateX(1100);
-		layout_total.setTranslateY(600);
 		
 		layout_total.setPrefSize(200, 100);
 		layout_total.setMaxSize(200, 100);
@@ -1271,7 +1268,7 @@ try {
 		lbl_doanhThu.setTranslateY(-10);
 		lbl_doanhThu.setStyle(style+"-fx-font-family: 'Work Sans';-fx-font-size : 20px;");
 		
-		lbl_tongTien = new Label("15.000.000đ");
+		lbl_tongTien = new Label(""+tongdoanhthu);
 		lbl_tongTien.setTranslateX(15);
 		lbl_tongTien.setTranslateY(-5);
 		
@@ -1311,7 +1308,6 @@ try {
 			}
 			st.play();
 		});
-		
 		
 		
 		noiDungChinh.getChildren().add(btn_layout);

@@ -127,7 +127,7 @@ public class QuanLiHoaDon extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			hddao = new HoaDonDAO();
-//			listhd = hddao.getListHoaDon();
+			listhd = hddao.getListHoaDon();
 			vedao = new VeDAO();
             BorderPane root = new BorderPane();
             Scene scene = new Scene(root,1920,1000);
@@ -1028,11 +1028,12 @@ public class QuanLiHoaDon extends Application {
 	    table_desc = new VBox();
 	    table_desc.setSpacing(20);
 	    
+	    
 	    for(HoaDon hd : listhd) {
 	        KhachHang kh = hddao.getKH(hd.getMaHoaDon());
 	        
 	        
-//	        create_layout_dong(hd.getMaHoaDon(), kh.getHoten(), kh.getSdt(), hd.getNgayThanhToan(), hd.getTongtien());
+	        create_layout_dong(hd.getMaHoaDon(), kh.getHoten(), kh.getSdt(), hd.getNgayThanhToan(), hd.getTongTien());
 	        
 	    }
 	    
