@@ -113,7 +113,7 @@ public class GiaoDienHoanTraVe extends Application {
 	int selected = 0;
 	private HBox pnlTongConglbl;
 	private Label lblTongCong;
-	private Label lblTongCongValue;
+	private Label lblTongCongValue = new Label();
 	private Label colLoaiHoaDon;
 	private StackPane paneCol7;
 
