@@ -86,4 +86,19 @@ public class KhachHangDAO {
 	    int kq = st.executeUpdate(q);
 	    return kq > 0; 
 	}
+	
+	public ArrayList<String> getListDoiTuong() throws SQLException
+	{
+		Statement st = databaseConnector.connect();
+		ArrayList<String> listdoiTuong = new ArrayList<String>();
+		String q = "select kh.doiTuong from KhachHang kh";
+		ResultSet rs = st.executeQuery(q);
+		while(rs.next())
+		{
+			String a = rs.getString(1);
+			listdoiTuong.add(a);
+		}
+		return listdoiTuong;
+	}
+	
 }

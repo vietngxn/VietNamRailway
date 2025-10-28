@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import fourcore.Entity.KhachHang;
 import fourcore.Entity.KhuyenMai;
@@ -892,7 +893,7 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 		window.setFullScreen(true);
 		window.show();
 	}
-		public void create_themchuongtrinhkm_layout() {
+		public void create_themchuongtrinhkm_layout() throws SQLException {
 		
 		//label đầu
 		lblCapNhatCTKM = new Label("Cập nhật thông tin");
@@ -1001,7 +1002,11 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 //		vboxNgayKetThuc.getChildren().addAll(lblNgayKetThuc, spNgayKetThuc);
 		
 		comboDoiTuong = new ComboBox<>();
-		comboDoiTuong.getItems().addAll("Người lớn", "Trẻ em", "Anh hùng liệt sĩ", "Tung tung tung sahur");
+		ArrayList<String> listdoiTuong =   ctkmDAO.getListDoiTuong();
+		for(String a : listdoiTuong)
+		{
+			comboDoiTuong.getItems().add(a);
+		}
 		comboDoiTuong.setPrefWidth(600);
 		comboDoiTuong.setPrefHeight(40);
 		comboDoiTuong.setStyle("-fx-font-size: 18px");

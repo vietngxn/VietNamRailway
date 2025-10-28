@@ -4,6 +4,7 @@ package fourcore.GiaoDien;
 import java.io.*;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import fourcore.Entity.KhachHang;
 import fourcore.animation.Animation;
@@ -847,7 +848,7 @@ public class CapNhatThongTinKhachHang extends Application {
 		window.setFullScreen(true);
 		window.show();
 	}
-	public void create_themchuongtrinhkm_layout() {
+	public void create_themchuongtrinhkm_layout() throws SQLException {
 		
 		//label đầu
 		lblKH = new Label("Cập nhật thông tin");
@@ -922,7 +923,11 @@ public class CapNhatThongTinKhachHang extends Application {
 		lblcomboDoiTuong.setId("lbl_TextField");
 		
 		comboDoiTuong = new ComboBox<>();
-		comboDoiTuong.getItems().addAll("Người lớn", "Trẻ em", "Khách Quốc Tế");
+		ArrayList<String> listdoiTuong = khdao.getListDoiTuong();
+		for(String s : listdoiTuong )
+		{
+			comboDoiTuong.getItems().add(s);			
+		}
 		comboDoiTuong.setPrefWidth(600);
 		comboDoiTuong.setPrefHeight(40);
 		comboDoiTuong.setStyle("-fx-font-size: 18px");
