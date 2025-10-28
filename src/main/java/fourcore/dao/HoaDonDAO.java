@@ -94,7 +94,7 @@ public class HoaDonDAO {
 	        "N'" + hd.getDiaChiKhachHangThanhToan() + "', " +
 	        hd.getTongTien() +
 	        ")";
-
+	    hd.setMaHoaDon(newMa);
 	    Statement insertST = database.connect();
 	    int rows = insertST.executeUpdate(insertQuery);
 	    insertST.close();

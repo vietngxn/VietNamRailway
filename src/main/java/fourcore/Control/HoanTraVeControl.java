@@ -47,6 +47,7 @@ public class HoanTraVeControl {
 				gdXuat.start(gdStage);
 				VBox gdMain = gdXuat.getNoiDungChinhVe();
 				root.setCenter(gdMain);
+				loadDuLieuThanhToan(listVeThanhToan, gdXuat.getlblTongCongValue(), gdXuat.getlblSoLuongValue());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

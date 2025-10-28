@@ -69,4 +69,35 @@ public class ChiTietHoaDonDAO {
 		return cthd1;
 	}
 
+	  public void themChiTietHoaDon(ChiTietHoaDon cthd) throws SQLException {
+	        Statement st = db.connect();
+
+	        String countQuery = "SELECT COUNT(*) AS soLuong FROM ChiTietHoaDon";
+	        int soLuong = 0;
+	        ResultSet rs = st.executeQuery(countQuery);
+	        if (rs.next()) {
+	            soLuong = rs.getInt("soLuong");
+	        }
+	        rs.close();
+
+	        String newMa = String.format("CTHD%04d", soLuong + 1);
+
+	        String insertQuery =
+	            "INSERT INTO ChiTietHoaDon (" +
+	            "maChiTietHoaDon, maHoaDon, maVeTau, moTa, donGia, giaTriThueVAT, thanhTien, loaiHoaDonChoVeTau" +
+	            ") VALUES (" +
+	            "N'" + newMa + "', " +
+	            "N'" + cthd.getHoaDon().getMaHoaDon() + "', " +
+	            "N'" + cthd.getVeTau().getMaVeTau() + "', " +
+	            "N'" + cthd.getMoTa() + "', " +
+	            cthd.getDonGia() + ", " +
+	            cthd.getThueVAT() + ", " +
+	            cthd.getThanhTien() + ", " +
+	            "N'" + cthd.getLoaiHoaDonChoVe() + "'" +
+	            ")";
+
+	        int rows = st.executeUpdate(insertQuery);
+	        System.out.println("Đã thêm " + rows + " chi tiết hóa đơn thành công.");
+	        st.close();
+	    }
 }

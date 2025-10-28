@@ -1048,7 +1048,7 @@ public class GiaoDienHoanTraVe extends Application {
 	}
 
 	public VBox loadDuLieuLenTable() throws SQLException {
-		dao = new VeDAO();
+		dao = new VeDAO(0);
 		list = dao.getListHoanVe();
 
 		VBox box = new VBox(10);
