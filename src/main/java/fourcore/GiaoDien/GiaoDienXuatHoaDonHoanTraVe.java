@@ -131,12 +131,11 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 
 	public GiaoDienXuatHoaDonHoanTraVe(Map<String, Double> list) {
 		listVeThanhToan = list;
-		ctrl.loadDuLieuThanhToan(list, lblTongCong, lblSoLuongVe);
 	}
 
 	public void start(Stage primaryStage, Map<String, Double> list) throws IOException {
 		try {
-			vedao = new VeDAO();
+		
 			menuList = new VBox();
 			menuList.setStyle("-fx-background-color: #F7F7F7;");
 			menuList.setPrefWidth(500);
@@ -594,8 +593,6 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 
 		pnl.getChildren().add(taoSubXuatHoaDonPane("Người mua", leftstyle, rightstyle));
 		pnl.getChildren().add(taoSubXuatHoaDonPane("Số giấy tờ", leftstyle, rightstyle));
-		pnl.getChildren().add(taoSubXuatHoaDonPane("Passport", leftstyle, rightstyle));
-		pnl.getChildren().add(taoSubXuatHoaDonPane("Tên khách hàng", leftstyle, rightstyle));
 		pnl.getChildren().add(taoSubXuatHoaDonPane("Địa chỉ", leftstyle, rightstyle));
 
 		return pnl;
@@ -861,19 +858,28 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 			hieuUngHover(btnThanhToan);
 			hieuUngHover(btnTroLai);
 			btnThanhToan.setOnMouseClicked(event -> {
-				Alert thongbao = new Alert(AlertType.CONFIRMATION);
-				Alert alert = new Alert(AlertType.CONFIRMATION);
-				alert.setTitle("Xác nhận");
-				alert.setHeaderText("Bạn có muốn thanh toán cho hóa đơn hoàn trả vé này?");
-				alert.setContentText("Hãy chọn OK để xác nhận hoặc Cancel để hủy.");
-				Optional<ButtonType> result = alert.showAndWait();
-
+//				Alert thongbao = new Alert(AlertType.CONFIRMATION);
+//				Alert alert = new Alert(AlertType.CONFIRMATION);
+//				alert.setTitle("Xác nhận");
+//				alert.setHeaderText("Bạn có muốn thanh toán cho hóa đơn hoàn trả vé này?");
+//				alert.setContentText("Hãy chọn OK để xác nhận hoặc Cancel để hủy.");
+//				Optional<ButtonType> result = alert.showAndWait();
+//			
+				System.out.println("Số lượng vé trong listVeThanhToan: " + listVeThanhToan.size());
+				try {
+					this.vedao = new VeDAO();
+					this.lsttDao = new LichSuTuongTacVe_Dao();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				for (Map.Entry<String, Double> entry : listVeThanhToan.entrySet()) {
 					String key = entry.getKey();
 					System.out.println(key);
 					double value = entry.getValue();
 					System.out.print(value);
 					try {
+						
 						System.out.println(vedao.ThayDoiTrangThaiVe(key, "đã hoàn trả"));
 						lsttDao.themLichSuTuongTacVe(
 								new LichSuTuongTacVe("TT" + key, new LoaiTuongTacVe("LT02", "hoàn trả"),
@@ -884,7 +890,7 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 				}
 			});
 
-//			ctrl.loadDuLieuThanhToan(listVeThanhToan, lblTongCongValue, lblSoLuongVeValue);
+			ctrl.loadDuLieuThanhToan(listVeThanhToan, lblTongCongValue, lblSoLuongVeValue);
 		}
 		return noiDungChinh;
 	}
