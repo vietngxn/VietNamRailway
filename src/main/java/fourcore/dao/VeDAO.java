@@ -168,14 +168,16 @@ public class VeDAO {
 			ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
 			KhuyenMai km = kmDAO.getKhuyenMaiBangMa(maKhuyenMai);
 
-			System.out.println(km.toString());
+//			System.out.println(km.toString());
 			Ve v = new Ve();
 			v = new Ve(maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe,
 					maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, new ChuyenTau(maChuyenTau), kh, km, dt);
 
 			listVe3.add(v);
 		}
+		System.out.println("lấy dữ liệu hoàn vé thành công");
 		return listVe3;
+		
 	}
 
 	public ArrayList<Ve> getListHoanVeTheoCCCDKhachHang(String cccd) throws SQLException {
@@ -233,6 +235,7 @@ public class VeDAO {
 
 			listVe4.add(v);
 		}
+		System.out.println("lấy dữ liệu vé theo cccd thành công");
 		return listVe4;
 	}
 
@@ -300,9 +303,9 @@ public class VeDAO {
 			System.out.println(maChuyenTau);
 			v = new Ve(maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe,
 					maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, new ChuyenTau(maChuyenTau), kh, km, dt);
-			System.out.println("lấy dữ liệu vé thành công");
 		}
 
+		System.out.println("lấy dữ liệu vé theo mã hoàn thành công");
 		return v;
 	}
 

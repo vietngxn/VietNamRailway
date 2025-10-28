@@ -82,7 +82,6 @@ public class NhanVien {
 	}
 	
 	public NhanVien(String maNhanVien) {
-		super();
 		this.maNhanVien = maNhanVien;
 	}
 	public NhanVien(String maNhanVien, String hoTen, String sdt,String gioiTinh, String email,String cccd,String tinhTrangLamViec) {
