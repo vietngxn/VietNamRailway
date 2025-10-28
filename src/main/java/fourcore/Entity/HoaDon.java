@@ -10,11 +10,20 @@ public class HoaDon {
 	private String emailKhachHangThanhToan;
 	private String cccdKhachHangThanhToan;
 	private String sdtKhachHangThanhToan;
+	private String diaChiKhachHangThanhToan;
 	private LocalDateTime ngayThanhToan;
 	private double tongTien;
 
 	// ===== Constructors =====
 	public HoaDon() {
+	}
+
+	public String getDiaChiKhachHangThanhToan() {
+		return diaChiKhachHangThanhToan;
+	}
+
+	public void setDiaChiKhachHangThanhToan(String diaChiKhachHangThanhToan) {
+		this.diaChiKhachHangThanhToan = diaChiKhachHangThanhToan;
 	}
 
 	public HoaDon(String maHD, LoaiHoaDon loaihd, NhanVien maNV, String tenKHThanhToan, String emailKHThanhToan,
@@ -31,12 +40,13 @@ public class HoaDon {
 	}
 
 	public HoaDon(String maNhanVien, String tenKhachHangThanhToan, String emailKhachHangThanhToan,
-			String cccdKhachHangThanhToan, String sdtKhachHangThanhToan, double tongTien) {
+			String cccdKhachHangThanhToan, String sdtKhachHangThanhToan, String diaChi, double tongTien) {
 		setMaNhanVien(new NhanVien(maNhanVien));
 		setTenKhachHangThanhToan(tenKhachHangThanhToan);
 		setEmailKhachHangThanhToan(emailKhachHangThanhToan);
 		setCccdKhachHangThanhToan(cccdKhachHangThanhToan);
 		setSdtKhachHangThanhToan(sdtKhachHangThanhToan);
+		setDiaChiKhachHangThanhToan(diaChi);
 		setTongTien(tongTien);
 	}
 

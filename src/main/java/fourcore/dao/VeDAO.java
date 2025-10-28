@@ -21,6 +21,11 @@ public class VeDAO {
 		getListVe();
 	}
 
+	public VeDAO(int x) throws SQLException {
+		
+	}
+
+	
 	public Ve getVeBangMaVe(String maVe) throws SQLException {
 		for (Ve x : listVe) {
 			if (x.getMaVeTau().equalsIgnoreCase(maVe)) {

@@ -82,9 +82,8 @@ public class ChiTietHoaDon {
 		LoaiHoaDonChoVe = loaiHoaDonChoVe;
 	}
 
-	public ChiTietHoaDon(String maChiTietHoaDon, HoaDon hoaDon, Ve veTau, String moTa, double dongia, double thueVAT,
+	public ChiTietHoaDon(HoaDon hoaDon, Ve veTau, String moTa, double dongia, double thueVAT,
 			double thanhTien,String loaiHoaDon) {
-		setMaChiTietHoaDon(maChiTietHoaDon);
 		setHoaDon(hoaDon);
 		setVeTau(veTau);
 		setMoTa(moTa);

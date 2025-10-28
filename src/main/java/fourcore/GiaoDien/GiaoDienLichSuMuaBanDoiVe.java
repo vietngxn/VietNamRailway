@@ -1209,7 +1209,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
     }
 
     public VBox loadDuLieuLenTable() throws SQLException {
-        dao = new LichSuTuongTacVe_Dao();
+        dao = new LichSuTuongTacVe_Dao(0);
         list = dao.getList();
         VBox box = new VBox(10);
         for (LichSuTuongTacVe x : list) {
