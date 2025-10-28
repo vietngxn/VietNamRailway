@@ -34,6 +34,7 @@ CREATE TABLE TaiKhoan (
     maNhanVien NVARCHAR(20) NOT NULL,
     tenDangNhap NVARCHAR(50) NOT NULL,
     matKhau NVARCHAR(100) NOT NULL,
+	isRemove BIT NOT NULL DEFAULT 0,
     FOREIGN KEY (maNhanVien) REFERENCES NhanVien(maNhanVien)
 );
 
@@ -47,7 +48,8 @@ CREATE TABLE KhachHang (
     email NVARCHAR(100) NOT NULL,
     cccd NVARCHAR(15),
     passport NVARCHAR(15),
-    doiTuong NVARCHAR(30)
+    doiTuong NVARCHAR(30),
+	isRemove BIT NOT NULL DEFAULT 0
 );
 
 -- ======================================
@@ -63,6 +65,7 @@ CREATE TABLE Tau (
     maTau NVARCHAR(20) PRIMARY KEY,
     tenTau NVARCHAR(100) NOT NULL,
     maLoaiTau NVARCHAR(20) NOT NULL,
+	isRemove BIT NOT NULL DEFAULT 0,
     FOREIGN KEY (maLoaiTau) REFERENCES LoaiTau(maLoaiTau)
 );
 
@@ -96,8 +99,7 @@ CREATE TABLE HanhTrinhGa (
     maGa NVARCHAR(20) NOT NULL,
     thuTuDung INT DEFAULT 0,
     FOREIGN KEY (maHanhTrinh) REFERENCES HanhTrinh(maHanhTrinh),
-    FOREIGN KEY (maGa) REFERENCES Ga(maGa),
-    CONSTRAINT UQ_HanhTrinhGa UNIQUE (maHanhTrinh, maGa)
+    FOREIGN KEY (maGa) REFERENCES Ga(maGa)
 );
 
 -- ======================================
@@ -110,6 +112,7 @@ CREATE TABLE ChuyenTau (
     ngayGioDi DATETIME NOT NULL,
     ngayGioDen DATETIME NOT NULL,
     giaCuocTrenChuyenTau DECIMAL(18,2) DEFAULT 0,
+	isRemove BIT NOT NULL DEFAULT 0,
     FOREIGN KEY (maTau) REFERENCES Tau(maTau),
     FOREIGN KEY (maHanhTrinh) REFERENCES HanhTrinh(maHanhTrinh)
 );
@@ -127,12 +130,14 @@ CREATE TABLE ToaTau (
     maLoaiToaTau NVARCHAR(20) NOT NULL,
     tenToaTau NVARCHAR(100) NOT NULL,
     soToa INT,
+	isRemove BIT NOT NULL DEFAULT 0,
     FOREIGN KEY (maLoaiToaTau) REFERENCES LoaiToaTau(maLoaiToaTau)
 );
 
 CREATE TABLE KhoangTau (
     maKhoangTau NVARCHAR(20) PRIMARY KEY,
     soKhoang INT NOT NULL,
+	isRemove BIT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE Tang (
@@ -150,6 +155,7 @@ CREATE TABLE GheNgoi (
     soGhe INT NOT NULL DEFAULT 0,
     giaTriTangThem DECIMAL(18,2) DEFAULT 0,
     luuDong BIT DEFAULT 0,
+	isRemove BIT NOT NULL DEFAULT 0,
     FOREIGN KEY (maTang) REFERENCES Tang(maTang),
     FOREIGN KEY (maLoaiGhe) REFERENCES LoaiGhe(maLoaiGhe),
     FOREIGN KEY (maKhoangTau) REFERENCES KhoangTau(maKhoangTau),
@@ -163,6 +169,7 @@ CREATE TABLE GheTrenChuyenTau (
     giaTienGhe DECIMAL(18,2) DEFAULT 0,
     trangThaiGhe NVARCHAR(10) NOT NULL DEFAULT N'còn trống'
         CHECK (trangThaiGhe IN (N'đã bán', N'còn trống')),
+	isRemove BIT NOT NULL DEFAULT 0,
     FOREIGN KEY (maGheNgoi) REFERENCES GheNgoi(maGheNgoi),
     FOREIGN KEY (maChuyenTau) REFERENCES ChuyenTau(maChuyenTau)
 );
@@ -178,14 +185,16 @@ CREATE TABLE KhuyenMai (
     ngayKetThuc DATETIME,
     trangThaiKhuyenMai NVARCHAR(20) DEFAULT N'kích hoạt'
         CHECK (trangThaiKhuyenMai IN (N'kích hoạt', N'kết thúc')),
-    dieuKienApDungKhuyenMai NVARCHAR(100)
+    dieuKienApDungKhuyenMai NVARCHAR(100),
+	isRemove BIT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE DoiTuongGiamGia (
     maDoiTuongGiamGia NVARCHAR(20) PRIMARY KEY,
     tenDoiTuongGiamGia NVARCHAR(50) NOT NULL,
     giaTriPhanTramGiamGia DECIMAL(5,2),
-    trangThaiGiamGia NVARCHAR(20)
+    trangThaiGiamGia NVARCHAR(20),
+	isRemove BIT NOT NULL DEFAULT 0
 );
 
 -- ======================================
@@ -230,7 +239,7 @@ CREATE TABLE Ve (
     maGiayTo NVARCHAR(50),
     giaVe DECIMAL(18,2) DEFAULT 0,
     ghiChu NVARCHAR(255),
-    trangThaiDoiVe NVARCHAR(10) DEFAULT N'chưa đổi'
+    trangThaiDoiVe NVARCHAR(20) DEFAULT N'chưa đổi'
         CHECK (trangThaiDoiVe IN (N'đã đổi', N'chưa đổi')),
     trangThaiVe NVARCHAR(20) DEFAULT N'hoạt động'
         CHECK (trangThaiVe IN (N'hoạt động', N'đã hoàn trả', N'kết thúc')),
@@ -238,6 +247,7 @@ CREATE TABLE Ve (
     maKhachHang NVARCHAR(20) NOT NULL,
     maKhuyenMai NVARCHAR(20) NULL,
     maDoiTuongGiamGia NVARCHAR(20) NOT NULL,
+	isRemove BIT NOT NULL DEFAULT 0,
     FOREIGN KEY (maChuyenTau) REFERENCES ChuyenTau(maChuyenTau),
     FOREIGN KEY (maKhachHang) REFERENCES KhachHang(maKhachHang),
     FOREIGN KEY (maKhuyenMai) REFERENCES KhuyenMai(maKhuyenMai),
@@ -252,6 +262,7 @@ CREATE TABLE ChiTietHoaDon (
     donGia DECIMAL(18,2) DEFAULT 0,
     giaTriThueVAT DECIMAL(18,2) DEFAULT 0,
     thanhTien DECIMAL(18,2) DEFAULT 0,
+	loaiHoaDonChoVeTau NVARCHAR(20) check (loaiHoaDonChoVeTau in (N'vé cá nhân',N'vé tập thể')),
     FOREIGN KEY (maHoaDon) REFERENCES HoaDon(maHoaDon),
     FOREIGN KEY (maVeTau) REFERENCES Ve(maVeTau)
 );
@@ -283,9 +294,9 @@ INSERT INTO ChucVu (maChucVu, tenChucVu) VALUES
 
 -- Dữ liệu mẫu cho bảng NhanVien
 INSERT INTO NhanVien (maNhanVien, hoTen, maChucVu, ngaySinh, diaChi, email, sdt, ngayVaoLam, tinhTrangLamViec, gioiTinh, cccd) VALUES
-(N'NV001', N'Nguyễn Văn A', N'CV01', '1985‑07‑15', N'123 Lê Lợi, TP HCM', N'vana@example.com', N'0901234567', '2022‑01‑10', N'còn làm', N'Nam', N'012345678901'),
-(N'NV002', N'Trần Thị B', N'CV02', '1990‑03‑22', N'45 Nguyễn Huệ, TP HCM', N'thib@example.com', N'0912345678', '2021‑05‑20', N'còn làm', N'Nữ', N'098765432109'),
-(N'NV003', N'Lê Văn C', N'CV03', '1978‑11‑02', N'78 Hai Bà Trưng, TP HCM', N'levanc@example.com', N'0923456789', '2020‑09‑01', N'còn làm', N'Nam', N'011223344556');
+(N'NV001', N'Nguyễn Văn A', N'CV01', '1985-07-15', N'123 Lê Lợi, TP HCM', N'vana@example.com', N'0901234567', '2022‑01‑10', N'còn làm', N'Nam', N'012345678901'),
+(N'NV002', N'Trần Thị B', N'CV02', '1990-03-22', N'45 Nguyễn Huệ, TP HCM', N'thib@example.com', N'0912345678', '2021‑05‑20', N'còn làm', N'Nữ', N'098765432109'),
+(N'NV003', N'Lê Văn C', N'CV03', '1978-11-02', N'78 Hai Bà Trưng, TP HCM', N'levanc@example.com', N'0923456789', '2020‑09‑01', N'còn làm', N'Nam', N'011223344556');
 
 -- Dữ liệu mẫu cho bảng TaiKhoan
 INSERT INTO TaiKhoan (maTaiKhoan, maNhanVien, tenDangNhap, matKhau) VALUES
@@ -443,25 +454,15 @@ INSERT INTO DoiTuongGiamGia (maDoiTuongGiamGia, tenDoiTuongGiamGia, giaTriPhanTr
 
 INSERT INTO LoaiHoaDon (maLoaiHoaDon, tenLoaiHoaDon, ghiChu)
 VALUES
-(N'LHD01', N'Vé cá nhân', N'Áp dụng cho khách mua dưới 10 vé'),
-(N'LHD02', N'Vé tập thể', N'Áp dụng cho khách mua từ 10 vé trở lên');
-
+(N'LHD01', N'bán vé', N'Áp dụng cho hóa đơn bán vé'),
+(N'LHD02', N'hoàn trả vé', N'Áp dụng cho hóa đơn hoàn trả vé'),
+(N'LHD03', N'đổi vé', N'Áp dụng cho hóa đơn đổi vé');
 
 -- Dữ liệu mẫu cho bảng HoaDon (đã thêm đầy đủ các trường)
 INSERT INTO HoaDon (maHoaDon, maLoaiHoaDon, maNhanVien, tenKhachHangThanhToan, emailKhachHangThanhToan, cccdKhachHangThanhToan, sdtKhachHangThanhToan, ngayThanhToan, tongTien) VALUES
 (N'HD001',N'LHD01', N'NV001', N'Nguyễn Văn A', N'nguyenvana@example.com', N'079123456789', N'0912345678', '2025-10-18 14:30:00', 500000),
-(N'HD002',N'LHD02', N'NV002', N'Trần Thị B', N'tranthib@example.com', N'079987654321', N'0987654321', '2025-10-18 15:00:00', 700000);
-
-
--- Dữ liệu mẫu cho bảng Ve
-INSERT INTO Ve (maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe, maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, maChuyenTau, maKhachHang, maKhuyenMai, maDoiTuongGiamGia) VALUES
-(N'V001', N'Hà Nội', N'TP HCM', N'Super Express', '2025‑10‑20 08:00:00', '2025‑10‑20 18:00:00', 1, 1, 1, 1, N'Một chiều', NULL, 550000, NULL, N'chưa đổi', N'hoạt động', N'CT001', N'KH001', N'KM01', N'DT02'),
-(N'V002', N'Đà Nẵng', N'Nha Trang', N'Night Dreamer', '2025‑10‑21 22:00:00', '2025‑10‑22 06:00:00', 2, 1, 2, 1, N'Khứ hồi', NULL, 820000, NULL, N'chưa đổi', N'hoạt động', N'CT002', N'KH002', NULL, N'DT01');
-
--- Dữ liệu mẫu cho bảng ChiTietHoaDon
-INSERT INTO ChiTietHoaDon (maChiTietHoaDon, maHoaDon, maVeTau, moTa, donGia, giaTriThueVAT, thanhTien) VALUES
-(N'CTHD001', N'HD001', N'V001', N'Ve Super Express 1 toa', 500000, 50000, 550000),
-(N'CTHD002', N'HD002', N'V002', N'Ve Night Dreamer VIP', 820000, 82000, 902000);
+(N'HD002',N'LHD01', N'NV002', N'Trần Thị B', N'tranthib@example.com', N'079987654321', N'0987654321', '2025-10-18 15:00:00', 700000),
+(N'HD003',N'LHD03', N'NV002', N'Trần Thị B', N'tranthib@example.com', N'079987654321', N'0987654321', '2025-10-18 15:00:00', 700000);
 
 -- Dữ liệu mẫu cho bảng LoaiTuongTacVe
 INSERT INTO LoaiTuongTacVe (maLoaiTuongTac, tenLoaiTuongTac) VALUES
@@ -470,6 +471,59 @@ INSERT INTO LoaiTuongTacVe (maLoaiTuongTac, tenLoaiTuongTac) VALUES
 (N'LT03', N'đổi'),
 (N'LT04', N'cấp lại vé');
 
+
+-- them dataVE test --
+-- Bảng Vé
+INSERT INTO Ve (maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe, maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, maChuyenTau, maKhachHang, maKhuyenMai, maDoiTuongGiamGia, isRemove)
+VALUES
+(N'V001', N'Hà Nội', N'TP HCM', N'Super Express', '2025-10-20 08:00:00', '2025-10-20 18:00:00', 1, 1, 1, 1, N'Một chiều', NULL, 550000, NULL, N'chưa đổi', N'hoạt động', N'CT001', N'KH001', N'KM01', N'DT02', 0),
+(N'V002', N'Đà Nẵng', N'Nha Trang', N'Night Dreamer', '2025-10-21 22:00:00', '2025-10-22 06:00:00', 2, 1, 2, 1, N'Khứ hồi', NULL, 820000, NULL, N'chưa đổi', N'hoạt động', N'CT002', N'KH002', NULL, N'DT01', 0),
+(N'V003', N'Hà Nội', N'TP HCM', N'Super Express', '2025-11-01 08:00:00', '2025-11-01 18:00:00', 1, 2, 1, 2, N'Một chiều', NULL, 550000, NULL, N'chưa đổi', N'hoạt động',N'CT001', N'KH001', N'KM01', N'DT02', 0),
+(N'V004', N'Đà Nẵng', N'Nha Trang', N'Night Dreamer', '2025-11-02 22:00:00', '2025-11-03 06:00:00', 2, 1, 2, 2, N'Khứ hồi', NULL, 820000, NULL, N'chưa đổi', N'hoạt động', N'CT002', N'KH002', NULL, N'DT01', 0),
+(N'V005', N'Hà Nội', N'TP HCM', N'Super Express', '2025-11-05 08:00:00', '2025-11-05 18:00:00', 1, 1, 1, 3, N'Một chiều', NULL, 550000, NULL, N'chưa đổi', N'hoạt động', N'CT001', N'KH001', N'KM01', N'DT02', 0),
+(N'V006', N'Đà Nẵng', N'Nha Trang', N'Night Dreamer', '2025-11-06 22:00:00', '2025-11-07 06:00:00', 2, 1, 2, 3, N'Khứ hồi', NULL, 820000, NULL, N'chưa đổi', N'hoạt động', N'CT002', N'KH002', NULL, N'DT01', 0),
+(N'V007', N'Hà Nội', N'TP HCM', N'Super Express', '2025-11-07 08:00:00', '2025-11-07 18:00:00', 1, 1, 1, 4, N'Một chiều', NULL, 550000, NULL, N'chưa đổi', N'hoạt động', N'CT001', N'KH001', N'KM01', N'DT02', 0),
+(N'V008', N'Đà Nẵng', N'Nha Trang', N'Night Dreamer', '2025-11-08 22:00:00', '2025-11-09 06:00:00', 2, 1, 2, 4, N'Khứ hồi', NULL, 820000, NULL, N'chưa đổi', N'hoạt động', N'CT002', N'KH002', NULL, N'DT01', 0),
+(N'V009', N'Hà Nội', N'TP HCM', N'Super Express', '2025-11-09 08:00:00', '2025-11-09 18:00:00', 1, 2, 1, 5, N'Một chiều', NULL, 550000, NULL, N'chưa đổi', N'hoạt động',N'CT001', N'KH001', N'KM01', N'DT02', 0),
+(N'V010', N'Đà Nẵng', N'Nha Trang', N'Night Dreamer', '2025-11-10 22:00:00', '2025-11-11 06:00:00', 2, 1, 2, 5, N'Khứ hồi', NULL, 820000, NULL, N'chưa đổi', N'hoạt động', N'CT002', N'KH002', NULL, N'DT01', 0),
+(N'V011', N'Hà Nội', N'TP HCM', N'Super Express', '2025-11-11 08:00:00', '2025-11-11 18:00:00', 1, 1, 1, 6, N'Một chiều', NULL, 550000, NULL, N'chưa đổi', N'hoạt động', N'CT001', N'KH001', N'KM01', N'DT02', 0),
+(N'V012', N'Đà Nẵng', N'Nha Trang', N'Night Dreamer', '2025-11-12 22:00:00', '2025-11-13 06:00:00', 2, 1, 2, 6, N'Khứ hồi', NULL, 820000, NULL, N'chưa đổi', N'hoạt động', N'CT002', N'KH002', NULL, N'DT01', 0),
+(N'V013', N'Hà Nội', N'TP HCM', N'Super Express', '2025-11-13 08:00:00', '2025-11-13 18:00:00', 1, 1, 1, 7, N'Một chiều', NULL, 550000, NULL, N'chưa đổi', N'hoạt động', N'CT001', N'KH001', N'KM01', N'DT02', 0),
+(N'V014', N'Đà Nẵng', N'Nha Trang', N'Night Dreamer', '2025-11-14 22:00:00', '2025-11-15 06:00:00', 2, 1, 2, 7, N'Khứ hồi', NULL, 820000, NULL, N'chưa đổi', N'hoạt động', N'CT002', N'KH002', NULL, N'DT01', 0),
+(N'V015', N'Hà Nội', N'TP HCM', N'Super Express', '2025-11-15 08:00:00', '2025-11-15 18:00:00', 1, 1, 1, 8, N'Một chiều', NULL, 550000, NULL, N'chưa đổi', N'hoạt động', N'CT001', N'KH001', N'KM01', N'DT02', 0),
+(N'V016', N'Đà Nẵng', N'Nha Trang', N'Night Dreamer', '2025-11-16 22:00:00', '2025-11-17 06:00:00', 2, 1, 2, 8, N'Khứ hồi', NULL, 820000, NULL, N'chưa đổi', N'hoạt động', N'CT002', N'KH002', NULL, N'DT01', 0),
+(N'V017', N'Hà Nội', N'TP HCM', N'Super Express', '2025-11-17 08:00:00', '2025-11-17 18:00:00', 1, 2, 1, 9, N'Một chiều', NULL, 550000, NULL, N'chưa đổi', N'hoạt động',N'CT001', N'KH001', N'KM01', N'DT02', 0),
+(N'V018', N'Đà Nẵng', N'Nha Trang', N'Night Dreamer', '2025-11-18 22:00:00', '2025-11-19 06:00:00', 2, 1, 2, 9, N'Khứ hồi', NULL, 820000, NULL, N'chưa đổi', N'hoạt động', N'CT002', N'KH002', NULL, N'DT01', 0),
+(N'V019', N'Hà Nội', N'TP HCM', N'Super Express', '2025-11-19 08:00:00', '2025-11-19 18:00:00', 1, 1, 1, 10, N'Một chiều', NULL, 550000, NULL, N'chưa đổi', N'hoạt động', N'CT001', N'KH001', N'KM01', N'DT02', 0),
+(N'V020', N'Đà Nẵng', N'Nha Trang', N'Night Dreamer', '2025-11-20 22:00:00', '2025-11-21 06:00:00', 2, 1, 2, 10, N'Khứ hồi', NULL, 820000, NULL, N'chưa đổi', N'hoạt động', N'CT002', N'KH002', NULL, N'DT01', 0),
+(N'V021', N'Hà Nội', N'TP HCM', N'Super Express', '2025-11-21 08:00:00', '2025-11-21 18:00:00', 1, 1, 1, 11, N'Một chiều', NULL, 550000, NULL, N'chưa đổi', N'hoạt động', N'CT001', N'KH001', N'KM01', N'DT01', 0),
+(N'V022', N'Hà Nội', N'TP HCM', N'Super Express', '2025-11-21 08:00:00', '2025-11-21 18:00:00', 1, 1, 1, 11, N'Một chiều', NULL, 550000, NULL, N'chưa đổi', N'hoạt động', N'CT001', N'KH002', N'KM01', N'DT02', 0);
+-- Bảng ChiTietHoaDon (tương ứng)
+INSERT INTO ChiTietHoaDon (maChiTietHoaDon, maHoaDon, maVeTau, moTa, donGia, giaTriThueVAT, thanhTien, loaiHoaDonChoVeTau)
+VALUES
+(N'CTHD001', N'HD001', N'V001', N'Vé Super Express 1 toa', 500000, 50000, 550000, N'vé tập thể'),
+(N'CTHD002', N'HD002', N'V002', N'Vé Night Dreamer VIP', 820000, 82000, 902000, N'vé cá nhân'),
+(N'CTHD003', N'HD001', N'V003', N'Vé Super Express 1 toa', 500000, 50000, 550000, N'vé tập thể'),
+(N'CTHD004', N'HD002', N'V004', N'Vé Night Dreamer VIP', 820000, 82000, 902000, N'vé cá nhân'),
+(N'CTHD005', N'HD001', N'V005', N'Vé Super Express 1 toa', 500000, 50000, 550000, N'vé tập thể'),
+(N'CTHD006', N'HD002', N'V006', N'Vé Night Dreamer VIP', 820000, 82000, 902000, N'vé cá nhân'),
+(N'CTHD007', N'HD001', N'V007', N'Vé Super Express 1 toa', 500000, 50000, 550000, N'vé tập thể'),
+(N'CTHD008', N'HD002', N'V008', N'Vé Night Dreamer VIP', 820000, 82000, 902000, N'vé cá nhân'),
+(N'CTHD009', N'HD001', N'V009', N'Vé Super Express 1 toa', 500000, 50000, 550000, N'vé tập thể'),
+(N'CTHD010', N'HD002', N'V010', N'Vé Night Dreamer VIP', 820000, 82000, 902000, N'vé cá nhân'),
+(N'CTHD011', N'HD001', N'V011', N'Vé Super Express 1 toa', 500000, 50000, 550000, N'vé tập thể'),
+(N'CTHD012', N'HD002', N'V012', N'Vé Night Dreamer VIP', 820000, 82000, 902000, N'vé cá nhân'),
+(N'CTHD013', N'HD001', N'V013', N'Vé Super Express 1 toa', 500000, 50000, 550000, N'vé tập thể'),
+(N'CTHD014', N'HD002', N'V014', N'Vé Night Dreamer VIP', 820000, 82000, 902000, N'vé cá nhân'),
+(N'CTHD015', N'HD001', N'V015', N'Vé Super Express 1 toa', 500000, 50000, 550000, N'vé tập thể'),
+(N'CTHD016', N'HD002', N'V016', N'Vé Night Dreamer VIP', 820000, 82000, 902000, N'vé cá nhân'),
+(N'CTHD017', N'HD001', N'V017', N'Vé Super Express 1 toa', 500000, 50000, 550000, N'vé tập thể'),
+(N'CTHD018', N'HD002', N'V018', N'Vé Night Dreamer VIP', 820000, 82000, 902000, N'vé cá nhân'),
+(N'CTHD019', N'HD001', N'V019', N'Vé Super Express 1 toa', 500000, 50000, 550000, N'vé tập thể'),
+(N'CTHD020', N'HD002', N'V020', N'Vé Night Dreamer VIP', 820000, 82000, 902000, N'vé cá nhân'),
+(N'CTHD021', N'HD001', N'V021', N'Vé Super Express 1 toa', 500000, 50000, 550000, N'vé tập thể'),
+(N'CTHD022', N'HD001', N'V022', N'Vé Super Express 1 toa', 500000, 50000, 550000, N'vé tập thể');
+
 -- Dữ liệu mẫu cho bảng LichSuTuongTacVe
 INSERT INTO LichSuTuongTacVe (maTuongTac, maLoaiTuongTac, maVeTau, giaTriChenhLech, ngayTuongTac) VALUES
 (N'TT001', N'LT01', N'V001', 0, '2025-10-18 14:30:00'), -- vé V001 được bán
@@ -477,22 +531,3 @@ INSERT INTO LichSuTuongTacVe (maTuongTac, maLoaiTuongTac, maVeTau, giaTriChenhLe
 (N'TT003', N'LT04', N'V002', 0, '2025-10-20 09:00:00'), -- vé V002 cấp lại
 (N'TT004', N'LT02', N'V002', -820000, '2025-10-21 12:00:00'); -- vé V002 hoàn trả, hoàn tiền
 
-
--- them dataVE test --
-INSERT INTO Ve (maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe, maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, maChuyenTau, maKhachHang, maKhuyenMai, maDoiTuongGiamGia) VALUES
-(N'V003', N'Hà Nội', N'TP HCM', N'Super Express', '2025‑11‑20 08:00:00', '2025‑10‑20 18:00:00', 1, 1, 1, 1, N'Một chiều', NULL, 550000, NULL, N'chưa đổi', N'hoạt động', N'CT001', N'KH001', N'KM01', N'DT02'),
-(N'V004', N'Đà Nẵng', N'Nha Trang', N'Night Dreamer', '2025‑11‑21 22:00:00', '2025‑10‑22 06:00:00', 2, 1, 2, 1, N'Khứ hồi', NULL, 820000, NULL, N'chưa đổi', N'hoạt động', N'CT002', N'KH002', NULL, N'DT01');
-
-INSERT INTO Ve (maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe, maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, maChuyenTau, maKhachHang, maKhuyenMai, maDoiTuongGiamGia) VALUES
-(N'V005', N'Hà Nội', N'TP HCM', N'Super Express', '2025‑11‑20 08:00:00', '2025‑10‑20 18:00:00', 1, 1, 1, 1, N'Một chiều', NULL, 550000, NULL, N'chưa đổi', N'hoạt động', N'CT001', N'KH001', N'KM01', N'DT02'),
-(N'V006', N'Đà Nẵng', N'Nha Trang', N'Night Dreamer', '2025‑11‑21 22:00:00', '2025‑10‑22 06:00:00', 2, 1, 2, 1, N'Khứ hồi', NULL, 820000, NULL, N'chưa đổi', N'hoạt động', N'CT002', N'KH002', NULL, N'DT01'),
-(N'V007', N'Hà Nội', N'TP HCM', N'Super Express', '2025‑11‑20 08:00:00', '2025‑10‑20 18:00:00', 1, 1, 1, 1, N'Một chiều', NULL, 550000, NULL, N'chưa đổi', N'hoạt động', N'CT001', N'KH001', N'KM01', N'DT02'),
-(N'V008', N'Đà Nẵng', N'Nha Trang', N'Night Dreamer', '2025‑11‑21 22:00:00', '2025‑10‑22 06:00:00', 2, 1, 2, 1, N'Khứ hồi', NULL, 820000, NULL, N'chưa đổi', N'hoạt động', N'CT002', N'KH002', NULL, N'DT01');
-
-INSERT INTO ChiTietHoaDon (maChiTietHoaDon, maHoaDon, maVeTau, moTa, donGia, giaTriThueVAT, thanhTien) VALUES
-(N'CTHD003', N'HD001', N'V003', N'Ve Super Express 1 toa', 500000, 50000, 550000),
-(N'CTHD004', N'HD002', N'V004', N'Ve Night Dreamer VIP', 820000, 82000, 902000),
-(N'CTHD005', N'HD001', N'V005', N'Ve Super Express 1 toa', 500000, 50000, 550000),
-(N'CTHD006', N'HD002', N'V006', N'Ve Night Dreamer VIP', 820000, 82000, 902000),
-(N'CTHD007', N'HD001', N'V007', N'Ve Super Express 1 toa', 500000, 50000, 550000),
-(N'CTHD008', N'HD002', N'V008', N'Ve Night Dreamer VIP', 820000, 82000, 902000);

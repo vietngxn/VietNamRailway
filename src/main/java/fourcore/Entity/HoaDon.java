@@ -30,6 +30,16 @@ public class HoaDon {
 		tongTien = tongTienHD;
 	}
 
+	public HoaDon(String maNhanVien, String tenKhachHangThanhToan, String emailKhachHangThanhToan,
+			String cccdKhachHangThanhToan, String sdtKhachHangThanhToan, double tongTien) {
+		setMaNhanVien(new NhanVien(maNhanVien));
+		setTenKhachHangThanhToan(tenKhachHangThanhToan);
+		setEmailKhachHangThanhToan(emailKhachHangThanhToan);
+		setCccdKhachHangThanhToan(cccdKhachHangThanhToan);
+		setSdtKhachHangThanhToan(sdtKhachHangThanhToan);
+		setTongTien(tongTien);
+	}
+
 	// ===== Getters & Setters =====
 	public String getMaHoaDon() {
 		return maHoaDon;

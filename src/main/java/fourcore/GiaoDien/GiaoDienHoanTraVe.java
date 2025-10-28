@@ -12,10 +12,12 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
+
 import fourcore.Control.HoanTraVeControl;
 import fourcore.Control.ThongKeKhachHangControl;
 import fourcore.Entity.LichSuTuongTacVe;
 import fourcore.Entity.Ve;
+import fourcore.dao.ChiTietHoaDonDAO;
 import fourcore.dao.LichSuTuongTacVe_Dao;
 import fourcore.dao.LoaiHoaDonDAO;
 import fourcore.dao.VeDAO;
@@ -274,8 +276,6 @@ public class GiaoDienHoanTraVe extends Application {
 
 		return pnlReturn;
 	}
-
-
 
 	private HBox taoSubCT1(String label, String value, String leftStyle, String rightStyle) {
 		Label lblLeft = new Label(label);
@@ -959,17 +959,18 @@ public class GiaoDienHoanTraVe extends Application {
 						pnlDataHoanTraVe.getChildren().clear();
 						Ve x = new Ve();
 						x = dao.getHoanVeBangMaVe(input);
-						LoaiHoaDonDAO lhdDao = new LoaiHoaDonDAO();
-						String tenloai = lhdDao.getLoaiHoaDonTheoMaVe(x.getMaVeTau());
-						pnlDataHoanTraVe.getChildren().add(taoDataChoTableHoanVe(x.getMaVeTau(),
-								x.getChuyenTau().getMaChuyenTau(), x.getGaDi() + " - " + x.getGaDen(),
+						ChiTietHoaDonDAO ctDao = new ChiTietHoaDonDAO();
+						String tenloai = ctDao.getLoaiHoaDonChoVeTau(x.getMaVeTau());
+						System.out.println(tenloai);
+						pnlDataHoanTraVe.getChildren().add(taoDataChoTableHoanVe(x.getMaVeTau(), x.getChuyenTau().getMaChuyenTau(),
+								x.getGaDi() + " - " + x.getGaDen(),
 								x.getNgayGioDi().toLocalDate() + " - " + x.getNgayGioDi().toLocalTime(),
 								"Toa số " + x.getSoToa() + " chỗ " + x.getSoGhe(), tenloai, x.getTrangThaiVe(),
 								x.getKhachHang().getHoten(), x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
 								x.getKhachHang().getCccd(), x.getGiaVe(),
 								nf.format(x.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
 								nf.format(x.getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%", x.tinhThanhTien(),
-								x.tinhPhiHoanTra(x.getNgayGioDi(), x.tinhThanhTien(), tenloai)));
+								x.tinhThanhTienThanhToanHoanTra(x.tinhPhiHoanTra(x.getNgayGioDi(), x.tinhThanhTien(), tenloai))));
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
@@ -1009,17 +1010,18 @@ public class GiaoDienHoanTraVe extends Application {
 						list.removeAll(list);
 						list = dao.getListHoanVeTheoCCCDKhachHang(input);
 						for (Ve x : list) {
-							LoaiHoaDonDAO lhdDao = new LoaiHoaDonDAO();
-							String tenloai = lhdDao.getLoaiHoaDonTheoMaVe(x.getMaVeTau());
-							pnlDataHoanTraVe.getChildren().add(taoDataChoTableHoanVe(x.getMaVeTau(),
-									x.getChuyenTau().getMaChuyenTau(), x.getGaDi() + " - " + x.getGaDen(),
+							ChiTietHoaDonDAO ctDao = new ChiTietHoaDonDAO();
+							String tenloai = ctDao.getLoaiHoaDonChoVeTau(x.getMaVeTau());
+							System.out.println(tenloai);
+							pnlDataHoanTraVe.getChildren().add(taoDataChoTableHoanVe(x.getMaVeTau(), x.getChuyenTau().getMaChuyenTau(),
+									x.getGaDi() + " - " + x.getGaDen(),
 									x.getNgayGioDi().toLocalDate() + " - " + x.getNgayGioDi().toLocalTime(),
 									"Toa số " + x.getSoToa() + " chỗ " + x.getSoGhe(), tenloai, x.getTrangThaiVe(),
 									x.getKhachHang().getHoten(), x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
 									x.getKhachHang().getCccd(), x.getGiaVe(),
 									nf.format(x.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
 									nf.format(x.getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%", x.tinhThanhTien(),
-									x.tinhPhiHoanTra(x.getNgayGioDi(), x.tinhThanhTien(), tenloai)));
+									x.tinhThanhTienThanhToanHoanTra(x.tinhPhiHoanTra(x.getNgayGioDi(), x.tinhThanhTien(), tenloai))));
 						}
 					} catch (SQLException e) {
 						e.printStackTrace();
@@ -1040,18 +1042,19 @@ public class GiaoDienHoanTraVe extends Application {
 	public Button traVeNutHoanVe() {
 		return this.btnHoanVe;
 	}
-	
-	public Map<String, Double> traVeListVeThanhToan(){
+
+	public Map<String, Double> traVeListVeThanhToan() {
 		return this.listVeThanhToan;
 	}
+
 	public VBox loadDuLieuLenTable() throws SQLException {
 		dao = new VeDAO();
 		list = dao.getListHoanVe();
 
 		VBox box = new VBox(10);
 		for (Ve x : list) {
-			LoaiHoaDonDAO lhdDao = new LoaiHoaDonDAO();
-			String tenloai = lhdDao.getLoaiHoaDonTheoMaVe(x.getMaVeTau());
+			ChiTietHoaDonDAO ctDao = new ChiTietHoaDonDAO();
+			String tenloai = ctDao.getLoaiHoaDonChoVeTau(x.getMaVeTau());
 			System.out.println(tenloai);
 			box.getChildren().add(taoDataChoTableHoanVe(x.getMaVeTau(), x.getChuyenTau().getMaChuyenTau(),
 					x.getGaDi() + " - " + x.getGaDen(),

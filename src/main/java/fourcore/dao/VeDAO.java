@@ -121,21 +121,21 @@ public class VeDAO {
 		ArrayList<Ve> listVe3 = new ArrayList<Ve>();
 
 		Statement st = database.connect();
-		String q = """
-				SELECT v.*
-				FROM Ve AS v
-				JOIN ChiTietHoaDon AS ct ON v.maVeTau = ct.maVeTau
-				JOIN HoaDon AS hd ON ct.maHoaDon = hd.maHoaDon
-				JOIN LoaiHoaDon AS lhd ON hd.maLoaiHoaDon = lhd.maLoaiHoaDon
-				WHERE v.trangThaiVe = N'hoạt động'
-				  AND v.ngayGioDi > GETDATE()
-				  AND (
-				        (lhd.tenLoaiHoaDon = N'Vé tập thể' AND v.ngayGioDi > DATEADD(HOUR, 24, GETDATE()))
-				     OR (lhd.tenLoaiHoaDon = N'Vé cá nhân'  AND v.ngayGioDi > DATEADD(HOUR, 4, GETDATE()))
-				);
-								""";
+		String sql =
+			    "SELECT v.* " +
+			    "FROM Ve AS v " +
+			    "JOIN ChiTietHoaDon AS ct ON v.maVeTau = ct.maVeTau " +
+			    "JOIN HoaDon AS hd ON ct.maHoaDon = hd.maHoaDon " +
+			    "JOIN LoaiHoaDon AS lhd ON hd.maLoaiHoaDon = lhd.maLoaiHoaDon " +
+			    "WHERE v.trangThaiVe = N'hoạt động' " +
+			    "AND v.ngayGioDi > GETDATE() " +
+			    "AND ( " +
+			    "    (ct.loaiHoaDonChoVeTau = N'Vé tập thể' AND v.ngayGioDi > DATEADD(HOUR, 24, GETDATE())) " +
+			    " OR (ct.loaiHoaDonChoVeTau = N'Vé cá nhân' AND v.ngayGioDi > DATEADD(HOUR, 4, GETDATE())) " +
+			    ") " ;
 
-		ResultSet rs = st.executeQuery(q);
+
+		ResultSet rs = st.executeQuery(sql);
 		while (rs.next()) {
 			String maVeTau = rs.getString(1);
 			String gaDi = rs.getString(2);
@@ -168,35 +168,36 @@ public class VeDAO {
 			ChuongTrinhKhuyenMaiDAO kmDAO = new ChuongTrinhKhuyenMaiDAO();
 			KhuyenMai km = kmDAO.getKhuyenMaiBangMa(maKhuyenMai);
 
-			System.out.println(km.toString());
+//			System.out.println(km.toString());
 			Ve v = new Ve();
 			v = new Ve(maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe,
 					maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, new ChuyenTau(maChuyenTau), kh, km, dt);
 
 			listVe3.add(v);
 		}
+		System.out.println("lấy dữ liệu hoàn vé thành công");
 		return listVe3;
+		
 	}
 
 	public ArrayList<Ve> getListHoanVeTheoCCCDKhachHang(String cccd) throws SQLException {
 		Statement st = database.connect();
 		ArrayList<Ve> listVe4 = new ArrayList<Ve>();
-		String q = """
-				SELECT v.*
-				FROM Ve AS v
-				JOIN ChiTietHoaDon AS ct ON v.maVeTau = ct.maVeTau
-				JOIN HoaDon AS hd ON ct.maHoaDon = hd.maHoaDon
-				JOIN LoaiHoaDon AS lhd ON hd.maLoaiHoaDon = lhd.maLoaiHoaDon
-				WHERE v.trangThaiVe = N'hoạt động'
-				  AND v.ngayGioDi > GETDATE()
-				  AND (
-				        (lhd.tenLoaiHoaDon = N'Vé tập thể' AND v.ngayGioDi > DATEADD(HOUR, 24, GETDATE()))
-				     OR (lhd.tenLoaiHoaDon = N'Vé cá nhân'  AND v.ngayGioDi > DATEADD(HOUR, 4, GETDATE()))
-				      )
-				  AND hd.cccdKhachHangThanhToan = """ + "'" + cccd + "'";
-		;
+		String sql =
+			    "SELECT v.* " +
+			    "FROM Ve AS v " +
+			    "JOIN ChiTietHoaDon AS ct ON v.maVeTau = ct.maVeTau " +
+			    "JOIN HoaDon AS hd ON ct.maHoaDon = hd.maHoaDon " +
+			    "JOIN LoaiHoaDon AS lhd ON hd.maLoaiHoaDon = lhd.maLoaiHoaDon " +
+			    "WHERE v.trangThaiVe = N'hoạt động' " +
+			    "AND v.ngayGioDi > GETDATE() " +
+			    "AND ( " +
+			    "    (ct.loaiHoaDonChoVeTau = N'Vé tập thể' AND v.ngayGioDi > DATEADD(HOUR, 24, GETDATE())) " +
+			    " OR (ct.loaiHoaDonChoVeTau = N'Vé cá nhân' AND v.ngayGioDi > DATEADD(HOUR, 4, GETDATE())) " +
+			    ") " +
+			    "AND hd.cccdKhachHangThanhToan = '" +cccd+"'";
 
-		ResultSet rs = st.executeQuery(q);
+		ResultSet rs = st.executeQuery(sql);
 		while (rs.next()) {
 			String maVeTau = rs.getString(1);
 			String gaDi = rs.getString(2);
@@ -234,6 +235,7 @@ public class VeDAO {
 
 			listVe4.add(v);
 		}
+		System.out.println("lấy dữ liệu vé theo cccd thành công");
 		return listVe4;
 	}
 
@@ -251,10 +253,21 @@ public class VeDAO {
 	public Ve getHoanVeBangMaVe(String maVe) throws SQLException {
 		Ve v = new Ve();
 		Statement myStmt = database.connect();
-		String query = "SELECT v.*\r\n" + "FROM Ve v\r\n" + "JOIN ChiTietHoaDon ct ON v.maVeTau = ct.maVeTau\r\n"
-				+ "WHERE v.trangThaiVe = N'hoạt động'\r\n" + "  AND v.ngayGioDi > GETDATE()\r\n" + "  AND v.maVeTau = '"
-				+ maVe + "'";
-		ResultSet rs = myStmt.executeQuery(query);
+		String sql = 
+			    "SELECT v.* " +
+			    "FROM Ve AS v " +
+			    "JOIN ChiTietHoaDon AS ct ON v.maVeTau = ct.maVeTau " +
+			    "JOIN HoaDon AS hd ON ct.maHoaDon = hd.maHoaDon " +
+			    "JOIN LoaiHoaDon AS lhd ON hd.maLoaiHoaDon = lhd.maLoaiHoaDon " +
+			    "WHERE v.trangThaiVe = N'hoạt động' " +
+			    "AND v.ngayGioDi > GETDATE() " +
+			    "AND ( " +
+			    "    (ct.loaiHoaDonChoVeTau = N'Vé tập thể' AND v.ngayGioDi > DATEADD(HOUR, 24, GETDATE())) " +
+			    " OR (ct.loaiHoaDonChoVeTau = N'Vé cá nhân' AND v.ngayGioDi > DATEADD(HOUR, 4, GETDATE())) " +
+			    ") " +
+			    "AND v.maVeTau = '"+maVe+"'";
+
+		ResultSet rs = myStmt.executeQuery(sql);
 		while (rs.next()) {
 			String maVeTau = rs.getString(1);
 			String gaDi = rs.getString(2);
@@ -290,9 +303,9 @@ public class VeDAO {
 			System.out.println(maChuyenTau);
 			v = new Ve(maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe,
 					maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, new ChuyenTau(maChuyenTau), kh, km, dt);
-			System.out.println("lấy dữ liệu vé thành công");
 		}
 
+		System.out.println("lấy dữ liệu vé theo mã hoàn thành công");
 		return v;
 	}
 

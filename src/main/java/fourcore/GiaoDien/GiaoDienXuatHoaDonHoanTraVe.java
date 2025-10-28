@@ -15,8 +15,10 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 import fourcore.Control.HoanTraVeControl;
+import fourcore.Entity.HoaDon;
 import fourcore.Entity.LichSuTuongTacVe;
 import fourcore.Entity.LoaiTuongTacVe;
+import fourcore.dao.HoaDonDAO;
 import fourcore.dao.LichSuTuongTacVe_Dao;
 import fourcore.dao.VeDAO;
 import javafx.animation.ScaleTransition;
@@ -127,7 +129,10 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 	private Window anyNodeInScene;
 	private VeDAO vedao;
 	private LichSuTuongTacVe_Dao lsttDao;
+	private HoaDonDAO hddao;
 	Map<String, Double> listVeThanhToan;
+
+	ArrayList<TextField> txtList = new ArrayList<TextField>();
 
 	public GiaoDienXuatHoaDonHoanTraVe(Map<String, Double> list) {
 		listVeThanhToan = list;
@@ -135,7 +140,7 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 
 	public void start(Stage primaryStage, Map<String, Double> list) throws IOException {
 		try {
-		
+
 			menuList = new VBox();
 			menuList.setStyle("-fx-background-color: #F7F7F7;");
 			menuList.setPrefWidth(500);
@@ -729,7 +734,7 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 		right.setPrefSize(1000, 50);
 		left.setStyle(leftStyle);
 		right.setStyle(rightStyle);
-
+		txtList.add(txtRight);
 		return new HBox(left, right);
 
 	}
@@ -864,30 +869,42 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 //				alert.setHeaderText("Bạn có muốn thanh toán cho hóa đơn hoàn trả vé này?");
 //				alert.setContentText("Hãy chọn OK để xác nhận hoặc Cancel để hủy.");
 //				Optional<ButtonType> result = alert.showAndWait();
-//			
+				String txtHoTenValue = txtHoTen.getText();
+				String txtSoGiayToValue = txtSoGiayTo.getText();
+				String txtEmailValue = txtEMail.getText();
+				String txtSDTValue = txtSdt.getText();
+				String txtDiaChiaValue = txtList.get(2).getText();
+				double tongCong = 0.0;
+				for (Map.Entry<String, Double> entry : listVeThanhToan.entrySet()) {
+					double value = entry.getValue();
+					tongCong += value;
+				}
+				HoaDon hd = new HoaDon("NV001", txtHoTenValue, txtEmailValue, txtSoGiayToValue, txtSDTValue, tongCong);
 				System.out.println("Số lượng vé trong listVeThanhToan: " + listVeThanhToan.size());
 				try {
 					this.vedao = new VeDAO();
 					this.lsttDao = new LichSuTuongTacVe_Dao();
+					this.hddao = new HoaDonDAO();
+					for (Map.Entry<String, Double> entry : listVeThanhToan.entrySet()) {
+						String key = entry.getKey();
+						System.out.println(key);
+						double value = entry.getValue();
+						System.out.print(value);
+						try {
+
+							System.out.println(vedao.ThayDoiTrangThaiVe(key, "đã hoàn trả"));
+							lsttDao.themLichSuTuongTacVe(
+									new LichSuTuongTacVe("TT" + key, new LoaiTuongTacVe("LT02", "hoàn trả"),
+											vedao.getVeBangMaVe(key), value, LocalDateTime.now()));
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						}
+					}
+					hddao.themHoaDonHoanTraVe(hd);
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				for (Map.Entry<String, Double> entry : listVeThanhToan.entrySet()) {
-					String key = entry.getKey();
-					System.out.println(key);
-					double value = entry.getValue();
-					System.out.print(value);
-					try {
-						
-						System.out.println(vedao.ThayDoiTrangThaiVe(key, "đã hoàn trả"));
-						lsttDao.themLichSuTuongTacVe(
-								new LichSuTuongTacVe("TT" + key, new LoaiTuongTacVe("LT02", "hoàn trả"),
-										vedao.getVeBangMaVe(key), value, LocalDateTime.now()));
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
-				}
+
 			});
 
 			ctrl.loadDuLieuThanhToan(listVeThanhToan, lblTongCongValue, lblSoLuongVeValue);
