@@ -83,7 +83,7 @@ public class HoaDonDAO {
 	        "INSERT INTO HoaDon (" +
 	        "maHoaDon, maLoaiHoaDon, maNhanVien, tenKhachHangThanhToan, " +
 	        "emailKhachHangThanhToan, cccdKhachHangThanhToan, " +
-	        "sdtKhachHangThanhToan, tongTien) VALUES (" +
+	        "sdtKhachHangThanhToan, diaChiKhachHangThanhToan, tongTien) VALUES (" +
 	        "'" + newMa + "', " +
 	        "'" + "LHD02" + "', " +
 	        "'" + hd.getMaNhanVien().getMaNhanVien() + "', " +
@@ -91,9 +91,10 @@ public class HoaDonDAO {
 	        "'" + hd.getEmailKhachHangThanhToan() + "', " +
 	        "'" + hd.getCccdKhachHangThanhToan() + "', " +
 	        "'" + hd.getSdtKhachHangThanhToan() + "', " +
+	        "N'" + hd.getDiaChiKhachHangThanhToan() + "', " +
 	        hd.getTongTien() +
 	        ")";
-
+	    hd.setMaHoaDon(newMa);
 	    Statement insertST = database.connect();
 	    int rows = insertST.executeUpdate(insertQuery);
 	    insertST.close();

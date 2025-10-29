@@ -27,6 +27,9 @@ public class LichSuTuongTacVe_Dao {
 		getList();
 	}
 
+	public LichSuTuongTacVe_Dao(int x) throws SQLException {
+		
+	}
 
 	public ArrayList<LichSuTuongTacVe> getList() throws SQLException {
 		LoaiTuongTac_Dao lttDao = new LoaiTuongTac_Dao();

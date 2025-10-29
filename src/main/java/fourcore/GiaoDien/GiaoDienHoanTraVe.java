@@ -11,15 +11,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
-
-
 import fourcore.Control.HoanTraVeControl;
-import fourcore.Control.ThongKeKhachHangControl;
-import fourcore.Entity.LichSuTuongTacVe;
 import fourcore.Entity.Ve;
 import fourcore.dao.ChiTietHoaDonDAO;
-import fourcore.dao.LichSuTuongTacVe_Dao;
-import fourcore.dao.LoaiHoaDonDAO;
 import fourcore.dao.VeDAO;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -30,7 +24,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -41,8 +34,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -962,15 +953,17 @@ public class GiaoDienHoanTraVe extends Application {
 						ChiTietHoaDonDAO ctDao = new ChiTietHoaDonDAO();
 						String tenloai = ctDao.getLoaiHoaDonChoVeTau(x.getMaVeTau());
 						System.out.println(tenloai);
-						pnlDataHoanTraVe.getChildren().add(taoDataChoTableHoanVe(x.getMaVeTau(), x.getChuyenTau().getMaChuyenTau(),
-								x.getGaDi() + " - " + x.getGaDen(),
-								x.getNgayGioDi().toLocalDate() + " - " + x.getNgayGioDi().toLocalTime(),
-								"Toa số " + x.getSoToa() + " chỗ " + x.getSoGhe(), tenloai, x.getTrangThaiVe(),
-								x.getKhachHang().getHoten(), x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
-								x.getKhachHang().getCccd(), x.getGiaVe(),
-								nf.format(x.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
-								nf.format(x.getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%", x.tinhThanhTien(),
-								x.tinhThanhTienThanhToanHoanTra(x.tinhPhiHoanTra(x.getNgayGioDi(), x.tinhThanhTien(), tenloai))));
+						pnlDataHoanTraVe.getChildren()
+								.add(taoDataChoTableHoanVe(x.getMaVeTau(), x.getChuyenTau().getMaChuyenTau(),
+										x.getGaDi() + " - " + x.getGaDen(),
+										x.getNgayGioDi().toLocalDate() + " - " + x.getNgayGioDi().toLocalTime(),
+										"Toa số " + x.getSoToa() + " chỗ " + x.getSoGhe(), tenloai, x.getTrangThaiVe(),
+										x.getKhachHang().getHoten(), x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
+										x.getKhachHang().getCccd(), x.getGiaVe(),
+										nf.format(x.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
+										nf.format(x.getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%",
+										x.tinhThanhTien(), x.tinhThanhTienThanhToanHoanTra(
+												x.tinhPhiHoanTra(x.getNgayGioDi(), x.tinhThanhTien(), tenloai))));
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
@@ -1013,15 +1006,16 @@ public class GiaoDienHoanTraVe extends Application {
 							ChiTietHoaDonDAO ctDao = new ChiTietHoaDonDAO();
 							String tenloai = ctDao.getLoaiHoaDonChoVeTau(x.getMaVeTau());
 							System.out.println(tenloai);
-							pnlDataHoanTraVe.getChildren().add(taoDataChoTableHoanVe(x.getMaVeTau(), x.getChuyenTau().getMaChuyenTau(),
-									x.getGaDi() + " - " + x.getGaDen(),
+							pnlDataHoanTraVe.getChildren().add(taoDataChoTableHoanVe(x.getMaVeTau(),
+									x.getChuyenTau().getMaChuyenTau(), x.getGaDi() + " - " + x.getGaDen(),
 									x.getNgayGioDi().toLocalDate() + " - " + x.getNgayGioDi().toLocalTime(),
 									"Toa số " + x.getSoToa() + " chỗ " + x.getSoGhe(), tenloai, x.getTrangThaiVe(),
 									x.getKhachHang().getHoten(), x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
 									x.getKhachHang().getCccd(), x.getGiaVe(),
 									nf.format(x.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
 									nf.format(x.getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%", x.tinhThanhTien(),
-									x.tinhThanhTienThanhToanHoanTra(x.tinhPhiHoanTra(x.getNgayGioDi(), x.tinhThanhTien(), tenloai))));
+									x.tinhThanhTienThanhToanHoanTra(
+											x.tinhPhiHoanTra(x.getNgayGioDi(), x.tinhThanhTien(), tenloai))));
 						}
 					} catch (SQLException e) {
 						e.printStackTrace();
@@ -1048,7 +1042,7 @@ public class GiaoDienHoanTraVe extends Application {
 	}
 
 	public VBox loadDuLieuLenTable() throws SQLException {
-		dao = new VeDAO();
+		dao = new VeDAO(0);
 		list = dao.getListHoanVe();
 
 		VBox box = new VBox(10);
@@ -1056,15 +1050,16 @@ public class GiaoDienHoanTraVe extends Application {
 			ChiTietHoaDonDAO ctDao = new ChiTietHoaDonDAO();
 			String tenloai = ctDao.getLoaiHoaDonChoVeTau(x.getMaVeTau());
 			System.out.println(tenloai);
-			box.getChildren().add(taoDataChoTableHoanVe(x.getMaVeTau(), x.getChuyenTau().getMaChuyenTau(),
-					x.getGaDi() + " - " + x.getGaDen(),
-					x.getNgayGioDi().toLocalDate() + " - " + x.getNgayGioDi().toLocalTime(),
-					"Toa số " + x.getSoToa() + " chỗ " + x.getSoGhe(), tenloai, x.getTrangThaiVe(),
-					x.getKhachHang().getHoten(), x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
-					x.getKhachHang().getCccd(), x.getGiaVe(),
-					nf.format(x.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
-					nf.format(x.getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%", x.tinhThanhTien(),
-					x.tinhThanhTienThanhToanHoanTra(x.tinhPhiHoanTra(x.getNgayGioDi(), x.tinhThanhTien(), tenloai))));
+			box.getChildren()
+					.add(taoDataChoTableHoanVe(x.getMaVeTau(), x.getChuyenTau().getMaChuyenTau(),
+							x.getGaDi() + " - " + x.getGaDen(),
+							x.getNgayGioDi().toLocalDate() + " - " + x.getNgayGioDi().toLocalTime(),
+							"Toa số " + x.getSoToa() + " chỗ " + x.getSoGhe(), tenloai, x.getTrangThaiVe(),
+							x.getKhachHang().getHoten(), x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
+							x.getKhachHang().getCccd(), x.getGiaVe(),
+							nf.format(x.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
+							nf.format(x.getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%", x.tinhThanhTien(),
+							x.tinhThanhTienThanhToanHoanTra(x.tinhPhiHoanTra(x.getNgayGioDi(), x.getGiaVe(), tenloai))));
 		}
 		return box;
 	}

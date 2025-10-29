@@ -63,10 +63,16 @@ public class LichSuTuongTacVe {
 		setNgayTuongTac(ngayTuongTac);
 	}
 
-	public double tinhTongTien() {
-		double giamDT = veTau.getGiaVe() * veTau.getDoiTuongGiamGia().giaTriPhanTramGiamGia * 0.01;
-		double giamKM = veTau.getGiaVe() * veTau.getKhuyenMai().getGiaTriPhanTramKhuyenMai() * 0.01;
-		return veTau.getGiaVe() - giamDT - giamKM + giaTriChenhLech;
+	public double tinhTongTien(String loai) {
+		if (loai.equalsIgnoreCase("bán")) {
+			return this.veTau.getGiaVe();
+		} else if (loai.equalsIgnoreCase("hoàn trả")) {
+			return this.veTau.getGiaVe() - this.getGiaTriChenhLech();
+		} else if (loai.equalsIgnoreCase("đổi")) {
+
+		}
+		return 0.0;
+
 	}
 
 }
