@@ -1118,7 +1118,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 
 					pnlDataDoiVe.getChildren().clear();
 
-					// Nếu người dùng nhập mã vé để tìm kiếm
+
 					if (maVeGetText != null && !maVeGetText.trim().isEmpty()) {
 						for (LichSuTuongTacVe x : list) {
 							if (x.getLoaiTuongTacVe().getTenLoaiTuongTac().equalsIgnoreCase("hoàn trả")
