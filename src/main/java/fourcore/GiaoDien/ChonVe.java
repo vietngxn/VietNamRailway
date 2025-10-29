@@ -870,6 +870,7 @@ public class ChonVe extends Application {
             VBox slChoDatBox = new VBox();
             Label slChoDatLabel = new Label("SL chỗ đặt");
             slChoDatLabel.setFont(interRegular13);
+            gheNgoiDAO.getListTrenChuyenTau();
             int soChoDaDat = gheNgoiDAO.tongSoGheTrenChuyen(c.getMaChuyenTau())- gheNgoiDAO.soGheTrongTrenChuyen(c.getMaChuyenTau());
             Label soChoDat = new Label(""+ soChoDaDat);
             soChoDat.setTranslateX(20);
@@ -1042,8 +1043,7 @@ public class ChonVe extends Application {
 
     }
     public boolean checkToaTrong(String maToa) throws SQLException {
-
-        ArrayList<GheTrenChuyenTau> listGheTrenChuyenTau =  gheNgoiDAO.getListGheTrenChuyenTau();
+        ArrayList<GheTrenChuyenTau> listGheTrenChuyenTau =  gheNgoiDAO.getListTrenChuyenTau();
 
         int cnt=0;
         for (GheTrenChuyenTau gtc : listGheTrenChuyenTau){

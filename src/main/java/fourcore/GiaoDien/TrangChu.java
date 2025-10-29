@@ -995,7 +995,13 @@ public class TrangChu extends Application {
 			quanLiKhachHangBox.setOnMouseClicked(event -> {
 				KhachHangControl khachHangControl = new KhachHangControl();
 				khachHangControl.handleMenuTrangChuSelect(root);
-			});
+                try {
+                    khachHangControl.handleThemKhachHangSelect(root);
+                    khachHangControl.suaThongTinKhachHangSelect(root);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
 
 			thongKeKhachHang.setOnMouseClicked(event -> {
 				ThongKeKhachHangControl thongKeKhachHangControl = new ThongKeKhachHangControl();

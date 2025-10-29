@@ -122,7 +122,7 @@ public class VeDAO {
 
 		Statement st = database.connect();
 		String sql =
-			    "SELECT v.* " +
+			    "SELECT DISTINCT v.* " +
 			    "FROM Ve AS v " +
 			    "JOIN ChiTietHoaDon AS ct ON v.maVeTau = ct.maVeTau " +
 			    "JOIN HoaDon AS hd ON ct.maHoaDon = hd.maHoaDon " +

@@ -799,16 +799,16 @@ public class GiaoDienXuatHoaDon extends Application {
             HoaDon hoaDon = new HoaDon(nhanVien,loaiHoaDon,txtHoTenValue,txtEmailValue,txtSoGiayToValue,txtSDTValue,txtDiaChiaValue,ngayThanhToan,tongTien);
             HoaDon hoaDon2 = banVeDAO.themHoaDon(hoaDon);
 
-            Ve veTau = new Ve();
+            ArrayList<Ve> listVe = new ArrayList<>();
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("veTau.dat"))) {
-                veTau = (Ve) ois.readObject();
-                System.out.println("vé đã đọc: " + veTau);
+                listVe = (ArrayList<Ve>) ois.readObject();
+                System.out.println("vé đã đọc: " + listVe);
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
             for(int i =0 ; i< banVeDAO.listGheTrenChuyenTau.size();i++){
-                banVeDAO.themCTHoaDon(hoaDon2,veTau,banVeDAO.listGheTrenChuyenTau.get(i),banVeDAO.ctkmSelected);
-                banVeDAO.themLichSuTuongTacVe(veTau,ctkmSelected,banVeDAO.listGheTrenChuyenTau.get(i));
+                banVeDAO.themCTHoaDon(hoaDon2,listVe.get(i),banVeDAO.listGheTrenChuyenTau.get(i),banVeDAO.ctkmSelected);
+                banVeDAO.themLichSuTuongTacVe(listVe.get(i),ctkmSelected,banVeDAO.listGheTrenChuyenTau.get(i));
                 System.out.println("them lich su ");
             }
 

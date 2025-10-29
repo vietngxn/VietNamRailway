@@ -79,6 +79,7 @@ public class GheNgoiDAO {
     }
 
     public ArrayList<GheTrenChuyenTau> getListTrenChuyenTau() throws SQLException {
+        listGheTrenChuyenTau.clear();
         Statement myStmt = databaseConnector.connect();
         String query = "select * from GheTrenChuyenTau";
         ResultSet rs = myStmt.executeQuery(query);

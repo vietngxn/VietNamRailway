@@ -908,7 +908,7 @@ public class QuanLyKhachHang extends Application {
 			
 			create_layout_button();
 			primaryStage.setFullScreen(true);
-			primaryStage.show();
+//			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -1088,7 +1088,12 @@ public class QuanLyKhachHang extends Application {
 		noiDungChinh.getChildren().add(table_layout);
 	}
 	
-	
+	public Button getThemKH_Button() {
+        return btn_themkh;
+    }
+    public Button getBtn_capnhat() {
+        return btn_capnhat;
+    }
 	public void create_layout_button()
 	{
 		layout_button = new HBox();
@@ -1201,13 +1206,10 @@ public class QuanLyKhachHang extends Application {
 			     String doiTuong = ((Label)((StackPane)selectedRow.getChildren().get(5)).getChildren().get(0)).getText();
 			     
 			     KhachHang kh = new KhachHang(maKH, hoTen, sdt, email, cccdPassport, cccdPassport, doiTuong);
-			     File file = new File("KhachHang.dat");
-			        if (file.exists()) {
-			            file.delete(); 
-			        }
 			     try {
 					ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("KhachHang.dat"));
 					oos.writeObject(kh);
+                    System.out.println("Ghi file khach hang thanh cong");
 					
 				} catch (FileNotFoundException e1) {
 					// TODO Auto-generated catch block

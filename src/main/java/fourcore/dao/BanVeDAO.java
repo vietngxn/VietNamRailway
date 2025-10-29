@@ -289,6 +289,7 @@ return hoaDon;
     }
 
     public void themVe() throws SQLException {
+        ArrayList<Ve> listVe = new ArrayList<>();
         Statement myStmt = databaseConnector.connect();
         Connection con = (Connection) databaseConnector.getInstance().getConnection();
         for(int i=0;i<listGheTrenChuyenTau.size();i++) {
@@ -302,14 +303,8 @@ return hoaDon;
                     checkThuTuToa(listGheTrenChuyenTau.get(i)),listGheTrenChuyenTau.get(i).getGheNgoi().getKhoangTau().getSoKhoang(),listGheTrenChuyenTau.get(i).getGheNgoi().getTang().getSoTang(),
                     listGheTrenChuyenTau.get(i).getGheNgoi().getSoGhe(),loaiVe,mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getCccd(),tinhTienVe(ctkmSelected,listGheTrenChuyenTau.get(i)),
                     null,"chưa đổi","hoạt động",listGheTrenChuyenTau.get(i).getChuyenTau(),kh,ctkmSelected,getDoiTuong(listGheTrenChuyenTau.get(i)));
+            listVe.add(veTau);
 
-            File file = new File("veTau.dat");
-            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
-                oos.writeObject(veTau);
-                System.out.println("✅ Đã ghi " + veTau + " vào file: " + file.getAbsolutePath());
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
 
 
             String insertVe = "INSERT INTO Ve " +
@@ -340,7 +335,13 @@ return hoaDon;
             System.out.println("Thêm vé thành công");
 
             updateTrangThaiGheTrenChuyenTau(listGheTrenChuyenTau.get(i));
-
+            File file = new File("veTau.dat");
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+                oos.writeObject(listVe);
+                System.out.println("✅ Đã ghi " + listVe + " vào file: " + file.getAbsolutePath());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
 
 
         }
