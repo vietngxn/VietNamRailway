@@ -41,10 +41,10 @@ public class HoanTraVeControl {
 		handleMenuTrangChuSelect(root);
 		listVeThanhToan = gdHoan.traVeListVeThanhToan();
 		gdXuat = new GiaoDienXuatHoaDonHoanTraVe(listVeThanhToan);
-		gdHoan.traVeNutHoanVe().setOnMouseClicked(event_ -> {
+		gdHoan.traVeNutHoanVe().setOnMouseClicked(event -> {
 			try {
-				Stage gdStage = new Stage();
-				gdXuat.start(gdStage);
+//				Stage gdStage = new Stage();
+//				gdXuat.start(gdStage);
 				VBox gdMain = gdXuat.getNoiDungChinhVe();
 				root.setCenter(gdMain);
 				loadDuLieuThanhToan(listVeThanhToan, gdXuat.getlblTongCongValue(), gdXuat.getlblSoLuongValue());
