@@ -248,7 +248,6 @@ CREATE TABLE Ve (
     maKhachHang NVARCHAR(20) NOT NULL,
     maKhuyenMai NVARCHAR(20) NULL,
     maDoiTuongGiamGia NVARCHAR(20) NOT NULL,
-	isRemove BIT NOT NULL DEFAULT 0,
     FOREIGN KEY (maChuyenTau) REFERENCES ChuyenTau(maChuyenTau),
     FOREIGN KEY (maKhachHang) REFERENCES KhachHang(maKhachHang),
     FOREIGN KEY (maKhuyenMai) REFERENCES KhuyenMai(maKhuyenMai),

@@ -874,15 +874,23 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 			VBox.setMargin(pnlThanhToanButton, new Insets(0, 0, 0, 20));
 			hieuUngHover(btnThanhToan);
 			hieuUngHover(btnTroLai);
+
 			btnThanhToan.setOnMouseClicked(event -> {
 
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setTitle("Xác nhận");
 				alert.setHeaderText("Bạn có muốn thanh toán cho hóa đơn hoàn trả vé này?");
 				alert.setContentText("Hãy chọn OK để xác nhận hoặc Cancel để hủy.");
+
+				ButtonType buttonYes = new ButtonType("Có");
+				ButtonType buttonNo = new ButtonType("Không");
+
+				alert.getButtonTypes().setAll(buttonYes, buttonNo);
+
 				Optional<ButtonType> result = alert.showAndWait();
 
-				if (result.isPresent() && result.get() == ButtonType.YES) {
+				if (result.isPresent() && result.get() == buttonYes) {
+
 					String txtHoTenValue = txtHoTen.getText();
 					String txtSoGiayToValue = txtSoGiayTo.getText();
 					String txtEmailValue = txtEMail.getText();
@@ -907,11 +915,11 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 							double value = entry.getValue();
 							System.out.print(value);
 							try {
-
 								System.out.println(vedao.ThayDoiTrangThaiVe(key, "đã hoàn trả"));
+								Ve ve = vedao.getVeBangMaVe(key);
 								lsttDao.themLichSuTuongTacVe(
-										new LichSuTuongTacVe("TT" + key, new LoaiTuongTacVe("LT02", "hoàn trả"),
-												vedao.getVeBangMaVe(key), value, LocalDateTime.now()));
+										new LichSuTuongTacVe("TT" + key, new LoaiTuongTacVe("LT02", "hoàn trả"), ve,
+												ve.getGiaVe() - value, LocalDateTime.now()));
 							} catch (SQLException e1) {
 								e1.printStackTrace();
 							}
@@ -928,6 +936,10 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
+
+				} else {
+					System.out.println("Người dùng chọn No: hủy thanh toán");
+
 				}
 
 			});
