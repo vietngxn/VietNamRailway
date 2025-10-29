@@ -1106,7 +1106,11 @@ public class QuanLyCTKM extends Application {
 		btn_xoaCTKM.setOnMouseClicked(event -> {
 			if(hangchon.size() == 0)
 			{
-				
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Thông Báo");
+				alert.setHeaderText(null);
+				alert.setContentText("Vui Lòng chỉ chọn 1 Chương Trình Khuyến Mãi Để Cập Nhật");
+				alert.showAndWait();
 			}
 			else {
 				ArrayList<GridPane> dsxoa = new ArrayList<GridPane>(hangchon);

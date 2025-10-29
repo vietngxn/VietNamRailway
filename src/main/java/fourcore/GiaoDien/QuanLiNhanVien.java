@@ -925,7 +925,7 @@ public class QuanLiNhanVien extends Application {
 		lbl_timkiem.setStyle("-fx-font-family: 'Inter';-fx-font-weight:bold;-fx-font-size:18px;-fx-text-fill : #00BACB;");
 	
 		ImageView img_timkiem = new ImageView(getClass().getResource("/images/copy/lookup.png").toExternalForm());
-		img_timkiem.setTranslateX(410);
+		img_timkiem.setTranslateX(510);
 		img_timkiem.setFitHeight(25);
 		img_timkiem.setFitWidth(25);
 		layout_lbl_timkiem.getChildren().addAll(lbl_timkiem,img_timkiem);

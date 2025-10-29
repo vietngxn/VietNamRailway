@@ -321,4 +321,17 @@ public class VeDAO {
 		int rows = st.executeUpdate(q);
 		return rows > 0;
 	}
+	
+	public double getGiaVe(String maVe) throws SQLException
+	{
+		Statement st = database.connect();
+		double GiaVe = 0;
+		String sql = "SELECT giaVe FROM Ve WHERE maVeTau = '" + maVe + "'";
+		ResultSet rs = st.executeQuery(sql);
+		while(rs.next()) {
+			GiaVe = rs.getDouble(1);
+		}
+		return GiaVe;
+		
+	}
 }

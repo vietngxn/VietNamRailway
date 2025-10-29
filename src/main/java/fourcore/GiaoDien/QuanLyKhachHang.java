@@ -1051,9 +1051,9 @@ public class QuanLyKhachHang extends Application {
 		tableCol.add(paneCol1, 0, 0);
 		tableCol.add(paneCol2, 1, 0);
 		tableCol.add(paneCol3, 2, 0);
-		tableCol.add(paneCol4, 3, 0);
-		tableCol.add(paneCol5, 4, 0);
-		tableCol.add(paneCol6, 5, 0);
+//		tableCol.add(paneCol4, 3, 0);
+//		tableCol.add(paneCol5, 4, 0);
+		tableCol.add(paneCol6, 3, 0);
 		
 		table_layout.getChildren().add(tableCol);
 		table_desc = new VBox();
@@ -1188,7 +1188,11 @@ public class QuanLyKhachHang extends Application {
 		btn_capnhat.setOnMouseClicked(e-> {
 			if(hangchon.size() ==0 || hangchon.size() > 1)
 			{
-				System.out.println("Lỗi");
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Thông Báo");
+				alert.setHeaderText(null);
+				alert.setContentText("Vui Lòng Chọn 1 Khách Hàng !");
+				alert.showAndWait();
 			}
 			else {
 				 GridPane selectedRow = hangchon.get(0);
@@ -1278,9 +1282,9 @@ public class QuanLyKhachHang extends Application {
 	    data.add(paneData1, 0, 0);
 	    data.add(paneData2, 1, 0);
 	    data.add(paneData3, 2, 0);
-	    data.add(paneData5, 3, 0);
-	    data.add(paneData4, 4, 0);
-	    data.add(paneData6, 5, 0);
+//	    data.add(paneData5, 3, 0);
+//	    data.add(paneData4, 4, 0);
+	    data.add(paneData6, 3, 0);
 	    
 	    lblmaKhachHang.setTranslateX(-20);
 	    lblhoTen.setTranslateX(-10);

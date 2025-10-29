@@ -1029,11 +1029,11 @@ public class QuanLiHoaDon extends Application {
 	    table_desc.setSpacing(20);
 	    
 	    
+	    
 	    for(HoaDon hd : listhd) {
-	        KhachHang kh = hddao.getKH(hd.getMaHoaDon());
 	        
 	        
-	        create_layout_dong(hd.getMaHoaDon(), kh.getHoten(), kh.getSdt(), hd.getNgayThanhToan(), hd.getTongTien());
+	        create_layout_dong(hd.getMaHoaDon(), hd.getTenKhachHangThanhToan(), hd.getSdtKhachHangThanhToan(), hd.getNgayThanhToan(), hd.getTongTien());
 	        
 	    }
 	    

@@ -39,6 +39,15 @@ public class HoaDon {
 		tongTien = tongTienHD;
 	}
 
+	public HoaDon(String maHoaDon, String tenKhachHangThanhToan, String sdtKhachHangThanhToan,
+			LocalDateTime ngayThanhToan, double tongTien) {
+		this.maHoaDon = maHoaDon;
+		this.tenKhachHangThanhToan = tenKhachHangThanhToan;
+		this.sdtKhachHangThanhToan = sdtKhachHangThanhToan;
+		this.ngayThanhToan = ngayThanhToan;
+		this.tongTien = tongTien;
+	}
+
 	public HoaDon(String maNhanVien, String tenKhachHangThanhToan, String emailKhachHangThanhToan,
 			String cccdKhachHangThanhToan, String sdtKhachHangThanhToan, String diaChi, double tongTien) {
 		setMaNhanVien(new NhanVien(maNhanVien));

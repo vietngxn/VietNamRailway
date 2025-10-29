@@ -24,6 +24,9 @@ public class ChucVu {
 		setTenChucVu(tenChucVu);
 	}
 	
+	public ChucVu(String maChucVu) {
+		this.maChucVu = maChucVu;
+	}
 	public ChucVu() {
 	}
 

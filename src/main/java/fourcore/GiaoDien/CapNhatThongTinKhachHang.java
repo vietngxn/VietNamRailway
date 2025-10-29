@@ -727,47 +727,7 @@ public class CapNhatThongTinKhachHang extends Application {
 		sceneThemCTKM.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 			
 		
-		buttoncapNhat.setOnAction(e-> {
-		    String ten = txtTenKH.getText();
-		    String sdt = txtSoDienThoai.getText();
-		    String email = txtemail.getText();
-		    String cccd = txtCCCD.getText();	
-		    String passport = txtPassport.getText();
-		    String doiTuong = txtcomboDoiTuong.getText();
-		    
-		    try {
-		        // Lấy số lượng khách hàng hiện tại từ database
-		        int sl = khdao.getListKhachHang().size();
-		        sl += 1; // Tăng lên 1 cho khách hàng mới
-		        
-		        String makh = "";
-		        if(sl >= 1 && sl <= 9) {
-		            makh = "KH00" + sl;
-		        }
-		        else if(sl >= 10 && sl <= 99) {
-		            makh = "KH0" + sl;
-		        }
-		        else {
-		            makh = "KH" + sl;
-		        }
-		        
-		        KhachHang kh = new KhachHang(makh, ten, sdt, email, cccd, passport, doiTuong);
-		        
-		        if(khdao.themKhachHang(kh)) {
-		            System.out.println("Thêm Thành Công - Mã KH: " + makh);
-		            // Clear form sau khi thêm thành công
-		            txtTenKH.clear();
-		            txtSoDienThoai.clear();
-		            txtemail.clear();
-		            txtCCCD.clear();
-		            txtPassport.clear();
-		            txtcomboDoiTuong.clear();
-		            comboDoiTuong.setValue(null);
-		        }
-		    } catch (SQLException e1) {
-		        e1.printStackTrace();
-		    }
-		});
+		
 
 		
 		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("KhachHang.dat"))) {

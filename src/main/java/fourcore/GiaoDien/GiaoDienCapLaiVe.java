@@ -259,28 +259,33 @@ public class GiaoDienCapLaiVe extends Application {
         pnlsubCT1.addRow(0, taoSubCT1("Họ tên", ve1.getKhachHang().getHoten(), leftStyle, rightStyle));
         pnlsubCT1.addRow(1,
                 taoSubCT1("Đối tượng", ve1.getDoiTuongGiamGia().getTenDoiTuongGiamGia(), leftStyle, rightStyle));
+        
         pnlsubCT1.addRow(2, taoSubCT1("Số giấy tờ", ve1.getKhachHang().getCccd(), leftStyle, rightStyle));
 
         // Các panel giá trị
         String lblCTStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 18px;";
         String lblValueCTStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 30px;";
 
+        
         // LichSuTuongTacVe lstt = new vedao1.get
-        VBox pnlsubCT2 = taoSubCT2("Giá vé", nf.format(ve1.getGiaVe()), lblCTStyle, lblValueCTStyle);
+//        VBox pnlsubCT2 = taoSubCT2("Giá vé", nf.format(ve1.getGiaVe()), lblCTStyle, lblValueCTStyle);
         VBox pnlsubCT3 = taoSubCT2("Giảm đối tượng", nf.format(ve1.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()),
                 lblCTStyle, lblValueCTStyle);
         VBox pnlsubCT4 = taoSubCT2("Khuyến mãi", nf.format(ve1.getKhuyenMai().getGiaTriPhanTramKhuyenMai()), lblCTStyle,
                 lblValueCTStyle);
         double phanTramGiam = (ve1.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()
                 + ve1.getKhuyenMai().getGiaTriPhanTramKhuyenMai()) / 100;
-        VBox pnlsubCT5 = taoSubCT2("Thành tiền", nf.format(ve1.getGiaVe() * (1 - phanTramGiam)), lblCTStyle,
+        
+        double giave = vedao.getGiaVe(maVeTau);
+        
+        VBox pnlsubCT5 = taoSubCT2("Thành tiền", String.valueOf(giave), lblCTStyle,
                 lblValueCTStyle);
 
         pnlsubCT1.setPrefWidth(400);
-        for (Pane pnl : new Pane[] { pnlsubCT2, pnlsubCT3, pnlsubCT4, pnlsubCT5 })
+        for (Pane pnl : new Pane[] { pnlsubCT3, pnlsubCT4, pnlsubCT5 })
             pnl.setPrefWidth(320);
 
-        pnlThongTinChiTiet.getChildren().addAll(pnlsubCT1, pnlsubCT2, pnlsubCT3, pnlsubCT4, pnlsubCT5);
+        pnlThongTinChiTiet.getChildren().addAll(pnlsubCT1,  pnlsubCT3, pnlsubCT4, pnlsubCT5);
         pnlReturn.getChildren().add(pnlThongTinChiTiet);
 
         pnlThongTinChiTiet.setManaged(false);
@@ -392,7 +397,14 @@ public class GiaoDienCapLaiVe extends Application {
     private VBox taoSubCT2(String title, String value, String labelStyle, String valueStyle) {
         Label lblTitle = new Label(title);
         lblTitle.setStyle(labelStyle);
-        Label lblValue = new Label(value);
+        Label  lblValue = new Label();
+        if(title.equalsIgnoreCase("giảm đối tượng") || title.equalsIgnoreCase("khuyến mãi"))
+        {
+        	lblValue = new Label(value+"%");
+        }
+        else {
+        	lblValue = new Label(value);
+        }
         lblValue.setStyle(valueStyle);
         VBox box = new VBox(5, new StackPane(lblTitle), new StackPane(lblValue));
         box.setAlignment(Pos.CENTER);
