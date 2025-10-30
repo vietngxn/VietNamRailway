@@ -6,11 +6,12 @@ import fourcore.Entity.HanhTrinh;
 import fourcore.Entity.KhuyenMai;
 import fourcore.Entity.Tau;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+
+import java.util.List;
 
 public class ChuyenTauDAO {
     DatabaseConnector databaseConnector = new DatabaseConnector();
@@ -42,6 +43,20 @@ public class ChuyenTauDAO {
         }
         return listChuyenTau;
     }
+    public String getMaChuyenTauCuoiCung() {
+        String maChuyenTau = null;
+        try {
+            Statement myStmt = databaseConnector.connect();
+            String sql = "Select top 1 maChuyenTau From ChuyenTau Order By maChuyenTau DESC";
+            ResultSet rs = myStmt.executeQuery(sql);
+            if(rs.next()) {
+                maChuyenTau = rs.getString(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return maChuyenTau;
+    }
     public ChuyenTau getChuyenTauBangMa(String maChuyenTauInput) throws SQLException {
         for (ChuyenTau c : listChuyenTau) {
             if (c.getMaChuyenTau().equals(maChuyenTauInput)) {
@@ -49,5 +64,40 @@ public class ChuyenTauDAO {
             }
         }
         return null;
+    }
+    public List<String> getListMaHanhTrinhTheoNgay(LocalDate ngayKhoiHanh) {
+        Date ngayGioDi = Date.valueOf(ngayKhoiHanh);
+
+        List<String> danhSachMaHanhTrinh = new ArrayList<>();
+        String sql = "SELECT maHanhTrinh FROM ChuyenTau WHERE CAST(ngayGioDi AS DATE) = ?";
+
+        try {
+            PreparedStatement ps = (PreparedStatement) databaseConnector.connect().getConnection().prepareStatement(sql);
+            ps.setDate(1, ngayGioDi);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                danhSachMaHanhTrinh.add(rs.getString("maHanhTrinh"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return danhSachMaHanhTrinh;
+    }
+    public boolean addChuyenTauVaoDB(ChuyenTau chuyenTau) {
+        String sql = "Insert Into ChuyenTau Values(?, ?, ?, ?, ?, ?)";
+        int n = 0;
+        try {
+            PreparedStatement ps = (PreparedStatement) databaseConnector.connect().getConnection().prepareStatement(sql);
+            ps.setString(1, chuyenTau.getMaChuyenTau());
+            ps.setString(2, chuyenTau.getTau().getMaTau());
+            ps.setString(3, chuyenTau.getHanhTrinh().getMaHanhTrinh());
+            ps.setTimestamp(4, Timestamp.valueOf(chuyenTau.getNgayGioDi()));
+            ps.setTimestamp(5, Timestamp.valueOf(chuyenTau.getNgayGioDen()));
+            ps.setDouble(6, chuyenTau.getGiaCuocTrenChuyenTau());
+            n = ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return n > 0;
     }
 }

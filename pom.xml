@@ -35,6 +35,12 @@
             <artifactId>mssql-jdbc</artifactId>
             <version>12.8.0.jre11</version>
         </dependency>
+        <!-- gsonFileHuuTien-->
+         <dependency>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		    <version>2.10.1</version>
+		</dependency>
     </dependencies>
 
     <build>

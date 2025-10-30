@@ -4,6 +4,7 @@ module VietNamRailwayInterface {
 	requires javafx.graphics;
 
     requires java.sql;
+    requires com.google.gson;
     exports fourcore.Entity;
     exports fourcore.GiaoDien;
 

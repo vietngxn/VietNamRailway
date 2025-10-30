@@ -6,6 +6,7 @@ import fourcore.Entity.LoaiTau;
 import fourcore.Entity.LoaiToaTau;
 import fourcore.Entity.ToaTau;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -68,4 +69,69 @@ public class ToaTauDAO {
         }
         return null;
     }
+    public ToaTau getToaTauTheoMa(String maToaTau) throws SQLException {
+        listToaTau = getListToaTau();
+        for(ToaTau tt : listToaTau) {
+            if(tt.getMaToaTau().equalsIgnoreCase(maToaTau)) return tt;
+        }
+        return null;
+    }
+
+    public ArrayList<ToaTau> getListToaTauTheoLoaiTau(String tenLoaiTau) throws SQLException {
+        String maLoaiToa = null;
+        if(tenLoaiTau.equalsIgnoreCase("SE1") || tenLoaiTau.equalsIgnoreCase("SE9")) maLoaiToa = "LTToa01";
+        LoaiToaTau loaiToaTau = loaiToaTauDAO.getLoaiToaTau(maLoaiToa);
+        ArrayList<ToaTau> listToaTheoLoaiTau = new ArrayList<>();
+        String sql = "Select * From ToaTau where maLoaiToaTau = ?";
+        try {
+            PreparedStatement ps = (PreparedStatement) databaseConnector.connect().getConnection().prepareStatement(sql);
+            ps.setString(1, maLoaiToa);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String maToa = rs.getString(1);
+                String tenToa = rs.getString(3);
+                int soGhe = rs.getInt(4);
+                ToaTau toaTau = new ToaTau(maToa, tenToa, soGhe, loaiToaTau);
+                listToaTheoLoaiTau.add(toaTau);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listToaTheoLoaiTau;
+
+    }
+
+    public ArrayList<ToaTau> getListToaTauTenToaTau(String tenLoaiTau) throws SQLException {
+	
+		String tenLoaiToa = null;
+		if(tenLoaiTau.equalsIgnoreCase("SE1") || tenLoaiTau.equalsIgnoreCase("SE9")) tenLoaiToa = "Toa thường";
+		ArrayList<ToaTau> listToaTheoLoaiTau = new ArrayList<>();
+		String sql = "Select * From ToaTau where tenToaTau = ?";
+		try {
+			PreparedStatement ps = (PreparedStatement) databaseConnector.connect().getConnection().prepareStatement(sql);
+			ps.setString(1, tenLoaiToa);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				String maToa = rs.getString(1);
+				String maLoaiToaTau = rs.getString(2);
+				LoaiToaTau loaiToaTau = loaiToaTauDAO.getLoaiToaTau(maLoaiToaTau);
+				String tenToa = rs.getString(3);
+				int soGhe = rs.getInt(4);
+				ToaTau toaTau = new ToaTau(maToa, tenToa, soGhe, loaiToaTau);
+				listToaTheoLoaiTau.add(toaTau);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listToaTheoLoaiTau;
+		
+	}
+	public ToaTau getToaTauTheoMaAndList(String maToaTau, ArrayList<ToaTau> listToaTau) {
+		for(ToaTau tt: listToaTau) {
+			if(tt.getMaToaTau().equalsIgnoreCase(maToaTau)) return tt;
+		}
+		return null;
+		
+	}
+
 }

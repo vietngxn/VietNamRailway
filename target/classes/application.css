@@ -293,3 +293,80 @@
 .radio-button:selected .dot {
     -fx-background-color: #00BACB;          /* Màu của chấm nhỏ */
 }
+#table_ThemToaTau {
+	-fx-font-size: 18px;
+}
+.table-view {
+	-fx-background-color: transparent;
+}
+.table-view .column-header {
+	-fx-background-color: transparent;
+}
+.column-header-background {
+    -fx-background-color: transparent;
+}
+.table-row-cell {
+	-fx-background-color: rgba(0, 186, 203 ,0.3);
+	-fx-background-radius: 20px;
+    -fx-border-color: transparent;
+    -fx-margin: 10 0 10 0;
+    -fx-padding: 15 0 15 0;
+}
+.table-cell {
+	-fx-alignment: CENTER;
+    -fx-text-fill: #222;
+    -fx-font-weight: bold;
+    -fx-font-size: 22px;
+    -fx-border-width: 0;
+}
+.table-row-cell:empty {
+    -fx-background-color: transparent;
+}
+.table-view .scroll-bar:vertical,
+.table-view .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-max-width: 0;
+    -fx-pref-width: 0;
+    -fx-min-width: 0;
+    -fx-max-height: 0;
+    -fx-pref-height: 0;
+    -fx-min-height: 0;
+}
+.selected-row {
+    -fx-background-color: #e1f5fe;
+    -fx-background-radius: 200px;
+    -fx-border-radius: 200px;
+    -fx-border-color: #26c6da;
+    -fx-border-width: 2px;
+}
+ /*.table-row-cell:selected  {
+    -fx-background-color: #e1f5fe;
+    -fx-background-radius: 200px;
+    -fx-border-radius: 200px;
+    -fx-border-color: #26c6da;
+    -fx-border-width: 2px;
+} */
+#table_DauTau .table-row-cell:selected {
+	-fx-background-color: #e1f5fe;
+    -fx-background-radius: 200px;
+    -fx-border-radius: 200px;
+    -fx-border-color: #26c6da;
+    -fx-border-width: 2px;
+}
+#lbl_Toa {
+	-fx-font-weight: bold;
+}
+#txt_ThemChuyenTau{
+	-fx-font-size: 18px;
+	-fx-border-color: #00BACB;
+	-fx-border-width: 2px;
+	-fx-background-color: transparent;
+	-fx-text-fill: #00BACB;
+	-fx-border-radius: 15px;
+	-fx-prompt-text-fill: #00BACB;
+	-fx-font-weight: bold;
+}
+#txt_ThemChuyenTau .text-field:prompt-text {
+    -fx-prompt-text-fill: #00BACB;
+    -fx-prompt-font-size: 18px;
+}

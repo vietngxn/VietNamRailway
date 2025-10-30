@@ -26,6 +26,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -1028,8 +1029,14 @@ public class TrangChu extends Application {
 			});
 			quanLiChuyenTauBox.setOnMouseClicked(event -> {
 				ChuyenTauControl chuyenTauControl = new ChuyenTauControl();
-				chuyenTauControl.handleMenuTrangChuSelect(root);
-			});
+                try {
+                    chuyenTauControl.handleMenuTrangChuSelect(root);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
 
 			// ------------------------------------------------------------------------------------------------------
 			BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));

@@ -3,10 +3,13 @@ package fourcore.dao;
 import fourcore.DatabaseConnector.DatabaseConnector;
 import fourcore.Entity.*;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GheNgoiDAO {
     DatabaseConnector databaseConnector = new DatabaseConnector();
@@ -167,39 +170,80 @@ public class GheNgoiDAO {
         }
         return null;
     }
+    //-------------------------------------------------------tien
+    public Map<String, ArrayList<GheNgoi>> getMapGheTheoToa(String maToaTauSQl) throws SQLException {
+        Map<String, ArrayList<GheNgoi>> mapGheTheoToa = new HashMap<>();
+        String query = "Select * from GheNgoi where maToaTau in (" + maToaTauSQl + ")";
+        Statement myStmt = databaseConnector.connect();
+        ResultSet rs = myStmt.executeQuery(query);
+        while(rs.next()) {
+
+            String maGheNgoi = rs.getString(1);
+
+            String maTang = rs.getString(2);
+            Tang tang = tangDAO.getTang(maTang);
+
+            String maLoaiGhe = rs.getString(3);
+            LoaiGhe loaiGhe = loaiGheDAO.getLoaiGhe(maLoaiGhe);
+
+            String maKhoangTau = rs.getString(4);
+            KhoangTau khoangTau = khoangTauDAO.getKhoang(maKhoangTau);
+
+            String maToaTau = rs.getString(5);
+            ToaTau toaTau = toaTauDAO.getToaTauTheoMa(maToaTau);
+
+            int soGhe = rs.getInt(6);
+            double giaTriTangThem = rs.getDouble(7);
+            boolean luuDong = rs.getBoolean(8);
+            GheNgoi gheNgoi = new GheNgoi(maGheNgoi, loaiGhe, tang, khoangTau, toaTau, soGhe, giaTriTangThem, luuDong);
+            mapGheTheoToa.computeIfAbsent(maToaTau, ma -> new ArrayList<>()).add(gheNgoi);
+        }
+        return mapGheTheoToa;
+    }
+    public ArrayList<GheNgoi> getAllGheCuaToa(String maToaTau) throws SQLException {
+
+        ArrayList<GheNgoi> danhSachGhe = getListGheNgoi();
+        ArrayList<GheNgoi> danhSachGheCuaToa = new ArrayList<GheNgoi>();
+        for( GheNgoi gn : danhSachGhe) {
+            if(gn.getToaTau().getMaToaTau().equalsIgnoreCase(maToaTau)) danhSachGheCuaToa.add(gn);
+        }
+        return danhSachGheCuaToa;
+
+    }
+    public boolean capNhatGiaTriTangThem(String maGhe, double giaTriTangThem) {
+        int n = 0;
+        String sql = "Update GheNgoi set giaTriTangThem = ? where maGheNgoi = ?";
+        try {
+            PreparedStatement ps = (PreparedStatement) databaseConnector.connect().getConnection().prepareStatement(sql);
+            ps.setDouble(1, giaTriTangThem);
+            ps.setString(2, maGhe);
+            n = ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return n > 0;
+
+    }
+    public boolean capNhatGiaTriTangThemChoMap(Map<String, Double> mapUpdateGhe) {
+        int n = 0;
+        String sql = "Update GheNgoi set giaTriTangThem = ? where maGheNgoi = ?";
+        try {
+            PreparedStatement ps = (PreparedStatement) databaseConnector.connect().getConnection().prepareStatement(sql);
+            for (Map.Entry<String, Double> entry : mapUpdateGhe.entrySet()) {
+                ps.setDouble(1, entry.getValue());
+                ps.setString(2, entry.getKey());
+                ps.addBatch();
+            }
+            int[] result = ps.executeBatch();
+            for(int num : result) {
+                n += num;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return true;
+    }
 }
 
-//
-//
-//String query =
-//        "  DECLARE \n" +
-//                "    @soGhe INT =" + soGheInput + ","+
-//                "    @maChuyenTau NVARCHAR(20) = N'"+maChuyenTauInput+"'," +
-//                "    @maToaTau NVARCHAR(20) = N'"+maToaInput+"';" +
-//                "SELECT \n" +
-//                "    gtc.maGheTrenChuyenTau,\n" +
-//                "    gtc.maChuyenTau,\n" +
-//                "    gn.maGheNgoi,\n" +
-//                "    gtc.trangThaiGhe,\n" +
-//                "    gtc.giaTienGhe\n" +
-//                "FROM GheTrenChuyenTau AS gtc\n" +
-//                "INNER JOIN GheNgoi AS gn ON gtc.maGheNgoi = gn.maGheNgoi\n" +
-//                "WHERE \n" +
-//                "    gtc.maChuyenTau = @maChuyenTau\n" +
-//                "    AND gn.maToaTau = @maToaTau\n" +
-//                "    AND gn.soGhe = @soGhe;\n" +
-//                "\n" +
-//                "\n";
-//ResultSet rs = myStmt.executeQuery(query);
-//        while (rs.next()) {
-//String maGheTrenChuyenTau = rs.getString(1);
-//String maChuyenTau = rs.getString(2);
-//String maGheNgoi = rs.getString(3);
-//String trangThaiGhe = rs.getString(4);
-//double giaTienGhe = rs.getDouble(5);
-//ChuyenTau ct = chuyenTauDAO.getChuyenTauBangMa(maChuyenTau);
-//GheNgoi gn = getGheBangMaGhe(maGheNgoi);
-//
-//GheTrenChuyenTau gheTrenChuyenTau = new GheTrenChuyenTau(maGheTrenChuyenTau,trangThaiGhe, giaTienGhe,ct,gn);
-//            return gheTrenChuyenTau;
-//        }
+

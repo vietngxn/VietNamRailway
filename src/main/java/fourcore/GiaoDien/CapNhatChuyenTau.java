@@ -1,12 +1,31 @@
 package fourcore.GiaoDien;
 
+import java.io.File;
+
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import fourcore.Entity.ChuyenTau;
+import fourcore.Entity.HanhTrinh;
+import fourcore.Entity.HanhTrinhGa;
+import fourcore.animation.GhiFile;
+import fourcore.dao.ChuyenTauDAO;
+import fourcore.dao.HanhTrinhGa_dao;
+import fourcore.dao.HanhTrinh_DAO;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -110,7 +129,12 @@ public class CapNhatChuyenTau extends Application {
 	private ComboBox<String> comboDauTau;
 	private DatePicker thoiGianKhoiHanh;
 	private DatePicker thoiGianDuKien;
-	
+	private File fileTmp;
+	private GhiFile ghiFile = new GhiFile();
+	private ChuyenTauDAO chuyentaudao = null;
+	private HanhTrinh_DAO hanhtrinhdao = new HanhTrinh_DAO();
+	private ArrayList<HanhTrinh> listHanhTrinh = null;
+	private HanhTrinhGa_dao hanhtrinhgadao = new HanhTrinhGa_dao();
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -219,9 +243,20 @@ public class CapNhatChuyenTau extends Application {
 	}
 	
 	
-public void creat_capnhatchuyentau_layout() {
+public void creat_capnhatchuyentau_layout() throws IOException, SQLException {
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		fileTmp = new File("src/main/resources/tmp_CapNhatChuyenTau.txt");
+		Map<String, Object> mapTmp = new HashMap<>();
+		chuyentaudao = new ChuyenTauDAO();
+		
+		List<String> allLine = Files.readAllLines(Paths.get("src/main/resources/tmp_CapNhatChuyenTau.txt")); 
+		String line = allLine.get(0); 
+		JsonObject obj = JsonParser.parseString(line).getAsJsonObject();
+		String maChuyenTau = obj.get("maChuyenTau").getAsString();
+		ChuyenTau chuyenTau = chuyentaudao.getChuyenTauBangMa(maChuyenTau);
+		
+		
 		
 		//label đầu
 		lblCapNhatChuyenTau = new Label("Cập nhật thông tin chuyến tàu");
@@ -246,23 +281,24 @@ public void creat_capnhatchuyentau_layout() {
 		txtMaChuyenTau.setPrefWidth(600);
 		txtMaChuyenTau.setPrefHeight(40);
 		txtMaChuyenTau.setId("txt_CapNhatChuyenTau");
+		txtMaChuyenTau.setText(chuyenTau.getMaChuyenTau());
 		txtMaChuyenTau.setMouseTransparent(true);
 		txtMaChuyenTau.setFocusTraversable(false);
 		
 		//comBoDauTau
-		comboDauTau = new ComboBox<>();
-		comboDauTau.getItems().addAll("SE1", "SE2", "SE3", "SE4");
-		comboDauTau.setPrefWidth(600);
-		comboDauTau.setPrefHeight(40);
-		comboDauTau.setStyle("-fx-font-size: 18px");
-		comboDauTau.setOpacity(0);
+//		comboDauTau = new ComboBox<>();
+//		comboDauTau.getItems().addAll("SE1", "SE2", "SE3", "SE4");
+//		comboDauTau.setPrefWidth(600);
+//		comboDauTau.setPrefHeight(40);
+//		comboDauTau.setStyle("-fx-font-size: 18px");
+//		comboDauTau.setOpacity(0);
 		
-		buttonComboDauTau = new Button();
-		ImageView iconDropCombo = new ImageView(new Image(getClass().getResourceAsStream("/img/chevron-down.png")));
-		iconDropCombo.setFitWidth(30);
-		iconDropCombo.setFitHeight(30);
-		buttonComboDauTau.setGraphic(iconDropCombo);
-		buttonComboDauTau.setStyle("-fx-background-color: transparent");
+//		buttonComboDauTau = new Button();
+//		ImageView iconDropCombo = new ImageView(new Image(getClass().getResourceAsStream("/img/chevron-down.png")));
+//		iconDropCombo.setFitWidth(30);
+//		iconDropCombo.setFitHeight(30);
+//		buttonComboDauTau.setGraphic(iconDropCombo);
+//		buttonComboDauTau.setStyle("-fx-background-color: transparent");
 		
 		txtComboDauTau = new TextField();
 		txtComboDauTau.setPrefWidth(600);
@@ -270,13 +306,14 @@ public void creat_capnhatchuyentau_layout() {
 		txtComboDauTau.setId("txt_CapNhatChuyenTau");
 		txtComboDauTau.setMouseTransparent(true);
 		txtComboDauTau.setFocusTraversable(false);
+		txtComboDauTau.setText(chuyenTau.getTau().getLoaiTau().getTenLoaiTau());
 		
 		lblDauTau = new Label("Đầu tàu");
 		lblDauTau.setId("lbl_TextField_Convert");
 		
 		spComboDauTau = new StackPane();
-		spComboDauTau.getChildren().addAll(txtComboDauTau, buttonComboDauTau, comboDauTau);
-		spComboDauTau.setAlignment(buttonComboDauTau, Pos.CENTER_RIGHT);
+		spComboDauTau.getChildren().addAll(txtComboDauTau);
+//		spComboDauTau.setAlignment(buttonComboDauTau, Pos.CENTER_RIGHT);
 		
 		vboxComboDauTau = new VBox();
 		vboxComboDauTau.getChildren().addAll(lblDauTau, spComboDauTau);
@@ -307,6 +344,7 @@ public void creat_capnhatchuyentau_layout() {
 		txtThoiGianKhoiHanh.setId("txt_CapNhatChuyenTau");
 		txtThoiGianKhoiHanh.setMouseTransparent(true);
 		txtThoiGianKhoiHanh.setFocusTraversable(false);
+		txtThoiGianKhoiHanh.setText(chuyenTau.getNgayGioDi().toLocalDate().format(formatter));
 		
 		buttonThoiGianKhoiHanh = new Button();
 		ImageView iconThoiGian = new ImageView(new Image(getClass().getResourceAsStream("/img/calendar.png")));
@@ -325,12 +363,12 @@ public void creat_capnhatchuyentau_layout() {
 		
 		
 		//hàng thứ ba gồm Date
-		thoiGianDuKien = new DatePicker();
-		thoiGianDuKien.setPromptText("Thời gian dự kiến");
-		thoiGianDuKien.setPrefWidth(30);
-		thoiGianDuKien.setPrefHeight(40);
-		thoiGianDuKien.setStyle("-fx-font-size: 18px");
-		thoiGianDuKien.setOpacity(0);
+//		thoiGianDuKien = new DatePicker();
+//		thoiGianDuKien.setPromptText("Thời gian dự kiến");
+//		thoiGianDuKien.setPrefWidth(30);
+//		thoiGianDuKien.setPrefHeight(40);
+//		thoiGianDuKien.setStyle("-fx-font-size: 18px");
+//		thoiGianDuKien.setOpacity(0);
 		
 		lblThoiGianDuKien = new Label("Thời gian dự kiến");
 		lblThoiGianDuKien.setId("lbl_TextField_Convert");
@@ -341,19 +379,20 @@ public void creat_capnhatchuyentau_layout() {
 		txtThoiGianDuKien.setId("txt_CapNhatChuyenTau");
 		txtThoiGianDuKien.setMouseTransparent(true);
 		txtThoiGianDuKien.setFocusTraversable(false);
+		txtThoiGianDuKien.setText(chuyenTau.getNgayGioDen().toLocalDate().format(formatter));
 		
-		buttonThoiGianDuKien = new Button();
-		ImageView iconThoiGianDuKien = new ImageView(new Image(getClass().getResourceAsStream("/img/calendar.png")));
-		iconThoiGianDuKien.setFitWidth(30);
-		iconThoiGianDuKien.setFitHeight(30);
-		buttonThoiGianDuKien.setGraphic(iconThoiGianDuKien);
-		buttonThoiGianDuKien.setStyle("-fx-background-color: transparent");
+//		buttonThoiGianDuKien = new Button();
+//		ImageView iconThoiGianDuKien = new ImageView(new Image(getClass().getResourceAsStream("/img/calendar.png")));
+//		iconThoiGianDuKien.setFitWidth(30);
+//		iconThoiGianDuKien.setFitHeight(30);
+//		buttonThoiGianDuKien.setGraphic(iconThoiGianDuKien);
+//		buttonThoiGianDuKien.setStyle("-fx-background-color: transparent");
 		
 		spThoiGianDuKien = new StackPane();
-		spThoiGianDuKien.getChildren().addAll(txtThoiGianDuKien, buttonThoiGianDuKien, thoiGianDuKien);
+		spThoiGianDuKien.getChildren().addAll(txtThoiGianDuKien);
 		spThoiGianDuKien.setMaxWidth(800);
-		spThoiGianDuKien.setAlignment(buttonThoiGianDuKien, Pos.CENTER_RIGHT);
-		spThoiGianDuKien.setAlignment(thoiGianDuKien, Pos.CENTER_RIGHT);
+//		spThoiGianDuKien.setAlignment(buttonThoiGianDuKien, Pos.CENTER_RIGHT);
+//		spThoiGianDuKien.setAlignment(thoiGianDuKien, Pos.CENTER_RIGHT);
 		
 		vboxThoiGianDuKien = new VBox();
 		vboxThoiGianDuKien.getChildren().addAll(lblThoiGianDuKien, spThoiGianDuKien);
@@ -368,6 +407,17 @@ public void creat_capnhatchuyentau_layout() {
 		buttonTiepTheo.setPrefWidth(150);
 		buttonTiepTheo.setPrefHeight(50);
 		buttonTiepTheo.setId("button_Blue");
+		buttonTiepTheo.setOnMouseClicked(event -> {
+			if(listHanhTrinh.size() == 10) {
+				System.out.println("Ngày " + txtThoiGianKhoiHanh.getText() + " hiện đã full hành trình");
+			} else {
+				mapTmp.put("ngayKhoiHanh", txtThoiGianKhoiHanh.getText());
+				mapTmp.put("ngayDenDuKien", txtThoiGianDuKien.getText());
+				Gson gson = new Gson();
+				String json = gson.toJson(mapTmp);
+				ghiFile.appendData(json, fileTmp);
+			}
+		});
 		
 		buttonThoat = new Button();
 		buttonThoat.setText("Thoát");
@@ -393,17 +443,33 @@ public void creat_capnhatchuyentau_layout() {
 		layoutCapNhatChuyenTau.setAlignment(Pos.CENTER);
 		layoutCapNhatChuyenTau.setStyle("-fx-background-color: #FFFFFF");
 		
-		comboDauTau.valueProperty().addListener((obs, oldVal, newVal) -> {
-			if(newVal != null) txtComboDauTau.setText(newVal.toString());
-		});
+//		comboDauTau.valueProperty().addListener((obs, oldVal, newVal) -> {
+//			if(newVal != null) txtComboDauTau.setText(newVal.toString());
+//		});
 		
 		thoiGianKhoiHanh.valueProperty().addListener((obs, oldVal, newVal) -> {
-			if(newVal != null) txtThoiGianKhoiHanh.setText(newVal.format(formatter));
+			if(newVal != null) {
+				txtThoiGianKhoiHanh.setText(newVal.format(formatter));
+				List<String> listMaHanhTrinhTheoNgay = chuyentaudao.getListMaHanhTrinhTheoNgay(newVal);
+
+		        listHanhTrinh = hanhtrinhdao.getList();
+		        
+		        
+		        for (int i = listHanhTrinh.size() - 1; i >= 0; i--) {
+		            HanhTrinh ht = listHanhTrinh.get(i);
+		            if (listMaHanhTrinhTheoNgay.contains(ht.getMaHanhTrinh())) {
+		                listHanhTrinh.remove(i);
+		            }
+		        }
+		        ArrayList<HanhTrinhGa> listHanhTrinhGa = hanhtrinhgadao.getListHanhTrinhGaTheoMaHanhTrinh(chuyenTau.getHanhTrinh().getMaHanhTrinh());
+		        LocalDate ngayDenDuKienLast = newVal.plusDays(listHanhTrinhGa.getLast().getSoNgayDiQua());
+		        txtThoiGianDuKien.setText(ngayDenDuKienLast.format(formatter));
+			}
 		});
 		
-		thoiGianDuKien.valueProperty().addListener((obs, oldVal, newVal) -> {
-			if(newVal != null) txtThoiGianDuKien.setText(newVal.format(formatter));
-		});
+//		thoiGianDuKien.valueProperty().addListener((obs, oldVal, newVal) -> {
+//			if(newVal != null) txtThoiGianDuKien.setText(newVal.format(formatter));
+//		});
 	}
 	
 	
