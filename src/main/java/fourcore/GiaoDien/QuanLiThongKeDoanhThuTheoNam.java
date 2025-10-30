@@ -638,12 +638,15 @@ try {
 			
 			create_btnlayout();
 			primaryStage.setFullScreen(true);
-			primaryStage.show();
+//			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
+    public VBox getGD(){
+        return noiDungChinh;
+    }
 	
 	public void create_title_layout() {
 		title_layout  = new VBox();

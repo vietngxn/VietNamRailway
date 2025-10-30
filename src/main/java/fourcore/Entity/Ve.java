@@ -224,58 +224,58 @@ public class Ve implements Serializable {
 		this.doiTuongGiamGia = doiTuongGiamGia;
 	}
 
-	public double tinhThanhTien() {
-		double giamDT = this.getGiaVe() * this.getDoiTuongGiamGia().giaTriPhanTramGiamGia * 0.01;
-		double giamKM = this.getGiaVe() * this.getKhuyenMai().getGiaTriPhanTramKhuyenMai() * 0.01;
-		return this.getGiaVe() - giamDT - giamKM;
-	}
+    public double tinhThanhTien() {
+        double giamDT = this.getGiaVe() * this.getDoiTuongGiamGia().giaTriPhanTramGiamGia * 0.01;
+        double giamKM = this.getGiaVe() * this.getKhuyenMai().getGiaTriPhanTramKhuyenMai() * 0.01;
+        return this.getGiaVe() - giamDT - giamKM;
+    }
 
-	public double tinhPhiHoanTra(LocalDateTime thoiGianMuaVe, double thanhTien, String loaiVe) {
-		LocalDateTime ngayHienTai = LocalDateTime.now();
-		Duration duration = Duration.between(thoiGianMuaVe, ngayHienTai);
-		double soGioChenhLech = Math.abs(duration.toHours());
+    public double tinhPhiHoanTra(LocalDateTime thoiGianMuaVe, double thanhTien, String loaiVe) {
+        LocalDateTime ngayHienTai = LocalDateTime.now();
+        Duration duration = Duration.between(thoiGianMuaVe, ngayHienTai);
+        double soGioChenhLech = Math.abs(duration.toHours());
 
-		System.out.println("Số giờ chênh lệch: " + soGioChenhLech);
+        System.out.println("Số giờ chênh lệch: " + soGioChenhLech);
 
-		double phiHoanTra = 0;
+        double phiHoanTra = 0;
 
-		if (loaiVe == null) {
-			System.out.println("⚠️ Loại vé null — không thể tính phí hoàn trả");
-			return 0;
-		}
+        if (loaiVe == null) {
+            System.out.println("⚠️ Loại vé null — không thể tính phí hoàn trả");
+            return 0;
+        }
 
-		if (loaiVe.equalsIgnoreCase("Vé cá nhân")) {
-			if (soGioChenhLech >= 4 && soGioChenhLech <= 24) {
-				phiHoanTra = thanhTien * 0.2;
-			} else if (soGioChenhLech > 24) {
-				phiHoanTra = thanhTien * 0.1;
-			} else { // < 4h
-				return 0;
-			}
-		} else if (loaiVe.equalsIgnoreCase("Vé tập thể")) {
-			if (soGioChenhLech >= 24 && soGioChenhLech <= 72) {
-				phiHoanTra = thanhTien * 0.2;
-			} else if (soGioChenhLech > 72) {
-				phiHoanTra = thanhTien * 0.1;
-			} else { // < 24h
-				return 0;
-			}
-		} else {
-			System.out.println("⚠️ Loại vé không hợp lệ: " + loaiVe);
-			return 0;
-		}
+        if (loaiVe.equalsIgnoreCase("Vé cá nhân")) {
+            if (soGioChenhLech >= 4 && soGioChenhLech <= 24) {
+                phiHoanTra = thanhTien * 0.2;
+            } else if (soGioChenhLech > 24) {
+                phiHoanTra = thanhTien * 0.1;
+            } else { // < 4h
+                return 0;
+            }
+        } else if (loaiVe.equalsIgnoreCase("Vé tập thể")) {
+            if (soGioChenhLech >= 24 && soGioChenhLech <= 72) {
+                phiHoanTra = thanhTien * 0.2;
+            } else if (soGioChenhLech > 72) {
+                phiHoanTra = thanhTien * 0.1;
+            } else { // < 24h
+                return 0;
+            }
+        } else {
+            System.out.println("⚠️ Loại vé không hợp lệ: " + loaiVe);
+            return 0;
+        }
 
-		if (phiHoanTra > 0 && phiHoanTra < 10000) {
-			phiHoanTra = 10000;
-		}
+        if (phiHoanTra > 0 && phiHoanTra < 10000) {
+            phiHoanTra = 10000;
+        }
 
-		return phiHoanTra;
-	}
+        return phiHoanTra;
+    }
 
-	public double tinhThanhTienThanhToanHoanTra(double phihoantra) {
-		double giamDT = this.getGiaVe() * this.getDoiTuongGiamGia().giaTriPhanTramGiamGia * 0.01;
-		double giamKM = this.getGiaVe() * this.getKhuyenMai().getGiaTriPhanTramKhuyenMai() * 0.01;
-		return this.getGiaVe() - giamDT - giamKM - phihoantra;
-	}
+    public double tinhThanhTienThanhToanHoanTra(double phihoantra) {
+        double giamDT = this.getGiaVe() * this.getDoiTuongGiamGia().giaTriPhanTramGiamGia * 0.01;
+        double giamKM = this.getGiaVe() * this.getKhuyenMai().getGiaTriPhanTramKhuyenMai() * 0.01;
+        return this.getGiaVe() - giamDT - giamKM - phihoantra;
+    }
 
 }

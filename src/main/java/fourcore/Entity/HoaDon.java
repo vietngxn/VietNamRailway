@@ -17,7 +17,16 @@ public class HoaDon {
 	// ===== Constructors =====
 	public HoaDon() {
 	}
-
+    public HoaDon(String maNhanVien, String tenKhachHangThanhToan, String emailKhachHangThanhToan,
+                  String cccdKhachHangThanhToan, String sdtKhachHangThanhToan, String diaChi, double tongTien) {
+        setMaNhanVien(new NhanVien(maNhanVien));
+        setTenKhachHangThanhToan(tenKhachHangThanhToan);
+        setEmailKhachHangThanhToan(emailKhachHangThanhToan);
+        setCccdKhachHangThanhToan(cccdKhachHangThanhToan);
+        setSdtKhachHangThanhToan(sdtKhachHangThanhToan);
+        setDiaChiKhachHangThanhToan(diaChi);
+        setTongTien(tongTien);
+    }
 
 	public String getDiaChiKhachHangThanhToan() {
 		return diaChiKhachHangThanhToan;

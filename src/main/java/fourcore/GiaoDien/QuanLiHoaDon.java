@@ -898,7 +898,7 @@ public class QuanLiHoaDon extends Application {
 			
 			create_layout_button();
 			primaryStage.setFullScreen(true);
-			primaryStage.show();
+//			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();

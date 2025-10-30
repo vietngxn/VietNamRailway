@@ -901,7 +901,8 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
                         double value = entry.getValue();
                         tongCong += value;
                     }
-                    HoaDon hd = new HoaDon("NV001", txtHoTenValue, txtEmailValue, txtSoGiayToValue, txtSDTValue, tongCong);
+                    HoaDon hd = new HoaDon("NV001", txtHoTenValue, txtEmailValue, txtSoGiayToValue, txtSDTValue,
+                            txtDiaChiaValue, tongCong);
                     System.out.println("Số lượng vé trong listVeThanhToan: " + listVeThanhToan.size());
                     try {
                         this.vedao = new VeDAO(0);
