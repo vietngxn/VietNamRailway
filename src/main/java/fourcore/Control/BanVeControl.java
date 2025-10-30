@@ -116,7 +116,6 @@ public class BanVeControl {
                     throw new RuntimeException(ex);
                 }
                 listChuyenTau = chuyenTauDAO.listChuyenTau;
-            System.out.println(listChuyenTau.get(1).getTau().getMaTau());
             ArrayList<ChuyenTau> listInsert = new ArrayList<>();
                 try {
                     listInsert = getListThoaDieuKien();

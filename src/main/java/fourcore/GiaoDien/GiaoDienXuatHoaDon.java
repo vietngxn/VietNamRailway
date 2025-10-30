@@ -563,19 +563,8 @@ public class GiaoDienXuatHoaDon extends Application {
 			noiDungChinh.setStyle("-fx-background-color: #F7F7F7;");
 			noiDungChinh.setPrefWidth(1300);
 
-			pnlDoiVelbl = new Pane();
-			lblDoiVe = new Label("Giỏ vé");
-			pnlDoiVelbl.getChildren().add(lblDoiVe);
-			lblDoiVe.setStyle("-fx-font-size: 40px;-fx-font-weight: bold;");
-			noiDungChinh.getChildren().add(pnlDoiVelbl);
-			VBox.setMargin(pnlDoiVelbl, new Insets(20, 0, 0, 50));
 
-			pnlThongTinlbl = new Pane();
-			lblThongTin = new Label("Thông tin người mua vé");
-			pnlThongTinlbl.getChildren().add(lblThongTin);
-			lblThongTin.setStyle("-fx-font-size: 25px;-fx-font-weight: bold;");
-			noiDungChinh.getChildren().add(pnlThongTinlbl);
-			VBox.setMargin(pnlThongTinlbl, new Insets(20, 0, 0, 50));
+
 
 			pnlThongTinNguoiMua = new GridPane();
 			VBox.setMargin(pnlThongTinNguoiMua, new Insets(30, 0, 0, 0));
@@ -605,14 +594,10 @@ public class GiaoDienXuatHoaDon extends Application {
 					    -fx-padding: 8 12 8 12;
 					""";
 
-			pnlThongTinNguoiMua.add(taoSubPane("Họ tên", "Nguyễn Tiến Đạt", leftStyle, rightStyle, 1), 0, 0);
-			pnlThongTinNguoiMua.add(taoSubPane("Email", "abc@gmail.com", leftStyle, rightStyle, 2), 1, 0);
-			pnlThongTinNguoiMua.add(taoSubPane("Số giấy tờ", "096123123123", leftStyle, rightStyle, 3), 0, 1);
-			pnlThongTinNguoiMua.add(taoSubPane("SĐT", "0933345556", leftStyle, rightStyle, 4), 1, 1);
-			noiDungChinh.getChildren().add(pnlThongTinNguoiMua);
+
 
 			pnlXuatHDlbl = new Pane();
-			lblXuatHD = new Label("Xuất hóa đơn");
+			lblXuatHD = new Label("Lập hóa đơn");
 			pnlXuatHDlbl.getChildren().add(lblXuatHD);
 			lblXuatHD.setStyle("-fx-font-size: 25px;-fx-font-weight: bold;");
 			noiDungChinh.getChildren().add(pnlXuatHDlbl);
@@ -647,7 +632,8 @@ public class GiaoDienXuatHoaDon extends Application {
 			;
 
 			pnlTongCong = new HBox();
-			lblTongCong = new Label("Tổng cộng:");
+			lblTongCong = new Label("Chi tiết :");
+            lblTongCong.setPrefWidth(200);
 			lblTongCong.setWrapText(true);
 			lblTongCong.setStyle(lblStyle);
             for(int i=0; i< mapChuyenTauVaUser.size();i++){
@@ -656,10 +642,13 @@ public class GiaoDienXuatHoaDon extends Application {
             tinhThongThanhTien();
             System.out.println(mapChuyenTauVaUser.size());
             System.out.println(tongCongThanhTien);
-			lblTongCongValue = new Label(nf.format(tienTruocVAT) + "đ   (+8% VAT) = " + nf.format(tongCongThanhTien) + "đ");
+			lblTongCongValue = new Label("Tổng tiền của " +mapChuyenTauVaUser.size()+" vé       : " + nf.format(tienTruocVAT) + "đ"+ "\n"
+                    +"Chiết khấu ("+ ctkmSelected.getGiaTriPhanTramKhuyenMai()+"%)      : - "+nf.format(tienTruocVAT*(ctkmSelected.getGiaTriPhanTramKhuyenMai()/100))+ "đ"+"\n"+
+                    "Thuế suất (8%)             : " + nf.format(tienTruocVAT*(1-ctkmSelected.getGiaTriPhanTramKhuyenMai()/100)*0.08)+ "đ"+"\n"+
+                    "Tổng cộng                    : "+nf.format(tongCongThanhTien) + "đ");
 			lblTongCongValue.setWrapText(true);
 			lblTongCongValue.setStyle(lblStyle + "-fx-font-weight: bold;");
-
+            lblTongCongValue.setTranslateY(55);
 			HBox.setMargin(lblTongCong, new Insets(0, 20, 0, 0));
 			pnlTongCong.setAlignment(Pos.CENTER);
 
@@ -676,6 +665,7 @@ public class GiaoDienXuatHoaDon extends Application {
 			btnThanhToan.setPrefSize(280, 50);
 
 			pnlThanhToanButtonSub2.getChildren().addAll(btnTroLai, btnThanhToan);
+            pnlThanhToanButtonSub2.setTranslateY(100);
 			HBox.setMargin(btnTroLai, new Insets(0, 750, 0, 0));
 			pnlThanhToanButton.getChildren().addAll(pnlThanhToanButtonSub1, pnlThanhToanButtonSub2);
 			VBox.setMargin(pnlThanhToanButtonSub1, new Insets(20, 0, 0, 0));
@@ -690,40 +680,29 @@ public class GiaoDienXuatHoaDon extends Application {
 			btnThanhToan.setOnMouseClicked(event -> {
                 boolean flag = true;
                 System.out.println(listTxtFieldHoaDon.size());
-                if (txtEMail.getText().isEmpty() || txtSdt.getText().isEmpty() || txtHoTen.getText().isEmpty() || txtSoGiayTo.getText().isEmpty()){
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Lỗi");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Vui lòng nhập đầy đủ thông tin!");
-                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                    alert.initOwner(stage);
-                    alert.initModality(Modality.WINDOW_MODAL);
-                    alert.showAndWait();
-                    flag = false;
-
-                }else{
                     for(TextField tf : listTxtFieldHoaDon){
-
-                        if(tf.getText().isEmpty()){
-                            Alert alert2 = new Alert(Alert.AlertType.ERROR);
-                            alert2.setTitle("Lỗi");
-                            alert2.setHeaderText(null);
-                            alert2.setContentText("Vui lòng nhập đầy đủ thông tin!");
-                            Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                            alert2.initOwner(stage2);
-                            alert2.initModality(Modality.WINDOW_MODAL);
-                            alert2.showAndWait();
-                            flag = false;
-                            break;
-                        }
-                    }
-                    if(flag == true){
-                        try {
-                            showConfirm(primaryStage, "Bạn muốn thanh toán hóa đơn này");
-                        } catch (SQLException e) {
-                            throw new RuntimeException(e);
+                        if(listTxtFieldHoaDon.get(2)!=tf){
+                            if(tf.getText().isEmpty()){
+                                Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                                alert2.setTitle("Lỗi");
+                                alert2.setHeaderText(null);
+                                alert2.setContentText("Vui lòng nhập đầy đủ thông tin!");
+                                Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                                alert2.initOwner(stage2);
+                                alert2.initModality(Modality.WINDOW_MODAL);
+                                alert2.showAndWait();
+                                flag = false;
+                                break;
+                            }
                         }
 
+
+                }
+                if(flag == true){
+                    try {
+                        showConfirm(primaryStage, "Bạn muốn thanh toán hóa đơn này");
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
                     }
 
                 }
@@ -737,7 +716,7 @@ public class GiaoDienXuatHoaDon extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Hệ thống quản lý vé tàu");
 			primaryStage.setFullScreen(true);
-//			primaryStage.show();
+			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -746,26 +725,32 @@ public class GiaoDienXuatHoaDon extends Application {
         ArrayList<GheTrenChuyenTau> listGheTrenChuyenTau = new ArrayList<>(mapChuyenTauVaUser.keySet());
         tongCongThanhTien = 0;
         tienTruocVAT =0;
+        double thueVAT= 0;
+        double phanTramKhuyenMai = 0;
+        phanTramKhuyenMai = ctkmSelected.getGiaTriPhanTramKhuyenMai();
+
         for (int i=0; i<mapChuyenTauVaUser.size();i++){
             double giaGhe = listGheTrenChuyenTau.get(i).getGiaTienGhe();
+            System.out.println("gia ghe:" +giaGhe);
             String tenDoiTuong = mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getDoiTuong();
-            double phanTramKhuyenMai = 0;
+
+
             double phanTramGiamDoiTuong = 0;
             for(int x=0; x<listDoiTuongGiamGia.size(); x++){
                 if(listDoiTuongGiamGia.get(x).getTenDoiTuongGiamGia().equals(tenDoiTuong)){
                     phanTramGiamDoiTuong = listDoiTuongGiamGia.get(x).getGiaTriPhanTramGiamGia();
+                    System.out.println("phan tram dt giam"+listDoiTuongGiamGia.get(x).getGiaTriPhanTramGiamGia());
                     break;
                 }
             }
-            if(ctkmSelected!=null){
-                phanTramKhuyenMai = ctkmSelected.getGiaTriPhanTramKhuyenMai();
-            }
-            double giaTong  = giaGhe*((100-phanTramKhuyenMai)/100);
-            giaTong = giaTong*((100-phanTramGiamDoiTuong)/100);
-            tienTruocVAT += giaTong;
+            double giaSauKhiGiamDoiTuong  = giaGhe*((100-phanTramGiamDoiTuong)/100);
+            tienTruocVAT += giaSauKhiGiamDoiTuong;
         }
-        tongCongThanhTien = tienTruocVAT * 1.08;
+        double tongGiaKhiApDungCTKM  =tienTruocVAT*((100-phanTramKhuyenMai)/100);
+        tongCongThanhTien = tongGiaKhiApDungCTKM * 1.08;
     }
+
+
 	private boolean showConfirm(Stage parentStage, String message) throws SQLException {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Xác nhận");
@@ -853,120 +838,17 @@ public class GiaoDienXuatHoaDon extends Application {
 
 		VBox pnl = new VBox(15);
 		pnl.setAlignment(Pos.CENTER);
+
 		pnl.getChildren().add(taoSubXuatHoaDonPane("Người mua", hoten, leftstyle, rightstyle));
-		pnl.getChildren().add(taoSubXuatHoaDonPane("Số giấy tờ", sogiayto, leftstyle, rightstyle));
+		pnl.getChildren().add(taoSubXuatHoaDonPane("Số CCCD", sogiayto, leftstyle, rightstyle));
+        pnl.getChildren().add(taoSubXuatHoaDonPane("Địa chỉ email",email, leftstyle, rightstyle));
+        pnl.getChildren().add(taoSubXuatHoaDonPane("Số điện thoại",sdt,leftstyle, rightstyle));
 		pnl.getChildren().add(taoSubXuatHoaDonPane("Địa chỉ", diachi, leftstyle, rightstyle));
 
 		return pnl;
 
 	}
 
-	private HBox taoSubPane(String label, String value, String leftStyle, String rightStyle, int check) {
-		StackPane left = new StackPane(new Label(label));
-		StackPane right = new StackPane();
-		right.setPrefSize(200, 40);
-
-		if (check == 1) {
-			txtHoTen = new TextField();
-			txtHoTen.setPromptText("Nhập họ tên");
-			String regexHoten = "[a-zA-ZÀ-ỹ\\s]+$";
-			txtHoTen.setOnAction(event -> {
-				String input = txtHoTen.getText();
-				if (!input.matches(regexHoten)) {
-					Alert alert = new Alert(Alert.AlertType.ERROR);
-					alert.setTitle("Lỗi định dạng");
-					alert.setHeaderText(null);
-					alert.setContentText("Họ tên không hợp lệ");
-					// Gắn vào Stage hiện tại (cực kỳ quan trọng)
-					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-					alert.initOwner(stage);
-
-					// Không cho resize, luôn ở giữa cửa sổ cha
-					alert.initModality(Modality.WINDOW_MODAL);
-					alert.showAndWait();
-				}
-				txtHoTen.setUserData(txtHoTen.getText());
-			});
-			txtHoTen.setStyle(rightStyle);
-			txtHoTen.setMaxWidth(Double.MAX_VALUE);
-			txtHoTen.setMaxHeight(Double.MAX_VALUE);
-			StackPane.setAlignment(txtHoTen, Pos.CENTER);
-			right.getChildren().add(txtHoTen);
-		} else if (check == 2) {
-			txtEMail = new TextField();
-			txtEMail.setPromptText("nhập email");
-			String regexHoten = "";
-//			txtEMail.setOnAction(event -> {
-//				String input = txtEMail.getText();
-//				if (!input.matches(regexHoten)) {
-//					Alert alert = new Alert(Alert.AlertType.ERROR);
-//					alert.setTitle("Lỗi định dạng");
-//					alert.setHeaderText(null);
-//					alert.setContentText("EMail không hợp lệ");
-//					alert.showAndWait();
-//				}
-//			});
-			txtEMail.setStyle(rightStyle);
-			txtEMail.setMaxWidth(Double.MAX_VALUE);
-			txtEMail.setMaxHeight(Double.MAX_VALUE);
-			StackPane.setAlignment(txtEMail, Pos.CENTER);
-			right.getChildren().add(txtEMail);
-		} else if (check == 3) {
-			txtSoGiayTo = new TextField();
-			txtSoGiayTo.setPromptText("Nhập số giấy tờ");
-			String regexSoGiayTo = "^[0-9]+$";
-			txtSoGiayTo.setOnAction(event -> {
-				String input = txtSoGiayTo.getText();
-				if (!input.matches(regexSoGiayTo)) {
-					Alert alert = new Alert(Alert.AlertType.ERROR);
-					alert.setTitle("Lỗi định dạng");
-					alert.setHeaderText(null);
-					alert.setContentText("Số giấy tờ không hợp lệ");
-					// Gắn vào Stage hiện tại (cực kỳ quan trọng)
-					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-					alert.initOwner(stage);
-
-					// Không cho resize, luôn ở giữa cửa sổ cha
-					alert.initModality(Modality.WINDOW_MODAL);
-					alert.showAndWait();
-				}
-			});
-			txtSoGiayTo.setStyle(rightStyle);
-			txtSoGiayTo.setMaxWidth(Double.MAX_VALUE);
-			txtSoGiayTo.setMaxHeight(Double.MAX_VALUE);
-			StackPane.setAlignment(txtSoGiayTo, Pos.CENTER);
-			right.getChildren().add(txtSoGiayTo);
-		} else if (check == 4) {
-			txtSdt = new TextField();
-			txtSdt.setPromptText("Nhập SDT");
-			String regexSoGiayTo = "^[0-9]+$";
-			txtSdt.setOnAction(event -> {
-				String input = txtSdt.getText();
-				if (!input.matches(regexSoGiayTo)) {
-					Alert alert = new Alert(Alert.AlertType.ERROR);
-					alert.setTitle("Lỗi định dạng");
-					alert.setHeaderText(null);
-					alert.setContentText("Số điện thoại không hợp lệ");
-					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-					alert.initOwner(stage);
-					alert.initModality(Modality.WINDOW_MODAL);
-					alert.showAndWait();
-				}
-			});
-			txtSdt.setStyle(rightStyle);
-			txtSdt.setMaxWidth(Double.MAX_VALUE);
-			txtSdt.setMaxHeight(Double.MAX_VALUE);
-			StackPane.setAlignment(txtSdt, Pos.CENTER);
-			right.getChildren().add(txtSdt);
-		}
-
-		left.setPrefWidth(100);
-		right.setPrefWidth(200);
-		left.setStyle(leftStyle);
-		left.setAlignment(Pos.CENTER);
-		right.setAlignment(Pos.CENTER);
-		return new HBox(left, right);
-	}
 
 	private HBox taoSubXuatHoaDonPane(String label, String value, String leftStyle, String rightStyle) {
 		StackPane left = new StackPane(new Label(label));
@@ -979,15 +861,7 @@ public class GiaoDienXuatHoaDon extends Application {
         listTxtFieldHoaDon.add(txtRight);
 		StackPane.setAlignment(txtRight, Pos.CENTER);
 		right.getChildren().add(txtRight);
-		if (label.equalsIgnoreCase("Người mua") || label.equalsIgnoreCase("Tên khách hàng")) {
-			txtHoTen.textProperty().addListener((obs, oldVal, newVal) -> {
-				txtRight.setText(newVal);
-			});
-		} else if (label.equalsIgnoreCase("Số giấy tờ")) {
-			txtSoGiayTo.textProperty().addListener((obs, oldVal, newVal) -> {
-				txtRight.setText(newVal);
-			});
-		}
+
 
 		left.setPrefSize(200, 50);
 		left.setAlignment(Pos.CENTER);
