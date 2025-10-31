@@ -48,7 +48,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class CapNhatChuongTrinhKhuyenMai extends Application {
-	public static void main(String[] args) {
+    public CapNhatChuongTrinhKhuyenMai() throws SQLException {
+    }
+
+    public static void main(String[] args) {
 		launch(args);
 //		Application.launch(ThemChuongTrinhKhuyenMai.class, args);
 	}

@@ -112,7 +112,11 @@ public class GiaoDienXuatHoaDon extends Application {
 	String sdt;
 	private TextField lblRight;
     public ArrayList<DoiTuongGiamGia> listDoiTuongGiamGia;
-	@Override
+
+    public GiaoDienXuatHoaDon() throws SQLException {
+    }
+
+    @Override
 	public void start(Stage primaryStage) {
 		try {
 

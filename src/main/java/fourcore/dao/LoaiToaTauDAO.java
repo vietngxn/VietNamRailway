@@ -11,13 +11,17 @@ import fourcore.Entity.ToaTau;
 public class LoaiToaTauDAO {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
     public ArrayList<LoaiToaTau> listLoaiToaTau = new ArrayList<>();
+    Statement myStmt;
 
-	public LoaiToaTauDAO() {
+	public LoaiToaTauDAO() throws SQLException {
+        myStmt= databaseConnector.connect();
+        goiDAO();
 	}
-
+    public void goiDAO(){
+        System.out.println("loai toa tau dao");
+    }
 	public ArrayList<LoaiToaTau> getListLoaiToaTau() {
 		try {
-			Statement myStmt = databaseConnector.connect();
 			String query = "SELECT * FROM LoaiToaTau";
 			ResultSet rs = myStmt.executeQuery(query);
 

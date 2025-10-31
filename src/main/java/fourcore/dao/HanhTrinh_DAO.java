@@ -12,14 +12,18 @@ import fourcore.Entity.LoaiToaTau;
 
 public class HanhTrinh_DAO {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
-
-	public HanhTrinh_DAO() {
+    Statement myStmt;
+    public void goiDAO(){
+        System.out.println("Hanh trinh dao");
+    }
+	public HanhTrinh_DAO() throws SQLException {
+        goiDAO();
+        myStmt = databaseConnector.connect();
 	}
 
 	public ArrayList<HanhTrinh> getList() {
 		ArrayList<HanhTrinh> list = new ArrayList<>();
 		try {
-			Statement myStmt = databaseConnector.connect();
 			String query = "SELECT * FROM HanhTrinh";
 			ResultSet rs = myStmt.executeQuery(query);
 
@@ -47,7 +51,6 @@ public class HanhTrinh_DAO {
     public ArrayList<Ga> getListGaByMaHanhTrinh(String maHanhTrinhInput){
         ArrayList<Ga> listGa = new ArrayList<>();
         try {
-            Statement myStmt = databaseConnector.connect();
             String query = "select htg.maGa, g.tenGa from HanhTrinhGa htg, Ga g where htg.maGa = g.maGa and htg.maHanhTrinh = '" + maHanhTrinhInput + "'";
             ResultSet rs = myStmt.executeQuery(query);
 

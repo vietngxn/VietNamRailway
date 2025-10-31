@@ -2,6 +2,7 @@ package fourcore.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -12,15 +13,20 @@ public class GheTrenChuyenTau_dao {
 
 	DatabaseConnector databaseConnector = new DatabaseConnector();
 	ArrayList<GheTrenChuyenTau> listGheTrenChuyenTau =  new ArrayList<>();
-    public GheTrenChuyenTau_dao() {
+    Statement myStmt;
+    public GheTrenChuyenTau_dao() throws SQLException {
+        myStmt = databaseConnector.connect();
+        goiDAO();
     	listGheTrenChuyenTau = new ArrayList<>();
     }
 
-	
+    public void goiDAO(){
+        System.out.println("ghe tren chuyen tau dao");
+    }
 	public String getMaGheTrenChuyenTauCuoiCung() {
 		String maGTCT = null;
 		try {
-			Statement myStmt = databaseConnector.connect();
+
 			String sql = "Select top 1 maGheTrenChuyenTau From GheTrenChuyenTau Order By maGheTrenChuyenTau DESC";
 			ResultSet rs = myStmt.executeQuery(sql);
 			if(rs.next()) {

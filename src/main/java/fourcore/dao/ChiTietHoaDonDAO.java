@@ -13,9 +13,11 @@ import fourcore.Entity.Ve;
 
 public class ChiTietHoaDonDAO {
 	DatabaseConnector db = new DatabaseConnector();
-
+    Statement st;
+    public ChiTietHoaDonDAO() throws SQLException {
+        st = db.connect();
+    }
 	public ArrayList<ChiTietHoaDon> getListChiTietHoaDon() throws SQLException {
-		Statement st = db.connect();
 		String q = "select * from ChiTietHoaDon";
 		ResultSet rs = st.executeQuery(q);
 		ArrayList<ChiTietHoaDon> listCTHoaDon = new ArrayList<ChiTietHoaDon>();
@@ -37,7 +39,6 @@ public class ChiTietHoaDonDAO {
 
 
 	public String getLoaiHoaDonChoVeTau(String mave) throws SQLException {
-		Statement st = db.connect();
 		String q = "select loaiHoaDonChoVeTau from ChiTietHoaDon where maVeTau = '" + mave + "'";
 		ResultSet rs = st.executeQuery(q);
 		ArrayList<ChiTietHoaDon> listCTHoaDon = new ArrayList<ChiTietHoaDon>();
@@ -70,7 +71,6 @@ public class ChiTietHoaDonDAO {
 	}
 
 	  public void themChiTietHoaDon(ChiTietHoaDon cthd) throws SQLException {
-	        Statement st = db.connect();
 
 	        String countQuery = "SELECT COUNT(*) AS soLuong FROM ChiTietHoaDon";
 	        int soLuong = 0;

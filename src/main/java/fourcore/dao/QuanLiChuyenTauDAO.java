@@ -21,11 +21,17 @@ public class QuanLiChuyenTauDAO {
     LocalDateTime thoiGianKhoiHanh;
     String gaDi;
     String gaDen;
+    Statement myStmt;
 
-    public QuanLiChuyenTauDAO() {}
+    public QuanLiChuyenTauDAO() throws SQLException {
+        myStmt = databaseConnector.connect();
+        goiDAO();
+    }
+    public void goiDAO(){
+        System.out.println("quan li chuyen tau dao");
+    }
     ArrayList listThongTinChuyenTau =  new ArrayList<>();
     public ArrayList getListThongTinChuyenTau() throws SQLException {
-        Statement myStmt = databaseConnector.connect();
         String query =    "SELECT " +
                 "    ct.maChuyenTau AS [Mã Chuyến], " +
                 "    t.tenTau AS [Đầu Tàu], " +

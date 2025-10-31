@@ -2,6 +2,7 @@ package fourcore.GiaoDien;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -399,7 +400,12 @@ public class QuanLyChuyenTau extends Application {
 
             });
             quanLiKhachHangBox.setOnMouseClicked(event -> {
-                QuanLyKhachHang gdQuanLyKhachHang = new QuanLyKhachHang();
+                QuanLyKhachHang gdQuanLyKhachHang = null;
+                try {
+                    gdQuanLyKhachHang = new QuanLyKhachHang();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 Stage quanLyKhachHangStage = new Stage();
                 gdQuanLyKhachHang.start(quanLyKhachHangStage);
                 VBox quanLyKhachHangVBox = gdQuanLyKhachHang.getQuanLiKhachHang();

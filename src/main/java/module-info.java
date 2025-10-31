@@ -5,7 +5,9 @@ module VietNamRailwayInterface {
 
     requires java.sql;
     requires com.google.gson;
-    exports fourcore.Entity;
+    requires com.google.zxing;
+    requires com.google.zxing.javase;
+    requires jakarta.mail;
     exports fourcore.GiaoDien;
 
     opens fourcore.GiaoDien to javafx.fxml;

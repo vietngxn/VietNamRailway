@@ -135,7 +135,11 @@ public class CapNhatChuyenTau extends Application {
 	private HanhTrinh_DAO hanhtrinhdao = new HanhTrinh_DAO();
 	private ArrayList<HanhTrinh> listHanhTrinh = null;
 	private HanhTrinhGa_dao hanhtrinhgadao = new HanhTrinhGa_dao();
-	@Override
+
+    public CapNhatChuyenTau() throws SQLException {
+    }
+
+    @Override
 	public void start(Stage primaryStage) {
 		try {
 			BorderPane root = new BorderPane();

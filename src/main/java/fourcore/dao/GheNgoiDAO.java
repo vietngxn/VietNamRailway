@@ -22,13 +22,17 @@ public class GheNgoiDAO {
     KhoangTauDAO khoangTauDAO = new KhoangTauDAO();
     ToaTauDAO toaTauDAO = new ToaTauDAO();
     ChuyenTauDAO chuyenTauDAO = new ChuyenTauDAO();
+    Statement myStmt;
     public GheNgoiDAO() throws SQLException {
+        goiDAO();
+        myStmt = databaseConnector.connect();
         getListGheNgoi();
         getListTrenChuyenTau();
     }
-
+    public void goiDAO(){
+        System.out.println("Ghe dao");
+    }
     public ArrayList<GheNgoi> getListGheNgoi() throws SQLException {
-        Statement myStmt = databaseConnector.connect();
         String query = "select * from GheNgoi";
         ResultSet rs = myStmt.executeQuery(query);
         while (rs.next()) {
@@ -83,7 +87,6 @@ public class GheNgoiDAO {
 
     public ArrayList<GheTrenChuyenTau> getListTrenChuyenTau() throws SQLException {
         listGheTrenChuyenTau.clear();
-        Statement myStmt = databaseConnector.connect();
         String query = "select * from GheTrenChuyenTau";
         ResultSet rs = myStmt.executeQuery(query);
         while (rs.next()) {
@@ -113,7 +116,6 @@ public class GheNgoiDAO {
     }
 
     public ArrayList<GheNgoi> getListGheTrenChuyenByMaChuyen(String maChuyenTauInput) throws SQLException {
-        Statement myStmt = databaseConnector.connect();
         String query = "select * from GheTrenChuyenTau where maChuyenTau ='" +maChuyenTauInput+"'";
         ResultSet rs = myStmt.executeQuery(query);
         while (rs.next()) {
@@ -127,7 +129,6 @@ public class GheNgoiDAO {
         return  listGheNgoiTrenChuyen;
     }
     public GheNgoi getGheBangMaToaVaSoGhe(String maToaInput, int soGheInput) throws SQLException {
-        Statement myStmt = databaseConnector.connect();
         String query = "  select * from GheNgoi where maToaTau = '" +maToaInput+"' and soGhe = "+soGheInput+ ";";
         ResultSet rs = myStmt.executeQuery(query);
         while (rs.next()) {
@@ -174,7 +175,6 @@ public class GheNgoiDAO {
     public Map<String, ArrayList<GheNgoi>> getMapGheTheoToa(String maToaTauSQl) throws SQLException {
         Map<String, ArrayList<GheNgoi>> mapGheTheoToa = new HashMap<>();
         String query = "Select * from GheNgoi where maToaTau in (" + maToaTauSQl + ")";
-        Statement myStmt = databaseConnector.connect();
         ResultSet rs = myStmt.executeQuery(query);
         while(rs.next()) {
 
@@ -214,7 +214,7 @@ public class GheNgoiDAO {
         int n = 0;
         String sql = "Update GheNgoi set giaTriTangThem = ? where maGheNgoi = ?";
         try {
-            PreparedStatement ps = (PreparedStatement) databaseConnector.connect().getConnection().prepareStatement(sql);
+            PreparedStatement ps = (PreparedStatement) myStmt.getConnection().prepareStatement(sql);
             ps.setDouble(1, giaTriTangThem);
             ps.setString(2, maGhe);
             n = ps.executeUpdate();
@@ -228,7 +228,7 @@ public class GheNgoiDAO {
         int n = 0;
         String sql = "Update GheNgoi set giaTriTangThem = ? where maGheNgoi = ?";
         try {
-            PreparedStatement ps = (PreparedStatement) databaseConnector.connect().getConnection().prepareStatement(sql);
+            PreparedStatement ps = (PreparedStatement)myStmt.getConnection().prepareStatement(sql);
             for (Map.Entry<String, Double> entry : mapUpdateGhe.entrySet()) {
                 ps.setDouble(1, entry.getValue());
                 ps.setString(2, entry.getKey());

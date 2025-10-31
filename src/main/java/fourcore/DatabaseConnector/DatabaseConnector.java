@@ -20,7 +20,7 @@ public class DatabaseConnector {
         con = DriverManager.getConnection(dbConfig.getUrl(),dbConfig.getUsername(),dbConfig.getPassword());
 
         Statement myStmt = con.createStatement();
-
+        System.out.println("Connected to database successfully");
         return myStmt;
     }
     public static Connection getConnection() {

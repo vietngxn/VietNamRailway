@@ -16,17 +16,22 @@ import fourcore.Entity.Ve;
 public class VeDAO {
 	DatabaseConnector database = new DatabaseConnector();
 	ArrayList<Ve> listVe = getListVe();
-
+    Statement st;
+    public void goiDAO(){
+        System.out.println("Ve dao");
+    }
 	public VeDAO() throws SQLException {
+
+        st = database.connect();
+        goiDAO();
 		getListVe();
 	}
 
 	public VeDAO(int x) throws SQLException {
-		
+        st = database.connect();
 	}
     public double getGiaVe(String maVe) throws SQLException
     {
-        Statement st = database.connect();
         double GiaVe = 0;
         String sql = "SELECT giaVe FROM Ve WHERE maVeTau = '" + maVe + "'";
         ResultSet rs = st.executeQuery(sql);
@@ -49,7 +54,6 @@ public class VeDAO {
 	private ArrayList<Ve> listVe1;
 
 	public ArrayList<Ve> getListVe() throws SQLException {
-	    Statement st = database.connect();
 	    String query = "SELECT \r\n"
 	    		+ "    ve.maVeTau, ve.gaDi, ve.gaDen, ve.tenTau, ve.ngayGioDi, ve.ngayGioDen,\r\n"
 	    		+ "    ve.soToa, ve.soKhoang, ve.soTang, ve.soGhe, ve.loaiVe, ve.maGiayTo,\r\n"
@@ -147,7 +151,6 @@ public class VeDAO {
 
     public Ve getHoanVeBangMaVe(String maVe) throws SQLException {
         Ve v = new Ve();
-        Statement myStmt = database.connect();
         String sql =
                 "SELECT DISTINCT v.* " +
                         "FROM Ve AS v " +
@@ -162,7 +165,7 @@ public class VeDAO {
                         ") " +
                         "AND v.maVeTau = '"+maVe+"'";
 
-        ResultSet rs = myStmt.executeQuery(sql);
+        ResultSet rs = st.executeQuery(sql);
         while (rs.next()) {
             String maVeTau = rs.getString(1);
             String gaDi = rs.getString(2);
@@ -206,7 +209,6 @@ public class VeDAO {
     public ArrayList<Ve> getListHoanVe() throws SQLException {
         ArrayList<Ve> listVe3 = new ArrayList<Ve>();
 
-        Statement st = database.connect();
         String sql =
                 "SELECT DISTINCT v.* " +
                         "FROM Ve AS v " +
@@ -266,7 +268,6 @@ public class VeDAO {
 
     }
     public ArrayList<Ve> getListHoanVeTheoCCCDKhachHang(String cccd) throws SQLException {
-        Statement st = database.connect();
         ArrayList<Ve> listVe4 = new ArrayList<Ve>();
         String sql =
                 "SELECT DISTINCT v.* " +
@@ -325,7 +326,6 @@ public class VeDAO {
     }
 	
 	public boolean ThayDoiTrangThaiVe(String mave, String trangthaimoi) throws SQLException {
-		Statement st = database.connect();
 		String q = "UPDATE Ve SET trangThaiVe = N'" + trangthaimoi + "' WHERE maVeTau = '" + mave + "'";
 		int rows = st.executeUpdate(q);
 		return rows > 0;

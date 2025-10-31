@@ -12,9 +12,13 @@ import java.util.ArrayList;
 public class KhachHangDAO {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
 	ArrayList<KhachHang> listKhachHang = new ArrayList<KhachHang>();
+    Statement st;
 
-	public ArrayList<KhachHang> getListKhachHang() throws SQLException {
-		Statement st = databaseConnector.connect();
+    public KhachHangDAO() throws SQLException {
+        st = databaseConnector.connect();
+    }
+
+    public ArrayList<KhachHang> getListKhachHang() throws SQLException {
 		String q = "select * from KhachHang";
 		ResultSet rs = st.executeQuery(q);
 		while (rs.next()) {
@@ -32,7 +36,6 @@ public class KhachHangDAO {
 	}
 
 	public KhachHang getKhachHangByMa(String maKhachHang) throws SQLException {
-		Statement st = databaseConnector.connect();
 		String q = "select * from KhachHang where maKhachHang = '" + maKhachHang + "'";
 		ResultSet rs = st.executeQuery(q);
 
@@ -52,8 +55,7 @@ public class KhachHangDAO {
 		return kh;
 	}
 	public boolean themKhachHang(KhachHang kh) throws SQLException {
-	    Statement st = databaseConnector.connect();
-	    String q = "INSERT INTO KhachHang VALUES ('" 
+	    String q = "INSERT INTO KhachHang VALUES ('"
 	            + kh.getMaKhachHang() + "', N'" 
 	            + kh.getHoten() + "', '" 
 	            + kh.getSdt() + "', '" 
@@ -67,13 +69,11 @@ public class KhachHangDAO {
 	}
 	
 	public boolean xoaKhachHang(String maKH) throws SQLException {
-	    Statement st = databaseConnector.connect();
 	    String sql = "DELETE FROM KhachHang WHERE maKhachHang = '" + maKH + "'";
 	    int kq = st.executeUpdate(sql);
 	    return kq > 0;
 	}
 	public boolean capNhatKhachHang(KhachHang kh) throws SQLException {
-	    Statement st = databaseConnector.connect();
 	    String q = "UPDATE KhachHang SET "
 	            + "hoTen = N'" + kh.getHoten() + "', "
 	            + "sdt = '" + kh.getSdt() + "', "

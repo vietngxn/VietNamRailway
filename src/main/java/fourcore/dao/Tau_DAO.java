@@ -14,13 +14,16 @@ public class Tau_DAO {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
     LoaiTau_DAO loaitaudao = new LoaiTau_DAO();
     ArrayList<Tau> listTau = new ArrayList<>();
-
-    public Tau_DAO() {
+    Statement myStmt = databaseConnector.connect();
+    public Tau_DAO() throws SQLException {
+        goiDAO();
 	}
+    public void goiDAO(){
+        System.out.println("Tau dao");
+    }
 	ArrayList<Tau> list = new ArrayList<>();
 
 	public ArrayList<Tau> getList() throws SQLException {
-		Statement myStmt = databaseConnector.connect();
 		String sql = """
 				    SELECT t.maTau, t.tenTau, lt.maLoaiTau, lt.tenLoaiTau, lt.giaCuoc
 				    FROM Tau t
@@ -42,7 +45,6 @@ public class Tau_DAO {
 		return list;
 	}
     public Tau getTauByMaTau(String maTauInput) throws SQLException {
-        Statement myStmt = databaseConnector.connect();
         ArrayList<Tau> listTau = getList();
         String sql = """
 				    SELECT t.maTau, t.tenTau, lt.maLoaiTau, lt.tenLoaiTau, lt.giaCuoc
@@ -74,7 +76,7 @@ public class Tau_DAO {
         ArrayList<Tau> listTauTheoHanhTrinh = new ArrayList<>();
         String sql = "Select * From Tau where maLoaiTau = ?";
         try {
-            PreparedStatement ps = (PreparedStatement) databaseConnector.connect().getConnection().prepareStatement(sql);
+            PreparedStatement ps = (PreparedStatement) myStmt.getConnection().prepareStatement(sql);
             if(maHanhTrinh.equalsIgnoreCase("HT001")) ps.setString(1, "LT01");
             else if(maHanhTrinh.equalsIgnoreCase("HT002")) ps.setString(1, "LT02");
             else if(maHanhTrinh.equalsIgnoreCase("HT003")) ps.setString(1, "LT03");
@@ -98,7 +100,6 @@ public class Tau_DAO {
         try {
 
             listTau.removeAll(listTau);
-            Statement myStmt = databaseConnector.connect();
             String query = "select * from Tau";
             ResultSet rs = myStmt.executeQuery(query);
             while (rs.next()) {

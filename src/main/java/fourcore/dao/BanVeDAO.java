@@ -31,8 +31,13 @@ public class BanVeDAO {
     private String maHoaDon;
     HoaDon hoaDon;
     private String maVeTau;
+    Statement myStmt = databaseConnector.connect();
 
+    public void goiDAO(){
+        System.out.println("Ban Ve dao");
+    }
     public BanVeDAO() throws SQLException {
+        goiDAO();
         listDoiTuongGiamGia = doiTuongGiamGiaDAO.getListDoiTuongGiamGia();
         loadDataFromFile();
     }
@@ -96,7 +101,6 @@ public class BanVeDAO {
         }
     }
     public String getMaVe() throws SQLException {
-        Statement myStmt = databaseConnector.connect();
         String query = " SELECT COUNT(*) AS soLuong FROM Ve";
         ResultSet rs = myStmt.executeQuery(query);
         int soLuong = 0;
@@ -108,7 +112,6 @@ public class BanVeDAO {
         return maVe;
     }
     public String getMaKH() throws SQLException {
-        Statement myStmt = databaseConnector.connect();
         String query = "SELECT COUNT(*) AS soLuong FROM KhachHang";
         ResultSet rs = myStmt.executeQuery(query);
         int soLuong = 0;
@@ -120,7 +123,6 @@ public class BanVeDAO {
         return maKH;
     }
     public String getMaHoaDon() throws SQLException {
-        Statement myStmt = databaseConnector.connect();
         String query = "SELECT COUNT(*) AS soLuong FROM HoaDon";
         ResultSet rs = myStmt.executeQuery(query);
         int soLuong = 0;
@@ -181,7 +183,6 @@ public class BanVeDAO {
         return null;
     }
     public void updateTrangThaiGheTrenChuyenTau(GheTrenChuyenTau gheTrenCT) throws SQLException {
-        Statement myStmt = databaseConnector.connect();
         Connection con = (Connection) databaseConnector.getInstance().getConnection();
         String query = "  UPDATE GheTrenChuyenTau \n" +
                 "   SET trangThaiGhe = N'đã bán'\n" +
@@ -194,7 +195,6 @@ public class BanVeDAO {
     }
 
     public HoaDon themHoaDon(HoaDon hoaDon) throws SQLException {
-        Statement myStmt = databaseConnector.connect();
         Connection con = (Connection) databaseConnector.getInstance().getConnection();
         maHoaDon = getMaHoaDon();
         this.hoaDon = hoaDon;
@@ -217,7 +217,6 @@ return hoaDon;
 
     }
     public String getMaCTHoaDon() throws SQLException {
-        Statement myStmt = databaseConnector.connect();
         String query = "SELECT COUNT(*) AS soLuong FROM ChiTietHoaDon";
         ResultSet rs = myStmt.executeQuery(query);
         int soLuong = 0;
@@ -238,7 +237,6 @@ return hoaDon;
             loaiHoaDon = "Vé cá nhân";
         }
             ChiTietHoaDon chiTietHoaDon = new ChiTietHoaDon(hoaDon,ve,ve.getTenTau(),tinhTienVe(khuyenMai,gheTrenChuyenTau),8,tinhTienVe(khuyenMai,gheTrenChuyenTau)*1.08,loaiHoaDon);
-        Statement myStmt = databaseConnector.connect();
         Connection con = (Connection) databaseConnector.getInstance().getConnection();
         String query = "Insert into ChiTietHoaDon " +
                 "Values (?,?,?,?,?,?,?,?)";
@@ -255,7 +253,6 @@ return hoaDon;
         System.out.println("Thêm ct hóa đơn thành công");
     }
     public String getMaLichSuTuongTac() throws SQLException {
-        Statement myStmt = databaseConnector.connect();
         String query = "SELECT COUNT(*) AS soLuong FROM LichSuTuongTacVe";
         ResultSet rs = myStmt.executeQuery(query);
         int soLuong = 0;
@@ -272,7 +269,6 @@ return hoaDon;
         String maVeTau = veTau.getMaVeTau();
         double giaTriChenhLech = tinhTienVe(khuyenMai,gheTrenChuyenTau);
         LocalDateTime ngayTuongTac =  LocalDateTime.now();
-        Statement myStmt = databaseConnector.connect();
         Connection con = (Connection) databaseConnector.getInstance().getConnection();
         String query = "Insert into LichSuTuongTacVe " +
                 "Values (?,?,?,?,?)";
@@ -290,7 +286,6 @@ return hoaDon;
 
     public void themVe() throws SQLException {
         ArrayList<Ve> listVe = new ArrayList<>();
-        Statement myStmt = databaseConnector.connect();
         Connection con = (Connection) databaseConnector.getInstance().getConnection();
         for(int i=0;i<listGheTrenChuyenTau.size();i++) {
             KhachHang kh = new KhachHang(getMaKH(), mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getHoten(), mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getCccd(), mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getDoiTuong());

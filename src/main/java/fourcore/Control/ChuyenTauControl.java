@@ -19,7 +19,10 @@ public class ChuyenTauControl {
 	public ThemDauTau gdThemDauTau = new ThemDauTau();
 	public ThemToaTau gdThemToaTau = new ThemToaTau();
 	public ThietLapGiaGhe gdThietLap = new ThietLapGiaGhe();
-	
+
+    public ChuyenTauControl() throws SQLException {
+    }
+
     public void handleMenuTrangChuSelect(BorderPane root) throws SQLException, IOException {
         QuanLyChuyenTau gdQuanLiChuyenTau = new QuanLyChuyenTau();
         Button buttonThemChuyen = null;

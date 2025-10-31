@@ -12,10 +12,17 @@ import java.util.ArrayList;
 public class NhanVienDAO {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
 	ArrayList<NhanVien> listKhachHang = new ArrayList<NhanVien>();
+    Statement st = databaseConnector.connect();
 
-	public ArrayList<NhanVien> getListNhanVien() throws SQLException {
+    public NhanVienDAO() throws SQLException {
+        goiDao();
+    }
+    public void goiDao(){
+        System.out.println("Nhan vien dao");
+    }
 
-		Statement st = databaseConnector.connect();
+    public ArrayList<NhanVien> getListNhanVien() throws SQLException {
+
 		String q = "Select * from NhanVien";
 		ResultSet rs = st.executeQuery(q);
 		while (rs.next()) {
@@ -34,9 +41,7 @@ public class NhanVienDAO {
 	}
 
 	public NhanVien getNhanVienByMa(String manv) throws SQLException {
-
-		Statement st = databaseConnector.connect();
-		String q = "Select * from NhanVien where maNhanVien = " + "'" + manv + "'";
+        String q = "Select * from NhanVien where maNhanVien = " + "'" + manv + "'";
 		ResultSet rs = st.executeQuery(q);
 		while (rs.next()) {
 			String maNhanVien = rs.getString(1);

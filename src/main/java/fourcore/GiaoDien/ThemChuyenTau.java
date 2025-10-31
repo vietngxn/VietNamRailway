@@ -141,7 +141,11 @@ public class ThemChuyenTau extends Application {
 	private TableView<HanhTrinh> table;
 	private Map<String, Object> mapTmp;
 	private Button buttonTiepTuc;
-	@Override
+
+    public ThemChuyenTau() throws SQLException {
+    }
+
+    @Override
 	public void start(Stage primaryStage) {
 		try {
 		

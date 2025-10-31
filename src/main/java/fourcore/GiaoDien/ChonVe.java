@@ -922,7 +922,12 @@ public class ChonVe extends Application {
                     throw new RuntimeException(e);
                 }
                 System.out.println(selectedChuyenTau.getMaChuyenTau());
-                ToaTauDAO toaTauDAO = new ToaTauDAO();
+                ToaTauDAO toaTauDAO = null;
+                try {
+                    toaTauDAO = new ToaTauDAO();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
 
                 try {
                     dsToaTrenChuyen = toaTauDAO.getListToaTauByMaCT(chuyenDuocSelect.getMaChuyenTau());

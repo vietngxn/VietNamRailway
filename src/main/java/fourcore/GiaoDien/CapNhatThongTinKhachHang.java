@@ -37,7 +37,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class CapNhatThongTinKhachHang extends Application {
-	public static void main(String[] args) {
+    public CapNhatThongTinKhachHang() throws SQLException {
+    }
+
+    public static void main(String[] args) {
 		launch(args);
 //		Application.launch(ThemChuongTrinhKhuyenMai.class, args);
 	}
@@ -102,7 +105,6 @@ public class CapNhatThongTinKhachHang extends Application {
 	private ImageView userIcon;
 	private Labeled userLabel;
 	private ImageView settingIcon;
-	private KhachHangDAO khdao = new KhachHangDAO();
 	private TextField txtCCCD;
 	private TextField txtPassport;
 	private StackPane spCCCD;

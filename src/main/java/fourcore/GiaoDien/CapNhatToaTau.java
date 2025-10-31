@@ -127,7 +127,11 @@ public class CapNhatToaTau extends Application {
 	private File fileTmp;
 	private GhiFile ghiFile = new GhiFile();
 	private ChuyenTauDAO chuyentaudao  = null;
-	@Override
+
+    public CapNhatToaTau() throws SQLException {
+    }
+
+    @Override
 	public void start(Stage primaryStage) {
 		try {
 			BorderPane root = new BorderPane();

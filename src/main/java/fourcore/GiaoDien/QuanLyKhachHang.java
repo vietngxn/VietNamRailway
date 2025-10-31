@@ -134,8 +134,11 @@ public class QuanLyKhachHang extends Application {
 	private Label colemail;
 	private StackPane paneCol5;
 	private StackPane paneCol6;
-    
-	@Override
+
+    public QuanLyKhachHang() throws SQLException {
+    }
+
+    @Override
 	public void start(Stage primaryStage) {
 		try {
 			listkh = khdao.getListKhachHang();
@@ -408,7 +411,12 @@ public class QuanLyKhachHang extends Application {
 
             });
             quanLiKhachHangBox.setOnMouseClicked(event -> {
-                QuanLyKhachHang gdQuanLyKhachHang = new QuanLyKhachHang();
+                QuanLyKhachHang gdQuanLyKhachHang = null;
+                try {
+                    gdQuanLyKhachHang = new QuanLyKhachHang();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 Stage quanLyKhachHangStage = new Stage();
                 gdQuanLyKhachHang.start(quanLyKhachHangStage);
                 VBox quanLyKhachHangVBox = gdQuanLyKhachHang.getQuanLiKhachHang();

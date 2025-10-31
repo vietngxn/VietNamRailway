@@ -14,10 +14,13 @@ import fourcore.Entity.NhanVien;
 public class TaiKhoanDAO {
 
     DatabaseConnector databaseConnector = new DatabaseConnector();
+    Statement st = databaseConnector.connect();
+
+    public TaiKhoanDAO() throws SQLException {
+    }
 
     public String getMatKhau(String tenDangNhap) throws SQLException
     {
-        Statement st = databaseConnector.connect();
         String sql = "SELECT tenDangNhap, matKhau FROM TaiKhoan WHERE tenDangNhap = '" + tenDangNhap + "'";
 
 
@@ -33,7 +36,6 @@ public class TaiKhoanDAO {
 
     public NhanVien getNhanVien(String tenDangNhap) throws SQLException
     {
-        Statement st = databaseConnector.connect();
         String sql = "SELECT nv.* FROM NhanVien nv "
                 + "JOIN TaiKhoan tk ON nv.maNhanVien = tk.maNhanVien "
                 + "WHERE tk.tenDangNhap = '" + tenDangNhap + "'";

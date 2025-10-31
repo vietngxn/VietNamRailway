@@ -12,13 +12,17 @@ import java.util.ArrayList;
 public class LoaiGheDAO {
     DatabaseConnector databaseConnector = new DatabaseConnector();
     ArrayList<LoaiGhe> listLoaiGhe = new ArrayList<>();
+    Statement myStmt;
 
     public LoaiGheDAO() throws SQLException {
+        myStmt = databaseConnector.connect();
         getListLoaiGhe();
+        goiDAO();
     }
-
+    public void goiDAO(){
+        System.out.println("loai ghe dao");
+    }
     public ArrayList<LoaiGhe> getListLoaiGhe() throws SQLException {
-        Statement myStmt = databaseConnector.connect();
         String query = " SELECT * FROM LoaiGhe";
         ResultSet rs = myStmt.executeQuery(query);
         while (rs.next()) {

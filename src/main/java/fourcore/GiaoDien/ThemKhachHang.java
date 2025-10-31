@@ -37,7 +37,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class ThemKhachHang extends Application {
-	public static void main(String[] args) {
+    public ThemKhachHang() throws SQLException {
+    }
+
+    public static void main(String[] args) {
 		launch(args);
 //		Application.launch(ThemChuongTrinhKhuyenMai.class, args);
 	}

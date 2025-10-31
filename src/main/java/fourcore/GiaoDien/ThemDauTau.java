@@ -131,7 +131,11 @@ public class ThemDauTau extends Application {
 	private TableView<Tau> table;
 	private Map<String, Object> mapTmp;
 	private Button buttonTiepTuc;
-	@Override
+
+    public ThemDauTau() throws SQLException {
+    }
+
+    @Override
 	public void start(Stage primaryStage) {
 		try {
 			BorderPane root = new BorderPane();

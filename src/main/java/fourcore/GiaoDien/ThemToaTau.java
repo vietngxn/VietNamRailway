@@ -126,7 +126,11 @@ public class ThemToaTau extends Application {
 	private File fileTmp;
 	private GhiFile ghiFile = new GhiFile();
 	private Button buttonTiepTuc;
-	@Override
+
+    public ThemToaTau() throws SQLException {
+    }
+
+    @Override
 	public void start(Stage primaryStage) {
 		try {
 			BorderPane root = new BorderPane();

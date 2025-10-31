@@ -8,8 +8,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
+
 public class KhachHangControl {
     QuanLyKhachHang gdQuanLyKhachHang = new QuanLyKhachHang();
+
+    public KhachHangControl() throws SQLException {
+    }
 
     public void handleMenuTrangChuSelect(BorderPane root) {
         Stage quanLyKhachHangStage = new Stage();
@@ -31,7 +36,12 @@ public class KhachHangControl {
         Stage suaKhachHangStage = new Stage();
 
         gdQuanLyKhachHang.getBtn_capnhat().setOnMouseClicked(e ->{
-            CapNhatThongTinKhachHang capNhatThongTinKhachHang = new CapNhatThongTinKhachHang();
+            CapNhatThongTinKhachHang capNhatThongTinKhachHang = null;
+            try {
+                capNhatThongTinKhachHang = new CapNhatThongTinKhachHang();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             try {
                 capNhatThongTinKhachHang.start(suaKhachHangStage);
             } catch (Exception ex) {

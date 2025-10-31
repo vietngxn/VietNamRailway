@@ -10,14 +10,14 @@ import fourcore.Entity.DoiTuongGiamGia;
 
 public class DoiTuongGiamGia_DAO {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
+    Statement myStmt = databaseConnector.connect();
 
-	public DoiTuongGiamGia_DAO() {
+	public DoiTuongGiamGia_DAO() throws SQLException {
 	}
 
 	ArrayList<DoiTuongGiamGia> list = new ArrayList<>();
 
 	public ArrayList<DoiTuongGiamGia> getList() throws SQLException {
-		Statement myStmt = databaseConnector.connect();
 		String query = "select * from DoiTuongGiamGia";
 		ResultSet rs = myStmt.executeQuery(query);
 		while (rs.next()) {

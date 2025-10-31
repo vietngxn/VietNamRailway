@@ -12,11 +12,14 @@ import fourcore.Entity.NhanVien;
 public class LoaiHoaDonDAO {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
 	ArrayList<LoaiHoaDon> list = new ArrayList<>();
+    Statement st = databaseConnector.connect();
 
-	public ArrayList<LoaiHoaDon> getList() throws SQLException {
+    public LoaiHoaDonDAO() throws SQLException {
+    }
+
+    public ArrayList<LoaiHoaDon> getList() throws SQLException {
 
 		String sql = "SELECT * FROM LoaiHoaDon";
-		Statement st = databaseConnector.connect();
 		ResultSet rs = st.executeQuery(sql);
 
 		while (rs.next()) {
@@ -38,7 +41,6 @@ public class LoaiHoaDonDAO {
 		LoaiHoaDon loai = null;
 		String sql = "SELECT * FROM LoaiHoaDon WHERE maLoaiHoaDon = '" + maLoaiHoaDon + "'";
 
-		Statement st = databaseConnector.connect();
 		ResultSet rs = st.executeQuery(sql);
 
 		if (rs.next()) {
@@ -66,7 +68,6 @@ public class LoaiHoaDonDAO {
 	               + "AND v.ngayGioDi > GETDATE() "
 	               + "AND v.maVeTau = '" + maVe + "'";
 
-	    Statement st = databaseConnector.connect();
 	    ResultSet rs = st.executeQuery(sql);
 	    if (rs.next()) {
 	        loai = rs.getString("tenLoaiHoaDon");

@@ -13,14 +13,17 @@ import fourcore.Entity.LoaiTuongTacVe;
 public class LoaiTuongTac_Dao {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
 	ArrayList<LoaiTuongTacVe> list = getList();
+    Statement myStmt = databaseConnector.connect();
 
 	public LoaiTuongTac_Dao() throws SQLException {
+        goiDAO();
 		getList();
 	}
 
-
+    public void goiDAO(){
+        System.out.println("loai tuong tac dao");
+    }
 	public ArrayList<LoaiTuongTacVe> getList() throws SQLException {
-		Statement myStmt = databaseConnector.connect();
 		ArrayList<LoaiTuongTacVe> list1 = new ArrayList<LoaiTuongTacVe>();
 		String query = "select * from LoaiTuongTacVe";
 		ResultSet rs = myStmt.executeQuery(query);
@@ -34,7 +37,6 @@ public class LoaiTuongTac_Dao {
 	}
 
 	public LoaiTuongTacVe getLoaiTheoMa(String maTuongTac) throws SQLException {
-		Statement myStmt = databaseConnector.connect();
 		LoaiTuongTacVe ltt = new LoaiTuongTacVe();
 		String query = "select * from LoaiTuongTacVe where maLoaiTuongTac = " + "'" + maTuongTac + "'";
 		ResultSet rs = myStmt.executeQuery(query);

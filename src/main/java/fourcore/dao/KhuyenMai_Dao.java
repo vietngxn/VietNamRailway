@@ -12,13 +12,14 @@ import fourcore.Entity.KhuyenMai;
 public class KhuyenMai_Dao {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
 	ArrayList<KhuyenMai> list = getList();
-	public KhuyenMai_Dao() throws SQLException {
+    Statement myStmt = databaseConnector.connect();
+
+    public KhuyenMai_Dao() throws SQLException {
         getList();
 	}
 
 
 	public ArrayList<KhuyenMai> getList() throws SQLException {
-		Statement myStmt = databaseConnector.connect();
 		String query = "select * from KhuyenMai";
 		ResultSet rs = myStmt.executeQuery(query);
 		ArrayList<KhuyenMai> list1 = new ArrayList<>();

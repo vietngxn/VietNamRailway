@@ -20,12 +20,16 @@ public class ChuyenTauDAO {
     ArrayList<Tau> listTau;
     HanhTrinh_DAO hanhTrinh_DAO = new HanhTrinh_DAO();
     ArrayList<HanhTrinh> listHanhTrinh;
+    Statement myStmt = databaseConnector.connect();
+    public void goiDAO(){
+        System.out.println("chuyen tau dao");
+    }
     public ChuyenTauDAO() throws SQLException {
+        goiDAO();
         getListChuyenTau();
     }
 
     public ArrayList<ChuyenTau> getListChuyenTau() throws SQLException {
-        Statement myStmt = databaseConnector.connect();
         String query = "select * from ChuyenTau";
         ResultSet rs = myStmt.executeQuery(query);
         listHanhTrinh = hanhTrinh_DAO.getList();
@@ -46,7 +50,6 @@ public class ChuyenTauDAO {
     public String getMaChuyenTauCuoiCung() {
         String maChuyenTau = null;
         try {
-            Statement myStmt = databaseConnector.connect();
             String sql = "Select top 1 maChuyenTau From ChuyenTau Order By maChuyenTau DESC";
             ResultSet rs = myStmt.executeQuery(sql);
             if(rs.next()) {

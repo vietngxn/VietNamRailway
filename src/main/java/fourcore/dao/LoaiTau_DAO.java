@@ -12,12 +12,17 @@ import fourcore.Entity.LoaiTau;
 public class LoaiTau_DAO {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
     ArrayList<LoaiTau> listLoaiTau =  new ArrayList<>();
-	public LoaiTau_DAO() {}
+    Statement myStmt;
 
+    public LoaiTau_DAO() throws SQLException {
+        myStmt = databaseConnector.connect();
+        goiDAO();
+    }
 	ArrayList<LoaiTau> list = new ArrayList<>();
-
+    public void goiDAO(){
+        System.out.println("loai tau dao");
+    }
 	public ArrayList<LoaiTau> getList() throws SQLException {
-		Statement myStmt = databaseConnector.connect();
 		String query = "select * from LoaiTau";
 		ResultSet rs = myStmt.executeQuery(query);
 		while (rs.next()) {
@@ -32,7 +37,6 @@ public class LoaiTau_DAO {
         try {
 
             listLoaiTau.removeAll(listLoaiTau);
-            Statement myStmt = databaseConnector.connect();
             String query = "select * from LoaiTau";
             ResultSet rs = myStmt.executeQuery(query);
             while (rs.next()) {
@@ -61,7 +65,7 @@ public class LoaiTau_DAO {
         int n = 0;
         String sql = "Update LoaiTau set giaCuoc = ? where maLoaiTau = ?";
         try {
-            PreparedStatement ps = (PreparedStatement) databaseConnector.connect().getConnection().prepareStatement(sql);
+            PreparedStatement ps = (PreparedStatement) myStmt.getConnection().prepareStatement(sql);
             ps.setDouble(1, giaCuoc);
             ps.setString(2, maLoaiTau);
             n = ps.executeUpdate();

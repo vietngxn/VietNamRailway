@@ -12,12 +12,16 @@ import java.util.ArrayList;
 public class TangDAO {
     DatabaseConnector databaseConnector = new DatabaseConnector();
     public ArrayList<Tang> listTang = new ArrayList<>();
-
+    Statement myStmt;
+    public void goiDAO(){
+        System.out.println("Tang dao");
+    }
     TangDAO() throws SQLException {
+        myStmt = databaseConnector.connect();
+        goiDAO();
         getListTang();
     }
     public ArrayList<Tang> getListTang() throws SQLException {
-        Statement myStmt = databaseConnector.connect();
         String query = "SELECT * FROM Tang";
         ResultSet rs = myStmt.executeQuery(query);
         while (rs.next()) {

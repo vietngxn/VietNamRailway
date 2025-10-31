@@ -13,9 +13,15 @@ public class GaTauDao {
     DatabaseConnector databaseConnector = new DatabaseConnector();
     ArrayList<Ga> danhSachGaTau = new ArrayList<>();
     ArrayList<String> danhSachTenGa = new ArrayList<>();
+    Statement myStmt = databaseConnector.connect();
+    public void goiDAO(){
+        System.out.println("ga tau dao");
+    }
+    public GaTauDao() throws SQLException {
+        goiDAO();
+    }
 
     public String getGaDi() throws SQLException {
-        Statement myStmt = databaseConnector.connect();
         String query = "select tenGa from ga where cuLy=0";
         ResultSet rs = myStmt.executeQuery(query);
         while (rs.next()) {
@@ -26,7 +32,7 @@ public class GaTauDao {
     }
 
     public ArrayList<String> getDanhSachTenGaTau() throws SQLException {
-        Statement myStmt = databaseConnector.connect();
+
 
         String query = "select tenGa from ga";
         ResultSet rs = myStmt.executeQuery(query);

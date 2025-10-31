@@ -18,8 +18,17 @@ public class ToaTauDAO {
     ArrayList<ToaTau> listToaTau =  new ArrayList<>();
     LoaiToaTauDAO loaiToaTauDAO = new LoaiToaTauDAO();
 
+    Statement myStmt;
+    public ToaTauDAO() throws SQLException {
+        myStmt = databaseConnector.connect();
+        goiDAO();
+
+    }
+    public void goiDAO(){
+        System.out.println("toa tau dao");
+    }
     public ArrayList<ToaTau> getListToaTau() throws SQLException {
-        Statement myStmt = databaseConnector.connect();
+
         String query = "select * from ToaTau";
         ResultSet rs = myStmt.executeQuery(query);
         while (rs.next()) {
@@ -27,7 +36,6 @@ public class ToaTauDAO {
             String maLoaiToa = rs.getString(2);
             String tenToaTau = rs.getString(3);
             int soToaTau = Integer.parseInt(rs.getString(4));
-            LoaiToaTauDAO loaiToaTauDAO = new LoaiToaTauDAO();
             LoaiToaTau loaiToaTau = loaiToaTauDAO.getLoaiToaTau(maLoaiToa);
             ToaTau toaTau = new ToaTau(maToaTau, tenToaTau,soToaTau, loaiToaTau);
             listToaTau.add(toaTau);
@@ -37,9 +45,7 @@ public class ToaTauDAO {
         return listToaTau;
     }
     public ArrayList<ToaTau> getListToaTauByMaCT(String maCT) throws SQLException {
-    DatabaseConnector databaseConnector = new DatabaseConnector();
     ArrayList<ToaTau> listToaTheoChuyen =  new ArrayList<>();
-    Statement myStmt = databaseConnector.connect();
     String query = "SELECT DISTINCT tt.maToaTau,tt.tenToaTau,tt.soToa,ltt.maLoaiToaTau\n" +
             "FROM GheTrenChuyenTau gtc\n" +
             "JOIN GheNgoi g ON gtc.maGheNgoi = g.maGheNgoi\n" +
@@ -84,7 +90,7 @@ public class ToaTauDAO {
         ArrayList<ToaTau> listToaTheoLoaiTau = new ArrayList<>();
         String sql = "Select * From ToaTau where maLoaiToaTau = ?";
         try {
-            PreparedStatement ps = (PreparedStatement) databaseConnector.connect().getConnection().prepareStatement(sql);
+            PreparedStatement ps = (PreparedStatement) myStmt.getConnection().prepareStatement(sql);
             ps.setString(1, maLoaiToa);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -108,7 +114,7 @@ public class ToaTauDAO {
 		ArrayList<ToaTau> listToaTheoLoaiTau = new ArrayList<>();
 		String sql = "Select * From ToaTau where tenToaTau = ?";
 		try {
-			PreparedStatement ps = (PreparedStatement) databaseConnector.connect().getConnection().prepareStatement(sql);
+			PreparedStatement ps = (PreparedStatement) myStmt.getConnection().prepareStatement(sql);
 			ps.setString(1, tenLoaiToa);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {

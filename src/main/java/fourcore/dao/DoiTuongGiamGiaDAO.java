@@ -10,9 +10,14 @@ import java.util.ArrayList;
 
 public class DoiTuongGiamGiaDAO {
     DatabaseConnector databaseConnector = new DatabaseConnector();
+    Statement myStmt = databaseConnector.connect();
+
     ArrayList<DoiTuongGiamGia> listDoiTuongGiamGia = new ArrayList<>();
+
+    public DoiTuongGiamGiaDAO() throws SQLException {
+    }
+
     public ArrayList<DoiTuongGiamGia> getListDoiTuongGiamGia() throws SQLException {
-        Statement myStmt = databaseConnector.connect();
         String query = "select * from DoiTuongGiamGia";
         ResultSet rs = myStmt.executeQuery(query);
         while (rs.next()) {

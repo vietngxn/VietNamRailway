@@ -167,7 +167,11 @@ public class ThietLapGiaGhe extends Application {
 	private Map<String, Double> mapUpdateGhe = new HashMap<>();
 	private GheTrenChuyenTau_dao ghetrenchuyentaudao = new GheTrenChuyenTau_dao();
 	private ChuyenTau chuyenTauCuaGheTrenChuyenTau = null;
-	@Override
+
+    public ThietLapGiaGhe() throws SQLException {
+    }
+
+    @Override
 	public void start(Stage primaryStage) {
 		try {
 			

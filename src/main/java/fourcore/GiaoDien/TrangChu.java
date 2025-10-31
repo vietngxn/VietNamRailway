@@ -994,8 +994,13 @@ public class TrangChu extends Application {
 			});
 
 			quanLiKhachHangBox.setOnMouseClicked(event -> {
-				KhachHangControl khachHangControl = new KhachHangControl();
-				khachHangControl.handleMenuTrangChuSelect(root);
+                KhachHangControl khachHangControl = null;
+                try {
+                    khachHangControl = new KhachHangControl();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                khachHangControl.handleMenuTrangChuSelect(root);
                 try {
                     khachHangControl.handleThemKhachHangSelect(root);
                     khachHangControl.suaThongTinKhachHangSelect(root);
@@ -1028,7 +1033,12 @@ public class TrangChu extends Application {
 
 			});
 			quanLiChuyenTauBox.setOnMouseClicked(event -> {
-				ChuyenTauControl chuyenTauControl = new ChuyenTauControl();
+                ChuyenTauControl chuyenTauControl = null;
+                try {
+                    chuyenTauControl = new ChuyenTauControl();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 try {
                     chuyenTauControl.handleMenuTrangChuSelect(root);
                 } catch (SQLException e) {

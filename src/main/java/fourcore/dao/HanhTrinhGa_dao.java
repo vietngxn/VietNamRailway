@@ -1,8 +1,6 @@
 package fourcore.dao;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -17,7 +15,13 @@ public class HanhTrinhGa_dao {
 	
 	DatabaseConnector databaseConnector = new DatabaseConnector();
 	private ArrayList<HanhTrinhGa> listHanhTrinhGa = new ArrayList<HanhTrinhGa>();
-	public HanhTrinhGa_dao() {
+    Statement myStmt;
+    public void goiDAO(){
+        System.out.println("hanh trinh ga dao");
+    }
+	public HanhTrinhGa_dao() throws SQLException {
+        goiDAO();
+        myStmt = databaseConnector.connect();
 		listHanhTrinhGa = new ArrayList<>();
 	}
 	
@@ -25,7 +29,7 @@ public class HanhTrinhGa_dao {
 		ArrayList<HanhTrinhGa> listHanhTrinhGa = new ArrayList<>();
 		String sql = "Select * From HanhTrinhGa where maHanhTrinh = ?";
 		try {
-			PreparedStatement ps = (PreparedStatement) databaseConnector.connect().getConnection().prepareStatement(sql);
+			PreparedStatement ps = (PreparedStatement) myStmt.getConnection().prepareStatement(sql);
 			ps.setString(1, maHanhTrinh);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
@@ -51,7 +55,7 @@ public class HanhTrinhGa_dao {
 		String sql = "SELECT maHanhTrinh FROM ChuyenTau WHERE CAST(ngayGioDi AS DATE) = ?";
 
 		try {
-			PreparedStatement ps = (PreparedStatement) databaseConnector.connect().getConnection().prepareStatement(sql);
+			PreparedStatement ps = (PreparedStatement) myStmt.getConnection().prepareStatement(sql);
 			ps.setDate(1, ngayGioDi);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {

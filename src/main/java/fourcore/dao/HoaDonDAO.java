@@ -16,9 +16,12 @@ import fourcore.Entity.NhanVien;
 public class HoaDonDAO {
 	DatabaseConnector database = new DatabaseConnector();
 	ArrayList<HoaDon> listHoaDon = new ArrayList<HoaDon>();
+    Statement st = database.connect();
 
-	public ArrayList<HoaDon> getListHoaDon() throws SQLException {
-		Statement st = database.connect();
+    public HoaDonDAO() throws SQLException {
+    }
+
+    public ArrayList<HoaDon> getListHoaDon() throws SQLException {
 		String q = "SELECT hd.maHoaDon, kh.hoTen , kh.sdt , hd.ngayThanhToan , hd.tongTien\r\n"
 				+ "				FROM [dbo].[HoaDon] hd, [dbo].[ChiTietHoaDon] chd , [dbo].[Ve] ve , [dbo].[KhachHang] kh\r\n"
 				+ "				WHERE hd.MaHoaDon = chd.MaHoaDon \r\n" + "				and\r\n"
@@ -38,8 +41,7 @@ public class HoaDonDAO {
 	}
 
 	public HoaDon getHoaDonBangMaVe(String maVe) throws SQLException {
-		Statement st = database.connect();
-		String q = "select hd.*\r\n" + "from HoaDon as hd\r\n"
+        String q = "select hd.*\r\n" + "from HoaDon as hd\r\n"
 				+ "join ChiTietHoaDon as ct on hd.maHoaDon = ct.maHoaDon\r\n"
 				+ "join Ve as v on ct.maVeTau = v.maVeTau\r\n" + "where v.maVeTau = " + "'" + maVe + "'";
 		ResultSet rs = st.executeQuery(q);
@@ -65,7 +67,6 @@ public class HoaDonDAO {
 	}
 
 	public void themHoaDonHoanTraVe(HoaDon hd) throws SQLException {
-	    Statement st = database.connect();
 
 	    String countQuery = "SELECT COUNT(*) AS soLuong FROM HoaDon";
 	    int soLuongHoaDon = 0;

@@ -14,15 +14,16 @@ import fourcore.Entity.Tau;
 
 public class ThongKeDAO {
 	DatabaseConnector db = new DatabaseConnector();
-	
-	public ThongKeDAO()
-	{
-		
+    Statement st = db.connect();
+
+    public ThongKeDAO() throws SQLException {
+		goiDAO();
 	}
-	
+    public void goiDAO(){
+        System.out.println("Ve dao");
+    }
 	public Map<Tau, Integer> getTauVaSoLanDi() throws SQLException {
 	    Map<Tau, Integer> list = new LinkedHashMap<>();
-	    Statement st = db.connect();
 	    String q = "SELECT " +
 	               "t.maTau, " +
 	               "t.tenTau, " +
@@ -46,7 +47,6 @@ public class ThongKeDAO {
 	public Map<KhachHang,Integer> getKhachHangvaSoLanDi() throws SQLException
 	{
 		Map<KhachHang,Integer> list = new LinkedHashMap<KhachHang, Integer>();
-		Statement st = db.connect();
 		 String q = "SELECT " +
 	               "    kh.maKhachHang, " +
 	               "    kh.hoTen, " +
@@ -67,7 +67,6 @@ public class ThongKeDAO {
 	
 	public Map<Integer,Double> getDoanhThuTheoThang(int nam) throws SQLException{
 	    Map<Integer,Double> list = new LinkedHashMap<Integer, Double>();
-	    Statement st = db.connect();
 	    String q = "SELECT \r\n"
 	        + " MONTH(ngayThanhToan) AS Thang,\r\n"
 	        + " SUM(tongTien) AS DoanhThuThang\r\n"

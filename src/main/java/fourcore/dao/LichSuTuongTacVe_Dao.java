@@ -22,19 +22,23 @@ import fourcore.Entity.Ve;
 public class LichSuTuongTacVe_Dao {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
 	ArrayList<LichSuTuongTacVe> list = getList();
+    Statement myStmt = databaseConnector.connect();
 
 	public LichSuTuongTacVe_Dao() throws SQLException {
+        goiDAO();
 		getList();
-	}
 
+	}
+    public void goiDAO(){
+        System.out.println("lich su tuong tac dao");
+    }
 	public LichSuTuongTacVe_Dao(int x) throws SQLException {
-		
+		goiDAO();
 	}
 
 	public ArrayList<LichSuTuongTacVe> getList() throws SQLException {
 		LoaiTuongTac_Dao lttDao = new LoaiTuongTac_Dao();
 		VeDAO veDao = new VeDAO();
-		Statement myStmt = databaseConnector.connect();
 		ArrayList<LichSuTuongTacVe> list1 = new ArrayList<LichSuTuongTacVe>();
 		String query = "select * from LichSuTuongTacVe";
 		ResultSet rs = myStmt.executeQuery(query);
@@ -56,7 +60,6 @@ public class LichSuTuongTacVe_Dao {
 	
 	public boolean themLichSuTuongTacVe(LichSuTuongTacVe lstt) throws SQLException
 	{
-		Statement st = databaseConnector.connect();
 		LocalDateTime ngay = lstt.getNgayTuongTac();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String ngayFormatted = ngay.format(formatter);
@@ -66,7 +69,7 @@ public class LichSuTuongTacVe_Dao {
 		        + lstt.getVeTau().getMaVeTau()+ "', "
 		        + lstt.getGiaTriChenhLech() + ", '"
 		        + ngayFormatted + "')";
-		boolean check = st.execute(query);
+		boolean check = myStmt.execute(query);
 		return check;
 	}
 	
