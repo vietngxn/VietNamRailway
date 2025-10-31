@@ -707,6 +707,7 @@ public class ChonVe extends Application {
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
+            gheDangChonList.clear();
             hienThiDanhSachChuyenTau(docLai);
             noiDungChinh.getChildren().add(danhSachGheBox);
 
@@ -825,7 +826,11 @@ public class ChonVe extends Application {
         List<ImageView> imageViews = new ArrayList<>();
 
         for (ChuyenTau c : danhSachChuyenTau) {
+
             HBox chuyenTauCont = new HBox();
+            ScrollPane chuyenTauScroll = new ScrollPane(chuyenTauCont);
+            chuyenTauScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+            chuyenTauScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 //            chuyenTauCont.setPrefWidth(200);
             StackPane chuyenTauBox = new StackPane();
             ImageView chuyenTauImage = new ImageView(defaultImage);
@@ -898,6 +903,7 @@ public class ChonVe extends Application {
 
             chuyenTauCont.getChildren().add(chuyenTauBox);
             chuyenTauCont.setPadding(new Insets(0,20,0,0));
+
             chuyenTauMenu.getChildren().add(chuyenTauCont);
             imageViews.add(chuyenTauImage);
             chuyenTauCont.setUserData(c);
@@ -1157,6 +1163,9 @@ public class ChonVe extends Application {
 
                 // Ghi danh sách ghế ra file
                 File file = new File("ds_ghe_dang_chon.dat");
+                if(file.exists()){
+                    file.delete();
+                }
                 try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
                     oos.writeObject(gheDangChonList);
                 }
@@ -1190,7 +1199,7 @@ public class ChonVe extends Application {
         int thuTuGhe = 36;
         for(int col=0; col<soCot; col++){
             for(int row=0; row<soHang; row++){
-                if(gaDen.equals("TP HCM")){
+                if(gaDen.equals("Hà Nội")){
                     System.out.println("Khong luu dong");
                     ImageView gheTrongImg =  new ImageView(getClass().getResource("/img/gheTrong.png").toExternalForm());
 
@@ -1225,11 +1234,11 @@ public class ChonVe extends Application {
                     }
 
                     danhSachGheGridPane.add(ghePane,col,row);
-                    if(gtc.getTrangThaiGhe().equals("còn trống") && gtc.getGheNgoi().isLuuDong() != true){
+                    if(gtc.getTrangThaiGhe().equals("Còn trống") && gtc.getGheNgoi().isLuuDong() != true){
                         final boolean[] isSelected = {false};
                         ghePane.setOnMouseClicked(event -> {
                             isSelected[0] = !isSelected[0]; // Toggle chọn / hủy chọn
-
+                            System.out.println("click");
                             if (isSelected[0]) {
                                 // Chọn ghế
                                 gheTrongImg.setImage(new Image(getClass().getResource("/img/gheDangChon.png").toExternalForm()));
@@ -1289,7 +1298,7 @@ public class ChonVe extends Application {
                     final int soGheH = thuTuGhe;
                     GheTrenChuyenTau gtc = gheNgoiDAO.getGheTrenChuyenTau(soGheH,maToaTau,maChuyen);
 
-                    if(gtc.getTrangThaiGhe().equals("đã bán")){
+                    if(gtc.getTrangThaiGhe().equals("Đã bán")){
                         gheTrongImg.setImage(new Image(getClass().getResource("/img/gheDaDat.png").toExternalForm()));
                     }
                     if(!gtc.getGheNgoi().isLuuDong()){

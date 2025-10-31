@@ -577,11 +577,13 @@ public class GioVe extends Application {
 
 			try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("ds_ghe_dang_chon.dat"))) {
                 listGheSelected.clear();
+
 				listGheSelected = (ArrayList<GheTrenChuyenTau>) ois.readObject();
 				System.out.println("Dữ liệu đọc được: " + listGheSelected);
 			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
+            pnlDataGioVe.getChildren().clear();
 			for (int i = 0; i < listGheSelected.size(); i++) {
 				pnlDataGioVe.getChildren().add(taoDataChoTableGioVe(listGheSelected.get(i)));
 			}
@@ -815,6 +817,9 @@ public class GioVe extends Application {
 			e.printStackTrace();
 		}
 	}
+    public void clearSelectedList(){
+        listGheSelected.clear();
+    }
     public Button getGioVeTroLaiBtn(){
         return btnTroLai;
     }

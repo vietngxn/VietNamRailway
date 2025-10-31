@@ -14,15 +14,14 @@ import fourcore.Entity.KhuyenMai;
 import fourcore.Entity.Ve;
 
 public class VeDAO {
-	DatabaseConnector database = new DatabaseConnector();
+
+    DatabaseConnector database = new DatabaseConnector();
+    Statement st = database.connect();;
 	ArrayList<Ve> listVe = getListVe();
-    Statement st;
     public void goiDAO(){
         System.out.println("Ve dao");
     }
 	public VeDAO() throws SQLException {
-
-        st = database.connect();
         goiDAO();
 		getListVe();
 	}
@@ -57,7 +56,7 @@ public class VeDAO {
 	    String query = "SELECT \r\n"
 	    		+ "    ve.maVeTau, ve.gaDi, ve.gaDen, ve.tenTau, ve.ngayGioDi, ve.ngayGioDen,\r\n"
 	    		+ "    ve.soToa, ve.soKhoang, ve.soTang, ve.soGhe, ve.loaiVe, ve.maGiayTo,\r\n"
-	    		+ "    ve.giaVe, ve.ghiChu, ve.trangThaiDoiVe, ve.trangThaiVe,\r\n"
+	    		+ "    ve.giaVe, ve.ghiChu, ve.maVeDuocDoi, ve.trangThaiVe,\r\n"
 	    		+ "    ct.maChuyenTau,\r\n"
 	    		+ "    kh.maKhachHang, kh.hoTen, kh.sdt, kh.email, kh.cccd, kh.passport, kh.doiTuong,\r\n"
 	    		+ "    km.maKhuyenMai, km.tenChuongTrinh, km.trangThaiKhuyenMai, \r\n"
