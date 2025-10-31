@@ -24,6 +24,16 @@ public class VeDAO {
 	public VeDAO(int x) throws SQLException {
 		
 	}
+	public KhachHang getKhachHang(String maVeTau) throws SQLException {
+		KhachHang kh = new KhachHang();
+		for (Ve ve : listVe) {
+			if (ve.getMaVeTau().equalsIgnoreCase(maVeTau)) {
+				kh = ve.getKhachHang();
+				break;
+			}
+		}
+		return kh;
+	}
 
 	
 	public Ve getVeBangMaVe(String maVe) throws SQLException {
@@ -244,16 +254,6 @@ public class VeDAO {
 		return listVe4;
 	}
 
-	public KhachHang getKhachHang(String maVeTau) throws SQLException {
-		KhachHang kh = new KhachHang();
-		for (Ve ve : listVe) {
-			if (ve.getMaVeTau().equalsIgnoreCase(maVeTau)) {
-				kh = ve.getKhachHang();
-				break;
-			}
-		}
-		return kh;
-	}
 
 	public Ve getHoanVeBangMaVe(String maVe) throws SQLException {
 		Ve v = new Ve();
