@@ -889,51 +889,51 @@ public class TrangChu extends Application {
 			chartBox.setTranslateY(50);
 			chartContainer.getChildren().add(chartBox);
 
-			// =========================
-			// || LICH SU ||
-			// =========================
-			VBox lichSuCont = new VBox();
-			Label lichSuLabel = new Label("Lịch sử bán vé");
-			InputStream interBoldFontLoad1 = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Bold.ttf");
-			Font interBoldFont2 = Font.loadFont(interBoldFontLoad1, 30);
-			lichSuLabel.setFont(interBoldFont2);
-			lichSuCont.getChildren().add(lichSuLabel);
-			lichSuCont.setTranslateX(50);
+//			// =========================
+//			// || LICH SU ||
+//			// =========================
+//			VBox lichSuCont = new VBox();
+//			Label lichSuLabel = new Label("Lịch sử bán vé");
+//			InputStream interBoldFontLoad1 = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Bold.ttf");
+//			Font interBoldFont2 = Font.loadFont(interBoldFontLoad1, 30);
+//			lichSuLabel.setFont(interBoldFont2);
+//			lichSuCont.getChildren().add(lichSuLabel);
+//			lichSuCont.setTranslateX(50);
+//
+//			TableView<LichSuBanVe> table = new TableView<>();
+//
+//			// Cột 1: mã vé
+//			TableColumn<LichSuBanVe, String> maVeCol = new TableColumn<>("Mã Vé");
+//			maVeCol.setCellValueFactory(new PropertyValueFactory<>("maVe"));
+//
+//			// Cột 2: tên
+//			TableColumn<LichSuBanVe, String> tenCol = new TableColumn<>("Tên khách hàng");
+//			tenCol.setCellValueFactory(new PropertyValueFactory<>("ten"));
+//
+//			// Cột 3: ngày mua
+//			TableColumn<LichSuBanVe, String> ngayMuaCol = new TableColumn<>("Ngày mua");
+//			ngayMuaCol.setCellValueFactory(new PropertyValueFactory<>("ngayMua"));
+//
+//			table.getColumns().addAll(maVeCol, tenCol, ngayMuaCol);
+//			table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+//
+//			// Dữ liệu mẫu
+//			ObservableList<LichSuBanVe> data = FXCollections.observableArrayList(
+//					new LichSuBanVe("V001", "Nguyễn Tiến Đạt", LocalDate.of(1995, 3, 15)),
+//					new LichSuBanVe("V002", "Nguyễn Tiến Đạt", LocalDate.of(2006, 3, 15)),
+//					new LichSuBanVe("V003", "Nguyễn Tiến Đạt", LocalDate.of(2005, 3, 15))
+//
+//			);
+//
+//			table.setItems(data);
+//			VBox listLichSu = new VBox(table);
+//			listLichSu.setTranslateY(50);
+//			listLichSu.setMinWidth(500);
+//			listLichSu.setMinHeight(900);
+//			scene.getStylesheets().add(getClass().getResource("/table-style-trangchu.css").toExternalForm());
+//			lichSuCont.getChildren().add(listLichSu);
 
-			TableView<LichSuBanVe> table = new TableView<>();
-
-			// Cột 1: mã vé
-			TableColumn<LichSuBanVe, String> maVeCol = new TableColumn<>("Mã Vé");
-			maVeCol.setCellValueFactory(new PropertyValueFactory<>("maVe"));
-
-			// Cột 2: tên
-			TableColumn<LichSuBanVe, String> tenCol = new TableColumn<>("Tên khách hàng");
-			tenCol.setCellValueFactory(new PropertyValueFactory<>("ten"));
-
-			// Cột 3: ngày mua
-			TableColumn<LichSuBanVe, String> ngayMuaCol = new TableColumn<>("Ngày mua");
-			ngayMuaCol.setCellValueFactory(new PropertyValueFactory<>("ngayMua"));
-
-			table.getColumns().addAll(maVeCol, tenCol, ngayMuaCol);
-			table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-			// Dữ liệu mẫu
-			ObservableList<LichSuBanVe> data = FXCollections.observableArrayList(
-					new LichSuBanVe("V001", "Nguyễn Tiến Đạt", LocalDate.of(1995, 3, 15)),
-					new LichSuBanVe("V002", "Nguyễn Tiến Đạt", LocalDate.of(2006, 3, 15)),
-					new LichSuBanVe("V003", "Nguyễn Tiến Đạt", LocalDate.of(2005, 3, 15))
-
-			);
-
-			table.setItems(data);
-			VBox listLichSu = new VBox(table);
-			listLichSu.setTranslateY(50);
-			listLichSu.setMinWidth(500);
-			listLichSu.setMinHeight(900);
-			scene.getStylesheets().add(getClass().getResource("/table-style-trangchu.css").toExternalForm());
-			lichSuCont.getChildren().add(listLichSu);
-
-			chartVaLichSuBanContainer.getChildren().addAll(chartContainer, lichSuCont);
+			chartVaLichSuBanContainer.getChildren().addAll(chartContainer);
 			CheckBox hienNoiDungCheckBox = new CheckBox("Hiện thống kê tổng quan");
 			hienNoiDungCheckBox.setFont(moTaTiLeFont4);
 			hienNoiDungCheckBox.setTranslateX(1100);
