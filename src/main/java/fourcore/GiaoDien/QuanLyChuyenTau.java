@@ -83,7 +83,7 @@ public class QuanLyChuyenTau extends Application {
     private ArrayList<GridPane> hangchon = new ArrayList<>();
     private HBox layout_button;
     private Button btn_xoaChuyenTau;
-    private Button btn_themChuyenTau;
+    private Button btn_themChuyenTau = new Button();
     private Button btn_suaChuyenTau;
     private Label lbl_title_thoigiankhoihanh;
     private Node lbl_title_gadigaden;

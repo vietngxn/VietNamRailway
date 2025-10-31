@@ -87,7 +87,7 @@ public class ChuyenTauDAO {
         return danhSachMaHanhTrinh;
     }
     public boolean addChuyenTauVaoDB(ChuyenTau chuyenTau) {
-        String sql = "Insert Into ChuyenTau Values(?, ?, ?, ?, ?, ?)";
+        String sql = "Insert Into ChuyenTau Values(?, ?, ?, ?, ?, ?,?)";
         int n = 0;
         try {
             PreparedStatement ps = (PreparedStatement) databaseConnector.connect().getConnection().prepareStatement(sql);
@@ -97,6 +97,7 @@ public class ChuyenTauDAO {
             ps.setTimestamp(4, Timestamp.valueOf(chuyenTau.getNgayGioDi()));
             ps.setTimestamp(5, Timestamp.valueOf(chuyenTau.getNgayGioDen()));
             ps.setDouble(6, chuyenTau.getGiaCuocTrenChuyenTau());
+            ps.setBoolean(7,false);
             n = ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

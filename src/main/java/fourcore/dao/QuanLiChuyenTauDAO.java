@@ -32,40 +32,49 @@ public class QuanLiChuyenTauDAO {
     }
     ArrayList listThongTinChuyenTau =  new ArrayList<>();
     public ArrayList getListThongTinChuyenTau() throws SQLException {
-        String query =    "SELECT " +
-                "    ct.maChuyenTau AS [Mã Chuyến], " +
-                "    t.tenTau AS [Đầu Tàu], " +
-                "    COUNT(DISTINCT tt.maToaTau) AS [Số lượng toa], " +
-                "    SUM(CASE WHEN gtct.trangThaiGhe = N'còn trống' THEN 1 ELSE 0 END) AS [Vé Trống], " +
-                "    ct.ngayGioDi AS [Thời Gian Khởi Hành], " +
-                "    gaDi.tenGa AS [Ga đi], " +
-                "    gaDen.tenGa AS [Ga đến] " +
-                "FROM ChuyenTau ct " +
-                "JOIN Tau t ON ct.maTau = t.maTau " +
-                "LEFT JOIN GheTrenChuyenTau gtct ON ct.maChuyenTau = gtct.maChuyenTau " +
-                "LEFT JOIN GheNgoi gn ON gtct.maGheNgoi = gn.maGheNgoi " +
-                "LEFT JOIN ToaTau tt ON gn.maToaTau = tt.maToaTau " +
-                "LEFT JOIN ( " +
-                "    SELECT htg.maHanhTrinh, g.tenGa " +
-                "    FROM HanhTrinhGa htg " +
-                "    JOIN Ga g ON htg.maGa = g.maGa " +
-                "    WHERE htg.thuTuDung = ( " +
-                "        SELECT MIN(thuTuDung) " +
-                "        FROM HanhTrinhGa htg2 " +
-                "        WHERE htg.maHanhTrinh = htg2.maHanhTrinh " +
-                "    ) " +
-                ") gaDi ON gaDi.maHanhTrinh = ct.maHanhTrinh " +
-                "LEFT JOIN ( " +
-                "    SELECT htg.maHanhTrinh, g.tenGa " +
-                "    FROM HanhTrinhGa htg " +
-                "    JOIN Ga g ON htg.maGa = g.maGa " +
-                "    WHERE htg.thuTuDung = ( " +
-                "        SELECT MAX(thuTuDung) " +
-                "        FROM HanhTrinhGa htg2 " +
-                "        WHERE htg.maHanhTrinh = htg2.maHanhTrinh " +
-                "    ) " +
-                ") gaDen ON gaDen.maHanhTrinh = ct.maHanhTrinh " +
-                "GROUP BY ct.maChuyenTau, t.tenTau, ct.ngayGioDi, gaDi.tenGa, gaDen.tenGa;";
+        String query =  "SELECT \n" +
+                "    ct.maChuyenTau AS [Mã Chuyến],\n" +
+                "    t.maTau AS [Đầu Tàu],\n" +
+                "    COUNT(DISTINCT tt.maToaTau) AS [Số lượng toa],\n" +
+                "    SUM(CASE WHEN gtct.trangThaiGhe = N'còn trống' THEN 1 ELSE 0 END) AS [Vé Trống],\n" +
+                "    ct.ngayGioDi AS [Thời Gian Khởi Hành],\n" +
+                "    gaDi.tenGa AS [Ga đi],\n" +
+                "    gaDen.tenGa AS [Ga đến]\n" +
+                "FROM ChuyenTau AS ct\n" +
+                "JOIN Tau AS t ON ct.maTau = t.maTau\n" +
+                "LEFT JOIN GheTrenChuyenTau AS gtct ON ct.maChuyenTau = gtct.maChuyenTau\n" +
+                "LEFT JOIN GheNgoi AS gn ON gtct.maGheNgoi = gn.maGheNgoi\n" +
+                "LEFT JOIN ToaTau AS tt ON gn.maToaTau = tt.maToaTau\n" +
+                "LEFT JOIN (\n" +
+                "    SELECT \n" +
+                "        htg.maHanhTrinh, \n" +
+                "        g.tenGa\n" +
+                "    FROM HanhTrinhGa AS htg\n" +
+                "    JOIN Ga AS g ON htg.maGa = g.maGa\n" +
+                "    WHERE htg.thuTuDung = (\n" +
+                "        SELECT MIN(htg2.thuTuDung)\n" +
+                "        FROM HanhTrinhGa AS htg2\n" +
+                "        WHERE htg.maHanhTrinh = htg2.maHanhTrinh\n" +
+                "    )\n" +
+                ") AS gaDi ON gaDi.maHanhTrinh = ct.maHanhTrinh\n" +
+                "LEFT JOIN (\n" +
+                "    SELECT \n" +
+                "        htg.maHanhTrinh, \n" +
+                "        g.tenGa\n" +
+                "    FROM HanhTrinhGa AS htg\n" +
+                "    JOIN Ga AS g ON htg.maGa = g.maGa\n" +
+                "    WHERE htg.thuTuDung = (\n" +
+                "        SELECT MAX(htg2.thuTuDung)\n" +
+                "        FROM HanhTrinhGa AS htg2\n" +
+                "        WHERE htg.maHanhTrinh = htg2.maHanhTrinh\n" +
+                "    )\n" +
+                ") AS gaDen ON gaDen.maHanhTrinh = ct.maHanhTrinh\n" +
+                "GROUP BY \n" +
+                "    ct.maChuyenTau, \n" +
+                "    t.maTau, \n" +
+                "    ct.ngayGioDi, \n" +
+                "    gaDi.tenGa, \n" +
+                "    gaDen.tenGa;";
 
         ResultSet rs = myStmt.executeQuery(query);
         while (rs.next()) {

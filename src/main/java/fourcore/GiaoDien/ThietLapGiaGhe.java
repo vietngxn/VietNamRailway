@@ -15,10 +15,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.google.gson.JsonArray;
@@ -117,7 +114,7 @@ public class ThietLapGiaGhe extends Application {
 	private Label lbl_title_thoigiankhoihanh;
 	private Node lbl_title_tongTien;
 	private Label lblCapNhatChuyenTau;
-	private VBox layoutThemCT;
+	private VBox layoutThemCT= new VBox(20);;
 	private GridPane gridCapNhatChuyenTau;
 	private TextField txtMaChuyenTau;
 	private TextField txtThoiGianKhoiHanh;
@@ -258,8 +255,7 @@ public class ThietLapGiaGhe extends Application {
 			
 			
 			//Noi dung chinh lam phan chinh o day. T lam sidebar truoc r update sau		
-			layoutThemCT = new VBox(20);
-			
+
 			create_themThietLap_layout();
 			
 			noiDungChinh = new VBox();
@@ -1212,6 +1208,7 @@ public class ThietLapGiaGhe extends Application {
 		
 		buttonThemChuyenTau.setOnMouseClicked(event -> {
 			String maChuyenTauLast = chuyentaudao.getMaChuyenTauCuoiCung();
+                maChuyenTauLast = "CT00";
 			String chuCT = maChuyenTauLast.replaceAll("\\d", "");
 			String soCT = maChuyenTauLast.replaceAll("\\D", "");
 			

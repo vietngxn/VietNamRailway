@@ -25,14 +25,14 @@ public class Tau_DAO {
 
 	public ArrayList<Tau> getList() throws SQLException {
 		String sql = """
-				    SELECT t.maTau, t.tenTau, lt.maLoaiTau, lt.tenLoaiTau, lt.giaCuoc
-				    FROM Tau t
-				    JOIN LoaiTau lt ON t.maLoaiTau = lt.maLoaiTau
+				      SELECT t.maTau, t.bienSoTau, lt.maLoaiTau, lt.tenLoaiTau, lt.giaCuoc
+                      FROM Tau t
+                      JOIN LoaiTau lt ON t.maLoaiTau = lt.maLoaiTau
 				""";
 		ResultSet rs = myStmt.executeQuery(sql);
 		while (rs.next()) {
 			String maTau = rs.getString("maTau");
-            String tenTau = rs.getString("tenTau");
+            String tenTau = rs.getString("bienSoTau");
             
             LoaiTau lt = new LoaiTau(
                     rs.getString("maLoaiTau"),
@@ -47,14 +47,14 @@ public class Tau_DAO {
     public Tau getTauByMaTau(String maTauInput) throws SQLException {
         ArrayList<Tau> listTau = getList();
         String sql = """
-				    SELECT t.maTau, t.tenTau, lt.maLoaiTau, lt.tenLoaiTau, lt.giaCuoc
+				    SELECT t.maTau, t.bienSoTau, lt.maLoaiTau, lt.tenLoaiTau, lt.giaCuoc
 				    FROM Tau t
 				    JOIN LoaiTau lt ON t.maLoaiTau = lt.maLoaiTau
 				""";
         ResultSet rs = myStmt.executeQuery(sql);
         while (rs.next()) {
             String maTau = rs.getString("maTau");
-            String tenTau = rs.getString("tenTau");
+            String tenTau = rs.getString("bienSoTau");
 
             LoaiTau lt = new LoaiTau(
                     rs.getString("maLoaiTau"),
@@ -77,10 +77,10 @@ public class Tau_DAO {
         String sql = "Select * From Tau where maLoaiTau = ?";
         try {
             PreparedStatement ps = (PreparedStatement) myStmt.getConnection().prepareStatement(sql);
-            if(maHanhTrinh.equalsIgnoreCase("HT001")) ps.setString(1, "LT01");
-            else if(maHanhTrinh.equalsIgnoreCase("HT002")) ps.setString(1, "LT02");
-            else if(maHanhTrinh.equalsIgnoreCase("HT003")) ps.setString(1, "LT03");
-            else if(maHanhTrinh.equalsIgnoreCase("HT009")) ps.setString(1, "LT09");
+            if(maHanhTrinh.equalsIgnoreCase("HT01")) ps.setString(1, "LT01");
+            else if(maHanhTrinh.equalsIgnoreCase("HT02")) ps.setString(1, "LT02");
+            else if(maHanhTrinh.equalsIgnoreCase("HT03")) ps.setString(1, "LT03");
+            else if(maHanhTrinh.equalsIgnoreCase("HT09")) ps.setString(1, "LT09");
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
                 String maTau = rs.getString(1);

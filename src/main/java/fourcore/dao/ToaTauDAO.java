@@ -46,7 +46,7 @@ public class ToaTauDAO {
     }
     public ArrayList<ToaTau> getListToaTauByMaCT(String maCT) throws SQLException {
     ArrayList<ToaTau> listToaTheoChuyen =  new ArrayList<>();
-    String query = "SELECT DISTINCT tt.maToaTau,tt.tenToaTau,tt.soToa,ltt.maLoaiToaTau\n" +
+    String query = "SELECT DISTINCT tt.maToaTau,tt.tenToaTau,tt.soLuongGheTrongToa,ltt.maLoaiToaTau\n" +
             "FROM GheTrenChuyenTau gtc\n" +
             "JOIN GheNgoi g ON gtc.maGheNgoi = g.maGheNgoi\n" +
             "JOIN ToaTau tt ON g.maToaTau = tt.maToaTau\n" +
@@ -110,7 +110,7 @@ public class ToaTauDAO {
     public ArrayList<ToaTau> getListToaTauTenToaTau(String tenLoaiTau) throws SQLException {
 	
 		String tenLoaiToa = null;
-		if(tenLoaiTau.equalsIgnoreCase("SE1") || tenLoaiTau.equalsIgnoreCase("SE9")) tenLoaiToa = "Toa thường";
+		if(tenLoaiTau.equalsIgnoreCase("SE1") || tenLoaiTau.equalsIgnoreCase("SE9")) tenLoaiToa = "Ngồi mềm công nghệ Nhật Bản";
 		ArrayList<ToaTau> listToaTheoLoaiTau = new ArrayList<>();
 		String sql = "Select * From ToaTau where tenToaTau = ?";
 		try {
