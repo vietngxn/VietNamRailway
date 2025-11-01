@@ -63,7 +63,8 @@ public class GheNgoiDAO {
     public ArrayList<GheTrenChuyenTau> getListGheTrenChuyenTau() {
         return listGheTrenChuyenTau;
     }
-    public int tongSoGheTrenChuyen(String maChuyenTau){
+    public int tongSoGheTrenChuyen(String maChuyenTau) throws SQLException {
+        getListTrenChuyenTau();
         int count=0;
         for (int i = 0; i < listGheTrenChuyenTau.size(); i++) {
             if(listGheTrenChuyenTau.get(i).getChuyenTau().getMaChuyenTau().equals(maChuyenTau)){
@@ -72,7 +73,7 @@ public class GheNgoiDAO {
         }
         return count;
     }
-    public int soGheTrongTrenChuyen(String maChuyenTau){
+    public int soGheTrongTrenChuyen(String maChuyenTau) throws SQLException {
         int tongSoGhe = tongSoGheTrenChuyen(maChuyenTau);
         int count=0;
         for (int i = 0; i < listGheTrenChuyenTau.size(); i++) {
