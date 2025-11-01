@@ -62,14 +62,22 @@ public class LichSuTuongTacVe {
 		setGiaTriChenhLech(giaTriChenhLech);
 		setNgayTuongTac(ngayTuongTac);
 	}
+	
+	public LichSuTuongTacVe(LoaiTuongTacVe loaiTuongTacVe, Ve veTau, double giaTriChenhLech,
+			LocalDateTime ngayTuongTac) {
+		setLoaiTuongTacVe(loaiTuongTacVe);
+		setVeTau(veTau);
+		setGiaTriChenhLech(giaTriChenhLech);
+		setNgayTuongTac(ngayTuongTac);
+	}
 
 	public double tinhTongTien(String loai) {
-		if (loai.equalsIgnoreCase("bán")) {
+		if (loai.equalsIgnoreCase("LTT01")) {
 			return this.veTau.getGiaVe();
-		} else if (loai.equalsIgnoreCase("hoàn trả")) {
+		} else if (loai.equalsIgnoreCase("LTT03")) {
 			return this.veTau.getGiaVe() - this.getGiaTriChenhLech();
-		} else if (loai.equalsIgnoreCase("đổi")) {
-
+		} else if (loai.equalsIgnoreCase("LTT02")) {
+			return this.veTau.getGiaVe() + this.getGiaTriChenhLech();
 		}
 		return 0.0;
 

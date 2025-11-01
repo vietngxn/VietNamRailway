@@ -87,7 +87,7 @@ public class VeDAO {
 	        String maGiayTo = rs.getString("maGiayTo");
 	        double giaVe = rs.getDouble("giaVe");
 	        String ghiChu = rs.getString("ghiChu");
-	        String trangThaiDoiVe = rs.getString("trangThaiDoiVe");
+	        String trangThaiDoiVe = rs.getString("maVeDuocDoi");
 	        String trangThaiVe = rs.getString("trangThaiVe");
 	        String maChuyenTau = rs.getString("maChuyenTau");
 	        String maKhachHang = rs.getString("maKhachHang");
@@ -267,7 +267,9 @@ public class VeDAO {
 
     }
     public ArrayList<Ve> getListHoanVeTheoCCCDKhachHang(String cccd) throws SQLException {
-        ArrayList<Ve> listVe4 = new ArrayList<Ve>();
+        
+    	
+    	ArrayList<Ve> listVe4 = new ArrayList<Ve>();
         String sql =
                 "SELECT DISTINCT v.* " +
                         "FROM Ve AS v " +

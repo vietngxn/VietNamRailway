@@ -21,17 +21,19 @@ import fourcore.Entity.Ve;
 
 public class LichSuTuongTacVe_Dao {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
+	Statement myStmt = databaseConnector.connect();
 	ArrayList<LichSuTuongTacVe> list = getList();
-    Statement myStmt = databaseConnector.connect();
 
 	public LichSuTuongTacVe_Dao() throws SQLException {
-        goiDAO();
+		goiDAO();
 		getList();
 
 	}
-    public void goiDAO(){
-        System.out.println("lich su tuong tac dao");
-    }
+
+	public void goiDAO() {
+		System.out.println("lich su tuong tac dao");
+	}
+
 	public LichSuTuongTacVe_Dao(int x) throws SQLException {
 		goiDAO();
 	}
@@ -57,21 +59,26 @@ public class LichSuTuongTacVe_Dao {
 
 		return list1;
 	}
-	
-	public boolean themLichSuTuongTacVe(LichSuTuongTacVe lstt) throws SQLException
-	{
+
+	public int getSoLuongLichSuTuongTacVe() throws SQLException {
+		String countQuery = "SELECT COUNT(*) AS soLuong FROM LichSuTuongTacVe";
+		int soLuongHoaDon = 0;
+		ResultSet rs = myStmt.executeQuery(countQuery);
+		if (rs.next()) {
+			soLuongHoaDon = rs.getInt("soLuong");
+		}
+		return soLuongHoaDon;
+	}
+
+	public boolean themLichSuTuongTacVe(LichSuTuongTacVe lstt) throws SQLException {
 		LocalDateTime ngay = lstt.getNgayTuongTac();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String ngayFormatted = ngay.format(formatter);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		String ngayFormatted = ngay.format(formatter);
 		String query = "INSERT INTO LichSuTuongTacVe (maTuongTac, maLoaiTuongTac, maVeTau, giaTriChenhLech, ngayTuongTac) VALUES (N'"
-		        + lstt.getMaTuongTac() + "', N'"
-		        + lstt.getLoaiTuongTacVe().getMaLoaiTuongTac() + "', N'"
-		        + lstt.getVeTau().getMaVeTau()+ "', "
-		        + lstt.getGiaTriChenhLech() + ", '"
-		        + ngayFormatted + "')";
+				+ lstt.getMaTuongTac() + "', N'" + lstt.getLoaiTuongTacVe().getMaLoaiTuongTac() + "', N'"
+				+ lstt.getVeTau().getMaVeTau() + "', " + lstt.getGiaTriChenhLech() + ", '" + ngayFormatted + "')";
 		boolean check = myStmt.execute(query);
 		return check;
 	}
-	
 
 }
