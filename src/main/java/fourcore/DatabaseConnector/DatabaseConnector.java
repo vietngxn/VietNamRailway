@@ -23,6 +23,7 @@ public class DatabaseConnector {
         System.out.println("Connected to database successfully");
         return myStmt;
     }
+    
     public static Connection getConnection() {
         return con;
     }
