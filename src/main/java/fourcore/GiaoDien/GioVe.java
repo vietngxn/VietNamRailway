@@ -639,7 +639,7 @@ public class GioVe extends Application {
 			lblTongCong.setWrapText(true);
 			lblTongCong.setStyle(lblStyle);
 
-			lblTongCongValue = new Label(nf.format(tongCongThanhTien));
+			lblTongCongValue = new Label("" +0);
 			lblTongCongValue.setWrapText(true);
 			lblTongCongValue.setStyle(lblStyle + "-fx-font-weight: bold;");
 
@@ -650,9 +650,11 @@ public class GioVe extends Application {
 			pnlTongCong.getChildren().addAll(lblTongCong, lblTongCongValue);
 			btnApDungChuongTrinhKhuyenMai.setOnAction(event -> {
 				Stage popupStage = new Stage();
-				popupStage.initOwner(primaryStage);
-				popupStage.initModality(Modality.APPLICATION_MODAL); // chặn thao tác ở main stage
-				popupStage.initStyle(StageStyle.UTILITY); // hiển thị dạng popup gọn
+
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                popupStage.initOwner(stage);
+				popupStage.initModality(Modality.WINDOW_MODAL);
+				popupStage.initStyle(StageStyle.UTILITY);
 				popupStage.setAlwaysOnTop(true);
 				popupStage.setTitle("Chọn chương trình khuyến mãi");
 
@@ -675,7 +677,7 @@ public class GioVe extends Application {
 				} catch (SQLException e) {
 					throw new RuntimeException(e);
 				}
-				
+
 					try {
 						listCTKM = ctkmDAO.getListKhuyenMai();
 					} catch (SQLException e) {
@@ -857,7 +859,12 @@ public class GioVe extends Application {
 	public VBox taoDataChoTableGioVe(GheTrenChuyenTau gheTrenChuyenTau) throws SQLException {
 		Label lblGiamDoiTuongValue = new Label("0");
 		Label lblKhuyenMaiValue = new Label("0");
-         double giaVe1Value = gheTrenChuyenTau.getChuyenTau().getGiaCuocTrenChuyenTau() * gaTauDao.getCuLiBangTenGa(gaDen) + gheTrenChuyenTau.getGiaTienGhe();
+        double giaVe1Value = 0;
+        if (gheTrenChuyenTau.getGheNgoi().isLuuDong()){
+            giaVe1Value = gheTrenChuyenTau.getChuyenTau().getGiaCuocTrenChuyenTau() * gaTauDao.getCuLiBangTenGa(gaDen) + gheTrenChuyenTau.getGiaTienGhe();
+        }else {
+            giaVe1Value = gheTrenChuyenTau.getGiaTienGhe();
+        }
 		Label lblThanhTienValue = new Label(String.valueOf(giaVe1Value));
         System.out.println("Ga den:"+ gaTauDao.getCuLiBangTenGa(gaDen)+" Gia tri thanh tien khoi tao "+ giaVe1Value +" gia ghe" + gheTrenChuyenTau.getGiaTienGhe());
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
@@ -1001,7 +1008,7 @@ public class GioVe extends Application {
 		String lblValueCTStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 30px;";
         GaTauDao gaTauDao = new GaTauDao();
 
-		VBox pnlsubCT2 = taoSubCT2("Giá vé", gheTrenChuyenTau.getChuyenTau().getGiaCuocTrenChuyenTau() * gaTauDao.getCuLiBangTenGa(gaDen) + gheTrenChuyenTau.getGiaTienGhe(), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT2 = taoSubCT2("Giá vé", giaVe1Value , lblCTStyle, lblValueCTStyle);
 		VBox pnlsubCT3 = taoSubCT2WithLabel("Giảm đối tượng", lblGiamDoiTuongValue, lblCTStyle, lblValueCTStyle);
 		VBox pnlsubCT5 = taoSubCT2WithLabel("Thành tiền", lblThanhTienValue, lblCTStyle, lblValueCTStyle);
 

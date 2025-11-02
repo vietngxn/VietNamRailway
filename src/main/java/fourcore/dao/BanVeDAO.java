@@ -32,7 +32,7 @@ public class BanVeDAO {
     HoaDon hoaDon;
     private String maVeTau;
     Statement myStmt = databaseConnector.connect();
-
+    GaTauDao gaTauDao = new GaTauDao();
     public void goiDAO(){
         System.out.println("Ban Ve dao");
     }
@@ -185,7 +185,7 @@ public class BanVeDAO {
     public void updateTrangThaiGheTrenChuyenTau(GheTrenChuyenTau gheTrenCT) throws SQLException {
         Connection con = (Connection) databaseConnector.getInstance().getConnection();
         String query = "  UPDATE GheTrenChuyenTau \n" +
-                "   SET trangThaiGhe = N'đã bán'\n" +
+                "   SET trangThaiGhe = N'Đã bán'\n" +
                 "  where maGheTrenChuyenTau = ?";
         PreparedStatement sta = con.prepareStatement(query);
         sta.setString(1,gheTrenCT.getMaGheTrenChuyenTau());
@@ -200,17 +200,19 @@ public class BanVeDAO {
         this.hoaDon = hoaDon;
         hoaDon.setMaHoaDon(maHoaDon);
         String query = "Insert into HoaDon " +
-                "VALUES (?,?,?,?,?,?,?,?,?)";
+                "VALUES (?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement sta = con.prepareStatement(query);
         sta.setString(1,maHoaDon);
-        sta.setString(2,hoaDon.getMaNhanVien().getMaNhanVien());
-        sta.setObject(3,LocalDateTime.now());
-        sta.setDouble(4,hoaDon.getTongTien());
-        sta.setString(5,hoaDon.getMaLoaiHoaDon().getMaLoaiHoaDon());
-        sta.setString(6,hoaDon.getTenKhachHangThanhToan());
-        sta.setString(7,hoaDon.getEmailKhachHangThanhToan());
-        sta.setString(8,hoaDon.getCccdKhachHangThanhToan());
-        sta.setString(9,hoaDon.getSdtKhachHangThanhToan());
+        sta.setString(2,hoaDon.getMaLoaiHoaDon().getMaLoaiHoaDon());
+        sta.setString(3,hoaDon.getMaNhanVien().getMaNhanVien());
+        sta.setString(4,hoaDon.getTenKhachHangThanhToan());
+        sta.setString(5,hoaDon.getEmailKhachHangThanhToan());
+        sta.setString(6,hoaDon.getCccdKhachHangThanhToan());
+        sta.setString(7,hoaDon.getSdtKhachHangThanhToan());
+        sta.setObject(8,LocalDateTime.now());
+        sta.setDouble(9,hoaDon.getTongTien());
+        sta.setString(10,hoaDon.getDiaChiKhachHangThanhToan());
+
         sta.executeUpdate();
         System.out.println("Thêm hóa đơn thành công");
 return hoaDon;
@@ -265,7 +267,7 @@ return hoaDon;
     }
     public void themLichSuTuongTacVe(Ve veTau,KhuyenMai khuyenMai, GheTrenChuyenTau gheTrenChuyenTau) throws SQLException {
         String maLichSuTuongTac =  getMaLichSuTuongTac();
-        String maLoaiTuongTac = "LT01";
+        String maLoaiTuongTac = "LTT01";
         String maVeTau = veTau.getMaVeTau();
         double giaTriChenhLech = tinhTienVe(khuyenMai,gheTrenChuyenTau);
         LocalDateTime ngayTuongTac =  LocalDateTime.now();
@@ -283,16 +285,42 @@ return hoaDon;
         System.out.println("Thêm lịch sử tương tác thành công");
 
     }
+    public String checkKhachHang(String cccd) throws SQLException {
+        String query = "  select maKhachHang from KhachHang where cccd = '" +cccd+"'";
+        ResultSet rs = myStmt.executeQuery(query);
+        while (rs.next()) {
+            return rs.getString(1);
+        }
+        return null;
+    }
+    public void updateGiaGheLuuDong(GheTrenChuyenTau g) throws SQLException {
 
+        double giaTienGhe= g.getChuyenTau().getGiaCuocTrenChuyenTau() * gaTauDao.getCuLiBangTenGa(gaDen) + g.getGiaTienGhe();
+        String query = "UPDATE GheTrenChuyenTau" +
+                "      SET giaTienGhe = ?" +
+                "      where maGheTrenChuyenTau = ?";
+        PreparedStatement sta = databaseConnector.getInstance().getConnection().prepareStatement(query);
+        sta.setDouble(1, giaTienGhe);
+        sta.setString(2,g.getMaGheTrenChuyenTau());
+    }
     public void themVe() throws SQLException {
         ArrayList<Ve> listVe = new ArrayList<>();
         Connection con = (Connection) databaseConnector.getInstance().getConnection();
         for(int i=0;i<listGheTrenChuyenTau.size();i++) {
-            KhachHang kh = new KhachHang(getMaKH(), mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getHoten(), mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getCccd(), mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getDoiTuong());
-
-            if(khachHangDAO.themKhachHang(kh)) {
-                System.out.println("Thêm Thành Công - Mã KH: " + kh.getMaKhachHang());
+            if(listGheTrenChuyenTau.get(i).getGheNgoi().isLuuDong()){
+                updateGiaGheLuuDong(listGheTrenChuyenTau.get(i));
             }
+            KhachHang kh = new KhachHang(getMaKH(), mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getHoten(), mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getCccd(), mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getDoiTuong());
+            String maKhachHang="";
+            if(checkKhachHang(kh.getCccd()) != null){
+                maKhachHang = checkKhachHang(kh.getCccd());
+            }else {
+                if(khachHangDAO.themKhachHang(kh)) {
+                    System.out.println("Thêm Thành Công - Mã KH: " + kh.getMaKhachHang());
+                }
+                maKhachHang = kh.getMaKhachHang();
+            }
+
             maVeTau = getMaVe();
             Ve veTau = new Ve(maVeTau,gaDi,gaDen,listGheTrenChuyenTau.get(i).getChuyenTau().getTau().getTenTau(),listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDi(),listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDen(),
                     checkThuTuToa(listGheTrenChuyenTau.get(i)),listGheTrenChuyenTau.get(i).getGheNgoi().getKhoangTau().getSoKhoang(),listGheTrenChuyenTau.get(i).getGheNgoi().getTang().getSoTang(),
@@ -303,7 +331,7 @@ return hoaDon;
 
 
             String insertVe = "INSERT INTO Ve " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
             PreparedStatement sta = null;
             sta = con.prepareStatement(insertVe);
             sta.setString(1,maVeTau);
@@ -320,12 +348,13 @@ return hoaDon;
             sta.setString(12, mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getCccd());
             sta.setDouble(13,tinhTienVe(ctkmSelected,listGheTrenChuyenTau.get(i)));
             sta.setString(14,null);
-            sta.setString(15,"chưa đổi");
-            sta.setString(16,"hoạt động");
+            sta.setString(15,null);
+            sta.setString(16,"Hoạt động");
             sta.setString(17,listGheTrenChuyenTau.get(i).getChuyenTau().getMaChuyenTau());
-            sta.setString(18,kh.getMaKhachHang());
+            sta.setString(18,maKhachHang);
             sta.setString(19,ctkmSelected.getMaKhuyenMai());
             sta.setString(20,getDoiTuong(listGheTrenChuyenTau.get(i)).getMaDoiTuongGiamGia());
+            sta.setString(21,"false");
             sta.executeUpdate();
             System.out.println("Thêm vé thành công");
 
