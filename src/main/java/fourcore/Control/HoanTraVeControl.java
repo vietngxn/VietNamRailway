@@ -29,7 +29,7 @@ public class HoanTraVeControl {
 	GiaoDienXuatHoaDonHoanTraVe gdXuat;
 	Node gdHoanBackUp;
 	VeDAO dao;
-	Map<String, Double> listVeThanhToan;
+	Map<Ve, Double> listVeThanhToan;
 	private ChiTietHoaDonDAO cthd;
 
 	public HoanTraVeControl() {
@@ -62,8 +62,8 @@ public class HoanTraVeControl {
 				alert.showAndWait();
 				kTraHopLe = 0;
 			}
-			for (Map.Entry<String, Double> entry : listVeThanhToan.entrySet()) {
-				String key = entry.getKey();
+			for (Map.Entry<Ve, Double> entry : listVeThanhToan.entrySet()) {
+				String key = entry.getKey().getMaVeTau();
 				try {
 					dao = new VeDAO();
 					cthd = new ChiTietHoaDonDAO();
@@ -143,11 +143,11 @@ public class HoanTraVeControl {
 		});
 	}
 
-	public void loadDuLieuThanhToan(Map<String, Double> listVe, Label lblTongCong, Label lblSoLuong) {
+	public void loadDuLieuThanhToan(Map<Ve, Double> listVe, Label lblTongCong, Label lblSoLuong) {
 		double tongcong = 0;
 		int cnt = 0;
-		for (Map.Entry<String, Double> entry : listVe.entrySet()) {
-			String key = entry.getKey();
+		for (Map.Entry<Ve, Double> entry : listVe.entrySet()) {
+			String key = entry.getKey().getMaVeTau();
 			Double value = entry.getValue();
 			tongcong += value;
 			cnt++;

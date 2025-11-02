@@ -114,7 +114,7 @@ public class GiaoDienHoanTraVe extends Application {
 	private Label colLoaiHoaDon;
 	private StackPane paneCol7;
 
-	Map<String, Double> listVeThanhToan = new HashMap<>();
+	Map<Ve, Double> listVeThanhToan = new HashMap<>();
 	private BorderPane root;
 	private HoanTraVeControl ctrl = new HoanTraVeControl();
 	private ChuyenTauDAO ctDAO;
@@ -258,7 +258,15 @@ public class GiaoDienHoanTraVe extends Application {
 				tongCongPhiHoanTra += thanhtien;
 				loadLableTongCongValue(tongCongPhiHoanTra);
 				System.out.println(mave + " " + isSelected);
-				listVeThanhToan.put(mave, thanhtien);
+				Ve v;
+				try {
+					v = dao.getVeBangMaVe(mave);
+					listVeThanhToan.put(v, thanhtien);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			} else {
 				data.setStyle(normalStyle);
 				ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), data);
@@ -269,7 +277,14 @@ public class GiaoDienHoanTraVe extends Application {
 				tongCongPhiHoanTra -= thanhtien;
 				loadLableTongCongValue(tongCongPhiHoanTra);
 				System.out.println(mave + " " + isSelected);
-				listVeThanhToan.remove(mave);
+				Ve v;
+				try {
+					v = dao.getVeBangMaVe(mave);
+					listVeThanhToan.remove(v);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 
@@ -1009,8 +1024,8 @@ public class GiaoDienHoanTraVe extends Application {
 				}
 			});
 
-			this.btnHoanVe.setOnMouseClicked(event ->{
-				
+			this.btnHoanVe.setOnMouseClicked(event -> {
+
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1021,8 +1036,7 @@ public class GiaoDienHoanTraVe extends Application {
 		return this.btnHoanVe;
 	}
 
-	
-	public Map<String, Double> traVeListVeThanhToan() {
+	public Map<Ve, Double> traVeListVeThanhToan() {
 		return this.listVeThanhToan;
 	}
 
@@ -1038,8 +1052,8 @@ public class GiaoDienHoanTraVe extends Application {
 			System.out.println(tenloai);
 			ct = ctDAO.getChuyenTauBangMa(x.getChuyenTau().getMaChuyenTau());
 			t = tDao.getTauByMaTau(ct.getTau().getMaTau());
-			box.getChildren().add(taoDataChoTableHoanVe(x.getMaVeTau(),
-					t.getLoaiTau().getTenLoaiTau(), x.getGaDi() + " - " + x.getGaDen(),
+			box.getChildren().add(taoDataChoTableHoanVe(x.getMaVeTau(), t.getLoaiTau().getTenLoaiTau(),
+					x.getGaDi() + " - " + x.getGaDen(),
 					x.getNgayGioDi().toLocalDate() + " - " + x.getNgayGioDi().toLocalTime(),
 					"Toa số " + x.getSoToa() + " chỗ " + x.getSoGhe(), tenloai, x.getTrangThaiVe(),
 					x.getKhachHang().getHoten(), x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
