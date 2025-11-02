@@ -224,11 +224,11 @@ public class Ve implements Serializable {
 		this.doiTuongGiamGia = doiTuongGiamGia;
 	}
 
-    public double tinhThanhTien() {
-        double giamDT = this.getGiaVe() * this.getDoiTuongGiamGia().giaTriPhanTramGiamGia * 0.01;
-        double giamKM = this.getGiaVe() * this.getKhuyenMai().getGiaTriPhanTramKhuyenMai() * 0.01;
-        return this.getGiaVe() - giamDT - giamKM;
-    }
+//    public double tinhThanhTien() {
+//        double giamDT = this.getGiaVe() * this.getDoiTuongGiamGia().giaTriPhanTramGiamGia * 0.01;
+//        double giamKM = this.getGiaVe() * this.getKhuyenMai().getGiaTriPhanTramKhuyenMai() * 0.01;
+//        return this.getGiaVe() - giamDT - giamKM;
+//    }
 
     public double tinhPhiHoanTra(LocalDateTime thoiGianMuaVe, double thanhTien, String loaiVe) {
         LocalDateTime ngayHienTai = LocalDateTime.now();
@@ -273,9 +273,7 @@ public class Ve implements Serializable {
     }
 
     public double tinhThanhTienThanhToanHoanTra(double phihoantra) {
-        double giamDT = this.getGiaVe() * this.getDoiTuongGiamGia().giaTriPhanTramGiamGia * 0.01;
-        double giamKM = this.getGiaVe() * this.getKhuyenMai().getGiaTriPhanTramKhuyenMai() * 0.01;
-        return this.getGiaVe() - giamDT - giamKM - phihoantra;
+        return this.getGiaVe() - phihoantra;
     }
 
 }

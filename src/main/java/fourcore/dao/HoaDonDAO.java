@@ -16,12 +16,12 @@ import fourcore.Entity.NhanVien;
 public class HoaDonDAO {
 	DatabaseConnector database = new DatabaseConnector();
 	ArrayList<HoaDon> listHoaDon = new ArrayList<HoaDon>();
-    Statement st = database.connect();
+	Statement st = database.connect();
 
-    public HoaDonDAO() throws SQLException {
-    }
+	public HoaDonDAO() throws SQLException {
+	}
 
-    public ArrayList<HoaDon> getListHoaDon() throws SQLException {
+	public ArrayList<HoaDon> getListHoaDon() throws SQLException {
 		String q = "SELECT hd.maHoaDon, kh.hoTen , kh.sdt , hd.ngayThanhToan , hd.tongTien\r\n"
 				+ "				FROM [dbo].[HoaDon] hd, [dbo].[ChiTietHoaDon] chd , [dbo].[Ve] ve , [dbo].[KhachHang] kh\r\n"
 				+ "				WHERE hd.MaHoaDon = chd.MaHoaDon \r\n" + "				and\r\n"
@@ -41,7 +41,7 @@ public class HoaDonDAO {
 	}
 
 	public HoaDon getHoaDonBangMaVe(String maVe) throws SQLException {
-        String q = "select hd.*\r\n" + "from HoaDon as hd\r\n"
+		String q = "select hd.*\r\n" + "from HoaDon as hd\r\n"
 				+ "join ChiTietHoaDon as ct on hd.maHoaDon = ct.maHoaDon\r\n"
 				+ "join Ve as v on ct.maVeTau = v.maVeTau\r\n" + "where v.maVeTau = " + "'" + maVe + "'";
 		ResultSet rs = st.executeQuery(q);
@@ -68,39 +68,36 @@ public class HoaDonDAO {
 
 	public void themHoaDonHoanTraVe(HoaDon hd) throws SQLException {
 
-	    String countQuery = "SELECT COUNT(*) AS soLuong FROM HoaDon";
-	    int soLuongHoaDon = 0;
+		String countQuery = "SELECT COUNT(*) AS soLuong FROM HoaDon";
+		int soLuong = 0;
+		ResultSet rs = st.executeQuery(countQuery);
+		if (rs.next()) {
+			soLuong = rs.getInt("soLuong");
+		}
+		rs.close();
 
-	    ResultSet rs = st.executeQuery(countQuery);
-	    if (rs.next()) {
-	        soLuongHoaDon = rs.getInt("soLuong");
-	    }
-	    rs.close();
-	    st.close();
+		String newMa = null;
+		if (soLuong < 10) {
+			soLuong += 1;
+			newMa = "HD0" + soLuong;
+		} else {
+			soLuong += 1;
+			newMa = "HD" + soLuong;
+		}
 
-	    String newMa = String.format("HD%04d", soLuongHoaDon + 1);
+		String insertQuery = "INSERT INTO HoaDon (" + "maHoaDon, maLoaiHoaDon, maNhanVien, tenKhachHangThanhToan, "
+				+ "emailKhachHangThanhToan, cccdKhachHangThanhToan, "
+				+ "sdtKhachHangThanhToan, diaChiKhachHangThanhToan, tongTien) VALUES (" + "'" + newMa + "', " + "'"
+				+ "LHD02" + "', " + "'" + hd.getMaNhanVien().getMaNhanVien() + "', " + "N'"
+				+ hd.getTenKhachHangThanhToan() + "', " + "'" + hd.getEmailKhachHangThanhToan() + "', " + "'"
+				+ hd.getCccdKhachHangThanhToan() + "', " + "'" + hd.getSdtKhachHangThanhToan() + "', " + "N'"
+				+ hd.getDiaChiKhachHangThanhToan() + "', " + hd.getTongTien() + ")";
+		hd.setMaHoaDon(newMa);
+		Statement insertST = database.connect();
+		int rows = insertST.executeUpdate(insertQuery);
+		insertST.close();
 
-	    String insertQuery =
-	        "INSERT INTO HoaDon (" +
-	        "maHoaDon, maLoaiHoaDon, maNhanVien, tenKhachHangThanhToan, " +
-	        "emailKhachHangThanhToan, cccdKhachHangThanhToan, " +
-	        "sdtKhachHangThanhToan, diaChiKhachHangThanhToan, tongTien) VALUES (" +
-	        "'" + newMa + "', " +
-	        "'" + "LHD02" + "', " +
-	        "'" + hd.getMaNhanVien().getMaNhanVien() + "', " +
-	        "N'" + hd.getTenKhachHangThanhToan() + "', " +
-	        "'" + hd.getEmailKhachHangThanhToan() + "', " +
-	        "'" + hd.getCccdKhachHangThanhToan() + "', " +
-	        "'" + hd.getSdtKhachHangThanhToan() + "', " +
-	        "N'" + hd.getDiaChiKhachHangThanhToan() + "', " +
-	        hd.getTongTien() +
-	        ")";
-	    hd.setMaHoaDon(newMa);
-	    Statement insertST = database.connect();
-	    int rows = insertST.executeUpdate(insertQuery);
-	    insertST.close();
-
-	    System.out.println("Số hàng được thêm thành công: " + rows);
+		System.out.println("Số hàng được thêm thành công: " + rows);
 	}
 
 	public KhachHang getKH(String mahd) throws SQLException {

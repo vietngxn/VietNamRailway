@@ -12,9 +12,9 @@ import fourcore.Entity.LoaiTuongTacVe;
 
 public class LoaiTuongTac_Dao {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
-	ArrayList<LoaiTuongTacVe> list = getList();
     Statement myStmt = databaseConnector.connect();
-
+	ArrayList<LoaiTuongTacVe> list = getList();
+	
 	public LoaiTuongTac_Dao() throws SQLException {
         goiDAO();
 		getList();
@@ -23,6 +23,7 @@ public class LoaiTuongTac_Dao {
     public void goiDAO(){
         System.out.println("loai tuong tac dao");
     }
+    
 	public ArrayList<LoaiTuongTacVe> getList() throws SQLException {
 		ArrayList<LoaiTuongTacVe> list1 = new ArrayList<LoaiTuongTacVe>();
 		String query = "select * from LoaiTuongTacVe";

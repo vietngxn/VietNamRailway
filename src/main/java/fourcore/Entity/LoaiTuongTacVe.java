@@ -15,7 +15,10 @@ public class LoaiTuongTacVe {
 		setMaLoaiTuongTac(maLoaiTuongTac);
 		setTenLoaiTuongTac(tenLoaiTuongTac);
 	}
-
+	
+	public LoaiTuongTacVe(String maLoaiTuongTac) {
+		setMaLoaiTuongTac(maLoaiTuongTac);
+	}
 	// Getter và Setter
 	public String getMaLoaiTuongTac() {
 		return maLoaiTuongTac;
