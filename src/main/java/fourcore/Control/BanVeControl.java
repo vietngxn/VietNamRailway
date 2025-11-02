@@ -6,14 +6,18 @@ import fourcore.GiaoDien.*;
 import fourcore.dao.ChuyenTauDAO;
 import fourcore.dao.GheNgoiDAO;
 import fourcore.dao.HanhTrinh_DAO;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.sql.SQLException;
+import java.sql.SQLXML;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -119,11 +123,23 @@ public class BanVeControl {
                     throw new RuntimeException(ex);
                 }
                 listChuyenTau = chuyenTauDAO.listChuyenTau;
+
             ArrayList<ChuyenTau> listInsert = new ArrayList<>();
                 try {
                     listInsert = getListThoaDieuKien();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
+                }
+                if(listInsert.size()==0){
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Thông báo");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Không có chuyến tàu phù hợp!!");
+                    Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+                    alert.initOwner(stage);
+                    alert.initModality(Modality.WINDOW_MODAL);
+                    alert.showAndWait();
+                    return;
                 }
                 try {
                     gdChonve.hienThiDanhSachChuyenTau(listChuyenTau);

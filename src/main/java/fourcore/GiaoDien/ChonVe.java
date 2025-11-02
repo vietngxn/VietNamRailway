@@ -1086,7 +1086,7 @@ public class ChonVe extends Application {
         int cnt=0;
         for (GheTrenChuyenTau gtc : listGheTrenChuyenTau){
             if((gtc.getGheNgoi().getToaTau().getMaToaTau().equals(maToa)) && gtc.getGheNgoi().getToaTau().getLoaiToaTau().getMaLoaiToaTau().equals("LTToa01") ){
-                if(gtc.getTrangThaiGhe().equals("đã bán")){
+                if(gtc.getTrangThaiGhe().equals("Đã bán")){
                     cnt++;
                 }
                 if(cnt==36){
@@ -1094,7 +1094,7 @@ public class ChonVe extends Application {
                 }
             }
             if((gtc.getGheNgoi().getToaTau().getMaToaTau().equals(maToa)) && gtc.getGheNgoi().getToaTau().getLoaiToaTau().getMaLoaiToaTau().equals("LTToa02") ){
-                if(gtc.getTrangThaiGhe().equals("đã bán")){
+                if(gtc.getTrangThaiGhe().equals("Đã bán")){
                     cnt++;
                 }
                 if(cnt==18){
@@ -1232,7 +1232,7 @@ public class ChonVe extends Application {
 
                     final int soGheH = thuTuGhe;
                     GheTrenChuyenTau gtc = gheNgoiDAO.getGheTrenChuyenTau(soGheH,maToaTau,maChuyen);
-                    if(gtc.getTrangThaiGhe().equals("đã bán")){
+                    if(gtc.getTrangThaiGhe().equals("Đã bán")){
                         gheTrongImg.setImage(new Image(getClass().getResource("/img/gheDaDat.png").toExternalForm()));
                     }
                     if(gtc.getGheNgoi().isLuuDong() == true){
@@ -1441,7 +1441,7 @@ public class ChonVe extends Application {
                 GheTrenChuyenTau gtc = gheNgoiDAO.getGheTrenChuyenTau(soGheH, maToaTau, maChuyen);
                 if (gaDen.equals("TP HCM")) {
                     ImageView gheTrongImg = new ImageView(getClass().getResource("/img/giuongConTrong.png").toExternalForm());
-                    if(gtc.getTrangThaiGhe().equals("đã bán")){
+                    if(gtc.getTrangThaiGhe().equals("Đã bán")){
                         gheTrongImg.setImage(new Image(getClass().getResource("/img/giuongHetCho.png").toExternalForm()));
                     }
                     if(gtc.getGheNgoi().isLuuDong() == true){
@@ -1469,7 +1469,7 @@ public class ChonVe extends Application {
                         ghePane.setPadding(new Insets(0, 0, 0, 0));
                     }
 
-                    if(gtc.getTrangThaiGhe().equals("còn trống") && gtc.getGheNgoi().isLuuDong() != true){
+                    if(gtc.getTrangThaiGhe().equals("Còn trống") && gtc.getGheNgoi().isLuuDong() != true){
                         final boolean[] isSelected = {false};
                         ghePane.setOnMouseClicked(event -> {
                             isSelected[0] = !isSelected[0]; // Toggle chọn / hủy chọn
@@ -1526,7 +1526,7 @@ public class ChonVe extends Application {
                     thuTuGhe--; // giảm số giường vì bạn đếm từ 18 về 1
                 } else {
                     ImageView gheTrongImg = new ImageView(getClass().getResource("/img/ghegiuongnamluudong.png").toExternalForm());
-                    if(gtc.getTrangThaiGhe().equals("đã bán")){
+                    if(gtc.getTrangThaiGhe().equals("Đã bán")){
                         gheTrongImg.setImage(new Image(getClass().getResource("/img/giuongHetCho.png").toExternalForm()));
                     }
                     if(!gtc.getGheNgoi().isLuuDong()){
@@ -1555,7 +1555,7 @@ public class ChonVe extends Application {
                         ghePane.setPadding(new Insets(0, 0, 0, 0));
                     }
 
-                    if(gtc.getTrangThaiGhe().equals("còn trống") && gtc.getGheNgoi().isLuuDong() == true){
+                    if(gtc.getTrangThaiGhe().equals("Còn trống") && gtc.getGheNgoi().isLuuDong() == true){
                         final boolean[] isSelected = {false};
                         ghePane.setOnMouseClicked(event -> {
                             isSelected[0] = !isSelected[0]; // Toggle chọn / hủy chọn

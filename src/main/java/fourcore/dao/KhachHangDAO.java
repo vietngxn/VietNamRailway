@@ -61,8 +61,9 @@ public class KhachHangDAO {
 	            + kh.getSdt() + "', '" 
 	            + kh.getEmail() + "', '" 
 	            + kh.getCccd() + "', '" 
-	            + kh.getPassport() + "', N'" 
-	            + kh.getDoiTuong() + "')";
+	            + null + "', N'"
+	            + kh.getDoiTuong()
+                + "','false')";
 	    
 	    int kq = st.executeUpdate(q);
 	    return kq > 0; 

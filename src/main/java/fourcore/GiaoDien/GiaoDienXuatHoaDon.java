@@ -728,7 +728,7 @@ public class GiaoDienXuatHoaDon extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Hệ thống quản lý vé tàu");
 			primaryStage.setFullScreen(true);
-//			primaryStage.show();
+			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -786,16 +786,16 @@ public class GiaoDienXuatHoaDon extends Application {
             System.out.println("ClickYes");
             BanVeDAO banVeDAO = new BanVeDAO();
             banVeDAO.themVe();
-            String txtHoTenValue = txtHoTen.getText();
-            String txtSoGiayToValue = txtSoGiayTo.getText();
-            String txtEmailValue = txtEMail.getText();
-            String txtSDTValue = txtSdt.getText();
-            String txtDiaChiaValue = listTxtFieldHoaDon.get(2).getText();
+            String txtHoTenValue = listTxtFieldHoaDon.get(0).getText();
+            String txtSoGiayToValue = listTxtFieldHoaDon.get(1).getText();
+            String txtEmailValue = listTxtFieldHoaDon.get(2).getText();
+            String txtSDTValue = listTxtFieldHoaDon.get(3).getText();
+            String txtDiaChiaValue = listTxtFieldHoaDon.get(4).getText();
             LoaiHoaDonDAO loaiHoaDonDAO = new LoaiHoaDonDAO();
             LoaiHoaDon loaiHoaDon = new LoaiHoaDon();
             loaiHoaDon = loaiHoaDonDAO.getLoaiHoaDonTheoMa("LHD01");
             NhanVienDAO nhanVienDAO = new NhanVienDAO();
-            NhanVien nhanVien = nhanVienDAO.getNhanVienByMa("NV001");
+            NhanVien nhanVien = nhanVienDAO.getNhanVienByMa("NV01");
             double tongTien = tongCongThanhTien;
             LocalDateTime ngayThanhToan = LocalDateTime.now();
             System.out.println(ngayThanhToan.toString());
