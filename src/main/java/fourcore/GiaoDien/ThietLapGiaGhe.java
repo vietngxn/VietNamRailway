@@ -1208,7 +1208,7 @@ public class ThietLapGiaGhe extends Application {
 		
 		buttonThemChuyenTau.setOnMouseClicked(event -> {
 			String maChuyenTauLast = chuyentaudao.getMaChuyenTauCuoiCung();
-                maChuyenTauLast = "CT00";
+                maChuyenTauLast = "CT01";
 			String chuCT = maChuyenTauLast.replaceAll("\\d", "");
 			String soCT = maChuyenTauLast.replaceAll("\\D", "");
 			
