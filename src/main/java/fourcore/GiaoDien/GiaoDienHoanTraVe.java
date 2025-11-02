@@ -146,7 +146,7 @@ public class GiaoDienHoanTraVe extends Application {
 		String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
 		Label[] labels = { new Label(mave), new Label(LoaiHoaDon), new Label(chuyen), new Label(gaDiGaDen),
 				new Label(trangThai), new Label(vitrighe), new Label(ngayMua) };
-		double[] widths = { 200, 180, 250, 270, 220, 220, 200 };
+		double[] widths = { 100, 270, 120, 250, 250, 220, 200 };
 
 		for (int i = 0; i < labels.length; i++) {
 			Label lbl = labels[i];
@@ -233,7 +233,7 @@ public class GiaoDienHoanTraVe extends Application {
 
 		pnlsubCT1.setPrefWidth(400);
 		for (Pane pnl : new Pane[] { pnlsubCT2, pnlsubCT5, pnlsubCT6 })
-			pnl.setPrefWidth(280);
+			pnl.setPrefWidth(200);
 
 		pnlThongTinChiTiet.getChildren().addAll(pnlsubCT1, pnlsubCT2, pnlsubCT5, pnlsubCT6);
 		pnlReturn.getChildren().add(pnlThongTinChiTiet);

@@ -1030,7 +1030,6 @@ public class TrangChu extends Application {
 			quanLiCTKMMenu.setOnMouseClicked(event -> {
 				KhuyenMaiControl khuyenMaiControl = new KhuyenMaiControl();
 				khuyenMaiControl.handleMenuTrangChuSelect(root);
-
 			});
 			quanLiChuyenTauBox.setOnMouseClicked(event -> {
                 ChuyenTauControl chuyenTauControl = null;

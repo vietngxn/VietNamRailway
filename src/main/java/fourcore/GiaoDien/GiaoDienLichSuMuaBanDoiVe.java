@@ -134,7 +134,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 		String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
 		Label[] labels = { new Label(mave), new Label(chuyen), new Label(loai), new Label(gaDiGaDen),
 				new Label(ngayKhoiHanh.toString()), new Label(vitrighe), new Label(formatter.format(ngayMua)) };
-		double[] widths = { 200, 180, 200, 250, 270, 220, 200 };
+		double[] widths = {  200, 200, 250, 250, 270, 220, 200 };
 
 		for (int i = 0; i < labels.length; i++) {
 			Label lbl = labels[i];
@@ -916,10 +916,10 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 											x.getVeTau().getMaVeTau(), t.getLoaiTau().getTenLoaiTau(),
 											x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
 											x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
-											x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
+											formatter.format(x.getVeTau().getNgayGioDi().toLocalDate()) + " - "
 													+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
 											"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
-											x.getVeTau().getNgayGioDi().toLocalDate(),
+											x.getNgayTuongTac().toLocalDate(),
 											x.getVeTau().getKhachHang().getHoten(),
 											x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
 											x.getVeTau().getKhachHang().getCccd(), x.getVeTau().getGiaVe(),
@@ -951,10 +951,10 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 											x.getVeTau().getMaVeTau(), t.getLoaiTau().getTenLoaiTau(),
 											x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
 											x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
-											x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
+											formatter.format(x.getVeTau().getNgayGioDi().toLocalDate()) + " - "
 													+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
 											"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
-											x.getVeTau().getNgayGioDi().toLocalDate(),
+											x.getNgayTuongTac().toLocalDate(),
 											x.getVeTau().getKhachHang().getHoten(),
 											x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
 											x.getVeTau().getKhachHang().getCccd(), x.getVeTau().getGiaVe(),
@@ -991,10 +991,10 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 										x.getVeTau().getMaVeTau(), t.getLoaiTau().getTenLoaiTau(),
 										x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
 										x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
-										x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
+										formatter.format(x.getVeTau().getNgayGioDi().toLocalDate()) + " - "
 												+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
 										"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
-										x.getVeTau().getNgayGioDi().toLocalDate(),
+										x.getNgayTuongTac().toLocalDate(),
 										x.getVeTau().getKhachHang().getHoten(),
 										x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
 										x.getVeTau().getKhachHang().getCccd(), x.getVeTau().getGiaVe(),
@@ -1061,10 +1061,10 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 											x.getVeTau().getMaVeTau(), t.getLoaiTau().getTenLoaiTau(),
 											x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
 											x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
-											x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
+											formatter.format(x.getVeTau().getNgayGioDi().toLocalDate()) + " - "
 													+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
 											"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
-											x.getVeTau().getNgayGioDi().toLocalDate(),
+											x.getNgayTuongTac().toLocalDate(),
 											x.getVeTau().getKhachHang().getHoten(),
 											x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
 											x.getVeTau().getKhachHang().getCccd(), x.getVeTau().getGiaVe(),
@@ -1098,10 +1098,10 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 											x.getVeTau().getMaVeTau(), t.getLoaiTau().getTenLoaiTau(),
 											x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
 											x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
-											x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
+											formatter.format(x.getVeTau().getNgayGioDi().toLocalDate()) + " - "
 													+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
 											"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
-											x.getVeTau().getNgayGioDi().toLocalDate(),
+											x.getNgayTuongTac().toLocalDate(),
 											x.getVeTau().getKhachHang().getHoten(),
 											x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
 											x.getVeTau().getKhachHang().getCccd(), x.getVeTau().getGiaVe(),
@@ -1135,7 +1135,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 							pnlDataDoiVe.getChildren().add(taoDataChoTableLichSuMuaBanDoiVe(x.getVeTau().getMaVeTau(),
 									t.getLoaiTau().getTenLoaiTau(), x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
 									x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
-									x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
+									formatter.format(x.getVeTau().getNgayGioDi().toLocalDate()) + " - "
 											+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
 									"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
 									x.getVeTau().getNgayGioDi().toLocalDate(), x.getVeTau().getKhachHang().getHoten(),
@@ -1205,10 +1205,10 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 											x.getVeTau().getMaVeTau(), t.getLoaiTau().getTenLoaiTau(),
 											x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
 											x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
-											x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
+											formatter.format(x.getVeTau().getNgayGioDi().toLocalDate()) + " - "
 													+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
 											"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
-											x.getVeTau().getNgayGioDi().toLocalDate(),
+											x.getNgayTuongTac().toLocalDate(),
 											x.getVeTau().getKhachHang().getHoten(),
 											x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
 											x.getVeTau().getKhachHang().getCccd(), x.getVeTau().getGiaVe(),
@@ -1241,10 +1241,10 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 											x.getVeTau().getMaVeTau(), t.getLoaiTau().getTenLoaiTau(),
 											x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
 											x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
-											x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
+											formatter.format(x.getVeTau().getNgayGioDi().toLocalDate()) + " - "
 													+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
 											"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
-											x.getVeTau().getNgayGioDi().toLocalDate(),
+											x.getNgayTuongTac().toLocalDate(),
 											x.getVeTau().getKhachHang().getHoten(),
 											x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
 											x.getVeTau().getKhachHang().getCccd(), x.getVeTau().getGiaVe(),
@@ -1280,10 +1280,10 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 							pnlDataDoiVe.getChildren().add(taoDataChoTableLichSuMuaBanDoiVe(x.getVeTau().getMaVeTau(),
 									t.getLoaiTau().getTenLoaiTau(), x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
 									x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
-									x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
+									formatter.format(x.getVeTau().getNgayGioDi().toLocalDate()) + " - "
 											+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
 									"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
-									x.getVeTau().getNgayGioDi().toLocalDate(), x.getVeTau().getKhachHang().getHoten(),
+									x.getNgayTuongTac().toLocalDate(), x.getVeTau().getKhachHang().getHoten(),
 									x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
 									x.getVeTau().getKhachHang().getCccd(), x.getVeTau().getGiaVe(),
 									nf.format(x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
@@ -1332,10 +1332,10 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 					.add(taoDataChoTableLichSuMuaBanDoiVe(x.getVeTau().getMaVeTau(), t.getLoaiTau().getTenLoaiTau(),
 							x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
 							x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
-							x.getVeTau().getNgayGioDi().toLocalDate().toString() + " - "
+							formatter.format(x.getVeTau().getNgayGioDi().toLocalDate()) + " - "
 									+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
 							"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
-							x.getVeTau().getNgayGioDi().toLocalDate(), x.getVeTau().getKhachHang().getHoten(),
+							x.getNgayTuongTac().toLocalDate(), x.getVeTau().getKhachHang().getHoten(),
 							x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
 							x.getVeTau().getKhachHang().getCccd(), x.getVeTau().getGiaVe(),
 							nf.format(x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
