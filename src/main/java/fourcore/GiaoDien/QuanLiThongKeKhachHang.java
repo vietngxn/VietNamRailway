@@ -1,8 +1,10 @@
 package fourcore.GiaoDien;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.Map;
 
 import fourcore.Entity.KhachHang;
 import fourcore.dao.ThongKeDAO;
+import fourcore.util.ExcelExporter;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -26,6 +29,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Group;
@@ -638,7 +642,7 @@ try {
 			
 			create_btnlayout();
 			primaryStage.setFullScreen(true);
-			primaryStage.show();
+//			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -922,10 +926,12 @@ try {
         	if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
         		table_desc.getChildren().clear();
         		create_barchart_khachHang();
+        		btn_xuatThongKe.setDisable(false);
         		noiDungChinh.getChildren().remove(layout_total);
         	}
         	else {
         		table_desc.getChildren().clear();
+        		btn_xuatThongKe.setDisable(false);
         		create_table();
         	}
         });
@@ -1288,7 +1294,7 @@ try {
 		btn_layout.setTranslateY(250);
 		btn_xuatThongKe = new Button("Xuất Thống Kê");
 		btn_xuatThongKe.setPrefSize(200,40);
-		
+		btn_xuatThongKe.setDisable(true);
 		String style = "-fx-font-family: 'Inter';-fx-font-weight: bold;-fx-font-size: 20px;-fx-text-fill:#00BACB;-fx-background-color:white;-fx-background-color:white;-fx-background-radius:20px;-fx-border-radius:20px;-fx-border-color:#00BACB;-fx-border-width:2px;";
 		btn_xuatThongKe.setStyle(style+"-fx-background-color:#00BACB;-fx-text-fill:white;");
 		btn_layout.getChildren().add(btn_xuatThongKe);
@@ -1308,6 +1314,25 @@ try {
 			st.play();
 		});
 		
+		btn_xuatThongKe.setOnMouseClicked(e -> {
+		    FileChooser fileChooser = new FileChooser();
+		    fileChooser.setTitle("Lưu file Thống Kê Khách Hàng");
+		    fileChooser.getExtensionFilters().add(
+		        new FileChooser.ExtensionFilter("Excel Files (*.xlsx)", "*.xlsx")
+		    );
+		    
+		    // Đặt tên file mặc định
+		    LocalDateTime now = LocalDateTime.now();
+		    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss");
+		    fileChooser.setInitialFileName("ThongKeKhachHang_" + now.format(formatter) + ".xlsx");
+		    
+		    Stage stage = (Stage) noiDungChinh.getScene().getWindow();
+		    File file = fileChooser.showSaveDialog(stage);
+		    
+		    if (file != null) {
+		        ExcelExporter.exportThongKeKhachHang(map, file.getAbsolutePath());
+		    }
+		});
 		
 		
 		noiDungChinh.getChildren().add(btn_layout);

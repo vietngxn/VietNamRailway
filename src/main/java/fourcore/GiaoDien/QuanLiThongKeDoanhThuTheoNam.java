@@ -1,9 +1,11 @@
 package fourcore.GiaoDien;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import fourcore.dao.ThongKeDAO;
+import fourcore.util.ExcelExporter;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -25,6 +28,7 @@ import javafx.collections.ObservableArrayBase;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Group;
@@ -638,7 +642,7 @@ try {
 			
 			create_btnlayout();
 			primaryStage.setFullScreen(true);
-//			primaryStage.show();
+			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -971,6 +975,7 @@ try {
         	if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
         		table_desc.getChildren().clear();
         		try {
+        			btn_xuatThongKe.setDisable(false);
 					create_barchart_nam();
 					create_layout_total();
 				} catch (SQLException e1) {
@@ -982,6 +987,7 @@ try {
         	}
         	else {
         		table_desc.getChildren().clear();
+        		btn_xuatThongKe.setDisable(false);
         		create_piechart_nam();
         		create_layout_total();
         	}
@@ -1058,7 +1064,7 @@ try {
 		map = thongkedao.getDoanhThuTheoThang(nam);
 		
 		XYChart.Series<String, Number> data = new XYChart.Series<>();
-		
+		tongdoanhthu =0 ;
 		for (int thang = 1; thang <= 12; thang++) {
 		    double doanhThu = map.getOrDefault(thang, 0.0);
 		     tongdoanhthu += doanhThu;
@@ -1254,6 +1260,7 @@ try {
 	}
 	public void create_layout_total()
 	{
+		
 		if (layout_total != null && noiDungChinh.getChildren().contains(layout_total)) {
 	        noiDungChinh.getChildren().remove(layout_total);
 	    }	
@@ -1292,6 +1299,7 @@ try {
 		btn_layout.setTranslateY(250);
 		btn_xuatThongKe = new Button("Xuất Thống Kê");
 		btn_xuatThongKe.setPrefSize(200,40);
+		btn_xuatThongKe.setDisable(true);
 		
 		String style = "-fx-font-family: 'Inter';-fx-font-weight: bold;-fx-font-size: 20px;-fx-text-fill:#00BACB;-fx-background-color:white;-fx-background-color:white;-fx-background-radius:20px;-fx-border-radius:20px;-fx-border-color:#00BACB;-fx-border-width:2px;";
 		btn_xuatThongKe.setStyle(style+"-fx-background-color:#00BACB;-fx-text-fill:white;");
@@ -1311,7 +1319,41 @@ try {
 			}
 			st.play();
 		});
+	
 		
+		
+		btn_xuatThongKe.setOnMouseClicked(e -> {
+		    FileChooser fileChooser = new FileChooser();
+		    fileChooser.setTitle("Lưu file Thống Kê Doanh Thu");
+		    fileChooser.getExtensionFilters().add(
+		        new FileChooser.ExtensionFilter("Excel Files (*.xlsx)", "*.xlsx")
+		    );
+		    
+		    // Đặt tên file mặc định
+		    LocalDateTime now = LocalDateTime.now();
+		    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss");
+		    if(date.getValue() != null) {
+		        int nam = date.getValue().getYear();
+		        fileChooser.setInitialFileName("ThongKeDoanhThu_" + nam + "_" + now.format(formatter) + ".xlsx");
+		    } else {
+		        fileChooser.setInitialFileName("ThongKeDoanhThu_" + now.format(formatter) + ".xlsx");
+		    }
+		    
+		    Stage stage = (Stage) noiDungChinh.getScene().getWindow();
+		    File file = fileChooser.showSaveDialog(stage);
+		    
+		    if (file != null) {
+		        if(date.getValue() != null) {
+		            int nam = date.getValue().getYear();
+		            ExcelExporter.exportThongKeDoanhThuTheoNam(map, nam, tongdoanhthu, file.getAbsolutePath());
+		        } else {
+		            Alert alert = new Alert(Alert.AlertType.WARNING);
+		            alert.setTitle("Cảnh báo");
+		            alert.setContentText("Vui lòng chọn năm trước khi xuất file!");
+		            alert.showAndWait();
+		        }
+		    }
+		});
 		
 		noiDungChinh.getChildren().add(btn_layout);
 	}

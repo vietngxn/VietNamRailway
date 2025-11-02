@@ -10,7 +10,14 @@ module VietNamRailwayInterface {
     requires com.google.zxing.javase;
     requires jakarta.mail;
 	requires java.desktop;
+	requires org.apache.poi.ooxml;
+	requires org.apache.poi.poi;
+	requires org.apache.xmlbeans;
+	
+	exports fourcore.Entity;
     exports fourcore.GiaoDien;
+    exports fourcore.util;
+    
     opens fourcore.Entity to javafx.base, javafx.graphics; 
     opens fourcore.GiaoDien to javafx.fxml, javafx.graphics;
 }

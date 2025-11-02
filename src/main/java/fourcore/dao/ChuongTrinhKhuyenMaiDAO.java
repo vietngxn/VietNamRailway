@@ -33,8 +33,9 @@ public class ChuongTrinhKhuyenMaiDAO {
 			LocalDateTime ngayKetThuc = rs.getTimestamp(5).toLocalDateTime();
 			String trangThai = rs.getString(6);
 			String dieuKienApDung = rs.getString(7);
+			int remove = rs.getInt(8);
 			KhuyenMai khuyenMai = new KhuyenMai(maKhuyenMai, tenChuongTrinh, trangThai, dieuKienApDung,
-					giaTriPhanTramKhuyenMai, ngayBatDau, ngayKetThuc);
+					giaTriPhanTramKhuyenMai, ngayBatDau, ngayKetThuc,remove);
 			listKhuyenMai.add(khuyenMai);
 			// maKhuyenMai,tenChuongTrinh,trangThaiKhuyenMai,dieuKienApDung,iaTriPhanTramKhuyenMai,ngayBatDau,ngayKetThuc)
 		}
@@ -75,12 +76,22 @@ public class ChuongTrinhKhuyenMaiDAO {
     	return kq > 0;
     }
     
+    public boolean khoiPhucKhuyenMai(String maKhuyenMai) throws SQLException {
+        
+    	Statement st = databaseConnector.connect();
+    	String query = "UPDATE KhuyenMai SET isRemove = 0 WHERE maKhuyenMai = '" + maKhuyenMai + "'";
+        int r = st.executeUpdate(query);
+        return r > 0 ;
+        
+    }
+
     public boolean xoaKhuyenMai(String maKhuyenMai) throws SQLException {
-
-        String q = "DELETE FROM KhuyenMai WHERE maKhuyenMai = '" + maKhuyenMai + "'";
-
-        int rows = myStmt.executeUpdate(q);
-        return rows > 0;
+        
+    	Statement st = databaseConnector.connect();
+    	String query = "UPDATE KhuyenMai SET isRemove = 1 WHERE maKhuyenMai = '" + maKhuyenMai + "'";
+        int r = st.executeUpdate(query);
+        return r > 0 ;
+        
     }
 
     public boolean capNhatKhuyenMai(KhuyenMai km) throws SQLException {

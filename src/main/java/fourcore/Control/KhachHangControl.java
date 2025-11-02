@@ -37,11 +37,7 @@ public class KhachHangControl {
 
         gdQuanLyKhachHang.getBtn_capnhat().setOnMouseClicked(e ->{
             CapNhatThongTinKhachHang capNhatThongTinKhachHang = null;
-            try {
-                capNhatThongTinKhachHang = new CapNhatThongTinKhachHang();
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
+            capNhatThongTinKhachHang = new CapNhatThongTinKhachHang();
             try {
                 capNhatThongTinKhachHang.start(suaKhachHangStage);
             } catch (Exception ex) {

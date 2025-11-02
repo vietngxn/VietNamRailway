@@ -109,4 +109,33 @@ public class HoaDonDAO {
 		return kh1;
 	}
 
+	
+	public HoaDon getHoaDonTheoMa(String maHD) throws SQLException {
+	    
+	    String q = "SELECT * FROM HoaDon WHERE maHoaDon = '" + maHD + "'";
+	    ResultSet rs = st.executeQuery(q);
+
+	    if (rs.next()) {
+	    	HoaDon hd = new HoaDon();
+	    	String mahd = rs.getString("maHoaDon");
+			String maloaihd = rs.getString("maLoaiHoaDon");
+			String manv = rs.getString("maNhanVien");
+			String tenkh = rs.getString("tenKhachHangThanhToan");
+			String email = rs.getString("emailKhachHangThanhToan");
+			String cccd = rs.getString("cccdKhachHangThanhToan");
+			String sdt = rs.getString("sdtKhachHangThanhToan");
+			LocalDateTime ngaytt = rs.getTimestamp("ngayThanhToan").toLocalDateTime();
+			double tongtien = rs.getDouble("tongTien");
+			NhanVienDAO nvDao = new NhanVienDAO();
+			NhanVien nv = nvDao.getNhanVienByMa(manv);
+			LoaiHoaDonDAO loaihdDao = new LoaiHoaDonDAO();
+			LoaiHoaDon loaiHD = loaihdDao.getLoaiHoaDonTheoMa(maloaihd);
+			hd = new HoaDon(mahd, loaiHD, nv, tenkh, email, cccd, sdt, ngaytt, tongtien);
+			System.out.println("lấy thông tin hóa đơn " + mahd);
+	        return hd;
+	    }
+	    return null;
+	}
+
+	
 }

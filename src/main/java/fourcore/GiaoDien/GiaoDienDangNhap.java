@@ -1,7 +1,15 @@
 package fourcore.GiaoDien;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.sql.SQLException;
 
+import fourcore.Entity.NhanVien;
+import fourcore.dao.TaiKhoanDAO;
 import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -11,6 +19,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -46,14 +55,15 @@ public class GiaoDienDangNhap extends Application {
 	private VBox box_button;
 	private Button btn_dangnhap;
 	private Label lbl_title;
-	private VBox vbox1; 
+	private VBox vbox1;
+	private TaiKhoanDAO tkdao; 
 	
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
 		primaryStage = stage;
-		
+		tkdao = new TaiKhoanDAO(); 
 		root_pane = new StackPane();
 		root_pane.setAlignment(Pos.CENTER);
 		
@@ -278,20 +288,67 @@ public class GiaoDienDangNhap extends Application {
 			st.play();
 		});
 		btn_dangnhap.setOnMouseClicked(event -> {
-		    // Đóng cửa sổ đăng nhập hiện tại
-		    stage.close();
+			
+			
+			String ten = txt_manhanvien.getText();
+			String matKhau = txt_password.getText();
+			
+			if(ten.equalsIgnoreCase("") || matKhau.equalsIgnoreCase(""))
+			{
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				alert.setTitle("Thông Báo");
+				alert.setHeaderText(null);
+				alert.setContentText("Tài Khoản hoặc mặt khẩu trống");
+				alert.showAndWait();
+			}
+			else {
+			try {
+				String mkdao = tkdao.getMatKhau(ten);
+				if(mkdao.equals(matKhau))
+				{
+					
+					NhanVien nv = tkdao.getNhanVien(ten);
+					File file = new File("NhanVien.dat");
+				    if (file.exists()) {
+				        file.delete();
+				    }
+					ObjectOutputStream oos;
+					try {
+						
+						oos = new ObjectOutputStream(new FileOutputStream("NhanVien.dat"));
+						oos.writeObject(nv);
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					stage.close();
 		    
-		    // Mở cửa sổ trang chủ mới
-		    try {
-		        TrangChu trangchu = new TrangChu();
+					try {
+						TrangChu trangchu = new TrangChu();
 		        
-		        Stage newStage = new Stage();
-		        
-		        TrangChu tc = new TrangChu();
-				tc.start(newStage);
-		    } catch (Exception e) {
-		        e.printStackTrace();
-		    }
+						Stage newStage = new Stage();
+						
+						TrangChu tc = new TrangChu();
+						tc.start(newStage);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				else {
+					Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Thông Báo");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Tài khoản Hoặc mật khẩu sai");
+                    alert.showAndWait();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			}
 		});
 	}
 	public static void main(String[] args) {
