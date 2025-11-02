@@ -77,7 +77,7 @@ public class Tau_DAO {
         String sql = "Select * From Tau where maLoaiTau = ?";
         try {
             PreparedStatement ps = (PreparedStatement) myStmt.getConnection().prepareStatement(sql);
-            if(maHanhTrinh.equalsIgnoreCase("HT01")) ps.setString(1, "LT01");
+            if(maHanhTrinh.equalsIgnoreCase("HT04")) ps.setString(1, "LT04");
             else if(maHanhTrinh.equalsIgnoreCase("HT02")) ps.setString(1, "LT02");
             else if(maHanhTrinh.equalsIgnoreCase("HT03")) ps.setString(1, "LT03");
             else if(maHanhTrinh.equalsIgnoreCase("HT09")) ps.setString(1, "LT09");

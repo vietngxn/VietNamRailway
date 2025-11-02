@@ -110,7 +110,7 @@ public class ToaTauDAO {
     public ArrayList<ToaTau> getListToaTauTenToaTau(String tenLoaiTau) throws SQLException {
 	
 		String tenLoaiToa = null;
-		if(tenLoaiTau.equalsIgnoreCase("SE1") || tenLoaiTau.equalsIgnoreCase("SE9")) tenLoaiToa = "Ngồi mềm công nghệ Nhật Bản";
+		if(tenLoaiTau.equalsIgnoreCase("SE4") || tenLoaiTau.equalsIgnoreCase("SE9")) tenLoaiToa = "Ngồi mềm công nghệ Nhật Bản";
 		ArrayList<ToaTau> listToaTheoLoaiTau = new ArrayList<>();
 		String sql = "Select * From ToaTau where tenToaTau = ?";
 		try {

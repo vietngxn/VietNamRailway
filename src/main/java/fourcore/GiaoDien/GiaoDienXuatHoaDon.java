@@ -111,15 +111,23 @@ public class GiaoDienXuatHoaDon extends Application {
 	String email;
 	String sdt;
 	private TextField lblRight;
+    GaTauDao gaTauDao = new GaTauDao();
     public ArrayList<DoiTuongGiamGia> listDoiTuongGiamGia;
-
+    String gaDen = "";
     public GiaoDienXuatHoaDon() throws SQLException {
     }
-
+        public Button getBtnTroLai(){
+        return btnTroLai;
+        }
     @Override
 	public void start(Stage primaryStage) {
 		try {
-
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("gaDen.dat"))) {
+                gaDen = ois.readObject().toString();
+                System.out.println("Dữ liệu ga den đọc được: " + gaDen);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
             listDoiTuongGiamGia = dtggDAO.getListDoiTuongGiamGia();
 
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("mapGheVaKhachHang.dat"))) {
@@ -720,21 +728,27 @@ public class GiaoDienXuatHoaDon extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Hệ thống quản lý vé tàu");
 			primaryStage.setFullScreen(true);
-			primaryStage.show();
+//			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-    public void tinhThongThanhTien(){
+    public void tinhThongThanhTien() throws SQLException {
         ArrayList<GheTrenChuyenTau> listGheTrenChuyenTau = new ArrayList<>(mapChuyenTauVaUser.keySet());
         tongCongThanhTien = 0;
         tienTruocVAT =0;
         double thueVAT= 0;
         double phanTramKhuyenMai = 0;
         phanTramKhuyenMai = ctkmSelected.getGiaTriPhanTramKhuyenMai();
+        double giaGhe;
 
         for (int i=0; i<mapChuyenTauVaUser.size();i++){
-            double giaGhe = listGheTrenChuyenTau.get(i).getGiaTienGhe();
+            if(listGheTrenChuyenTau.get(i).getGheNgoi().isLuuDong()){
+                giaGhe = listGheTrenChuyenTau.get(i).getChuyenTau().getGiaCuocTrenChuyenTau() * gaTauDao.getCuLiBangTenGa(gaDen) + listGheTrenChuyenTau.get(i).getGiaTienGhe();
+            }else{
+                giaGhe  = listGheTrenChuyenTau.get(i).getGiaTienGhe();
+            }
+
             System.out.println("gia ghe:" +giaGhe);
             String tenDoiTuong = mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getDoiTuong();
 

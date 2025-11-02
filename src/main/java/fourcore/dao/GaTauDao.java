@@ -7,6 +7,8 @@ import fourcore.Entity.KhuyenMai;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class GaTauDao {
@@ -30,6 +32,15 @@ public class GaTauDao {
         }
         return null;
     }
+    public String getMaGaTuTenGa(String tenGa) throws SQLException {
+        String query = "select maGa from ga where tenGa=N'"+tenGa+"'";
+        ResultSet rs = myStmt.executeQuery(query);
+        String maGa = "";
+        while (rs.next()) {
+            maGa = rs.getString(1);
+        }
+        return maGa;
+    }
 
     public ArrayList<String> getDanhSachTenGaTau() throws SQLException {
 
@@ -41,5 +52,39 @@ public class GaTauDao {
             danhSachTenGa.add(tenGa);
         }
         return danhSachTenGa;
+    }
+    public Time getGioDiKeHoach(String maHanhTrinh, String maGa) throws SQLException {
+        Time gioDenKeHoach = null;
+        String query = "select maHanhTrinh, maGa, gioDiKeHoach,soNgayDiQua \n" +
+                "from HanhTrinhGa\n" +
+                "where maHanhTrinh = '"+maHanhTrinh+"' and maGa = '"+maGa+"'";
+        ResultSet rs = myStmt.executeQuery(query);
+        while(rs.next()) {
+            gioDenKeHoach = rs.getTime(3);
+        }
+        return gioDenKeHoach;
+    }
+    public int getSoNgayDiQua(String maHanhTrinh, String maGa) throws SQLException {
+        int soNgayDiQua = 0;
+        String query = "select maHanhTrinh, maGa, gioDiKeHoach,soNgayDiQua \n" +
+                "from HanhTrinhGa\n" +
+                "where maHanhTrinh = '"+maHanhTrinh+"' and maGa = '"+maGa+"'";
+        ResultSet rs = myStmt.executeQuery(query);
+        while(rs.next()) {
+            soNgayDiQua = rs.getInt(4);
+        }
+        return soNgayDiQua;
+    }
+    public double getCuLiBangTenGa(String tenGa) throws SQLException {
+        double cuLy = 0;
+        String query = "select  cuLy\n" +
+                "from Ga\n" +
+                "where  tenGa = N'"+tenGa+"'";
+
+        ResultSet rs = myStmt.executeQuery(query);
+        while (rs.next()) {
+            cuLy = rs.getDouble(1);
+        }
+        return cuLy;
     }
 }
