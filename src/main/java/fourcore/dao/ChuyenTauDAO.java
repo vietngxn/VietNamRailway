@@ -1,10 +1,12 @@
 package fourcore.dao;
 
 import fourcore.DatabaseConnector.DatabaseConnector;
+
 import fourcore.Entity.ChuyenTau;
 import fourcore.Entity.HanhTrinh;
 import fourcore.Entity.KhuyenMai;
 import fourcore.Entity.Tau;
+import fourcore.animation.Animation;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChuyenTauDAO {
+	public Animation animation = new Animation();
     DatabaseConnector databaseConnector = new DatabaseConnector();
     public ArrayList<ChuyenTau> listChuyenTau =  new ArrayList<>();
     Tau_DAO tau_DAO = new Tau_DAO();
@@ -48,7 +51,7 @@ public class ChuyenTauDAO {
         return listChuyenTau;
     }
     public String getMaChuyenTauCuoiCung() {
-        String maChuyenTau = null;
+        String maChuyenTau = "";
         try {
             String sql = "Select top 1 maChuyenTau From ChuyenTau Order By maChuyenTau DESC";
             ResultSet rs = myStmt.executeQuery(sql);
@@ -104,4 +107,23 @@ public class ChuyenTauDAO {
         }
         return n > 0;
     }
+    
+   
+    public ArrayList<String> getListMaChuyenTauTheoNgay(LocalDateTime ngayKhoiHanh) {
+    	ArrayList<String> listChuyenTauTheoMaHanhTrinh = new ArrayList<>();
+    	String sql = "select maChuyenTau from ChuyenTau where ? between ngayGioDi and ngayGioDen";
+    	
+    	try {
+    		PreparedStatement ps = (PreparedStatement) databaseConnector.connect().getConnection().prepareStatement(sql);
+    		ps.setTimestamp(1, Timestamp.valueOf(ngayKhoiHanh));
+    		ResultSet rs = ps.executeQuery();
+    		while(rs.next()) {
+    			String maChuyenTau = rs.getString(1);
+    	        listChuyenTauTheoMaHanhTrinh.add(maChuyenTau);
+    		}
+    	} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return listChuyenTauTheoMaHanhTrinh;
+    } 
 }

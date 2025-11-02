@@ -164,6 +164,7 @@ public class ThietLapGiaGhe extends Application {
 	private Map<String, Double> mapUpdateGhe = new HashMap<>();
 	private GheTrenChuyenTau_dao ghetrenchuyentaudao = new GheTrenChuyenTau_dao();
 	private ChuyenTau chuyenTauCuaGheTrenChuyenTau = null;
+	private Button buttonTroLai;
 
     public ThietLapGiaGhe() throws SQLException {
     }
@@ -1195,8 +1196,7 @@ public class ThietLapGiaGhe extends Application {
 			}
 		});
 		
-		Button buttonTroLai = new Button();
-		buttonTroLai.setText("Trở lại");
+		buttonTroLai = new Button("Trở lại");
 		buttonTroLai.setPrefWidth(200);
 		buttonTroLai.setPrefHeight(60);
 		buttonTroLai.setId("button_Red");
@@ -1208,14 +1208,15 @@ public class ThietLapGiaGhe extends Application {
 		
 		buttonThemChuyenTau.setOnMouseClicked(event -> {
 			String maChuyenTauLast = chuyentaudao.getMaChuyenTauCuoiCung();
-                maChuyenTauLast = "CT00";
+			
+            if(maChuyenTauLast.equalsIgnoreCase(""))  maChuyenTauLast = "CT00";
 			String chuCT = maChuyenTauLast.replaceAll("\\d", "");
 			String soCT = maChuyenTauLast.replaceAll("\\D", "");
 			
 			
 			int soCTNew = Integer.parseInt(soCT);
 			soCTNew++;
-			String maChuyenTauInsert = chuCT + String.format("%03d", soCTNew);
+			String maChuyenTauInsert = chuCT + String.format("%02d", soCTNew);
 			
 			String maGTCT = ghetrenchuyentaudao.getMaGheTrenChuyenTauCuoiCung();
 			String chuGTCT = maGTCT.replaceAll("\\d", "");
@@ -1273,11 +1274,20 @@ public class ThietLapGiaGhe extends Application {
 					ArrayList<GheNgoi> listGheNgoiInsert = mapGheTheoToa.get(maToa);
 					double giaTienGhe = tau.getLoaiTau().getGiaCuoc() * 1726;
 					for(GheNgoi gn : listGheNgoiInsert) {
-						String maGTCTInsert = chuGTCT + String.format("%04d", soGTCTNew);
-						giaTienGhe += gn.getGiaTriTangThem() + gn.getTang().getGiaTang();
-						GheTrenChuyenTau gtct = new GheTrenChuyenTau(maGTCTInsert, "Còn trống", giaTienGhe, chuyenTauCuaGheTrenChuyenTau, gn);
-						listGheTrenChuyenTau.add(gtct);
-						soGTCTNew++;
+						if(!gn.isLuuDong()) {
+							String maGTCTInsert = chuGTCT + String.format("%02d", soGTCTNew);
+							giaTienGhe += gn.getGiaTriTangThem() + gn.getTang().getGiaTang();
+							GheTrenChuyenTau gtct = new GheTrenChuyenTau(maGTCTInsert, "Còn trống", giaTienGhe, chuyenTauCuaGheTrenChuyenTau, gn);
+							listGheTrenChuyenTau.add(gtct);
+							soGTCTNew++;
+						}
+						else {
+							String maGTCTInsert = chuGTCT + String.format("%02d", soGTCTNew);
+							giaTienGhe = gn.getGiaTriTangThem() + gn.getTang().getGiaTang();
+							GheTrenChuyenTau gtct = new GheTrenChuyenTau(maGTCTInsert, "Còn trống", giaTienGhe, chuyenTauCuaGheTrenChuyenTau, gn);
+							listGheTrenChuyenTau.add(gtct);
+							soGTCTNew++;
+						}
 						
 					}
 				}
@@ -1319,8 +1329,9 @@ public class ThietLapGiaGhe extends Application {
 	}
 	
 	
-	
-						   
+	public Button getButtonTroLai() {
+		return this.buttonTroLai;
+	}
 	
 	
 	public static void main(String[] args) {
