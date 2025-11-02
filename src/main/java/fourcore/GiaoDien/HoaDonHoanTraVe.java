@@ -1,4 +1,5 @@
-package fourcore.Entity;
+package fourcore.GiaoDien;
+
 
 import java.security.KeyStore.Entry;
 import java.sql.SQLException;
@@ -9,6 +10,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
+import fourcore.Entity.ChiTietHoaDon;
+import fourcore.Entity.HoaDon;
+import fourcore.Entity.LichSuTuongTacVe;
+import fourcore.Entity.LoaiTuongTacVe;
+import fourcore.Entity.Ve;
 import fourcore.dao.ChiTietHoaDonDAO;
 import fourcore.dao.GheTrenChuyenTau_dao;
 import fourcore.dao.HoaDonDAO;
@@ -29,7 +35,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class XuatHoaDonHoanTraVe extends Application {
+public class HoaDonHoanTraVe extends Application {
 
 	private BorderPane root;
 	private VBox table_layout;
@@ -68,7 +74,7 @@ public class XuatHoaDonHoanTraVe extends Application {
 		primaryStage.show();
 	}
 
-	public XuatHoaDonHoanTraVe(String hoten, String diaChi, String sdt, String cccd, String email,
+	public HoaDonHoanTraVe(String hoten, String diaChi, String sdt, String cccd, String email,
 			Map<Ve, Double> listVe) {
 		this.hoTen = hoten;
 		this.sdt = sdt;

@@ -16,13 +16,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 import fourcore.Control.HoanTraVeControl;
-import fourcore.Entity.ChiTietHoaDon;
-import fourcore.Entity.GheTrenChuyenTau;
-import fourcore.Entity.HoaDon;
-import fourcore.Entity.LichSuTuongTacVe;
-import fourcore.Entity.LoaiTuongTacVe;
 import fourcore.Entity.Ve;
-import fourcore.Entity.XuatHoaDonHoanTraVe;
 import fourcore.dao.ChiTietHoaDonDAO;
 import fourcore.dao.GheTrenChuyenTau_dao;
 import fourcore.dao.HoaDonDAO;
@@ -830,7 +824,7 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 					System.out.println(txtHoTenValue);
 					System.out.println(txtSDTValue);
 					// Tạo cửa sổ mới
-					XuatHoaDonHoanTraVe gd = new XuatHoaDonHoanTraVe(txtHoTenValue, txtDiaChiValue, txtSDTValue,
+					HoaDonHoanTraVe gd = new HoaDonHoanTraVe(txtHoTenValue, txtDiaChiValue, txtSDTValue,
 							txtSoGiayToValue, txtEmailValue, listVeThanhToan);
 					Stage gdStage = new Stage();
 
