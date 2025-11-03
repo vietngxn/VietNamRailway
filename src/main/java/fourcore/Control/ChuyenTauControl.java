@@ -1,5 +1,6 @@
 package fourcore.Control;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -8,6 +9,8 @@ import fourcore.GiaoDien.ThemChuyenTau;
 import fourcore.GiaoDien.ThemDauTau;
 import fourcore.GiaoDien.ThemToaTau;
 import fourcore.GiaoDien.ThietLapGiaGhe;
+import fourcore.animation.Animation;
+import fourcore.animation.GhiFile;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -19,6 +22,8 @@ public class ChuyenTauControl {
 	public ThemDauTau gdThemDauTau = new ThemDauTau();
 	public ThemToaTau gdThemToaTau = new ThemToaTau();
 	public ThietLapGiaGhe gdThietLap = new ThietLapGiaGhe();
+	public GhiFile ghiFile = new GhiFile();
+	public File fileTmp = new File("src/main/resources/tmp_ChuyenTau.txt");
 
     public ChuyenTauControl() throws SQLException {
     }
@@ -69,6 +74,46 @@ public class ChuyenTauControl {
 										try {
 											gdChinhThietLap = gdThietLap.create_themThietLap_layout();
 											root.setCenter(gdChinhThietLap);
+//											Button btnTroLaiCuaThietLap = gdThietLap.getButtonTroLai();
+//											btnTroLaiCuaThietLap.setOnMouseClicked(event4 -> {
+//												if(ghiFile.xoaTrangDong(fileTmp, 2)) {
+//													VBox gdChinhThemToaTauBack = null;
+//													try {
+//														gdChinhThemToaTauBack = gdThemToaTau.creat_themtoatau_layout();
+//														root.setCenter(gdChinhThemToaTauBack);
+//														Button btnTroLaiCuaToaTau = gdThemToaTau.getButtonTroLai();
+//														btnTroLaiCuaToaTau.setOnMouseClicked(event5 -> {
+//															if(ghiFile.xoaTrangDong(fileTmp, 1)) {
+//																VBox gdChinhThemDauTauBack = null;
+//																try {
+//																	gdChinhThemDauTauBack = gdThemDauTau.creat_themDauTau_layout();
+//																	root.setCenter(gdChinhThemDauTauBack);
+//																	Button btnTroLaiCuaThemDauTau = gdThemDauTau.getButtonTroLai();
+//																	btnTroLaiCuaThemDauTau.setOnMouseClicked(event6 -> {
+//																		if(ghiFile.xoaTrangDong(fileTmp, 0)) {
+//																			VBox gdChinhThemChuyenTauBack = null;
+//																			try {
+//																				gdChinhThemChuyenTauBack = gdThemChuyenTau.creat_themchuyentau_layout();
+//																				root.setCenter(gdChinhThemChuyenTauBack);
+//																			} catch (SQLException e) {
+//																				// TODO Auto-generated catch block
+//																				e.printStackTrace();
+//																			}
+//																			
+//																		}
+//																	});
+//																} catch (SQLException | IOException e) {
+//																	// TODO Auto-generated catch block
+//																	e.printStackTrace();
+//																}
+//															}
+//														});
+//													} catch (SQLException | IOException e) {
+//														// TODO Auto-generated catch block
+//														e.printStackTrace();
+//													}
+//												}
+//											});
 										} catch (SQLException | IOException e) {
 											// TODO Auto-generated catch block
 											e.printStackTrace();

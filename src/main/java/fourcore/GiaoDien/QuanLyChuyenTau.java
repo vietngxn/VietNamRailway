@@ -985,7 +985,7 @@ public class QuanLyChuyenTau extends Application {
 
         lbl_title_maChuyenTau = new Label("Mã Chuyến");
         lbl_title_dauTau = new Label("Đầu Tàu");
-        lbl_title_soluongtoa = new Label("Số lượng toa");
+        lbl_title_soluongtoa = new Label("Số Lượng Toa");
         lbl_title_veTrong = new Label("Vé Trống");
         lbl_title_thoigiankhoihanh = new Label("Thời Gian Khởi Hành");
         lbl_title_gadigaden = new Label("Ga đi - Ga đến");
