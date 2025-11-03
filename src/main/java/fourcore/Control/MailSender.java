@@ -38,6 +38,7 @@ public class MailSender {
         // đính kèm
         MimeBodyPart attachmentPart = new MimeBodyPart();
         attachmentPart.attachFile(new File(filePath));
+
         try {
             // Tạo nội dung mail
             Message message = new MimeMessage(session);

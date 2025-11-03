@@ -1439,7 +1439,7 @@ public class ChonVe extends Application {
             for (int row = 0; row < soHang; row++) {
                 final int soGheH = thuTuGhe;
                 GheTrenChuyenTau gtc = gheNgoiDAO.getGheTrenChuyenTau(soGheH, maToaTau, maChuyen);
-                if (gaDen.equals("TP HCM")) {
+                if (gaDen.equals("Hà Nội")) {
                     ImageView gheTrongImg = new ImageView(getClass().getResource("/img/giuongConTrong.png").toExternalForm());
                     if(gtc.getTrangThaiGhe().equals("Đã bán")){
                         gheTrongImg.setImage(new Image(getClass().getResource("/img/giuongHetCho.png").toExternalForm()));

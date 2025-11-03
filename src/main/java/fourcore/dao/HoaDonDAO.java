@@ -68,7 +68,7 @@ public class HoaDonDAO {
                 "    v.giaVe AS ThanhTien\n" +
                 "FROM ChiTietHoaDon cthd\n" +
                 "JOIN Ve v ON cthd.maVeTau = v.maVeTau\n" +
-                "JOIN GheTrenChuyenTau gtc ON v.maGheTrenChuyen = gtc.maGheTrenChuyenTau\n" +
+                "JOIN GheTrenChuyenTau gtc ON v.maGheTrenChuyenTau = gtc.maGheTrenChuyenTau\n" +
                 "JOIN GheNgoi g ON gtc.maGheNgoi = g.maGheNgoi\n" +
                 "JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe\n" +
                 "JOIN DoiTuongGiamGia dt ON v.maDoiTuongGiamGia = dt.maDoiTuongGiamGia\n" +
