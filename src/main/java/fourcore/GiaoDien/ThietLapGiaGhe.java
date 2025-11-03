@@ -387,7 +387,7 @@ public class ThietLapGiaGhe extends Application {
 						}
 						StringBuilder chuoiGiaGoc = new StringBuilder();
 						StringBuilder chuoiGiaHienTai = new StringBuilder();
-						chuoiGiaHienTai.append("Giá vé hiện tại: ");
+						chuoiGiaHienTai.append("Giá vé tăng thêm: ");
 						chuoiGiaGoc.append("Giá gốc: ");
 						for(String maGhe : listGheChon) {
 						    String giaGoc = mapGheTheoToaGiaGoc.get(maGhe);
@@ -477,7 +477,7 @@ public class ThietLapGiaGhe extends Application {
 						}
 						StringBuilder chuoiGiaGoc = new StringBuilder();
 						StringBuilder chuoiGiaHienTai = new StringBuilder();
-						chuoiGiaHienTai.append("Giá vé hiện tại: ");
+						chuoiGiaHienTai.append("Giá vé tăng thêm: ");
 						chuoiGiaGoc.append("Giá gốc: ");
 						for(String maGhe : listGheChon) {
 						    String giaGoc = mapGheTheoToaGiaGoc.get(maGhe);
@@ -620,7 +620,7 @@ public class ThietLapGiaGhe extends Application {
 						}
 						StringBuilder chuoiGiaGoc = new StringBuilder();
 						StringBuilder chuoiGiaHienTai = new StringBuilder();
-						chuoiGiaHienTai.append("Giá vé hiện tại: ");
+						chuoiGiaHienTai.append("Giá vé tăng thêm: ");
 						chuoiGiaGoc.append("Giá gốc: ");
 						for(String maGhe : listGheChon) {
 						    String giaGoc = mapGheTheoToaGiaGoc.get(maGhe);
@@ -891,7 +891,7 @@ public class ThietLapGiaGhe extends Application {
 //		boxGiaCuoc.setMaxWidth();
 		boxGiaCuoc.setId("box_Money");
 		
-		Label lblGiaGocCuoc = new Label("Giá gốc: " + df.format(tau.getLoaiTau().getGiaCuoc()));
+		Label lblGiaGocCuoc = new Label("Giá gốc: " + df.format(tau.getLoaiTau().getGiaCuoc())+"/km");
 		lblGiaGocCuoc.setId("txt_Money");
 		
 		GridPane gridThietLapGiaCuoc = new GridPane();
@@ -1097,7 +1097,7 @@ public class ThietLapGiaGhe extends Application {
 		gridGiaGhe.setHgap(20);
 		gridGiaGhe.setAlignment(Pos.CENTER);
 		
-		Label lblGiaCuocHienTai = new Label("Giá cước hiện tại: " + df.format(tau.getLoaiTau().getGiaCuoc()));
+		Label lblGiaCuocHienTai = new Label("Giá cước hiện tại: " + df.format(tau.getLoaiTau().getGiaCuoc())+"/km");
 		lblGiaCuocHienTai.setStyle("-fx-font-size: 18px; -fx-font-weight: bold");
 		lblGiaVeHienTai = new Label("Giá vé hiện tại: ");
 		lblGiaVeHienTai.setStyle("-fx-font-size: 18px; -fx-font-weight: bold");

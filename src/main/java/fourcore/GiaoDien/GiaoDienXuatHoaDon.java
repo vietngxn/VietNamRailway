@@ -8,6 +8,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import com.google.zxing.WriterException;
+import fourcore.Control.MailSender;
 import fourcore.Control.QRGenerator;
 import fourcore.Control.VeTauPdfExporter;
 import fourcore.Entity.*;
@@ -828,6 +829,10 @@ public class GiaoDienXuatHoaDon extends Application {
                 qrGenerator.generateQRCodeImage(listVe.get(i).getMaVeTau());
                 VeTauPdfExporter veTauPdfExporter = new VeTauPdfExporter();
                 veTauPdfExporter.exportVeTauToPdf(listVe.get(i));
+                MailSender mailSender = new MailSender();
+                if(txtEmailValue != null){
+                    mailSender.sendEmail(txtEmailValue,"VeTauExport/"+listVe.get(i).getMaVeTau()+".pdf");
+                }
             }
             HoaDonBanVe hoaDonBanVe = new HoaDonBanVe(hoaDon2);
             hoaDonBanVe.showAsPopup(null);

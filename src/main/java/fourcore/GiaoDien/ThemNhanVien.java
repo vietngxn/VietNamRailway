@@ -152,7 +152,11 @@ public class ThemNhanVien extends Application {
 	private NhanVienDAO nvdao;
 	private ArrayList<NhanVien> listNhanVien;
 	private ArrayList<String> listChucVu;
-	
+
+
+    public VBox getLayoutThemNhanVIen(){
+        return layoutThemNhanVIen;
+    }
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		khdao = new KhachHangDAO();
@@ -835,7 +839,7 @@ public class ThemNhanVien extends Application {
 		
 		window.setScene(sceneThemCTKM);
 		window.setFullScreen(true);
-		window.show();
+//		window.show();
 	}
     public VBox getThemKHLayout(){
         return layoutThemNhanVIen;

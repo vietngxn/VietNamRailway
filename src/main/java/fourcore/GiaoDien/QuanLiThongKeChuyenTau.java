@@ -1,12 +1,11 @@
 package fourcore.GiaoDien;
 
+import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,33 +15,23 @@ import java.util.Map;
 import fourcore.Entity.Tau;
 import fourcore.dao.ThongKeDAO;
 import fourcore.util.ExcelExporter;
-import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.ScaleTransition;
-import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArrayBase;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -54,13 +43,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 
 
 public class QuanLiThongKeChuyenTau extends Application {
@@ -641,7 +627,7 @@ try {
 			
 			create_btnlayout();
 			primaryStage.setFullScreen(true);
-			primaryStage.show();
+//			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -683,146 +669,146 @@ try {
 		
 		checks = new ArrayList<>(Arrays.asList(false, false, false));
 
-		button_thongKe1.setOnMouseClicked(e -> {
-		    if (!checks.get(0)) {
-		    	table_desc.getChildren().clear();
-		        button_thongKe1.setStyle(style + "-fx-background-color:#00BACB;-fx-text-fill:white;");
-		        button_thongKe2.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
-		        button_thongKe3.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
-		        checks.set(0, true);
-		        checks.set(1, false);
-		        checks.set(2, false);
-		        noiDungChinh.getChildren().remove(layout_total);
-		        
-		        ObservableList<String> items = FXCollections.observableArrayList("BarChart","Table");
-		        comboBox.setItems(items);
-		        comboBox.getSelectionModel().selectFirst();
-		        if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
-	        		table_desc.getChildren().clear();
-	        		try {
-						create_barchart_chuyentau();
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-	        		noiDungChinh.getChildren().remove(layout_total);
-	        	}
-	        	else {
-	        		table_desc.getChildren().clear();
-	        		create_table();
-	        		
-	        	}
-		        comboBox.setOnAction(null);
-		        comboBox.setOnAction(event  -> { 
-		        	if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
-		        		table_desc.getChildren().clear();
-		        		try {
-							create_barchart_chuyentau();
-						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-		        		noiDungChinh.getChildren().remove(layout_total);
-		        	}
-		        	else {
-		        		table_desc.getChildren().clear();
-		        		create_table();
-		        		
-		        	}
-		        });
-		    } else {
-		        button_thongKe1.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
-		        checks.set(0, false);
-		    }
-		});
+//		button_thongKe1.setOnMouseClicked(e -> {
+//		    if (!checks.get(0)) {
+//		    	table_desc.getChildren().clear();
+//		        button_thongKe1.setStyle(style + "-fx-background-color:#00BACB;-fx-text-fill:white;");
+//		        button_thongKe2.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
+//		        button_thongKe3.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
+//		        checks.set(0, true);
+//		        checks.set(1, false);
+//		        checks.set(2, false);
+//		        noiDungChinh.getChildren().remove(layout_total);
+//		        
+//		        ObservableList<String> items = FXCollections.observableArrayList("BarChart","Table");
+//		        comboBox.setItems(items);
+//		        comboBox.getSelectionModel().selectFirst();
+//		        if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
+//	        		table_desc.getChildren().clear();
+//	        		try {
+//						create_barchart_chuyentau();
+//					} catch (SQLException e1) {
+//						// TODO Auto-generated catch block
+//						e1.printStackTrace();
+//					}
+//	        		noiDungChinh.getChildren().remove(layout_total);
+//	        	}
+//	        	else {
+//	        		table_desc.getChildren().clear();
+//	        		create_table();
+//	        		
+//	        	}
+//		        comboBox.setOnAction(null);
+//		        comboBox.setOnAction(event  -> { 
+//		        	if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
+//		        		table_desc.getChildren().clear();
+//		        		try {
+//							create_barchart_chuyentau();
+//						} catch (SQLException e1) {
+//							// TODO Auto-generated catch block
+//							e1.printStackTrace();
+//						}
+//		        		noiDungChinh.getChildren().remove(layout_total);
+//		        	}
+//		        	else {
+//		        		table_desc.getChildren().clear();
+//		        		create_table();
+//		        		
+//		        	}
+//		        });
+//		    } else {
+//		        button_thongKe1.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
+//		        checks.set(0, false);
+//		    }
+//		});
 
-		button_thongKe2.setOnMouseClicked(e -> {
-		    if (!checks.get(1)) {
-		        button_thongKe2.setStyle(style + "-fx-background-color:#00BACB;-fx-text-fill:white;");
-		        button_thongKe1.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
-		        button_thongKe3.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
-		        
-		        ObservableList<String> itemsThang = FXCollections.observableArrayList("BarChart", "PieChart");
-		        comboBox.setItems(itemsThang);
-		        comboBox.getSelectionModel().selectFirst();
-		        
-		        if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
-	            	table_desc.getChildren().clear();
-	                create_barchart_thang();
-	                noiDungChinh.getChildren().remove(layout_total);
-	                create_layout_total();
-	            } else  if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("Table")) {
-	            	table_desc.getChildren().clear();
-	                create_piechart_thang();
-	                noiDungChinh.getChildren().remove(layout_total);
-	                create_layout_total();
-	            }
-		        checks.set(0, false);
-		        checks.set(1, true);
-		        checks.set(2, false);
-		        comboBox.setOnAction(null);
-		        comboBox.setOnAction(event -> {
-		            if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
-		            	table_desc.getChildren().clear();
-		                create_barchart_thang();
-		                noiDungChinh.getChildren().remove(layout_total);
-		                create_layout_total();
-		            } else {
-		            	table_desc.getChildren().clear();
-		                create_piechart_thang();
-		                noiDungChinh.getChildren().remove(layout_total);
-		                create_layout_total();
-		            }
-		        });
-		    } else {
-		        button_thongKe2.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
-		        checks.set(1, false);
-		    }
-		});
-
-		button_thongKe3.setOnMouseClicked(e -> {
-			
-		    if (!checks.get(2)) {
-		        button_thongKe3.setStyle(style + "-fx-background-color:#00BACB;-fx-text-fill:white;");
-		        button_thongKe1.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
-		        button_thongKe2.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
-		        checks.set(0, false);
-		        checks.set(1, false);
-		        checks.set(2, true);
-		        ObservableList<String> itemsThang = FXCollections.observableArrayList("BarChart", "Table");
-		        comboBox.setItems(itemsThang);
-		        comboBox.getSelectionModel().selectFirst();
-		        
-		        if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
-	            	table_desc.getChildren().clear();
-	                create_barchart_nam();
-	                noiDungChinh.getChildren().remove(layout_total);
-	                create_layout_total();
-	            } else {
-	            	table_desc.getChildren().clear();
-	                create_piechart_nam();
-	                noiDungChinh.getChildren().remove(layout_total);
-	                create_layout_total();
-	            }
-		        comboBox.setOnAction(null);
-		        comboBox.setOnAction(event -> {
-		            if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
-		            	table_desc.getChildren().clear();
-		                create_barchart_nam();
-		                noiDungChinh.getChildren().remove(layout_total);
-		                create_layout_total();
-		            } else {
-		            	table_desc.getChildren().clear();
-		                create_piechart_nam();
-		                noiDungChinh.getChildren().remove(layout_total);
-		                create_layout_total();
-		            }
-		        });
-		    } else {
-		        button_thongKe3.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
-		        checks.set(2, false);
-		    }
-		});
+//		button_thongKe2.setOnMouseClicked(e -> {
+//		    if (!checks.get(1)) {
+//		        button_thongKe2.setStyle(style + "-fx-background-color:#00BACB;-fx-text-fill:white;");
+//		        button_thongKe1.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
+//		        button_thongKe3.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
+//		        
+//		        ObservableList<String> itemsThang = FXCollections.observableArrayList("BarChart", "PieChart");
+//		        comboBox.setItems(itemsThang);
+//		        comboBox.getSelectionModel().selectFirst();
+//		        
+//		        if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
+//	            	table_desc.getChildren().clear();
+//	                create_barchart_thang();
+//	                noiDungChinh.getChildren().remove(layout_total);
+//	                create_layout_total();
+//	            } else  if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("Table")) {
+//	            	table_desc.getChildren().clear();
+//	                create_piechart_thang();
+//	                noiDungChinh.getChildren().remove(layout_total);
+//	                create_layout_total();
+//	            }
+//		        checks.set(0, false);
+//		        checks.set(1, true);
+//		        checks.set(2, false);
+//		        comboBox.setOnAction(null);
+//		        comboBox.setOnAction(event -> {
+//		            if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
+//		            	table_desc.getChildren().clear();
+//		                create_barchart_thang();
+//		                noiDungChinh.getChildren().remove(layout_total);
+//		                create_layout_total();
+//		            } else {
+//		            	table_desc.getChildren().clear();
+//		                create_piechart_thang();
+//		                noiDungChinh.getChildren().remove(layout_total);
+//		                create_layout_total();
+//		            }
+//		        });
+//		    } else {
+//		        button_thongKe2.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
+//		        checks.set(1, false);
+//		    }
+//		});
+//
+//		button_thongKe3.setOnMouseClicked(e -> {
+//			
+//		    if (!checks.get(2)) {
+//		        button_thongKe3.setStyle(style + "-fx-background-color:#00BACB;-fx-text-fill:white;");
+//		        button_thongKe1.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
+//		        button_thongKe2.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
+//		        checks.set(0, false);
+//		        checks.set(1, false);
+//		        checks.set(2, true);
+//		        ObservableList<String> itemsThang = FXCollections.observableArrayList("BarChart", "Table");
+//		        comboBox.setItems(itemsThang);
+//		        comboBox.getSelectionModel().selectFirst();
+//		        
+//		        if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
+//	            	table_desc.getChildren().clear();
+//	                create_barchart_nam();
+//	                noiDungChinh.getChildren().remove(layout_total);
+//	                create_layout_total();
+//	            } else {
+//	            	table_desc.getChildren().clear();
+//	                create_piechart_nam();
+//	                noiDungChinh.getChildren().remove(layout_total);
+//	                create_layout_total();
+//	            }
+//		        comboBox.setOnAction(null);
+//		        comboBox.setOnAction(event -> {
+//		            if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
+//		            	table_desc.getChildren().clear();
+//		                create_barchart_nam();
+//		                noiDungChinh.getChildren().remove(layout_total);
+//		                create_layout_total();
+//		            } else {
+//		            	table_desc.getChildren().clear();
+//		                create_piechart_nam();
+//		                noiDungChinh.getChildren().remove(layout_total);
+//		                create_layout_total();
+//		            }
+//		        });
+//		    } else {
+//		        button_thongKe3.setStyle(style + "-fx-background-color:white;-fx-text-fill:#00BACB;");
+//		        checks.set(2, false);
+//		    }
+//		});
 //		check(checks);
 		button_thongKe1.hoverProperty().addListener((obs,oval,nval)->{
 			ScaleTransition st = new ScaleTransition(Duration.millis(200), button_thongKe1);
@@ -932,7 +918,7 @@ try {
 				}
         		noiDungChinh.getChildren().remove(layout_total);
         	}
-        	else {
+        	else if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("table")) {
         		table_desc.getChildren().clear();
         		create_table();
         		btn_xuatThongKe.setDisable(false);
@@ -1042,7 +1028,7 @@ try {
 	    BarChart<String, Number> barchart = new BarChart<String, Number>(ca, na);
 	    barchart.setTitle("Thống kê top 10 chuyến tàu chạy nhiều nhất");
 	    barchart.setLegendVisible(false);
-	    barchart.setAnimated(true); // ← BẬT ANIMATION TỰ ĐỘNG
+	    
 
 	    ArrayList<XYChart.Data<String, Number>> listdata = new ArrayList<>();
 
@@ -1052,7 +1038,6 @@ try {
 	        listdata.add(new XYChart.Data<>(tau.getTenTau(), soLan));
 	    }
 
-	    // Sắp xếp
 	    for(int i = 0; i < listdata.size() - 1; i++) {
 	        for(int j = i+1; j < listdata.size(); j++) {
 	            if(listdata.get(i).getYValue().doubleValue() < listdata.get(j).getYValue().doubleValue()) {
@@ -1075,15 +1060,6 @@ try {
 	        list.getData().add(s);
 	    }
 	    barchart.getData().add(list);
-
-	    // Hiển thị số trên bar (đơn giản)
-	    Platform.runLater(() -> {
-	        for(XYChart.Data<String, Number> data : list.getData()) {
-	            Text dataText = new Text(data.getYValue().toString());
-	            dataText.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-fill: #333;");
-	            data.setNode(dataText);
-	        }
-	    });
 
 	    table_desc.getChildren().clear();
 	    table_desc.getChildren().add(barchart);
@@ -1271,31 +1247,67 @@ try {
 		});
 		
 		btn_xuatThongKe.setOnMouseClicked(e -> {
-		    FileChooser fileChooser = new FileChooser();
-		    fileChooser.setTitle("Lưu file Thống Kê");
-		    fileChooser.getExtensionFilters().add(
-		        new FileChooser.ExtensionFilter("Excel Files (*.xlsx)", "*.xlsx")
-		    );
-		    
-		    // Đặt tên file mặc định
-		    LocalDateTime now = LocalDateTime.now();
-		    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss");
-		    fileChooser.setInitialFileName("ThongKeChuyenTau_" + now.format(formatter) + ".xlsx");
-		    
-		    Stage stage = (Stage) noiDungChinh.getScene().getWindow();
-		    File file = fileChooser.showSaveDialog(stage);
-		    
-		    if (file != null) {
-		        ExcelExporter.exportThongKeTau(map, file.getAbsolutePath());
+		    try {
+		        // Tạo folder nếu chưa có
+		        String folderPath = "ThongKeExport";
+		        File folder = new File(folderPath);
+		        if (!folder.exists()) {
+		            folder.mkdirs();
+		        }
+		        
+		        // Tạo tên file với thời gian
+		        LocalDateTime now = LocalDateTime.now();
+		        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss");
+		        String fileName = "ThongKeChuyenTau_" + now.format(formatter) + ".xlsx";
+		        String filePath = folderPath + "/" + fileName;
+		        
+		        // Export trực tiếp
+		        ExcelExporter.exportThongKeTau(map, filePath);
+		        
+		        // Mở file với WPS
+                File pdfFile = new File(filePath);
+                if (pdfFile.exists()) {
+                    if (Desktop.isDesktopSupported()) {
+                        Desktop.getDesktop().open(pdfFile); // mở file PDF bằng ứng dụng mặc định
+                    } else {
+                        System.out.println("Desktop không được hỗ trợ. Vui lòng mở file thủ công: " + pdfFile.getAbsolutePath());
+                    }
+                } else {
+                    System.out.println("File PDF không tồn tại: " + filePath);
+                }
+		        
+		        // Thông báo thành công
+		        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		        alert.setTitle("Thành công");
+		        alert.setHeaderText(null);
+		        alert.setContentText("Xuất file thành công!\n" + filePath);
+		        alert.showAndWait();
+		        
+		    } catch (Exception ex) {
+		        Alert alert = new Alert(Alert.AlertType.ERROR);
+		        alert.setTitle("Lỗi");
+		        alert.setHeaderText(null);
+		        alert.setContentText("Lỗi khi xuất file: " + ex.getMessage());
+		        alert.showAndWait();
 		    }
 		});
-		
+
 		
 		
 		noiDungChinh.getChildren().add(btn_layout);
 	}
-	
-	
+		
+	private void openPDFWithWPS(String filePath) throws IOException {
+	    String wpsPath = "C:\\Users\\Admin\\AppData\\Local\\Kingsoft\\WPS Office\\12.2.0.23131\\office6\\wps.exe";
+	    
+	    File wpsFile = new File(wpsPath);
+	    if (!wpsFile.exists()) {
+	        throw new IOException("WPS Office không tìm thấy");
+	    }
+	    
+	    ProcessBuilder pb = new ProcessBuilder(wpsPath, filePath);
+	    pb.start();
+	}
 	
 	
 	public VBox getQuanLiThongKe(){

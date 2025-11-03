@@ -1,5 +1,8 @@
 package fourcore.GiaoDien;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -36,6 +39,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -1081,6 +1085,20 @@ public class GiaoDienCapLaiVe extends Application {
                     try {
 
 
+                        File pdfFile = new File("VeTauExport/"+mave+".pdf");
+                        if (pdfFile.exists()) {
+                            if (Desktop.isDesktopSupported()) {
+                                Desktop.getDesktop().open(pdfFile); // mở file PDF bằng ứng dụng mặc định
+                            } else {
+                                System.out.println("Desktop không được hỗ trợ. Vui lòng mở file thủ công: " + pdfFile.getAbsolutePath());
+                            }
+                        } else {
+                            System.out.println("File PDF không tồn tại: " + "VeTauExport/"+mave+".pdf");
+                        }
+                    	
+                    		
+                    	
+
                         LoaiTuongTacVe lttv1 = new LoaiTuongTacVe();
 
 
@@ -1120,6 +1138,8 @@ public class GiaoDienCapLaiVe extends Application {
                     } catch (SQLException e1) {
                         // TODO Auto-generated catch block
                         e1.printStackTrace();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
                     }
 
                 }
@@ -1199,6 +1219,8 @@ public class GiaoDienCapLaiVe extends Application {
         }
     }
 
+
+    
     public void hienThi() throws SQLException
     {
         pnlDataDoiVe.getChildren().clear();

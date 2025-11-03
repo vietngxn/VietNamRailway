@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fourcore.Entity.KhachHang;
+import fourcore.Entity.KhuyenMai;
 import fourcore.Entity.NhanVien;
 import fourcore.dao.KhachHangDAO;
 import fourcore.dao.NhanVienDAO;
@@ -80,7 +81,7 @@ public class QuanLyKhachHang extends Application {
 	private Node lbl_title_doiTuong;
 	private VBox table_desc;
 	private ScrollPane scrollPane;
-	private ArrayList<GridPane> hangchon = new ArrayList<>();
+	private GridPane hangchon = new GridPane();
 	private HBox layout_button;
 	private Button btn_xoakh;
 	private Button btn_themkh;
@@ -914,7 +915,8 @@ public class QuanLyKhachHang extends Application {
 			
 			create_layout_button();
 			primaryStage.setFullScreen(true);
-			primaryStage.show();
+//			primaryStage.show();
+//			primaryStag	();
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -972,7 +974,7 @@ public class QuanLyKhachHang extends Application {
 		btn_timkiem.setOnAction(e -> {
 			String cccd = txt_timkiem.getText();
 			if(cccd.isEmpty()) {
-				Alert alert =  new Alert(Alert.AlertType.INFORMATION);
+				Alert alert =  new Alert(AlertType.INFORMATION);
 				alert.setContentText("Vui Lòng nhập cccd của nhân viên");
 				alert.setHeaderText(null);
 				alert.showAndWait();
@@ -986,7 +988,7 @@ public class QuanLyKhachHang extends Application {
 						create_layout_dong(kh1.getMaKhachHang(),kh1.getHoten(),kh1.getSdt(),kh1.getCccd(),kh1.getEmail(),kh1.getDoiTuong());
 					}
 					else {
-						Alert alert =  new Alert(Alert.AlertType.INFORMATION);
+						Alert alert =  new Alert(AlertType.INFORMATION);
 						alert.setContentText("Không tìm thấy Khách Hàng phù hợp!");
 						alert.setHeaderText(null);
 						alert.showAndWait();
@@ -1082,8 +1084,8 @@ public class QuanLyKhachHang extends Application {
 		
 		paneCol1 = new StackPane(colmaKhachHang);
 		paneCol2 = new StackPane(colhoTen);
-		paneCol3 = new StackPane(colsoDienThoai);
-		paneCol4 = new StackPane(colemail);
+//		paneCol3 = new StackPane(colsoDienThoai);
+//		paneCol4 = new StackPane(colemail);
 		paneCol5 = new StackPane(colCCCD);
 		paneCol6 = new StackPane(coldoiTuong);
 		
@@ -1091,24 +1093,24 @@ public class QuanLyKhachHang extends Application {
 		
 		paneCol1.setPrefWidth(300);
 		paneCol2.setPrefWidth(300);
-		paneCol3.setPrefWidth(300);
-		paneCol4.setPrefWidth(300);
+//		paneCol3.setPrefWidth(300);
+//		paneCol4.setPrefWidth(300);
 		paneCol5.setPrefWidth(300);
 		paneCol6.setPrefWidth(300);
 		
 		paneCol1.setAlignment(Pos.CENTER);
 		paneCol2.setAlignment(Pos.CENTER);
-		paneCol3.setAlignment(Pos.CENTER);
-		paneCol4.setAlignment(Pos.CENTER);
+//		paneCol3.setAlignment(Pos.CENTER);
+//		paneCol4.setAlignment(Pos.CENTER);
 		paneCol5.setAlignment(Pos.CENTER);
 		paneCol6.setAlignment(Pos.CENTER);
 		
 		tableCol.add(paneCol1, 0, 0);
 		tableCol.add(paneCol2, 1, 0);
-		tableCol.add(paneCol3, 2, 0);
-		tableCol.add(paneCol4, 3, 0);
-		tableCol.add(paneCol5, 4, 0);
-		tableCol.add(paneCol6, 5, 0);
+//		tableCol.add(paneCol3, 2, 0);
+//		tableCol.add(paneCol4, 3, 0);
+		tableCol.add(paneCol5, 2, 0);
+		tableCol.add(paneCol6, 3, 0);
 		
 		table_layout.getChildren().add(tableCol);
 		table_desc = new VBox();
@@ -1119,10 +1121,10 @@ public class QuanLyKhachHang extends Application {
 		{
 			if(kh.getCccd() != null)
 			{
-			create_layout_dong(kh.getMaKhachHang(), kh.getHoten(), kh.getSdt(), kh.getEmail(), kh.getCccd(), kh.getDoiTuong());
+			create_layout_dong(kh.getMaKhachHang(), kh.getHoten(), kh.getSdt(), kh.getCccd(), kh.getEmail(), kh.getDoiTuong());
 			}
 			else {
-				create_layout_dong(kh.getMaKhachHang(), kh.getHoten(), kh.getSdt(), kh.getEmail(), kh.getPassport(), kh.getDoiTuong());	
+				create_layout_dong(kh.getMaKhachHang(), kh.getHoten(), kh.getSdt(), kh.getPassport(), kh.getEmail(), kh.getDoiTuong());	
 			}
 		}
 		
@@ -1245,37 +1247,6 @@ public class QuanLyKhachHang extends Application {
 			}
 		});
 		
-		btn_capnhat.setOnMouseClicked(e-> {
-			if(hangchon.size() ==0 || hangchon.size() > 1)
-			{
-				System.out.println("Lỗi");
-			}
-			else {
-				 GridPane selectedRow = hangchon.get(0);
-				 
-				 String maKH = ((Label)((StackPane)selectedRow.getChildren().get(0)).getChildren().get(0)).getText();
-			     String hoTen = ((Label)((StackPane)selectedRow.getChildren().get(1)).getChildren().get(0)).getText();
-			     String sdt = ((Label)((StackPane)selectedRow.getChildren().get(2)).getChildren().get(0)).getText();
-			     String email = ((Label)((StackPane)selectedRow.getChildren().get(3)).getChildren().get(0)).getText();
-			     String cccdPassport = ((Label)((StackPane)selectedRow.getChildren().get(4)).getChildren().get(0)).getText();
-			     String doiTuong = ((Label)((StackPane)selectedRow.getChildren().get(5)).getChildren().get(0)).getText();
-			     
-			     KhachHang kh = new KhachHang(maKH, hoTen, sdt, email, cccdPassport, cccdPassport, doiTuong);
-			     try {
-					ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("KhachHang.dat"));
-					oos.writeObject(kh);
-                    System.out.println("Ghi file khach hang thanh cong");
-					
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			     
-			}
-		});
 		noiDungChinh.getChildren().add(layout_button);
 		
 	}
@@ -1310,40 +1281,41 @@ public class QuanLyKhachHang extends Application {
 	    // Tạo StackPane cho mỗi cột giống như tableCol
 	    StackPane paneData1 = new StackPane(lblmaKhachHang);
 	    StackPane paneData2 = new StackPane(lblhoTen);
-	    StackPane paneData3 = new StackPane(lblsdt);
+//	    StackPane paneData3 = new StackPane(lblsdt);
 	    StackPane paneData5 = new StackPane(lblCCCD);
-	    StackPane paneData4 = new StackPane(lblemail);
+//	    StackPane paneData4 = new StackPane(lblemail);
 	    StackPane paneData6 = new StackPane(lblloaidoituong);
 	    
 	    // Set width giống như paneCol
 	    paneData1.setPrefWidth(300);
 	    paneData2.setPrefWidth(300);
-	    paneData3.setPrefWidth(300);
-	    paneData4.setPrefWidth(300);	    
+//	    paneData3.setPrefWidth(300);
+//	    paneData4.setPrefWidth(300);	    
 	    paneData5.setPrefWidth(300);
 	    paneData6.setPrefWidth(300);
 	    
 	    // Set alignment CENTER giống như paneCol
 	    paneData1.setAlignment(Pos.CENTER);
 	    paneData2.setAlignment(Pos.CENTER);
-	    paneData3.setAlignment(Pos.CENTER);
-	    paneData4.setAlignment(Pos.CENTER);
+//	    paneData3.setAlignment(Pos.CENTER);
+//	    paneData4.setAlignment(Pos.CENTER);
 	    paneData5.setAlignment(Pos.CENTER);
 	    paneData6.setAlignment(Pos.CENTER);
 	    
 	    // Add vào GridPane theo đúng cột
 	    data.add(paneData1, 0, 0);
 	    data.add(paneData2, 1, 0);
-	    data.add(paneData3, 2, 0);
-	    data.add(paneData5, 3, 0);
-	    data.add(paneData4, 4, 0);
-	    data.add(paneData6, 5, 0);
+//	    data.add(paneData3, 2, 0);
+	    data.add(paneData5, 2, 0);
+//	    data.add(paneData4, 4, 0);
+	    data.add(paneData6, 3, 0);
 	    
 	    lblmaKhachHang.setTranslateX(-20);
 	    lblhoTen.setTranslateX(-10);
 	    lblCCCD.setTranslateX(10);
 	    lblemail.setTranslateX(10);
 	    lblloaidoituong.setTranslateX(20);
+	    lblloaidoituong.setWrapText(true);
 //	    
 	    String normalStyle = """
 	    	    -fx-background-color: rgba(0, 186, 203, 0.3);
@@ -1377,38 +1349,72 @@ public class QuanLyKhachHang extends Application {
 	    String style_thaydoi = "-fx-background-color : #00BACB4D;-fx-background-radius:15px;-fx-border-radius:15px;-fx-border-color:#00BACB;-fx-border-width:2px;";
 	    
 	    dongHienTai.setOnMouseClicked(e -> {
-			if (hangchon.contains(dongHienTai)) {
-				hangchon.remove(dongHienTai);
-				dongHienTai.setStyle(normalStyle);
-			} else {
-				hangchon.add(dongHienTai);
-				dongHienTai.setStyle(selectedStyle);
-			}
-//			btn_xoakh.setDisable(hangchon.isEmpty());
-		});
-	    
-	    dongHienTai.setOnMouseEntered(e -> {
-			if (!hangchon.contains(dongHienTai)) {
-				dongHienTai.setStyle(hoverStyle);
-			}
-			ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), dongHienTai);
-			scaleUp.setToX(1.02);
-			scaleUp.setToY(1.02);
-			scaleUp.play();
-		});
+	        if (hangchon == dongHienTai) {
+	            // Bỏ chọn nếu click lại hàng đang chọn
+	            hangchon = null;
+	            dongHienTai.setStyle(normalStyle);
+	        } else {
+	            // Bỏ chọn hàng cũ
+	            if (hangchon != null) {
+	                hangchon.setStyle(normalStyle);
+	            }
+	            
+	            // Chọn hàng mới
+	            hangchon = dongHienTai;
+	            dongHienTai.setStyle(selectedStyle);
+	        }
+	        
+	        btn_capnhat.setDisable(hangchon == null);
+	        
 
-		// RỜI CHUỘT
-		dongHienTai.setOnMouseExited(e -> {
-			if (hangchon.contains(dongHienTai)) {
-				dongHienTai.setStyle(selectedStyle);
-			} else {
-				dongHienTai.setStyle(normalStyle);
-			}
-			ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), dongHienTai);
-			scaleDown.setToX(1.0);
-			scaleDown.setToY(1.0);
-			scaleDown.play();
-		});
+	        if (hangchon != null) {
+	            String maKH = ((Label)((StackPane)hangchon.getChildren().get(0)).getChildren().get(0)).getText();
+	            
+	            try {
+	                KhachHang kh = khdao.getKhachHangByMa(makh);
+	                
+	                File file = new File("KhuyenMai.dat");
+	                if(file.exists()) {
+	                    file.delete();
+	                }
+	                
+	                ObjectOutputStream oos;
+	                try {
+	                    oos = new ObjectOutputStream(new FileOutputStream("KhachHang.dat"));
+	                    oos.writeObject(kh);
+	                    System.out.println("Ghi Thành Cong");
+	                } catch (FileNotFoundException e1) {
+	                    e1.printStackTrace();
+	                } catch (IOException e1) {
+	                    e1.printStackTrace();
+	                }
+	            } catch (SQLException e1) {
+	                e1.printStackTrace();
+	            }
+	        }
+	    });
+
+	    dongHienTai.setOnMouseEntered(e -> {
+	        if (hangchon != dongHienTai) {
+	            dongHienTai.setStyle(hoverStyle);
+	        }
+	        ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), dongHienTai);
+	        scaleUp.setToX(1.02);
+	        scaleUp.setToY(1.02);
+	        scaleUp.play();
+	    });
+
+	    dongHienTai.setOnMouseExited(e -> {
+	        if (hangchon != dongHienTai) {
+	            dongHienTai.setStyle(normalStyle);
+	        } else {
+	            dongHienTai.setStyle(selectedStyle);
+	        }
+	        ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), dongHienTai);
+	        scaleDown.setToX(1.0);
+	        scaleDown.setToY(1.0);
+	        scaleDown.play();
+	    });
 	    
 	    
 	    

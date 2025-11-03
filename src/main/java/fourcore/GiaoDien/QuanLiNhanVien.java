@@ -136,6 +136,13 @@ public class QuanLiNhanVien extends Application {
 	private Button btn_khoiPhuc1; 
 	private GridPane[] hangchonPopup = null;
 	private Button btn_timkiem;
+
+    public Button getBtn_themNhanVien() {
+        return btn_themNhanVien;
+    }
+    public Button getBtn_capnhat(){
+        return btn_capnhat;
+    }
     @Override
 	public void start(Stage primaryStage) {
 		try {
@@ -1752,7 +1759,7 @@ public class QuanLiNhanVien extends Application {
 	    	
 	    	NhanVien nv;
 			try {
-				nv = nhanvienDAO.getNhanVienByMa(manhanvien);
+				nv = nhanvienDAO.getNhanVienByMa1(manhanvien);
 			
 	    	
 	    	File file = new File("NhanVienCapNhat.dat");

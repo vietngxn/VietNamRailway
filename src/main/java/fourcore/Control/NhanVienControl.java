@@ -1,22 +1,41 @@
 package fourcore.Control;
 
-import fourcore.GiaoDien.CapNhatNhanVien;
-import fourcore.GiaoDien.QuanLiHoaDon;
-import fourcore.GiaoDien.QuanLiNhanVien;
+import fourcore.GiaoDien.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class NhanVienControl {
-	private QuanLiNhanVien qlyNhanVien;
+	private QuanLiNhanVien qlyNhanVien = new QuanLiNhanVien();;
     public void handleMenuTrangChuSelect(BorderPane root) {
-        qlyNhanVien = new QuanLiNhanVien();
         Stage stage = new Stage();
         qlyNhanVien.start(stage);
         VBox quanLyNhanVienGD = qlyNhanVien.getGDQlyNhanVien();
         root.setCenter(quanLyNhanVienGD);
     }
-    
+
+    public void handleThemNhanVien(BorderPane root) throws Exception {
+        ThemNhanVien themNhanVien = new ThemNhanVien();
+        Stage themNVStage = new Stage();
+        themNhanVien.start(themNVStage);
+        qlyNhanVien.getBtn_themNhanVien().setOnMouseClicked(e ->{
+            root.setCenter(themNhanVien.getLayoutThemNhanVIen());
+        });
+    }
+    public void suaThongTinNhanVien(BorderPane root) throws Exception {
+        Stage suaNhanVienStage = new Stage();
+
+        qlyNhanVien.getBtn_capnhat().setOnMouseClicked(e ->{
+            CapNhatNhanVien capNhatNhanVien = null;
+            capNhatNhanVien = new CapNhatNhanVien();
+            try {
+                capNhatNhanVien.start(suaNhanVienStage);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+            root.setCenter(capNhatNhanVien.getLayout());
+        });
+    }
     
     public void handlecapNhatbtn(BorderPane root) throws Exception
 	{

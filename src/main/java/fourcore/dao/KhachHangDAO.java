@@ -13,7 +13,21 @@ public class KhachHangDAO {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
 	ArrayList<KhachHang> listKhachHang = new ArrayList<KhachHang>();
     Statement st;
+    public ArrayList<String> getDoiTuong() throws SQLException
+    {
+        String q = "select  dt.tenDoiTuongGiamGia\r\n"
+                + "			 from DoiTuongGiamGia dt";
 
+        ArrayList<String> listdoituong = new ArrayList<>();
+        ResultSet  rs = st.executeQuery(q);
+        while(rs.next())
+        {
+            String a = rs.getString(1);
+            listdoituong.add(a);
+        }
+        return listdoituong;
+
+    }
     public KhachHangDAO() throws SQLException {
         st = databaseConnector.connect();
     }
@@ -54,6 +68,17 @@ public class KhachHangDAO {
 
 		return kh;
 	}
+    public String getMaKH() throws SQLException {
+        String query = "SELECT COUNT(*) AS soLuong FROM KhachHang";
+        ResultSet rs = st.executeQuery(query);
+        int soLuong = 0;
+        while (rs.next()) {
+            soLuong = rs.getInt(1);
+        }
+        rs.close();
+        String maKH = String.format("KH%04d", soLuong+1);
+        return maKH;
+    }
 	public boolean themKhachHang(KhachHang kh) throws SQLException {
 	    String q = "INSERT INTO KhachHang VALUES ('"
 	            + kh.getMaKhachHang() + "', N'" 
@@ -97,7 +122,7 @@ public class KhachHangDAO {
 	    if (rs.next()) {
 	        KhachHang kh = new KhachHang();
 	        kh.setMaKhachHang(rs.getString(1));  
-	        kh.setHoten(q);        
+	        kh.setHoten(rs.getString(2));
 	        kh.setSdt(rs.getString(3));          
 	        kh.setEmail(rs.getString(4));        
 	        kh.setCccd(rs.getString(5));         

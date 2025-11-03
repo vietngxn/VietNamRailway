@@ -1,11 +1,10 @@
 package fourcore.GiaoDien;
 
+import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,34 +14,24 @@ import java.util.Map;
 import fourcore.Entity.KhachHang;
 import fourcore.dao.ThongKeDAO;
 import fourcore.util.ExcelExporter;
-import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.ScaleTransition;
-import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArrayBase;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -55,13 +44,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 
 
 public class QuanLiThongKeKhachHang extends Application {
@@ -929,7 +915,7 @@ try {
         		btn_xuatThongKe.setDisable(false);
         		noiDungChinh.getChildren().remove(layout_total);
         	}
-        	else {
+        	else if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("table")) {
         		table_desc.getChildren().clear();
         		btn_xuatThongKe.setDisable(false);
         		create_table();
@@ -1315,28 +1301,57 @@ try {
 		});
 		
 		btn_xuatThongKe.setOnMouseClicked(e -> {
-		    FileChooser fileChooser = new FileChooser();
-		    fileChooser.setTitle("Lưu file Thống Kê Khách Hàng");
-		    fileChooser.getExtensionFilters().add(
-		        new FileChooser.ExtensionFilter("Excel Files (*.xlsx)", "*.xlsx")
-		    );
-		    
-		    // Đặt tên file mặc định
-		    LocalDateTime now = LocalDateTime.now();
-		    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss");
-		    fileChooser.setInitialFileName("ThongKeKhachHang_" + now.format(formatter) + ".xlsx");
-		    
-		    Stage stage = (Stage) noiDungChinh.getScene().getWindow();
-		    File file = fileChooser.showSaveDialog(stage);
-		    
-		    if (file != null) {
-		        ExcelExporter.exportThongKeKhachHang(map, file.getAbsolutePath());
+		    try {
+		        // Tạo folder nếu chưa có
+		        String folderPath = "ThongKeExport";
+		        File folder = new File(folderPath);
+		        if (!folder.exists()) {
+		            folder.mkdirs();
+		        }
+		        
+		        // Tạo tên file với thời gian
+		        LocalDateTime now = LocalDateTime.now();
+		        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss");
+		        String fileName = "ThongKeChuyenTau_" + now.format(formatter) + ".xlsx";
+		        String filePath = folderPath + "/" + fileName;
+		        
+		        // Export trực tiếp
+		        ExcelExporter.exportThongKeKhachHang(map, filePath);
+		        
+
+                File pdfFile = new File(filePath);
+                if (pdfFile.exists()) {
+                    if (Desktop.isDesktopSupported()) {
+                        Desktop.getDesktop().open(pdfFile); // mở file PDF bằng ứng dụng mặc định
+                    } else {
+                        System.out.println("Desktop không được hỗ trợ. Vui lòng mở file thủ công: " + pdfFile.getAbsolutePath());
+                    }
+                } else {
+                    System.out.println("File PDF không tồn tại: " + filePath);
+                }
+		        
+		        // Thông báo thành công
+		        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		        alert.setTitle("Thành công");
+		        alert.setHeaderText(null);
+		        alert.setContentText("Xuất file thành công!\n" + filePath);
+		        alert.showAndWait();
+		        
+		    } catch (Exception ex) {
+		        Alert alert = new Alert(Alert.AlertType.ERROR);
+		        alert.setTitle("Lỗi");
+		        alert.setHeaderText(null);
+		        alert.setContentText("Lỗi khi xuất file: " + ex.getMessage());
+		        alert.showAndWait();
 		    }
 		});
 		
 		
 		noiDungChinh.getChildren().add(btn_layout);
 	}
+	
+	
+
 	public VBox getQuanLiThongKe(){
         return this.noiDungChinh;
     }

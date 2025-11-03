@@ -1,6 +1,6 @@
 package fourcore.GiaoDien;
 
-import java.security.KeyStore.Entry;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
@@ -9,10 +9,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
+import fourcore.Control.HoaDonHoanTraExportPDF;
 import fourcore.Entity.ChiTietHoaDon;
 import fourcore.Entity.HoaDon;
 import fourcore.Entity.LichSuTuongTacVe;
 import fourcore.Entity.LoaiTuongTacVe;
+import fourcore.Entity.ThongTinCtHoaDonHoanTraVe;
 import fourcore.Entity.Ve;
 import fourcore.dao.ChiTietHoaDonDAO;
 import fourcore.dao.GheTrenChuyenTau_dao;
@@ -291,6 +293,14 @@ public class HoaDonHoanTraVe extends Application {
 								key.getGiaVe() - value, 0, value, loai);
 						cthdDao.themChiTietHoaDon(cthd);
 					}
+					HoaDonHoanTraExportPDF hdHoanTra = new HoaDonHoanTraExportPDF();
+					try {
+						ThongTinCtHoaDonHoanTraVe cthd = new ThongTinCtHoaDonHoanTraVe(listVe);
+						hdHoanTra.exportHoaDon(hd, cthd);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					showConfirm(currentStage, "Thông báo", "Bạn đã thanh toán hóa đơn thành công");
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -312,9 +322,8 @@ public class HoaDonHoanTraVe extends Application {
 		alert.setHeaderText(null);
 		alert.setContentText(message);
 
-		ButtonType buttonYes = new ButtonType("Có");
-		ButtonType buttonNo = new ButtonType("Không");
-		alert.getButtonTypes().setAll(buttonYes, buttonNo);
+		ButtonType buttonYes = new ButtonType("OK");
+		alert.getButtonTypes().setAll(buttonYes);
 
 		if (ownerStage != null) {
 			alert.initOwner(ownerStage);

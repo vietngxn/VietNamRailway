@@ -165,7 +165,11 @@ public class CapNhatNhanVien extends Application {
 	private Label lblNgayVaoLam;
 	private ComboBox comboChucVu;
 	private ChucVuDAO cvdao;
-	
+
+
+    public VBox getLayout(){
+        return layoutCapNhatCTKM;
+    }
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		khdao = new KhachHangDAO();
@@ -903,7 +907,7 @@ public class CapNhatNhanVien extends Application {
 		 
 		window.setScene(sceneThemCTKM);
 		window.setFullScreen(true);
-		window.show();
+//		window.show();
 	}
     public VBox getcapNhatNhanVienLayout(){
         return layoutCapNhatNhanVien;

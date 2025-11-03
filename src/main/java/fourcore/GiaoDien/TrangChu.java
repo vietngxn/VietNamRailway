@@ -1,6 +1,7 @@
 package fourcore.GiaoDien;
 
 import fourcore.Control.*;
+import fourcore.Entity.NhanVien;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -26,8 +27,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Map;
@@ -546,7 +549,7 @@ public class TrangChu extends Application {
 			HBox thongKeLoaiGhe = new HBox();
 
 			Label quanLiChuyenTauuLabel = new Label("Quản lí chuyến tàu");
-			Label thongKeLoaiTauBest = new Label("Thống kê loại tàu được sử dụng nhiều nhất");
+			Label thongKeLoaiTauBest = new Label("Thống kê chuyến tàu");
 
 			quanLiChuyenTauBox.getChildren().add(quanLiChuyenTauuLabel);
 			thongKeLoaiGhe.getChildren().add(thongKeLoaiTauBest);
@@ -621,8 +624,9 @@ public class TrangChu extends Application {
 			userIcon = new ImageView(getClass().getResource("/img/user-circle.png").toExternalForm());
 			userIcon.setFitWidth(50);
 			userIcon.setFitHeight(50);
-
-			userLabel = new Label("Nguyễn Tiến Đạt");
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("NhanVien.dat"));
+            NhanVien nv1 = (NhanVien) ois.readObject();
+            userLabel = new Label(""+nv1.getHoTen());
 			userLabel.setFont(labelFont);
 			userLabel.setTranslateX(30);
 			settingIcon = new ImageView(getClass().getResource("/img/cog.png").toExternalForm());
@@ -1021,16 +1025,29 @@ public class TrangChu extends Application {
 
 			thongKeDoanhThuBox.setOnMouseClicked(event -> {
 				ThongKeChuyenTauControl thongKeTauControl = new ThongKeChuyenTauControl();
-				thongKeTauControl.handleMenuTrangChuSelect(root);
+				thongKeTauControl.handleShowThongKe(root);
 			});
 			quanLiNhanVienMenu.setOnMouseClicked(event -> {
 				NhanVienControl nhanVienControl = new NhanVienControl();
 				nhanVienControl.handleMenuTrangChuSelect(root);
-			});
+                try {
+                    nhanVienControl.handleThemNhanVien(root);
+                    nhanVienControl.handlecapNhatbtn(root);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+            });
 			quanLiCTKMMenu.setOnMouseClicked(event -> {
 				KhuyenMaiControl khuyenMaiControl = new KhuyenMaiControl();
 				khuyenMaiControl.handleMenuTrangChuSelect(root);
-			});
+                try {
+                    khuyenMaiControl.handleThemCTKM(root);
+                    khuyenMaiControl.suaThongTinKhachHangSelect(root);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
 			quanLiChuyenTauBox.setOnMouseClicked(event -> {
                 ChuyenTauControl chuyenTauControl = null;
                 try {
@@ -1045,6 +1062,11 @@ public class TrangChu extends Application {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+            });
+            thongKeLoaiTauBest.setOnMouseClicked(event -> {
+                ThongKeChuyenTauControl thongKeChuyenTauControl = null;
+                thongKeChuyenTauControl = new ThongKeChuyenTauControl();
+                thongKeChuyenTauControl.handleMenuTrangChuSelect(root);
             });
 
 			// ------------------------------------------------------------------------------------------------------

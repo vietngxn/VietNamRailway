@@ -4,6 +4,7 @@ package fourcore.GiaoDien;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import fourcore.Entity.KhachHang;
 import fourcore.animation.Animation;
@@ -735,19 +736,7 @@ public class ThemKhachHang extends Application {
 		    
 		    try {
 		        // Lấy số lượng khách hàng hiện tại từ database
-		        int sl = khdao.getListKhachHang().size();
-		        sl += 1; // Tăng lên 1 cho khách hàng mới
-		        
-		        String makh = "";
-		        if(sl >= 1 && sl <= 9) {
-		            makh = "KH00" + sl;
-		        }
-		        else if(sl >= 10 && sl <= 99) {
-		            makh = "KH0" + sl;
-		        }
-		        else {
-		            makh = "KH" + sl;
-		        }
+		        String makh = khdao.getMaKH();
 		        
 		        KhachHang kh = new KhachHang(makh, ten, sdt, email, cccd, passport, doiTuong);
 		        
@@ -778,7 +767,8 @@ public class ThemKhachHang extends Application {
     public VBox getThemKHLayout(){
         return layoutThemCTKM;
     }
-	public void create_themchuongtrinhkm_layout() {
+
+	public void create_themchuongtrinhkm_layout() throws SQLException {
 		
 		//label đầu
 		lblThemKH = new Label("Thêm Khách Hàng");
@@ -861,7 +851,11 @@ public class ThemKhachHang extends Application {
 		lblcomboDoiTuong.setId("lbl_TextField");
 		
 		comboDoiTuong = new ComboBox<>();
-		comboDoiTuong.getItems().addAll("Người lớn", "Trẻ em", "Khách Quốc Tế");
+        ArrayList<String> listdt = khdao.getDoiTuong();
+        for(String a : listdt)
+        {
+            comboDoiTuong.getItems().addAll(a);
+        }
 		comboDoiTuong.setPrefWidth(600);
 		comboDoiTuong.setPrefHeight(40);
 		comboDoiTuong.setStyle("-fx-font-size: 18px");
