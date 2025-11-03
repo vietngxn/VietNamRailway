@@ -1,22 +1,18 @@
 package fourcore.GiaoDien;
 
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
+import fourcore.Entity.ChucVu;
 import fourcore.Entity.KhachHang;
-import fourcore.Entity.KhuyenMai;
+import fourcore.Entity.NhanVien;
 import fourcore.animation.Animation;
-import fourcore.dao.ChuongTrinhKhuyenMaiDAO;
 import fourcore.dao.KhachHangDAO;
+import fourcore.dao.NhanVienDAO;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -26,8 +22,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -47,36 +41,42 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class CapNhatChuongTrinhKhuyenMai extends Application {
+public class ThemNhanVien extends Application {
 	public static void main(String[] args) {
 		launch(args);
 //		Application.launch(ThemChuongTrinhKhuyenMai.class, args);
 	}
 	private Stage window;
-	private VBox layoutCapNhatCTKM;
+	private VBox layoutThemNhanVIen;
 	private Scene sceneThemCTKM;
-	private Label lblKH;
-	private GridPane gridCapNhatKhachHang;
-	
-	private Label lblTenKH;
-	private TextField txtTenKH;
-	
-	private StackPane spTenKH;
-	
-	private Label lblsoDienThoai;
+	private Label lblThemKH;
+	private GridPane gridThemKH;
+	private Label lblMaCT;
+	private TextField txtMaCT;
+	private Label lblTenCT;
+	private TextField txtTenNhanVien;
+	private StackPane spMaCT;
+	private StackPane spTenCT;
+	private TextField ngayBatDau;
+	private Label lblNgayBatDau;
 	private TextField txtSoDienThoai;
-	
-	private StackPane spsoDienThoai;
+	private Button buttonNgayBatDau;
+	private StackPane spNgayBatDau;
 	private VBox vboxNgayBatDau;
 	private TextField txtemail;
-	private Label lblemail;
-
-	private StackPane spemail;
+	private Label lblNgayKetThuc;
+	private TextField txtNgayKetThuc;
+	private Button buttonNgayKetThuc;
+	private StackPane spNgayKetThuc;
 	private VBox vboxNgayKetThuc;
-
+	private ComboBox comboDoiTuong;
+	private Button buttoncomboDoiTuong;
+	private TextField txtcomboDoiTuong;
+	private StackPane spcomboDoiTuong;
+	private Label lblcomboDoiTuong;
 	private HBox buttonThemCTKMBox;
-	private Button buttoncapNhat;
-
+	private Button buttonThem;
+	
 	private Animation lblAnimation;
 	private VBox menuList;
 	private ImageView logoImgView;
@@ -107,53 +107,59 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 	private ImageView userIcon;
 	private Labeled userLabel;
 	private ImageView settingIcon;
-	private KhachHangDAO khdao ;
+	private KhachHangDAO khdao;
 	
+	private TextField txtPassport;
 	
-	private Scene sceneCapNhatCTKM;
+	private VBox layoutCapNhatCTKM;
+	
 	private Label lblCapNhatCTKM;
-	private GridPane gridCapNhatCTKM;
-	private Label lblphanTram;
+	private GridPane gridCapNhatNhanVien;
+
+	private Label lblTenNhanVien;
 	
-	private StackPane spPhanTram;
-	private Label lblTenCT;
-	private TextField txtTenCT;
-	private StackPane spTenCT;
-	private DatePicker ngayBatDau;
-	private Label lblNgayBatDau;
-	private TextField txtNgayBatDau;
-	private Button buttonNgayBatDau;
-	private StackPane spNgayBatDau;
-	private DatePicker ngayKetThuc;
-	private Label lblNgayKetThuc;
-	private TextField txtNgayKetThuc;
-	private Button buttonNgayKetThuc;
-	private StackPane spNgayKetThuc;
-	private ComboBox comboDoiTuong;
-	private Label lblcomboDoiTuong;
-	private Button buttoncomboDoiTuong;
-	private TextField txtcomboDoiTuong;
-	private StackPane spcomboDoiTuong;
+	private StackPane spTenNhanVien;
+
+	private Label lblSoDienThoai;
+	
+	private StackPane spSoDienThoai;
+
+	private Label lblEmail;
+	private TextField txtEmail;
+	private StackPane spEmail;
+
+	private Label lblGioiTinh;
+	private TextField txtGioiTinh;
+	private ComboBox<String> comboGioiTinh;
+	private StackPane spGioiTinh;
+
+	private Label lblCCCD;
+	private TextField txtCCCD;
+	private StackPane spCCCD;
+
+	private Label lblTinhTrangLamViec;
+	private TextField txtTinhTrangLamViec;
+	private ComboBox<String> comboTinhTrangLamViec;
+	private StackPane spTinhTrangLamViec;
+
 	private HBox buttonCapNhatCTKMBox;
-	private Button buttonCapNhat;
+	private Button buttoncapNhat;
 	private Button buttonThoat;
-	private ComboBox comboTrangThai;
-	private Label lblcomboTrangThai;
-	private Button buttoncomboTrangThai;
-	private TextField txtcomboTrangThai;
-	private StackPane spcomboTrangThai;
-	private String makm;
-	private ChuongTrinhKhuyenMaiDAO ctkmDAO;
-	private TextField txtphanTram;
-	private Label lblGiaTriKhuyenMai;
-	private TextField txtTrangThai;
-	private Label lblTrangThai;
-	private DateTimeFormatter formatter;
+	private TextField txtChucVu;
+	private TextField txtDiaChi;
+	private DatePicker ngayVaoLam;
+	private DatePicker ngaySinh;
+	private NhanVienDAO nvdao;
+	private ArrayList<NhanVien> listNhanVien;
+	private ArrayList<String> listChucVu;
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		khdao = new KhachHangDAO();
-		ctkmDAO= new ChuongTrinhKhuyenMaiDAO();
-		formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		nvdao = new NhanVienDAO();
+		listNhanVien = nvdao.getListNhanVien();
+		listChucVu = nvdao.getListChucVu();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		lblAnimation = new Animation();
 		
 		window = primaryStage;
@@ -751,14 +757,14 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 		
 		
 		
-        
 		
 		
-        layoutCapNhatCTKM = new VBox();
+		
+        layoutThemNhanVIen = new VBox();
 		create_themchuongtrinhkm_layout();
 		
 		root.setLeft(menuList);
-		root.setCenter(layoutCapNhatCTKM);
+		root.setCenter(layoutThemNhanVIen);
 		root.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
         
 		
@@ -766,330 +772,432 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 		sceneThemCTKM.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 			
 		
-		
-		
-		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("KhuyenMai.dat"))) {
-			KhuyenMai km = (KhuyenMai) ois.readObject();
-		    ois.close();
-		    System.out.println(km.toString());
-		   
-		   makm = km.getMaKhuyenMai();
-		   double phanTram = ctkmDAO.getPhanTramKhuyenMai(makm);
-		   
-		   txtTenCT.setText(km.getTenChuongTrinh());
-           if (!txtTenCT.getText().trim().isEmpty()) lblAnimation.scaleUp(lblTenCT);
-
-           // Giá trị KM
-           txtphanTram.setText(String.valueOf(phanTram));
-           if (!txtphanTram.getText().trim().isEmpty()) lblAnimation.scaleUp(lblphanTram);
-
-           // Ngày bắt đầu
-           LocalDate nbd = km.getNgayBatDau().toLocalDate();
-           ngayBatDau.setValue(nbd);
-           txtNgayBatDau.setText(nbd.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-           if (!txtNgayBatDau.getText().trim().isEmpty()) lblAnimation.scaleUp(lblNgayBatDau);
-
-           // Ngày kết thúc
-           LocalDate nkt = km.getNgayKetThuc().toLocalDate();
-           ngayKetThuc.setValue(nkt);
-           txtNgayKetThuc.setText(nkt.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-           if (!txtNgayKetThuc.getText().trim().isEmpty()) lblAnimation.scaleUp(lblNgayKetThuc);
-
-           // Trạng thái
-           String trangThai = km.getTrangThaiKhuyenMai();
-           comboTrangThai.setValue(trangThai);
-           txtcomboTrangThai.setText(trangThai);
-           if (!txtcomboTrangThai.getText().trim().isEmpty()) lblAnimation.scaleUp(lblcomboTrangThai);
-
-           // Đối tượng
-           String doiTuong = km.getDieuKienApDung();
-           comboDoiTuong.setValue(doiTuong);
-           txtcomboDoiTuong.setText(comboDoiTuong.getValue().toString());
-           if (!txtcomboDoiTuong.getText().trim().isEmpty()) lblAnimation.scaleUp(lblcomboDoiTuong);
-           
+		buttonThem.setOnAction(e-> {
+		    String ten = txtTenNhanVien.getText();
+		    String chucvu = txtChucVu.getText();
+		    LocalDate ngaysinh  = ngaySinh.getValue();
+		    String diaChi = txtDiaChi.getText();
+		    String email = txtemail.getText();
+		    String cccd = txtCCCD.getText();	
+		    String sdt = txtSoDienThoai.getText();
+		    LocalDate ngayvaolam = ngayVaoLam.getValue();
+//		    String passport = txtPassport.getText();
+//		    String doiTuong = txtcomboDoiTuong.getText();
+		    String gioiTinh = txtGioiTinh.getText();
 		    
-		     buttonCapNhat.setOnAction(e-> {
-		    	 try {
-		    		 String ten = txtTenCT.getText();
-		    		 String trangthai = txtcomboTrangThai.getText();
-		    		 String dieuKien = txtcomboDoiTuong.getText();
-		    		 double giaTri =   Double.valueOf(txtphanTram.getText());
-		    		 
-		    		 LocalDate ngaybatdau1 = ngayBatDau.getValue();
-		    		 LocalDate ngayketthuc1 = ngayKetThuc.getValue();
-		    		 
-		    		 
-		    		 LocalDateTime nbd1 = ngaybatdau1.atStartOfDay();
-		    		 LocalDateTime nbkt1 = ngayketthuc1.atStartOfDay();
-		    		 
-		    		 
-		    		 KhuyenMai km1 = new KhuyenMai(makm, ten, trangthai, dieuKien, giaTri, nbd1, nbkt1);
-					if(ctkmDAO.capNhatKhuyenMai(km1)) {
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setTitle("Thông Báo");
-						alert.setHeaderText(null);
-						alert.setContentText("Cập Nhật CTKM Thành Công");
-						alert.showAndWait();
-					 }
-				 } catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				 }
-		     });
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+		    
+		    if(chucvu.equalsIgnoreCase("nhân viên bán vé"))
+		    {
+		    	chucvu = "CV01";
+		    }
+		    else
+		    {
+		    	chucvu = "CV02";
+		    }
+		    try {
+		        // Lấy số lượng khách hàng hiện tại từ database
+		        int sl = listNhanVien.size();
+		        sl += 1; // Tăng lên 1 cho khách hàng mới
+		        
+		        String manv = "";
+		        if(sl >= 1 && sl <= 9) {
+		            manv = "NV0" + sl;
+		        }
+		        else {
+		            manv = "NV" + sl;
+		        }
+		        
+		        
+		        NhanVien nv = new NhanVien(manv, ten, new ChucVu(chucvu), ngaysinh, diaChi, email, sdt, ngayvaolam, "còn làm", gioiTinh, cccd,1);
+		        
+		        if(nvdao.themNhanVien(nv)) {
+		            System.out.println("Thêm Thành Công - Mã KH: " + manv);
+		            // Clear form sau khi thêm thành công
+		            txtTenNhanVien.clear();
+		            txtSoDienThoai.clear();
+		            txtSoDienThoai.clear();
+		            
+		            txtemail.clear();
+		            txtCCCD.clear();
+//		            txtcomboDoiTuong.clear();
+//		            comboDoiTuong.setValue(null);
+		        }
+		    } catch (SQLException e1) {
+		        e1.printStackTrace();
+		    }
+		});
+
 		
 		
 
-		txtphanTram.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-		    if (isNowFocused && txtphanTram.getText().trim().isEmpty()) {
-		    	lblAnimation.scaleUp(lblphanTram);
-		    } else {
-		    	if(txtphanTram.getText().trim().isEmpty()) lblAnimation.scaleDown(lblphanTram);
-		    }
-		});
-		txtTenCT.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-		    if (isNowFocused && txtTenCT.getText().trim().isEmpty()) {
-		    	lblAnimation.scaleUp(lblTenCT);
-		    } else {
-		    	if(txtTenCT.getText().trim().isEmpty()) lblAnimation.scaleDown(lblTenCT);
-		    }
-		});
-		
-		comboDoiTuong.valueProperty().addListener((obs, oldVal, newVal) -> {
-			if(newVal != null) {
-				if(txtcomboDoiTuong.getText().trim().isEmpty()) lblAnimation.scaleUp(lblcomboDoiTuong);
-				txtcomboDoiTuong.setText(newVal.toString());
-			}
-		});
-		
-		comboTrangThai.valueProperty().addListener((obs, oldVal, newVal) -> {
-			if(newVal != null) {
-				if(txtcomboTrangThai.getText().trim().isEmpty()) lblAnimation.scaleUp(lblcomboTrangThai);
-				txtcomboTrangThai.setText(newVal.toString());
-			}
-		});
-		
-		ngayBatDau.valueProperty().addListener((obs, oldVal, newVal) -> {
-			if(newVal != null) {
-				if(txtNgayBatDau.getText().trim().isEmpty()) lblAnimation.scaleUp(lblNgayBatDau);
-				txtNgayBatDau.setText(newVal.format(formatter));
-			}
-		});
-		
-		ngayKetThuc.valueProperty().addListener((obs, oldVal, newVal) -> {
-			if(newVal != null) {
-				if(txtNgayKetThuc.getText().trim().isEmpty()) lblAnimation.scaleUp(lblNgayKetThuc);
-				txtNgayKetThuc.setText(newVal.format(formatter));
-			}
-		});
-		
-		
 		
 		root.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 		
 		window.setScene(sceneThemCTKM);
 		window.setFullScreen(true);
-//		window.show();
+		window.show();
 	}
-		public void create_themchuongtrinhkm_layout() {
-		
-		//label đầu
-		lblCapNhatCTKM = new Label("Cập nhật thông tin");
-		lblCapNhatCTKM.setId("lbl_TieuDe");
-		
-		
-		//grid chứa các cái cần nhập
-		gridCapNhatCTKM = new GridPane();
-		gridCapNhatCTKM.setHgap(80);
-		gridCapNhatCTKM.setVgap(50);
-		gridCapNhatCTKM.setPadding(new Insets(70, 0, 0, 0));
-		gridCapNhatCTKM.setAlignment(Pos.CENTER);
-		
-		
-		//hàng đầu tiên chứa mã chương trình và tên chương trình
-		lblphanTram = new Label("% Giảm Giá");
-		lblphanTram.setId("lbl_TextField");
-
-		
-		txtphanTram = new TextField();
-		txtphanTram.setPrefWidth(600);
-		txtphanTram.setPrefHeight(40);
-		txtphanTram.setId("txt_CapNhatChuyenTau");
-		
-		
-		spPhanTram = new StackPane();
-		spPhanTram.getChildren().addAll(lblphanTram, txtphanTram);
-		spPhanTram.setAlignment(lblphanTram, Pos.CENTER_LEFT);
-		
-		lblTenCT = new Label("Tên chương trình");
-		lblTenCT.setId("lbl_TextField");
-		
-		txtTenCT = new TextField();
-		txtTenCT.setPrefWidth(600);
-		txtTenCT.setPrefHeight(40);
-		txtTenCT.setId("txt_CapNhatChuyenTau");
-		
-		spTenCT = new StackPane();
-		spTenCT.getChildren().addAll(lblTenCT, txtTenCT);
-		spTenCT.setAlignment(lblTenCT, Pos.CENTER_LEFT);
-		
-	
-		ngayBatDau = new DatePicker();
-		ngayBatDau.setPrefWidth(30);
-		ngayBatDau.setPrefHeight(40);
-		ngayBatDau.setStyle("-fx-font-size: 18px;");
-		ngayBatDau.setOpacity(0);
-		
-		lblNgayBatDau = new Label("Ngày Bắt Đầu");
-		lblNgayBatDau.setId("lbl_TextField");
-		
-		txtNgayBatDau = new TextField();
-		txtNgayBatDau.setPrefWidth(600);
-		txtNgayBatDau.setPrefHeight(40);
-		txtNgayBatDau.setId("txt_CapNhatChuyenTau");
-		txtNgayBatDau.setMouseTransparent(true);
-		txtNgayBatDau.setFocusTraversable(false);
-		
-		buttonNgayBatDau = new Button();
-		ImageView iconThoiGian = new ImageView(new Image(getClass().getResourceAsStream("/img/calendar.png")));
-		iconThoiGian.setFitWidth(30);
-		iconThoiGian.setFitHeight(30);
-		buttonNgayBatDau.setGraphic(iconThoiGian);
-		buttonNgayBatDau.setStyle("-fx-background-color: transparent");
-		
-		spNgayBatDau = new StackPane();
-		spNgayBatDau.getChildren().addAll(lblNgayBatDau, txtNgayBatDau, buttonNgayBatDau, ngayBatDau);
-		spNgayBatDau.setAlignment(buttonNgayBatDau, Pos.CENTER_RIGHT);
-		spNgayBatDau.setAlignment(lblNgayBatDau, Pos.CENTER_LEFT);
-		spNgayBatDau.setAlignment(ngayBatDau, Pos.CENTER_RIGHT);
-		
-//		vboxNgayBatDau = new VBox();
-//		vboxNgayBatDau.getChildren().addAll(lblNgayBatDau, spNgayBatDau);
-		
-		
-		ngayKetThuc = new DatePicker();
-		ngayKetThuc.setPrefWidth(30);
-		ngayKetThuc.setPrefHeight(40);
-		ngayKetThuc.setStyle("-fx-font-size: 18px");
-		ngayKetThuc.setOpacity(0);
-		
-		lblNgayKetThuc = new Label("Ngày kết thúc");
-		lblNgayKetThuc.setId("lbl_TextField");
-		
-		txtNgayKetThuc = new TextField();
-		txtNgayKetThuc.setPrefWidth(600);
-		txtNgayKetThuc.setPrefHeight(40);
-		txtNgayKetThuc.setId("txt_CapNhatChuyenTau");
-		txtNgayKetThuc.setMouseTransparent(true);
-		txtNgayKetThuc.setFocusTraversable(false);
-		
-		buttonNgayKetThuc = new Button();
-		ImageView iconNgayKetThuc = new ImageView(new Image(getClass().getResourceAsStream("/img/calendar.png")));
-		iconNgayKetThuc.setFitWidth(30);
-		iconNgayKetThuc.setFitHeight(30);
-		buttonNgayKetThuc.setGraphic(iconNgayKetThuc);
-		buttonNgayKetThuc.setStyle("-fx-background-color: transparent");
-		
-		spNgayKetThuc = new StackPane();
-		spNgayKetThuc.getChildren().addAll(lblNgayKetThuc, txtNgayKetThuc, buttonNgayKetThuc, ngayKetThuc);
-		spNgayKetThuc.setAlignment(buttonNgayKetThuc, Pos.CENTER_RIGHT);
-		spNgayKetThuc.setAlignment(lblNgayKetThuc, Pos.CENTER_LEFT);
-		spNgayKetThuc.setAlignment(ngayKetThuc, Pos.CENTER_RIGHT);
-		
-//		vboxNgayKetThuc = new VBox();
-//		vboxNgayKetThuc.getChildren().addAll(lblNgayKetThuc, spNgayKetThuc);
-		
-		comboDoiTuong = new ComboBox<>();
-		comboDoiTuong.getItems().addAll("Người lớn", "Trẻ em", "Anh hùng liệt sĩ", "Tung tung tung sahur");
-		comboDoiTuong.setPrefWidth(600);
-		comboDoiTuong.setPrefHeight(40);
-		comboDoiTuong.setStyle("-fx-font-size: 18px");
-		comboDoiTuong.setOpacity(0);
-		
-		lblcomboDoiTuong = new Label("Đối tượng áp dụng");
-		lblcomboDoiTuong.setId("lbl_TextField");
-		
-		buttoncomboDoiTuong = new Button();
-		ImageView iconDropCombo = new ImageView(new Image(getClass().getResourceAsStream("/img/chevron-down.png")));
-		iconDropCombo.setFitWidth(30);
-		iconDropCombo.setFitHeight(30);
-		buttoncomboDoiTuong.setGraphic(iconDropCombo);
-		buttoncomboDoiTuong.setStyle("-fx-background-color: transparent");
-		
-		txtcomboDoiTuong = new TextField();
-		txtcomboDoiTuong.setPrefWidth(600);
-		txtcomboDoiTuong.setPrefHeight(40);
-		txtcomboDoiTuong.setId("txt_CapNhatChuyenTau");
-		txtcomboDoiTuong.setMouseTransparent(true);
-		txtcomboDoiTuong.setFocusTraversable(false);
-		
-		spcomboDoiTuong = new StackPane();
-		spcomboDoiTuong.getChildren().addAll(lblcomboDoiTuong, txtcomboDoiTuong, buttoncomboDoiTuong, comboDoiTuong);
-		spcomboDoiTuong.setAlignment(buttoncomboDoiTuong, Pos.CENTER_RIGHT);
-		spcomboDoiTuong.setAlignment(lblcomboDoiTuong, Pos.CENTER_LEFT);
-		
-		comboTrangThai = new ComboBox<>();
-		comboTrangThai.getItems().addAll("kích hoạt", "kết thúc");
-		comboTrangThai.setPrefWidth(600);
-		comboTrangThai.setPrefHeight(40);
-		comboTrangThai.setStyle("-fx-font-size: 18px");
-		comboTrangThai.setOpacity(0);
-		
-		lblcomboTrangThai = new Label("Trạng thái");
-		lblcomboTrangThai.setId("lbl_TextField");
-		
-		buttoncomboTrangThai = new Button();
-		ImageView iconDropComboTrangThai = new ImageView(new Image(getClass().getResourceAsStream("/img/chevron-down.png")));
-		iconDropComboTrangThai.setFitWidth(30);
-		iconDropComboTrangThai.setFitHeight(30);
-		buttoncomboTrangThai.setGraphic(iconDropComboTrangThai);
-		buttoncomboTrangThai.setStyle("-fx-background-color: transparent");
-		
-		txtcomboTrangThai = new TextField();
-		txtcomboTrangThai.setPrefWidth(600);
-		txtcomboTrangThai.setPrefHeight(40);
-		txtcomboTrangThai.setId("txt_CapNhatChuyenTau");
-		txtcomboTrangThai.setMouseTransparent(true);
-		txtcomboTrangThai.setFocusTraversable(false);
-		
-		spcomboTrangThai = new StackPane();
-		spcomboTrangThai.getChildren().addAll(lblcomboTrangThai, txtcomboTrangThai, buttoncomboTrangThai, comboTrangThai);
-		spcomboTrangThai.setAlignment(buttoncomboTrangThai, Pos.CENTER_RIGHT);
-		spcomboTrangThai.setAlignment(lblcomboTrangThai, Pos.CENTER_LEFT);
-		
-		
-		buttonCapNhatCTKMBox = new HBox(10); //thay doi 10
-		buttonCapNhatCTKMBox.setMaxWidth(1600);
-		
-		buttonCapNhat = new Button();
-		buttonCapNhat.setText("Cập nhật");
-		buttonCapNhat.setPrefWidth(150);
-		buttonCapNhat.setPrefHeight(50);
-		buttonCapNhat.setId("button_Blue");
-		
-		buttonThoat = new Button();
-		buttonThoat.setText("Thoát");
-		buttonThoat.setPrefWidth(150);
-		buttonThoat.setPrefHeight(50);
-		buttonThoat.setId("button_White");
-		
-		buttonCapNhatCTKMBox.getChildren().addAll(buttonCapNhat, buttonThoat);
-		buttonCapNhatCTKMBox.setAlignment(Pos.BOTTOM_RIGHT);
-		buttonCapNhatCTKMBox.setPadding(new Insets(200, 40, 20, 0));
-		
-		gridCapNhatCTKM.add(spTenCT, 0, 0);
-		gridCapNhatCTKM.add(spPhanTram, 1, 0);
-		gridCapNhatCTKM.add(spNgayBatDau, 0, 1);
-		gridCapNhatCTKM.add(spNgayKetThuc, 1, 1);
-		gridCapNhatCTKM.add(spcomboDoiTuong, 0, 2);
-		gridCapNhatCTKM.add(spcomboTrangThai, 1, 2);
-		
-		
-		layoutCapNhatCTKM.getChildren().addAll(lblCapNhatCTKM, gridCapNhatCTKM, buttonCapNhatCTKMBox);
-		layoutCapNhatCTKM.setAlignment(Pos.CENTER);
-		layoutCapNhatCTKM.setStyle("-fx-background-color: #FFFFFF");
-	}
+    public VBox getThemKHLayout(){
+        return layoutThemNhanVIen;
+    }
+    public void create_themchuongtrinhkm_layout() {
+    	
+    	//label đầu
+    	lblThemKH = new Label("Thêm Nhân Viên Mới");
+    	lblThemKH.setId("lbl_TieuDe");
+    	
+    	
+    	//grid chứa các cái cần nhập
+    	gridThemKH = new GridPane();
+    	gridThemKH.setHgap(80);
+    	gridThemKH.setVgap(50);
+    	gridThemKH.setPadding(new Insets(70, 0, 0, 0));
+    	gridThemKH.setAlignment(Pos.CENTER);
+    	
+    	
+    	// Tên Nhân Viên
+    	Label lblTenNhanVien = new Label("Tên Nhân Viên");
+    	lblTenNhanVien.setId("lbl_TextField");
+    	
+    	txtTenNhanVien = new TextField();
+    	txtTenNhanVien.setPrefWidth(600);
+    	txtTenNhanVien.setPrefHeight(40);
+    	txtTenNhanVien.setId("txt_CapNhatChuyenTau");
+    	
+    	StackPane spTenNhanVien = new StackPane();
+    	spTenNhanVien.getChildren().addAll(lblTenNhanVien, txtTenNhanVien);
+    	spTenNhanVien.setAlignment(lblTenNhanVien, Pos.CENTER_LEFT);
+    	
+    	txtTenNhanVien.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+    	    if (isNowFocused && txtTenNhanVien.getText().trim().isEmpty()) {
+    	    	lblAnimation.scaleUp(lblTenNhanVien);
+    	    } else {
+    	    	if(txtTenNhanVien.getText().trim().isEmpty()) lblAnimation.scaleDown(lblTenNhanVien);
+    	    }
+    	});
+    	
+    	
+    	// Chức Vụ
+    	Label lblChucVu = new Label("Chức Vụ");
+    	lblChucVu.setId("lbl_TextField");
+    	
+    	ComboBox<String> comboChucVu = new ComboBox<>();
+    	for(String s : listChucVu)
+    	{
+    		comboChucVu.getItems().add(s);
+    	}
+    	comboChucVu.setPrefWidth(600);
+    	comboChucVu.setPrefHeight(40);
+    	comboChucVu.setStyle("-fx-font-size: 18px");
+    	comboChucVu.setOpacity(0);
+    	
+    	txtChucVu = new TextField();
+    	txtChucVu.setPrefWidth(600);
+    	txtChucVu.setPrefHeight(40);
+    	txtChucVu.setId("txt_CapNhatChuyenTau");
+    	txtChucVu.setMouseTransparent(true);
+    	txtChucVu.setFocusTraversable(false);
+    	
+    	Button buttonChucVu = new Button();
+    	ImageView iconChucVu = new ImageView(new Image(getClass().getResourceAsStream("/img/chevron-down.png")));
+    	iconChucVu.setFitWidth(30);
+    	iconChucVu.setFitHeight(30);
+    	buttonChucVu.setGraphic(iconChucVu);
+    	buttonChucVu.setStyle("-fx-background-color: transparent");
+    	
+    	StackPane spChucVu = new StackPane();
+    	spChucVu.getChildren().addAll(lblChucVu, txtChucVu, buttonChucVu, comboChucVu);
+    	spChucVu.setAlignment(buttonChucVu, Pos.CENTER_RIGHT);
+    	spChucVu.setAlignment(lblChucVu, Pos.CENTER_LEFT);
+    	
+    	comboChucVu.valueProperty().addListener((obs, oldVal, newVal) -> {
+    		if(newVal != null) {
+    			if(txtChucVu.getText().trim().isEmpty()) lblAnimation.scaleUp(lblChucVu);
+    			txtChucVu.setText(newVal.toString());
+    		}
+    	});
+    	
+    	
+    	// Ngày Sinh
+    	ngaySinh = new DatePicker();
+    	ngaySinh.setPrefWidth(30);
+    	ngaySinh.setPrefHeight(40);
+    	ngaySinh.setStyle("-fx-font-size: 18px");
+    	ngaySinh.setOpacity(0);
+    	
+    	Label lblNgaySinh = new Label("Ngày Sinh");
+    	lblNgaySinh.setId("lbl_TextField");
+    	
+    	ngayBatDau = new TextField();
+    	ngayBatDau.setPrefWidth(600);
+    	ngayBatDau.setPrefHeight(40);
+    	ngayBatDau.setId("txt_CapNhatChuyenTau");
+    	ngayBatDau.setMouseTransparent(true);
+    	ngayBatDau.setFocusTraversable(false);
+    	
+    	Button buttonNgaySinh = new Button();
+    	ImageView iconNgaySinh = new ImageView(new Image(getClass().getResourceAsStream("/img/calendar.png")));
+    	iconNgaySinh.setFitWidth(30);
+    	iconNgaySinh.setFitHeight(30);
+    	buttonNgaySinh.setGraphic(iconNgaySinh);
+    	buttonNgaySinh.setStyle("-fx-background-color: transparent");
+    	buttonNgaySinh.setOnAction(e -> ngaySinh.show());
+    	
+    	StackPane spNgaySinh = new StackPane();
+    	spNgaySinh.getChildren().addAll(lblNgaySinh, ngayBatDau, buttonNgaySinh, ngaySinh);
+    	spNgaySinh.setAlignment(buttonNgaySinh, Pos.CENTER_RIGHT);
+    	spNgaySinh.setAlignment(lblNgaySinh, Pos.CENTER_LEFT);
+    	
+    	ngaySinh.valueProperty().addListener((obs, oldVal, newVal) -> {
+    		if(newVal != null) {
+    			if(ngayBatDau.getText().trim().isEmpty()) lblAnimation.scaleUp(lblNgaySinh);
+    			ngayBatDau.setText(newVal.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+    		}
+    	});
+    	
+    	
+    	// Địa Chỉ
+    	Label lblDiaChi = new Label("Địa Chỉ");
+    	lblDiaChi.setId("lbl_TextField");
+    	
+    	txtDiaChi = new TextField();
+    	txtDiaChi.setPrefWidth(600);
+    	txtDiaChi.setPrefHeight(40);
+    	txtDiaChi.setId("txt_CapNhatChuyenTau");
+    	
+    	StackPane spDiaChi = new StackPane();
+    	spDiaChi.getChildren().addAll(lblDiaChi, txtDiaChi);
+    	spDiaChi.setAlignment(lblDiaChi, Pos.CENTER_LEFT);
+    	
+    	txtDiaChi.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+    	    if (isNowFocused && txtDiaChi.getText().trim().isEmpty()) {
+    	    	lblAnimation.scaleUp(lblDiaChi);
+    	    } else {
+    	    	if(txtDiaChi.getText().trim().isEmpty()) lblAnimation.scaleDown(lblDiaChi);
+    	    }
+    	});
+    	
+    	
+    	// Email
+    	Label lblEmail = new Label("Email");
+    	lblEmail.setId("lbl_TextField");
+    	
+    	txtemail = new TextField();
+    	txtemail.setPrefWidth(600);
+    	txtemail.setPrefHeight(40);
+    	txtemail.setId("txt_CapNhatChuyenTau");
+    	
+    	StackPane spEmail = new StackPane();
+    	spEmail.getChildren().addAll(lblEmail, txtemail);
+    	spEmail.setAlignment(lblEmail, Pos.CENTER_LEFT);
+    	
+    	txtemail.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+    	    if (isNowFocused && txtemail.getText().trim().isEmpty()) {
+    	    	lblAnimation.scaleUp(lblEmail);
+    	    } else {
+    	    	if(txtemail.getText().trim().isEmpty()) lblAnimation.scaleDown(lblEmail);
+    	    }
+    	});
+    	
+    	
+    	// Số Điện Thoại
+    	Label lblSoDienThoai = new Label("Số Điện Thoại");
+    	lblSoDienThoai.setId("lbl_TextField");
+    	
+    	txtSoDienThoai = new TextField();
+    	txtSoDienThoai.setPrefWidth(600);
+    	txtSoDienThoai.setPrefHeight(40);
+    	txtSoDienThoai.setId("txt_CapNhatChuyenTau");
+    	
+    	StackPane spSoDienThoai = new StackPane();
+    	spSoDienThoai.getChildren().addAll(lblSoDienThoai, txtSoDienThoai);
+    	spSoDienThoai.setAlignment(lblSoDienThoai, Pos.CENTER_LEFT);
+    	
+    	txtSoDienThoai.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+    	    if (isNowFocused && txtSoDienThoai.getText().trim().isEmpty()) {
+    	    	lblAnimation.scaleUp(lblSoDienThoai);
+    	    } else {
+    	    	if(txtSoDienThoai.getText().trim().isEmpty()) lblAnimation.scaleDown(lblSoDienThoai);
+    	    }
+    	});
+    	
+    	
+    	// Ngày Vào Làm
+    	ngayVaoLam = new DatePicker();
+    	ngayVaoLam.setPrefWidth(30);
+    	ngayVaoLam.setPrefHeight(40);
+    	ngayVaoLam.setStyle("-fx-font-size: 18px");
+    	ngayVaoLam.setOpacity(0);
+    	
+    	Label lblNgayVaoLam = new Label("Ngày Vào Làm");
+    	lblNgayVaoLam.setId("lbl_TextField");
+    	
+    	TextField txtNgayVaoLam = new TextField();
+    	txtNgayVaoLam.setPrefWidth(600);
+    	txtNgayVaoLam.setPrefHeight(40);
+    	txtNgayVaoLam.setId("txt_CapNhatChuyenTau");
+    	txtNgayVaoLam.setMouseTransparent(true);
+    	txtNgayVaoLam.setFocusTraversable(false);
+    	
+    	Button buttonNgayVaoLam = new Button();
+    	ImageView iconNgayVaoLam = new ImageView(new Image(getClass().getResourceAsStream("/img/calendar.png")));
+    	iconNgayVaoLam.setFitWidth(30);
+    	iconNgayVaoLam.setFitHeight(30);
+    	buttonNgayVaoLam.setGraphic(iconNgayVaoLam);
+    	buttonNgayVaoLam.setStyle("-fx-background-color: transparent");
+    	buttonNgayVaoLam.setOnAction(e-> ngayVaoLam.show());
+    	
+    	StackPane spNgayVaoLam = new StackPane();
+    	spNgayVaoLam.getChildren().addAll(lblNgayVaoLam, txtNgayVaoLam, buttonNgayVaoLam, ngayVaoLam);
+    	spNgayVaoLam.setAlignment(buttonNgayVaoLam, Pos.CENTER_RIGHT);
+    	spNgayVaoLam.setAlignment(lblNgayVaoLam, Pos.CENTER_LEFT);
+    	
+    	ngayVaoLam.valueProperty().addListener((obs, oldVal, newVal) -> {
+    		if(newVal != null) {
+    			if(txtNgayVaoLam.getText().trim().isEmpty()) lblAnimation.scaleUp(lblNgayVaoLam);
+    			txtNgayVaoLam.setText(newVal.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+    		}
+    	});
+    	
+    	
+    	// Tình Trạng Làm Việc
+    	Label lblTinhTrangLamViec = new Label("Tình Trạng Làm Việc");
+    	lblTinhTrangLamViec.setId("lbl_TextField");
+    	
+    	ComboBox<String> comboTinhTrangLamViec = new ComboBox<>();
+    	comboTinhTrangLamViec.getItems().addAll("Đang làm");
+    	comboTinhTrangLamViec.setPrefWidth(600);
+    	comboTinhTrangLamViec.setPrefHeight(40);
+    	comboTinhTrangLamViec.setStyle("-fx-font-size: 18px");
+    	comboTinhTrangLamViec.setOpacity(0);
+    	
+    	txtTinhTrangLamViec = new TextField();
+    	
+    	txtTinhTrangLamViec.setPrefWidth(600);
+    	txtTinhTrangLamViec.setPrefHeight(40);
+    	txtTinhTrangLamViec.setId("txt_CapNhatChuyenTau");
+    	txtTinhTrangLamViec.setMouseTransparent(true);
+    	txtTinhTrangLamViec.setFocusTraversable(false);
+    	
+    	Button buttonTinhTrangLamViec = new Button();
+    	ImageView iconTinhTrangLamViec = new ImageView(new Image(getClass().getResourceAsStream("/img/chevron-down.png")));
+    	iconTinhTrangLamViec.setFitWidth(30);
+    	iconTinhTrangLamViec.setFitHeight(30);
+    	buttonTinhTrangLamViec.setGraphic(iconTinhTrangLamViec);
+    	buttonTinhTrangLamViec.setStyle("-fx-background-color: transparent");
+    	
+    	StackPane spTinhTrangLamViec = new StackPane();
+    	spTinhTrangLamViec.getChildren().addAll(lblTinhTrangLamViec, txtTinhTrangLamViec, buttonTinhTrangLamViec, comboTinhTrangLamViec);
+    	spTinhTrangLamViec.setAlignment(buttonTinhTrangLamViec, Pos.CENTER_RIGHT);
+    	spTinhTrangLamViec.setAlignment(lblTinhTrangLamViec, Pos.CENTER_LEFT);
+    	
+    	comboTinhTrangLamViec.valueProperty().addListener((obs, oldVal, newVal) -> {
+    		if(newVal != null) {
+    			if(txtTinhTrangLamViec.getText().trim().isEmpty()) lblAnimation.scaleUp(lblTinhTrangLamViec);
+    			txtTinhTrangLamViec.setText(newVal.toString());
+    		}
+    	});
+    	
+    	
+    	// Giới Tính
+    	Label lblGioiTinh = new Label("Giới Tính");
+    	lblGioiTinh.setId("lbl_TextField");
+    	
+    	ComboBox<String> comboGioiTinh = new ComboBox<>();
+    	comboGioiTinh.getItems().addAll("Nam", "Nữ");
+    	comboGioiTinh.setPrefWidth(600);
+    	comboGioiTinh.setPrefHeight(40);
+    	comboGioiTinh.setStyle("-fx-font-size: 18px");
+    	comboGioiTinh.setOpacity(0);
+    	
+    	txtGioiTinh = new TextField();
+    	txtGioiTinh.setPrefWidth(600);
+    	txtGioiTinh.setPrefHeight(40);
+    	txtGioiTinh.setId("txt_CapNhatChuyenTau");
+    	txtGioiTinh.setMouseTransparent(true);
+    	txtGioiTinh.setFocusTraversable(false);
+    	
+    	Button buttonGioiTinh = new Button();
+    	ImageView iconGioiTinh = new ImageView(new Image(getClass().getResourceAsStream("/img/chevron-down.png")));
+    	iconGioiTinh.setFitWidth(30);
+    	iconGioiTinh.setFitHeight(30);
+    	buttonGioiTinh.setGraphic(iconGioiTinh);
+    	buttonGioiTinh.setStyle("-fx-background-color: transparent");
+    	
+    	StackPane spGioiTinh = new StackPane();
+    	spGioiTinh.getChildren().addAll(lblGioiTinh, txtGioiTinh, buttonGioiTinh, comboGioiTinh);
+    	spGioiTinh.setAlignment(buttonGioiTinh, Pos.CENTER_RIGHT);
+    	spGioiTinh.setAlignment(lblGioiTinh, Pos.CENTER_LEFT);
+    	
+    	comboGioiTinh.valueProperty().addListener((obs, oldVal, newVal) -> {
+    		if(newVal != null) {
+    			if(txtGioiTinh.getText().trim().isEmpty()) lblAnimation.scaleUp(lblGioiTinh);
+    			txtGioiTinh.setText(newVal.toString());
+    		}
+    	});
+    	
+    	
+    	// CCCD
+    	Label lblCCCD = new Label("CCCD");
+    	lblCCCD.setId("lbl_TextField");
+    	
+    	txtCCCD = new TextField();
+    	txtCCCD.setPrefWidth(600);
+    	txtCCCD.setPrefHeight(40);
+    	txtCCCD.setId("txt_CapNhatChuyenTau");
+    	
+    	StackPane spCCCD = new StackPane();
+    	spCCCD.getChildren().addAll(lblCCCD, txtCCCD);
+    	spCCCD.setAlignment(lblCCCD, Pos.CENTER_LEFT);
+    	
+    	txtCCCD.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+    	    if (isNowFocused && txtCCCD.getText().trim().isEmpty()) {
+    	    	lblAnimation.scaleUp(lblCCCD);
+    	    } else {
+    	    	if(txtCCCD.getText().trim().isEmpty()) lblAnimation.scaleDown(lblCCCD);
+    	    }
+    	});
+    	
+    	
+    	// Nút hành động
+    	buttonThemCTKMBox = new HBox(10);
+    	buttonThemCTKMBox.setMaxWidth(1600);
+    	
+    	buttonThem = new Button();
+    	buttonThem.setText("Thêm Nhân Viên");
+    	buttonThem.setPrefWidth(150);
+    	buttonThem.setPrefHeight(50);
+    	buttonThem.setId("button_Blue");
+    	
+    	Button buttonThoat = new Button();
+    	buttonThoat.setText("Thoát");
+    	buttonThoat.setPrefWidth(150);
+    	buttonThoat.setPrefHeight(50);
+    	buttonThoat.setId("button_White");
+    	
+    	buttonThoat.setOnAction(e -> window.close());
+    	
+    	buttonThemCTKMBox.getChildren().addAll(buttonThem, buttonThoat);
+    	buttonThemCTKMBox.setAlignment(Pos.BOTTOM_RIGHT);
+    	buttonThemCTKMBox.setPadding(new Insets(200, 40, 20, 0));
+    	
+    	
+    	// Thêm vào grid (5 hàng, 2 cột)
+    	gridThemKH.add(spTenNhanVien, 0, 0);
+    	gridThemKH.add(spChucVu, 1, 0);
+    	gridThemKH.add(spNgaySinh, 0, 1);
+    	gridThemKH.add(spDiaChi, 1, 1);
+    	gridThemKH.add(spEmail, 0, 2);
+    	gridThemKH.add(spSoDienThoai, 1, 2);
+    	gridThemKH.add(spNgayVaoLam, 0, 3);
+    	gridThemKH.add(spTinhTrangLamViec, 1, 3);
+    	gridThemKH.add(spGioiTinh, 0, 4);
+    	gridThemKH.add(spCCCD, 1, 4);
+    	
+    	
+    	layoutThemNhanVIen.getChildren().addAll(lblThemKH, gridThemKH, buttonThemCTKMBox);
+    	layoutThemNhanVIen.setAlignment(Pos.CENTER);
+    	layoutThemNhanVIen.setStyle("-fx-background-color: #FFFFFF");
+    }
 
 }

@@ -401,11 +401,7 @@ public class QuanLyChuyenTau extends Application {
             });
             quanLiKhachHangBox.setOnMouseClicked(event -> {
                 QuanLyKhachHang gdQuanLyKhachHang = null;
-                try {
-                    gdQuanLyKhachHang = new QuanLyKhachHang();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+                gdQuanLyKhachHang = new QuanLyKhachHang();
                 Stage quanLyKhachHangStage = new Stage();
                 gdQuanLyKhachHang.start(quanLyKhachHangStage);
                 VBox quanLyKhachHangVBox = gdQuanLyKhachHang.getQuanLiKhachHang();

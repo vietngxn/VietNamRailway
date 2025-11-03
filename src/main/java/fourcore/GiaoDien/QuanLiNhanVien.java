@@ -1,6 +1,13 @@
 package fourcore.GiaoDien;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -17,13 +24,18 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
+
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -76,7 +88,7 @@ public class QuanLiNhanVien extends Application {
 	private Node lbl_title_sdt;
 	private VBox table_desc;
 	private ScrollPane scrollPane;
-	private ArrayList<GridPane> hangchon = new ArrayList<>();
+	private GridPane hangchon = null;  
 	private HBox layout_button;
 	private Button btn_xoaNhanVien;
 	private Button btn_themNhanVien;
@@ -111,22 +123,28 @@ public class QuanLiNhanVien extends Application {
     private ImageView userIcon;
     private Label userLabel;
     private ImageView settingIcon;
-    private ImageView moTaDoanhThuIcon;
+    	
     private HBox xemLichSuVeBox;
     
 	private Label lbl_title_tinhTrangLamViec;
 	private Label lbl_title_gioiTinh;
 	private ArrayList<NhanVien> listnhanVien;
-
+	private NhanVienDAO nhanvienDAO;
+	private Button btn_khoiphuc;
+	private Stage window;
+	
+	private Button btn_khoiPhuc1; 
+	private GridPane[] hangchonPopup = null;
+	private Button btn_timkiem;
     @Override
 	public void start(Stage primaryStage) {
 		try {
 //			======================
 //			||     GET DATA     ||
 //			======================
-            NhanVienDAO nhanvienDAO = new NhanVienDAO();
+            nhanvienDAO = new NhanVienDAO();
             listnhanVien = nhanvienDAO.getListNhanVien();
-
+            
 //----------------------------------------------------------------------------------------------------------------------------------------
             BorderPane root = new BorderPane();
             Scene scene = new Scene(root,1920,1000);
@@ -397,12 +415,7 @@ public class QuanLiNhanVien extends Application {
 
             });
             quanLiKhachHangBox.setOnMouseClicked(event -> {
-                QuanLyKhachHang gdQuanLyKhachHang = null;
-                try {
-                    gdQuanLyKhachHang = new QuanLyKhachHang();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+                QuanLyKhachHang gdQuanLyKhachHang = new QuanLyKhachHang();
                 Stage quanLyKhachHangStage = new Stage();
                 gdQuanLyKhachHang.start(quanLyKhachHangStage);
                 VBox quanLyKhachHangVBox = gdQuanLyKhachHang.getQuanLiKhachHang();
@@ -415,7 +428,7 @@ public class QuanLiNhanVien extends Application {
                Stage thongKeKhachHangStage = new Stage();
                gdQuanLiThongKe.start(thongKeKhachHangStage);
                VBox quanLiThongKeVBox = gdQuanLiThongKe.getQuanLiThongKe();
-               root.setCenter(quanLiThongKeVBox);
+               root.setCenter(quanLiThongKeVBox);	
             });
 
 //			======================
@@ -741,7 +754,7 @@ public class QuanLiNhanVien extends Application {
                QuanLiNhanVien quanLyCTKM = new QuanLiNhanVien();
                Stage stage = new Stage();
                quanLyCTKM.start(stage);
-               VBox quanLyCTKMMenu = quanLyCTKM.getQuanLiCTKM();
+               VBox quanLyCTKMMenu = quanLyCTKM.getQuanLiNhanVien();
                root.setCenter(quanLyCTKMMenu);
             });
             danhSachMenuItem.getChildren().add(quanLiCTKMMenu);
@@ -900,7 +913,10 @@ public class QuanLiNhanVien extends Application {
 			
 			create_table_layout();
 			
+			loaddata();
+			
 			create_layout_button();
+			
 			primaryStage.setFullScreen(true);
 //			primaryStage.show();
 
@@ -908,7 +924,7 @@ public class QuanLiNhanVien extends Application {
 			e.printStackTrace();
 		}
 	}
-    public VBox getQuanLiCTKM() {
+    public VBox getQuanLiNhanVien() {
      return this.noiDungChinh;
     }
 	
@@ -931,7 +947,7 @@ public class QuanLiNhanVien extends Application {
 		lbl_timkiem.setStyle("-fx-font-family: 'Inter';-fx-font-weight:bold;-fx-font-size:18px;-fx-text-fill : #00BACB;");
 	
 		ImageView img_timkiem = new ImageView(getClass().getResource("/images/copy/lookup.png").toExternalForm());
-		img_timkiem.setTranslateX(410);
+		img_timkiem.setTranslateX(510);
 		img_timkiem.setFitHeight(25);
 		img_timkiem.setFitWidth(25);
 		layout_lbl_timkiem.getChildren().addAll(lbl_timkiem,img_timkiem);
@@ -951,8 +967,57 @@ public class QuanLiNhanVien extends Application {
 		
 		layout_timkiem.setTranslateX(100);
 		
-		title_layout.getChildren().add(layout_timkiem);
 		
+		HBox layout_btn_timkiem = new HBox();
+		layout_btn_timkiem.setSpacing(10);
+		btn_timkiem = new Button("Tìm Kiếm");
+		btn_timkiem.setPrefSize(150, 50);
+		btn_timkiem.setMaxSize(150, 50);
+		 
+		btn_timkiem.setStyle("-fx-background-color: #00BACB;-fx-text-fill: white;-fx-font-family: 'Inter';-fx-font-weight:bold;-fx-font-size:14px;-fx-cursor: hand;-fx-border-radius: 30px;-fx-background-radius:30px;");
+		btn_timkiem.setOnAction(e -> {
+			String cccd = txt_timkiem.getText();
+			if(cccd.isEmpty()) {
+				Alert alert =  new Alert(Alert.AlertType.INFORMATION);
+				alert.setContentText("Vui Lòng nhập cccd của nhân viên");
+				alert.setHeaderText(null);
+				alert.showAndWait();
+			} else {
+				try {
+					
+					NhanVien nv = nhanvienDAO.getNhanVienByCCCD(cccd);
+					if(nv  != null)
+					{
+						table_desc.getChildren().clear();
+						loadCTKMData(nv.getMaNhanVien(), nv.getHoTen(),nv.getSdt(), nv.getGioiTinh(), nv.getEmail(), nv.getCccd(),nv.getTinhTrangLamViec());
+					}
+					else {
+						Alert alert =  new Alert(Alert.AlertType.INFORMATION);
+						alert.setContentText("Không tìm thấy nhân viên phù hợp!");
+						alert.setHeaderText(null);
+						alert.showAndWait();
+					}
+						
+
+					
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		layout_btn_timkiem.getChildren().add(btn_timkiem);
+		layout_timkiem.getChildren().add(layout_btn_timkiem);
+
+		layout_btn_timkiem.setTranslateX(300);
+		layout_btn_timkiem.setTranslateY(20);
+		
+		title_layout.getChildren().add(layout_timkiem);
+
+		
+
 		txt_timkiem.focusedProperty().addListener((obs,oval,nval) -> {
 			TranslateTransition tt = new TranslateTransition(Duration.millis(350), lbl_timkiem);
 			if(nval)
@@ -961,7 +1026,11 @@ public class QuanLiNhanVien extends Application {
 			}
 			else
 			{
-				tt.setToY(0);
+				 if (txt_timkiem.getText().isEmpty()) {
+			            tt.setToY(0);
+			        } else {
+			            tt.setToY(-40);
+			        }
 			}
 			tt.play();
 		});
@@ -1061,9 +1130,7 @@ public class QuanLiNhanVien extends Application {
 //			======================
 
 //  DATA INPUT PATTERN:      maCT,tenCT,ngaybatdau,ngayketthuc,trangthai
-        for (NhanVien nv : listnhanVien) {
-            loadCTKMData(nv.getMaNhanVien(),nv.getHoTen(),nv.getSdt(),nv.getGioiTinh(),nv.getEmail(),nv.getCccd(),nv.getTinhTrangLamViec());
-        }
+	    
 
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -1072,7 +1139,7 @@ public class QuanLiNhanVien extends Application {
 	    scrollPane.setContent(table_desc);
 	    scrollPane.setFitToWidth(true);
 	    scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-	    scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+	    scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 	    scrollPane.setStyle("-fx-background-color: transparent");
 	    scrollPane.setPannable(true);
 	    
@@ -1083,6 +1150,19 @@ public class QuanLiNhanVien extends Application {
 	    
 	    noiDungChinh.getChildren().add(table_layout);
 	}
+	
+	
+	public void loaddata() throws SQLException
+	{
+		ArrayList<NhanVien> listnhanvien1 = nhanvienDAO.getListNhanVien();
+		for (NhanVien nv : listnhanvien1) {
+	        if(nv.getTinhTrangLamViec().equalsIgnoreCase("còn làm")) {
+	            loadCTKMData(nv.getMaNhanVien(), nv.getHoTen(), nv.getSdt(), nv.getGioiTinh(), nv.getEmail(), nv.getCccd(), nv.getTinhTrangLamViec());
+	            
+	        }
+	    }
+	}
+	
 	public void create_layout_button()
 	{
 		layout_button = new HBox();
@@ -1105,29 +1185,280 @@ public class QuanLiNhanVien extends Application {
 		btn_capnhat = new Button("Cập nhật thông tin");
 		btn_capnhat.setStyle(style+"-fx-background-color: linear-gradient(to top, #00BACB, #8EE6ED);");
 		btn_capnhat.setPrefSize(225, 60);
+		btn_capnhat.setDisable(true);
+		
+		btn_khoiphuc = new Button("Khôi Phục");
+		btn_khoiphuc.setStyle(style+"-fx-background-color: linear-gradient(to top, #00BACB, #8EE6ED);");
+		btn_khoiphuc.setPrefSize(225, 60);
+		btn_capnhat.setDisable(true);
+		
 		
 		layout_button.setSpacing(40);
-		layout_button.getChildren().addAll(btn_xoaNhanVien,btn_themNhanVien,btn_capnhat);
+		layout_button.getChildren().addAll(btn_khoiphuc,btn_themNhanVien,btn_xoaNhanVien,btn_capnhat);
 		
+		// REPLACE THIS SECTION in your btn_khoiphuc.setOnAction() method:
+
+		btn_khoiphuc.setOnAction(e -> {
+			
+		    // === TẠO POPUP STAGE ===
+		    Stage popupStage = new Stage();
+		    popupStage.initOwner(window);
+		    popupStage.initModality(Modality.APPLICATION_MODAL);
+		    popupStage.initStyle(StageStyle.DECORATED);
+		    popupStage.setTitle("Khôi phục nhân viên");
+		    popupStage.setWidth(1450);
+		    popupStage.setHeight(950);
+		    
+		    // Create a wrapper to track selected row in this popup
+		    hangchonPopup = new GridPane[]{null};
+		    
+		    // === TẠO ROOT LAYOUT CHO POPUP ===
+		    VBox popupRoot = new VBox();
+		    popupRoot.setStyle("-fx-background-color: #F7F7F7;");
+		    popupRoot.setPrefWidth(1450);
+		    popupRoot.setPrefHeight(950);
+		    
+		    // === TẠO TITLE LAYOUT ===
+		    VBox title_layout_recovery = new VBox();
+		    title_layout_recovery.setPadding(new Insets(30));
+		    title_layout_recovery.setSpacing(20);
+		    
+		    Label lbl_title_recovery = new Label("Khôi phục Nhân Viên"); 
+		    lbl_title_recovery.setStyle("-fx-font-family: 'Inter';-fx-font-weight:bold;-fx-font-size:30px;");
+		    title_layout_recovery.getChildren().add(lbl_title_recovery);
+		    
+		    // === TẠO TABLE LAYOUT (HEADER) ===
+		    VBox table_layout_recovery = new VBox();
+		    table_layout_recovery.setPadding(new Insets(10));
+		    
+		    GridPane tableCol_recovery = new GridPane();
+		    tableCol_recovery.setHgap(10);
+		    tableCol_recovery.setVgap(20);
+		    tableCol_recovery.setAlignment(Pos.CENTER);
+		    tableCol_recovery.setMaxWidth(1330);
+		    
+		    table_layout_recovery.setPrefSize(1350, 730);
+		    table_layout_recovery.setTranslateX(10);
+		    table_layout_recovery.setMaxSize(1350, 730);
+		    
+		    String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 18px; -fx-font-weight: bold;";
+		    
+		    Label lbl_title_maNhanVien_recovery = new Label("Mã Nhân Viên");
+		    lbl_title_maNhanVien_recovery.setStyle(styleHeader);
+		    
+		    Label lbl_title_tenNhanVien_recovery = new Label("Tên Nhân Viên");
+		    lbl_title_tenNhanVien_recovery.setStyle(styleHeader);
+		    
+		    Label lbl_title_sdt_recovery = new Label("Số Điện Thoại");
+		    lbl_title_sdt_recovery.setStyle(styleHeader);
+		    
+		    Label lbl_title_gioiTinh_recovery = new Label("Giới Tính");
+		    lbl_title_gioiTinh_recovery.setStyle(styleHeader);
+		    
+		    Label lbl_title_email_recovery = new Label("Email");
+		    lbl_title_email_recovery.setStyle(styleHeader);
+		    
+		    Label lbl_title_cccd_recovery = new Label("CCCD");
+		    lbl_title_cccd_recovery.setStyle(styleHeader);
+		    
+		    Label lbl_title_tinhTrangLamViec_recovery = new Label("Tình Trạng Làm Việc");
+		    lbl_title_tinhTrangLamViec_recovery.setStyle(styleHeader);
+		    
+		    lbl_title_maNhanVien_recovery.setTranslateX(-50);
+		    lbl_title_tenNhanVien_recovery.setTranslateX(-60);
+		    lbl_title_sdt_recovery.setTranslateX(-20);
+		    lbl_title_gioiTinh_recovery.setTranslateX(-25);
+		    lbl_title_email_recovery.setTranslateX(-40);
+		    lbl_title_cccd_recovery.setTranslateX(-15);
+		    
+		    StackPane paneCol1 = new StackPane(lbl_title_maNhanVien_recovery);
+		    StackPane paneCol2 = new StackPane(lbl_title_tenNhanVien_recovery);
+		    StackPane paneCol3 = new StackPane(lbl_title_sdt_recovery);
+		    StackPane paneCol4 = new StackPane(lbl_title_gioiTinh_recovery);
+		    StackPane paneCol5 = new StackPane(lbl_title_email_recovery);
+		    StackPane paneCol6 = new StackPane(lbl_title_cccd_recovery);
+		    StackPane paneCol7 = new StackPane(lbl_title_tinhTrangLamViec_recovery);
+		    
+		    paneCol1.setPrefWidth(150);
+		    paneCol2.setPrefWidth(180);
+		    paneCol3.setPrefWidth(150);
+		    paneCol4.setPrefWidth(150);
+		    paneCol5.setPrefWidth(200);
+		    paneCol6.setPrefWidth(130);
+		    paneCol7.setPrefWidth(200);
+		    
+		    paneCol1.setAlignment(Pos.CENTER);
+		    paneCol2.setAlignment(Pos.CENTER);
+		    paneCol3.setAlignment(Pos.CENTER);
+		    paneCol4.setAlignment(Pos.CENTER);
+		    paneCol5.setAlignment(Pos.CENTER);
+		    paneCol6.setAlignment(Pos.CENTER);
+		    paneCol7.setAlignment(Pos.CENTER);
+		    
+		    tableCol_recovery.add(paneCol1, 0, 0);
+		    tableCol_recovery.add(paneCol2, 1, 0);
+		    tableCol_recovery.add(paneCol3, 2, 0);
+		    tableCol_recovery.add(paneCol4, 3, 0);
+		    tableCol_recovery.add(paneCol5, 4, 0);
+		    tableCol_recovery.add(paneCol6, 5, 0);
+		    tableCol_recovery.add(paneCol7, 6, 0);
+		    
+		    table_layout_recovery.getChildren().add(tableCol_recovery);
+		    
+		    // === TẠO TABLE DESC (DANH SÁCH DỮ LIỆU) ===
+		    VBox table_desc_recovery = new VBox();
+		    table_desc_recovery.setSpacing(20);
+		    
+		    // === LOAD DỮ LIỆU ===
+		    ArrayList<NhanVien> listnhanvien2 = new ArrayList<NhanVien>();
+		    try {
+				listnhanvien2 = nhanvienDAO.getListNhanVien();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		    for (NhanVien nv : listnhanvien2) {
+		        if(nv.getTinhTrangLamViec().equalsIgnoreCase("đã nghỉ")) {
+		            loadDuLieuKhoiPhuc(table_desc_recovery, nv.getMaNhanVien(), nv.getHoTen(), nv.getSdt(), nv.getGioiTinh(),nv.getEmail(),nv.getCccd(),nv.getTinhTrangLamViec());
+		            
+		        }
+		    }
+		    
+		    ScrollPane scrollPane_recovery = new ScrollPane();
+		    scrollPane_recovery.setContent(table_desc_recovery);
+		    scrollPane_recovery.setFitToWidth(true);
+		    scrollPane_recovery.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		    scrollPane_recovery.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		    scrollPane_recovery.setStyle("-fx-background-color: transparent");
+		    scrollPane_recovery.setPannable(true);
+		    
+		    VBox.setVgrow(scrollPane_recovery, Priority.ALWAYS);
+		    scrollPane_recovery.setMaxHeight(660);
+		    
+		    table_layout_recovery.getChildren().add(scrollPane_recovery);
+		    
+		    // === TẠO BUTTON LAYOUT ===
+		    HBox layout_button_recovery = new HBox();
+		    layout_button_recovery.setPrefSize(1350, 60);
+		    layout_button_recovery.setAlignment(Pos.CENTER_RIGHT);
+		    layout_button_recovery.setTranslateX(30);	
+		    String style_recovery = "-fx-font-family: 'Inter';-fx-font-weight: bold;-fx-font-size:13.5px;-fx-text-fill:white;-fx-background-radius: 20px;";
+		    
+		    btn_khoiPhuc1 = new Button("Khôi Phục");
+		    btn_khoiPhuc1.setStyle(style_recovery+"-fx-background-color: linear-gradient(to top, #00BACB, #8EE6ED);");
+		    btn_khoiPhuc1.setPrefSize(225, 60);
+		    btn_khoiPhuc1.setDisable(true);
+		    
+		    Button btn_quayLai = new Button("Đóng");
+		    btn_quayLai.setStyle(style_recovery+"-fx-background-color: linear-gradient(to bottom, #D498A5, #D32B4F);");
+		    btn_quayLai.setPrefSize(225, 60);
+		    
+		    layout_button_recovery.setSpacing(40);
+		    layout_button_recovery.setTranslateX(-100);
+		    layout_button_recovery.getChildren().addAll(btn_quayLai, btn_khoiPhuc1);
+		    
+		    // === XỬ LÝ BUTTON KHÔI PHỤC ===
+		    btn_khoiPhuc1.setOnAction(ev -> {
+		        if(hangchonPopup[0] == null) {
+		            Alert alert = new Alert(Alert.AlertType.WARNING);
+		            alert.setTitle("Thông báo");
+		            alert.setHeaderText(null);
+		            alert.setContentText("Vui lòng chọn nhân viên để khôi phục");
+		            alert.showAndWait();
+		            return;
+		        }
+		        
+		        // Lấy mã nhân viên từ dòng được chọn
+		        String maNhanVien = ((Label)((StackPane)hangchonPopup[0].getChildren().get(0)).getChildren().get(0)).getText();
+		        
+		        try {
+		            // Cập nhật trạng thái nhân viên về "còn làm"
+		            if(nhanvienDAO.capNhatTrangThaidiLam(maNhanVien)) {
+		                // Xóa dòng từ table recovery
+		                FadeTransition ft = new FadeTransition(Duration.millis(400), hangchonPopup[0]);
+		                ft.setFromValue(1.0);
+		                ft.setToValue(0);
+		                ft.play();
+		                ft.setOnFinished(E -> {
+		                    table_desc_recovery.getChildren().remove(hangchonPopup[0]);
+		                    btn_khoiPhuc1.setDisable(true);
+		                    hangchonPopup[0] = null;
+		                });
+		                
+		                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		                alert.setTitle("Thành công");
+		                alert.setHeaderText(null);
+		                alert.setContentText("Khôi phục nhân viên thành công!");
+		                alert.showAndWait();
+		            }
+		        } catch (SQLException ex) {
+		            Alert alert = new Alert(Alert.AlertType.ERROR);
+		            alert.setTitle("Lỗi");
+		            alert.setHeaderText(null);
+		            alert.setContentText("Có lỗi xảy ra: " + ex.getMessage());
+		            alert.showAndWait();
+		            ex.printStackTrace();
+		        }
+		    });
+		    
+		    // === XỬ LÝ BUTTON ĐÓNG ===
+		    btn_quayLai.setOnAction(ev -> {
+		        popupStage.close();
+		        
+		        table_desc.getChildren().clear();	
+		        btn_xoaNhanVien.setDisable(true);
+		        btn_capnhat.setDisable(true);
+		        try {
+					loaddata();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		        
+		    });
+		    
+		    // === THÊM VÀO POPUP ROOT ===
+		    popupRoot.getChildren().addAll(title_layout_recovery, table_layout_recovery, layout_button_recovery);
+		    
+		    Scene popupScene = new Scene(popupRoot);
+		    popupStage.setScene(popupScene);
+		    popupStage.show();
+		});	
 		
 		btn_xoaNhanVien.setOnMouseClicked(event -> {
-			if(hangchon.size() == 0)
-			{
+			if(hangchon == null)
+			{		
 				
 			}
 			else {
-				ArrayList<GridPane> dsxoa = new ArrayList<GridPane>(hangchon);
-				for(GridPane x : dsxoa)
-				{					
-					FadeTransition ft = new FadeTransition(Duration.millis(300),x);
-					ft.setFromValue(1.0);
-					ft.setToValue(0);
-					ft.play();
-					ft.setOnFinished(E ->{						
-						table_desc.getChildren().remove(x);
-					});
-				}
-				hangchon.clear();
+					String manv =  ((Label)((StackPane)hangchon.getChildren().get(0)).getChildren().get(0)).getText();
+					
+					try {
+						if(nhanvienDAO.capNhatTrangThaiNghiLam(manv))
+						{
+							Alert alert = new Alert(Alert.AlertType.INFORMATION);
+							alert.setContentText("Xóa Nhân Viên Thành Công");
+							alert.setHeaderText(null);
+							alert.show();
+							FadeTransition ft = new FadeTransition(Duration.millis(300),hangchon);
+							ft.setFromValue(1.0);
+							ft.setToValue(0);
+							ft.play();
+							ft.setOnFinished(E ->{						
+								table_desc.getChildren().remove(hangchon);
+//								table_desc.getChildren().clear();
+//								reloaddata();
+								
+								
+							});
+						}
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				
+				
+				
 				
 			}
 		});
@@ -1165,6 +1496,143 @@ public class QuanLiNhanVien extends Application {
 		noiDungChinh.getChildren().add(layout_button);
 		
 	}
+
+	public void loadDuLieuKhoiPhuc(VBox targetPanel, String maNhanVien, String tenNhanVien, String soDienThoai, String gioiTinh, String email, String cccd, String tinhtranglamviec) {
+	    
+		GridPane data = new GridPane();
+	    
+	    data.setHgap(10);
+	    data.setAlignment(Pos.CENTER);
+	    data.setMaxWidth(1250);
+	    data.setTranslateX(20);
+	    data.setPrefHeight(70);
+	    data.setPadding(new Insets(0, 0, 0, 10));
+	    
+	    final GridPane hangchon1 = null;
+	    
+	    
+	    String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
+	    
+	    Label lblMaNhanVien = new Label(maNhanVien);
+	    Label lblTenNhanVien = new Label(tenNhanVien);
+	    Label lblsoDienThoai = new Label(soDienThoai);
+	    Label lblgioiTinh = new Label(gioiTinh);
+	    Label lblemail = new Label(email);
+	    Label lblCCCD = new Label(cccd);
+	    Label lbltinhTrangLamViec = new Label(tinhtranglamviec);
+	    
+	    String colorStyle;
+	    if(lbltinhTrangLamViec.getText().equalsIgnoreCase("còn làm")) {
+	        colorStyle = "-fx-text-fill: green;";
+	    } else {
+	        colorStyle = "-fx-text-fill: red;";
+	    }
+	    
+	    
+	    lblMaNhanVien.setStyle(baseStyle);
+	    lblTenNhanVien.setStyle(baseStyle);
+	    lblsoDienThoai.setStyle(baseStyle);
+	    lblemail.setStyle(baseStyle);
+	    lblgioiTinh.setStyle(baseStyle);
+	    lblCCCD.setStyle(baseStyle);
+	    lbltinhTrangLamViec.setStyle(baseStyle + colorStyle);
+	    
+	    lblMaNhanVien.setTranslateX(-70);
+	    lblTenNhanVien.setTranslateX(-80);
+	    lblsoDienThoai.setTranslateX(-40);
+	    lblgioiTinh.setTranslateX(-50);
+	    lblemail.setTranslateX(-55);
+	    lblCCCD.setTranslateX(-40);
+	    lblTenNhanVien.setWrapText(true);
+	    
+	    StackPane paneData1 = new StackPane(lblMaNhanVien);
+	    StackPane paneData2 = new StackPane(lblTenNhanVien);
+	    StackPane paneData3 = new StackPane(lblsoDienThoai);
+	    StackPane paneData4 = new StackPane(lblgioiTinh);
+	    StackPane paneData5 = new StackPane(lblemail);
+	    StackPane paneData6 = new StackPane(lblCCCD);
+	    StackPane paneData7 = new StackPane(lbltinhTrangLamViec);
+	    
+	    paneData1.setPrefWidth(150);
+	    paneData2.setPrefWidth(180);
+	    paneData3.setPrefWidth(150);
+	    paneData4.setPrefWidth(150);
+	    paneData5.setPrefWidth(200);
+	    paneData6.setPrefWidth(130);
+	    paneData7.setPrefWidth(130);
+	    
+	    paneData1.setAlignment(Pos.CENTER);
+	    paneData2.setAlignment(Pos.CENTER);
+	    paneData3.setAlignment(Pos.CENTER);
+	    paneData4.setAlignment(Pos.CENTER);
+	    paneData5.setAlignment(Pos.CENTER);
+	    paneData6.setAlignment(Pos.CENTER);
+	    paneData7.setAlignment(Pos.CENTER);
+	    
+	    data.add(paneData1, 0, 0);
+	    data.add(paneData2, 1, 0);
+	    data.add(paneData3, 2, 0);
+	    data.add(paneData4, 3, 0);
+	    data.add(paneData5, 4, 0);
+	    data.add(paneData6, 5, 0);
+	    data.add(paneData7, 6, 0);
+	    
+	    String normalStyle = """
+	        -fx-background-color: rgba(0, 186, 203, 0.3);
+	        -fx-background-radius: 15px;
+	        -fx-border-radius: 15px;
+	        -fx-border-color: #B6D0D3;
+	        -fx-border-width: 1px;
+	    """;
+
+	    String selectedStyle = """
+	        -fx-background-color: rgba(0, 186, 203, 0.9);
+	        -fx-background-radius: 15px;
+	        -fx-border-radius: 15px;
+	        -fx-border-color: #00BACB;
+	        -fx-border-width: 2px;
+	    """;
+	    
+	    data.setStyle(normalStyle);
+	    
+	    final GridPane dongHienTai1 = data;
+	    
+	    // === HOVER & CLICK EFFECT ===
+	    data.setOnMouseEntered(e -> {
+	    	 
+	        ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), data);
+	        scaleUp.setToX(1.02);
+	        scaleUp.setToY(1.02);
+	        scaleUp.play();
+	    });
+
+	    data.setOnMouseExited(e -> {
+	        ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), data);
+	        scaleDown.setToX(1.0);
+	        scaleDown.setToY(1.0);
+	        scaleDown.play();
+	    });
+	    
+	    data.setOnMouseClicked(e -> {
+	    	 if (hangchonPopup[0] != null && hangchonPopup[0] != dongHienTai1) {
+	             hangchonPopup[0].setStyle(normalStyle);
+	         }
+	         
+	         // Chọn dòng hiện tại
+	         hangchonPopup[0] = dongHienTai1;
+	         dongHienTai1.setStyle(selectedStyle);
+	         btn_khoiPhuc1.setDisable(false); 
+	    });
+	    
+	    
+	    
+	    
+	    targetPanel.getChildren().add(data);
+	}
+
+	
+
+	
 	public void loadCTKMData(String maNhanVien, String tenNhanVien, String soDienThoai,String gioiTinh,String email,String cccd, String tinhtranglamviec) {
 	    GridPane data = new GridPane();
 	    
@@ -1278,20 +1746,59 @@ public class QuanLiNhanVien extends Application {
 	    String style_thaydoi = "-fx-background-color : #00BACB4D;-fx-background-radius:15px;-fx-border-radius:15px;-fx-border-color:#00BACB;-fx-border-width:2px;";
 	    
 	    dongHienTai.setOnMouseClicked(e -> {
-			if (hangchon.contains(dongHienTai)) {
-				hangchon.remove(dongHienTai);
-				dongHienTai.setStyle(normalStyle);
-			} else {
-				hangchon.add(dongHienTai);
-				dongHienTai.setStyle(selectedStyle);
+	    	
+	    	String manhanvien =   ((Label)((StackPane)dongHienTai.getChildren().get(0)).getChildren().get(0)).getText();
+	    	
+	    	
+	    	NhanVien nv;
+			try {
+				nv = nhanvienDAO.getNhanVienByMa(manhanvien);
+			
+	    	
+	    	File file = new File("NhanVienCapNhat.dat");
+	    	if(file.exists())
+	    	{
+	    		file.delete();
+	    	}
+	    	
+	    	ObjectOutputStream oos;
+			try {
+				oos = new ObjectOutputStream(new FileOutputStream("NhanVienCapNhat.dat"));
+				oos.writeObject(nv);
+				System.out.println("Ghi Thanh Cong");
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
-			btn_xoaNhanVien.setDisable(hangchon.isEmpty());
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	    	
+			if (hangchon == dongHienTai) {
+
+			    hangchon = null;
+			    dongHienTai.setStyle(normalStyle);
+			} else {
+
+			    if (hangchon != null) {
+			        hangchon.setStyle(normalStyle);
+			    }
+
+			    hangchon = dongHienTai;
+			    dongHienTai.setStyle(selectedStyle);
+			}
+			btn_xoaNhanVien.setDisable(hangchon == null);
+			btn_capnhat.setDisable(hangchon == null);
 		});
 	    
 	    dongHienTai.setOnMouseEntered(e -> {
-			if (!hangchon.contains(dongHienTai)) {
-				dongHienTai.setStyle(hoverStyle);
-			}
+//			if (hangchon != dongHienTai) {
+//				dongHienTai.setStyle(hoverStyle);
+//			}
 			ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), dongHienTai);
 			scaleUp.setToX(1.02);
 			scaleUp.setToY(1.02);
@@ -1300,11 +1807,11 @@ public class QuanLiNhanVien extends Application {
 
 		// RỜI CHUỘT
 		dongHienTai.setOnMouseExited(e -> {
-			if (hangchon.contains(dongHienTai)) {
-				dongHienTai.setStyle(selectedStyle);
-			} else {
-				dongHienTai.setStyle(normalStyle);
-			}
+//			if (hangchon != dongHienTai) {
+//				dongHienTai.setStyle(selectedStyle);
+//			} else {
+//				dongHienTai.setStyle(normalStyle);
+//			}
 			ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), dongHienTai);
 			scaleDown.setToX(1.0);
 			scaleDown.setToY(1.0);
@@ -1314,9 +1821,17 @@ public class QuanLiNhanVien extends Application {
 	    table_desc.getChildren().add(data);
 	} 
 	
+	
+
+	
 	public VBox getGDQlyNhanVien(){
         return this.noiDungChinh;
     }
+	
+	public Button getCapnhat_btn()
+	{
+		return this.btn_capnhat;
+	}
 	
 	public static void main(String[] args) {
 		launch(args);

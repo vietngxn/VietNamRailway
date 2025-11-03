@@ -13,8 +13,17 @@ module VietNamRailwayInterface {
     requires layout;
     requires io;
     requires java.desktop;
+  	requires java.desktop;
+	requires org.apache.poi.ooxml;
+	requires org.apache.poi.poi;
+	requires org.apache.xmlbeans;
     exports fourcore.Entity;
+      exports fourcore.util;
     exports fourcore.GiaoDien;
-    opens fourcore.Entity to javafx.base, javafx.graphics; 
-    opens fourcore.GiaoDien to javafx.fxml, javafx.graphics;
+    opens fourcore.Entity to javafx.base;
+    opens fourcore.GiaoDien to javafx.fxml;
 }
+
+
+
+

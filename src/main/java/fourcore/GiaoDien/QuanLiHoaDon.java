@@ -122,6 +122,7 @@ public class QuanLiHoaDon extends Application {
 	private VeDAO vedao;
 	private ArrayList<HoaDon> listhd;
 	private Node lbl_title_soDienThoai;
+	private Button btn_timkiem;
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -398,12 +399,7 @@ public class QuanLiHoaDon extends Application {
 
             });
             quanLiKhachHangBox.setOnMouseClicked(event -> {
-                QuanLyKhachHang gdQuanLyKhachHang = null;
-                try {
-                    gdQuanLyKhachHang = new QuanLyKhachHang();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+                QuanLyKhachHang gdQuanLyKhachHang = new QuanLyKhachHang();
                 Stage quanLyKhachHangStage = new Stage();
                 gdQuanLyKhachHang.start(quanLyKhachHangStage);
                 VBox quanLyKhachHangVBox = gdQuanLyKhachHang.getQuanLiKhachHang();
@@ -903,7 +899,7 @@ public class QuanLiHoaDon extends Application {
 			
 			create_layout_button();
 			primaryStage.setFullScreen(true);
-//			primaryStage.show();
+			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -929,7 +925,7 @@ public class QuanLiHoaDon extends Application {
 		lbl_timkiem.setStyle("-fx-font-family: 'Inter';-fx-font-weight:bold;-fx-font-size:18px;-fx-text-fill : #00BACB;");
 	
 		ImageView img_timkiem = new ImageView(getClass().getResource("/images/copy/lookup.png").toExternalForm());
-		img_timkiem.setTranslateX(600);
+		img_timkiem.setTranslateX(550);
 		img_timkiem.setFitHeight(25);
 		img_timkiem.setFitWidth(25);
 		layout_lbl_timkiem.getChildren().addAll(lbl_timkiem,img_timkiem);
@@ -949,6 +945,53 @@ public class QuanLiHoaDon extends Application {
 		
 		layout_timkiem.setTranslateX(100);
 		
+		
+		HBox layout_btn_timkiem = new HBox();
+		layout_btn_timkiem.setSpacing(10);
+		btn_timkiem = new Button("Tìm Kiếm");
+		btn_timkiem.setPrefSize(150, 50);
+		btn_timkiem.setMaxSize(150, 50);
+		btn_timkiem.setTranslateX(250);
+		btn_timkiem.setTranslateY(20);
+		btn_timkiem.setStyle("-fx-background-color: #00BACB;-fx-text-fill: white;-fx-font-family: 'Inter';-fx-font-weight:bold;-fx-font-size:14px;-fx-cursor: hand;-fx-border-radius: 30px;-fx-background-radius:30px;");
+		
+		btn_timkiem.setOnAction(e -> {
+			String mahd = txt_timkiem.getText();
+			if(mahd.isEmpty()) {
+				Alert alert =  new Alert(Alert.AlertType.INFORMATION);
+				alert.setContentText("Vui Lòng nhập cccd của nhân viên");
+				alert.setHeaderText(null);
+				alert.showAndWait();
+			} else {
+				try {
+					
+					HoaDon hd = hddao.getHoaDonTheoMa(mahd);
+					if(hd  != null)
+					{
+						table_desc.getChildren().clear();
+						create_layout_dong(hd.getMaHoaDon(), hd.getTenKhachHangThanhToan(),hd.getMaLoaiHoaDon().getTenLoaiHoaDon(), hd.getNgayThanhToan(), hd.getTongTien() );
+					}
+					else {
+						Alert alert =  new Alert(Alert.AlertType.INFORMATION);
+						alert.setContentText("Không tìm thấy Hóa Đơn phù hợp!");
+						alert.setHeaderText(null);
+						alert.showAndWait();
+					}
+						
+
+					
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		
+		layout_btn_timkiem.getChildren().add(btn_timkiem);
+		layout_timkiem.getChildren().add(layout_btn_timkiem);
+		
 		title_layout.getChildren().add(layout_timkiem);
 		
 		txt_timkiem.focusedProperty().addListener((obs,oval,nval) -> {
@@ -959,7 +1002,11 @@ public class QuanLiHoaDon extends Application {
 			}
 			else
 			{
-				tt.setToY(0);
+				if (txt_timkiem.getText().isEmpty()) {
+		            tt.setToY(0);
+		        } else {
+		            tt.setToY(-40);
+		        }
 			}
 			tt.play();
 		});
@@ -1079,7 +1126,7 @@ public class QuanLiHoaDon extends Application {
 		btn_xemChiTiet.setPrefSize(225, 60);
 		
 		layout_button.setSpacing(40);
-		layout_button.getChildren().addAll(btn_xuatHoaDon,btn_xemChiTiet);
+		layout_button.getChildren().addAll(btn_xemChiTiet);
 		
 		
 		
