@@ -36,7 +36,6 @@ public class ChiTietHoaDonDAO {
 					new HoaDon(maHoaDon, null, null, maHoaDon, maHoaDon, maHoaDon, maHoaDon, null, 0.0),
 					new Ve(maveTau), moTa, donGia, thueVAT, thanhTien));
 		}
-
 		return listCTHoaDon;
 	}
 

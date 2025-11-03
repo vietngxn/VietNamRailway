@@ -1,15 +1,15 @@
 package fourcore.GiaoDien;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import com.google.zxing.WriterException;
+import fourcore.Control.QRGenerator;
+import fourcore.Control.VeTauPdfExporter;
 import fourcore.Entity.*;
 import fourcore.dao.*;
 import javafx.animation.ScaleTransition;
@@ -711,11 +711,19 @@ public class GiaoDienXuatHoaDon extends Application {
 
                 }
                 if(flag == true){
+
                     try {
                         showConfirm(primaryStage, "Bạn muốn thanh toán hóa đơn này");
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (WriterException e) {
+                        throw new RuntimeException(e);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
                     }
+
 
                 }
 			});
@@ -728,7 +736,7 @@ public class GiaoDienXuatHoaDon extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Hệ thống quản lý vé tàu");
 			primaryStage.setFullScreen(true);
-			primaryStage.show();
+//			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -769,7 +777,7 @@ public class GiaoDienXuatHoaDon extends Application {
     }
 
 
-	private boolean showConfirm(Stage parentStage, String message) throws SQLException {
+	private boolean showConfirm(Stage parentStage, String message) throws Exception {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Xác nhận");
 		alert.setHeaderText(null);
@@ -809,11 +817,21 @@ public class GiaoDienXuatHoaDon extends Application {
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
+            ArrayList<ChiTietHoaDon>  listChiTietHoaDon = new ArrayList<>();
             for(int i =0 ; i< banVeDAO.listGheTrenChuyenTau.size();i++){
-                banVeDAO.themCTHoaDon(hoaDon2,listVe.get(i),banVeDAO.listGheTrenChuyenTau.get(i),banVeDAO.ctkmSelected);
+                listChiTietHoaDon.add(banVeDAO.themCTHoaDon(hoaDon2,listVe.get(i),banVeDAO.listGheTrenChuyenTau.get(i),banVeDAO.ctkmSelected)) ;
                 banVeDAO.themLichSuTuongTacVe(listVe.get(i),ctkmSelected,banVeDAO.listGheTrenChuyenTau.get(i));
                 System.out.println("them lich su ");
             }
+            for(int i =  0; i<listVe.size();i++){
+                QRGenerator qrGenerator = new QRGenerator();
+                qrGenerator.generateQRCodeImage(listVe.get(i).getMaVeTau());
+                VeTauPdfExporter veTauPdfExporter = new VeTauPdfExporter();
+                veTauPdfExporter.exportVeTauToPdf(listVe.get(i));
+            }
+            HoaDonBanVe hoaDonBanVe = new HoaDonBanVe(hoaDon2);
+            hoaDonBanVe.showAsPopup(null);
+
 
         }
 

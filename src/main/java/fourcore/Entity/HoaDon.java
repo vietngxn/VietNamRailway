@@ -28,7 +28,19 @@ public class HoaDon {
         setTongTien(tongTien);
     }
 
-	public String getDiaChiKhachHangThanhToan() {
+    public HoaDon(String mahd, LoaiHoaDon loaiHoaDon, NhanVien nhanVien, String tenKhachHang, String emailKhachHang, String cccd, String sdtKhachHang, LocalDateTime ngayThanhToan, double tongTien, String diaChi) {
+        setMaHoaDon(mahd);
+        setMaLoaiHoaDon(loaiHoaDon);
+        setMaNhanVien(nhanVien);
+        setTenKhachHangThanhToan(tenKhachHang);
+        setEmailKhachHangThanhToan(emailKhachHang);
+        setCccdKhachHangThanhToan(cccd);
+        setSdtKhachHangThanhToan(sdtKhachHang);
+        setDiaChiKhachHangThanhToan(diaChi);
+        setNgayThanhToan(ngayThanhToan);
+    }
+
+    public String getDiaChiKhachHangThanhToan() {
 		return diaChiKhachHangThanhToan;
 	}
 

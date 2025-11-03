@@ -37,6 +37,10 @@ public class Ve implements Serializable {
 	public Ve(String maVeTau) {
 		this.maVeTau = maVeTau;
 	}
+    public Ve(double giaVe, KhuyenMai khuyenMai) {
+        this.giaVe = giaVe;
+        this.khuyenMai = khuyenMai;
+    };
 
 	public Ve(String maVeTau, String gaDi, String gaDen, String tenTau, LocalDateTime ngayGioDi,
 			LocalDateTime ngayGioDen, int soToa, int soKhoang, int soTang, int soGhe, String loaiVe, String maGiayTo,
