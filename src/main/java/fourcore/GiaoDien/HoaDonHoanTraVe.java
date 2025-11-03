@@ -1,4 +1,4 @@
-package fourcore.Entity;
+package fourcore.GiaoDien;
 
 import java.security.KeyStore.Entry;
 import java.sql.SQLException;
@@ -9,6 +9,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
+import fourcore.Entity.ChiTietHoaDon;
+import fourcore.Entity.HoaDon;
+import fourcore.Entity.LichSuTuongTacVe;
+import fourcore.Entity.LoaiTuongTacVe;
+import fourcore.Entity.Ve;
 import fourcore.dao.ChiTietHoaDonDAO;
 import fourcore.dao.GheTrenChuyenTau_dao;
 import fourcore.dao.HoaDonDAO;
@@ -29,13 +34,13 @@ import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class XuatHoaDonHoanTraVe extends Application {
+public class HoaDonHoanTraVe extends Application {
 
 	private BorderPane root;
 	private VBox table_layout;
 	private int cnt = 1;
 	private Button btn_xuatHoaDon;
-	private Button btn_thoat;
+	Button btn_thoat;
 	private VBox table_desc;
 
 	Map<Ve, Double> listVe = new HashMap();
@@ -66,10 +71,13 @@ public class XuatHoaDonHoanTraVe extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Hóa đơn");
 		primaryStage.show();
+
+		btn_thoat.setOnMouseClicked(event -> {
+			primaryStage.close();
+		});
 	}
 
-	public XuatHoaDonHoanTraVe(String hoten, String diaChi, String sdt, String cccd, String email,
-			Map<Ve, Double> listVe) {
+	public HoaDonHoanTraVe(String hoten, String diaChi, String sdt, String cccd, String email, Map<Ve, Double> listVe) {
 		this.hoTen = hoten;
 		this.sdt = sdt;
 		this.email = email;
@@ -290,6 +298,7 @@ public class XuatHoaDonHoanTraVe extends Application {
 			}
 			currentStage.close();
 		});
+
 		button_layout.getChildren().addAll(btn_xuatHoaDon, btn_thoat);
 
 		footer_layout.getChildren().addAll(tongCong_layout, button_layout);
