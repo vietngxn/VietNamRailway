@@ -1,6 +1,5 @@
 package fourcore.GiaoDien;
 
-
 import java.security.KeyStore.Entry;
 import java.sql.SQLException;
 import java.text.NumberFormat;
@@ -41,7 +40,7 @@ public class HoaDonHoanTraVe extends Application {
 	private VBox table_layout;
 	private int cnt = 1;
 	private Button btn_xuatHoaDon;
-	private Button btn_thoat;
+	Button btn_thoat;
 	private VBox table_desc;
 
 	Map<Ve, Double> listVe = new HashMap();
@@ -72,10 +71,13 @@ public class HoaDonHoanTraVe extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Hóa đơn");
 		primaryStage.show();
+
+		btn_thoat.setOnMouseClicked(event -> {
+			primaryStage.close();
+		});
 	}
 
-	public HoaDonHoanTraVe(String hoten, String diaChi, String sdt, String cccd, String email,
-			Map<Ve, Double> listVe) {
+	public HoaDonHoanTraVe(String hoten, String diaChi, String sdt, String cccd, String email, Map<Ve, Double> listVe) {
 		this.hoTen = hoten;
 		this.sdt = sdt;
 		this.email = email;
@@ -296,6 +298,7 @@ public class HoaDonHoanTraVe extends Application {
 			}
 			currentStage.close();
 		});
+
 		button_layout.getChildren().addAll(btn_xuatHoaDon, btn_thoat);
 
 		footer_layout.getChildren().addAll(tongCong_layout, button_layout);

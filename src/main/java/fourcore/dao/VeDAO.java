@@ -302,11 +302,12 @@ public class VeDAO {
 
 	public Double layGiaTienGheTheoMaVe(String maVeTau) throws SQLException {
 		Double giaTienGhe = 0.0;
-		String sql = "SELECT DISTINCT gtc.giaTienGhe " + "FROM Ve AS v "
-				+ "JOIN ChuyenTau AS ct ON v.maChuyenTau = ct.maChuyenTau "
-				+ "JOIN GheTrenChuyenTau AS gtc ON gtc.maChuyenTau = ct.maChuyenTau "
-				+ "JOIN GheNgoi AS gn ON gn.maGheNgoi = gtc.maGheNgoi " + "WHERE v.maVeTau = N'" + maVeTau + "' "
-				+ "AND v.soGhe = gn.soGhe";
+		String sql = "SELECT gtc.giaTienGhe "
+		           + "FROM Ve AS v "
+		           + "JOIN ChuyenTau AS ct ON ct.maChuyenTau = v.maChuyenTau "
+		           + "JOIN GheTrenChuyenTau AS gtc ON gtc.maChuyenTau = ct.maChuyenTau "
+		           + "WHERE v.maVeTau = N'" + maVeTau + "' "
+		           + "AND v.maGheTrenChuyenTau = gtc.maGheTrenChuyenTau";
 		ResultSet rs = st.executeQuery(sql);
 		if (rs.next()) {
 			giaTienGhe = rs.getDouble("giaTienGhe");
