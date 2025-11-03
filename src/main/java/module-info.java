@@ -15,6 +15,6 @@ module VietNamRailwayInterface {
     requires java.desktop;
     exports fourcore.Entity;
     exports fourcore.GiaoDien;
-    opens fourcore.Entity to javafx.base;
-    opens fourcore.GiaoDien to javafx.fxml;
+    opens fourcore.Entity to javafx.base, javafx.graphics; 
+    opens fourcore.GiaoDien to javafx.fxml, javafx.graphics;
 }
