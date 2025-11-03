@@ -13,6 +13,7 @@ import fourcore.Control.BanVeControl;
 import fourcore.Entity.*;
 import fourcore.dao.ChuongTrinhKhuyenMaiDAO;
 import fourcore.dao.DoiTuongGiamGiaDAO;
+import fourcore.dao.GaTauDao;
 import fourcore.dao.ToaTauDAO;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
@@ -93,6 +94,7 @@ public class GioVe extends Application {
 	private ImageView userIcon;
 	private Label userLabel;
 	private ImageView settingIcon;
+    String gaDen = "";
 	ToaTauDAO toaTauDAO = new ToaTauDAO();
 	ArrayList<ToaTau> listToaTauTrenChuyen;
 	public ArrayList<GheTrenChuyenTau> listGheSelected = new ArrayList<>();
@@ -100,7 +102,7 @@ public class GioVe extends Application {
 	public ArrayList<DoiTuongGiamGia> listDoiTuongGiamGia = dtggDAO.getListDoiTuongGiamGia();
 	Map<GheTrenChuyenTau, Double> mapTienGhe = new LinkedHashMap<>();
 	Map<GheTrenChuyenTau, KhachHang> mapChuyenTauVaUser = new LinkedHashMap<>();
-
+    GaTauDao gaTauDao = new GaTauDao();
 	ArrayList<KhachHang> listKH = new ArrayList<KhachHang>();
 
 	private List<TextField> listTxtHoTen = new ArrayList<>();
@@ -118,10 +120,18 @@ public class GioVe extends Application {
 	
 	public GioVe() throws SQLException {
 	}
-
+    public VBox getGDChinh() {
+        return noiDungChinh;
+    }
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("gaDen.dat"))) {
+                gaDen = ois.readObject().toString();
+                System.out.println("Dữ liệu ga den đọc được: " + gaDen);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
 			BorderPane root = new BorderPane();
 			Scene scene = new Scene(root, 1600, 800);
 			primaryStage.setScene(scene);
@@ -572,8 +582,6 @@ public class GioVe extends Application {
 			pnlDataGioVe = new VBox(10);
 			pnlDataGioVe.setAlignment(Pos.CENTER);
 
-//			pnlDataGioVe.getChildren().add(taoDataChoTableGioVe("SE2", "Sài Gòn - Hà Nội", "27/09/2025  -  08:40",
-//					"Toa số 3 chỗ 23", "Nguyễn Tiến Đạt G", "Con cặc", "093636363636", 1400000, 0, 0, 1400000));
 
 			try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("ds_ghe_dang_chon.dat"))) {
                 listGheSelected.clear();
@@ -631,7 +639,7 @@ public class GioVe extends Application {
 			lblTongCong.setWrapText(true);
 			lblTongCong.setStyle(lblStyle);
 
-			lblTongCongValue = new Label(nf.format(tongCongThanhTien));
+			lblTongCongValue = new Label("" +0);
 			lblTongCongValue.setWrapText(true);
 			lblTongCongValue.setStyle(lblStyle + "-fx-font-weight: bold;");
 
@@ -642,9 +650,11 @@ public class GioVe extends Application {
 			pnlTongCong.getChildren().addAll(lblTongCong, lblTongCongValue);
 			btnApDungChuongTrinhKhuyenMai.setOnAction(event -> {
 				Stage popupStage = new Stage();
-				popupStage.initOwner(primaryStage);
-				popupStage.initModality(Modality.APPLICATION_MODAL); // chặn thao tác ở main stage
-				popupStage.initStyle(StageStyle.UTILITY); // hiển thị dạng popup gọn
+
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                popupStage.initOwner(stage);
+				popupStage.initModality(Modality.WINDOW_MODAL);
+				popupStage.initStyle(StageStyle.UTILITY);
 				popupStage.setAlwaysOnTop(true);
 				popupStage.setTitle("Chọn chương trình khuyến mãi");
 
@@ -667,7 +677,7 @@ public class GioVe extends Application {
 				} catch (SQLException e) {
 					throw new RuntimeException(e);
 				}
-				
+
 					try {
 						listCTKM = ctkmDAO.getListKhuyenMai();
 					} catch (SQLException e) {
@@ -849,7 +859,14 @@ public class GioVe extends Application {
 	public VBox taoDataChoTableGioVe(GheTrenChuyenTau gheTrenChuyenTau) throws SQLException {
 		Label lblGiamDoiTuongValue = new Label("0");
 		Label lblKhuyenMaiValue = new Label("0");
-		Label lblThanhTienValue = new Label(String.valueOf(gheTrenChuyenTau.getGiaTienGhe()));
+        double giaVe1Value = 0;
+        if (gheTrenChuyenTau.getGheNgoi().isLuuDong()){
+            giaVe1Value = gheTrenChuyenTau.getChuyenTau().getGiaCuocTrenChuyenTau() * gaTauDao.getCuLiBangTenGa(gaDen) + gheTrenChuyenTau.getGiaTienGhe();
+        }else {
+            giaVe1Value = gheTrenChuyenTau.getGiaTienGhe();
+        }
+		Label lblThanhTienValue = new Label(String.valueOf(giaVe1Value));
+        System.out.println("Ga den:"+ gaTauDao.getCuLiBangTenGa(gaDen)+" Gia tri thanh tien khoi tao "+ giaVe1Value +" gia ghe" + gheTrenChuyenTau.getGiaTienGhe());
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
 		VBox pnlReturn = new VBox();
 		VBox.setMargin(pnlReturn, new Insets(0, 30, 0, 30));
@@ -862,14 +879,9 @@ public class GioVe extends Application {
 		data.setMaxWidth(1330);
 		data.setPrefHeight(70);
 		data.setPadding(new Insets(0, 0, 0, 10));
-		String gaDen = "";
+
 		String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
-		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("gaDen.dat"))) {
-			gaDen = ois.readObject().toString();
-			System.out.println("Dữ liệu ga den đọc được: " + gaDen);
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+
 		// list toa (ToaTauDAO)
 		int soToa = 0;
 		listToaTauTrenChuyen = toaTauDAO.getListToaTauByMaCT(gheTrenChuyenTau.getChuyenTau().getMaChuyenTau());
@@ -979,9 +991,14 @@ public class GioVe extends Application {
 				    -fx-font-family: "Kanit";
 				    -fx-padding: 8 12 8 12;
 				""";
-
+        double giaTienGhe= 0;
+        if(gheTrenChuyenTau.getGheNgoi().isLuuDong()){
+            giaTienGhe = gheTrenChuyenTau.getChuyenTau().getGiaCuocTrenChuyenTau() * gaTauDao.getCuLiBangTenGa(gaDen) + gheTrenChuyenTau.getGiaTienGhe();
+        }else{
+            giaTienGhe  =gheTrenChuyenTau.getGiaTienGhe();
+        }
 		pnlsubCT1.addRow(0, taoSubCT1("Họ tên", "", leftStyle, rightStyle, 1));
-		pnlsubCT1.addRow(1, taoSubCT1("Đối tượng", "", leftStyle, rightStyle, 2, gheTrenChuyenTau.getGiaTienGhe(),
+		pnlsubCT1.addRow(1, taoSubCT1("Đối tượng", "", leftStyle, rightStyle, 2, giaTienGhe,
 				lblGiamDoiTuongValue, lblThanhTienValue, gheTrenChuyenTau));
 
 		pnlsubCT1.addRow(2, taoSubCT1("Số giấy tờ", "", leftStyle, rightStyle, 3));
@@ -989,13 +1006,20 @@ public class GioVe extends Application {
 		// Các panel giá trị
 		String lblCTStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 18px;";
 		String lblValueCTStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 30px;";
+        GaTauDao gaTauDao = new GaTauDao();
 
-		VBox pnlsubCT2 = taoSubCT2("Giá vé", +gheTrenChuyenTau.getGiaTienGhe(), lblCTStyle, lblValueCTStyle);
+		VBox pnlsubCT2 = taoSubCT2("Giá vé", giaVe1Value , lblCTStyle, lblValueCTStyle);
 		VBox pnlsubCT3 = taoSubCT2WithLabel("Giảm đối tượng", lblGiamDoiTuongValue, lblCTStyle, lblValueCTStyle);
 		VBox pnlsubCT5 = taoSubCT2WithLabel("Thành tiền", lblThanhTienValue, lblCTStyle, lblValueCTStyle);
 
 		pnlReturn.setUserData("");
-		double giaGheHienTai = gheTrenChuyenTau.getGiaTienGhe();
+        double giaGheHienTai = 0;
+        if(gheTrenChuyenTau.getGheNgoi().isLuuDong()){
+            giaGheHienTai = gheTrenChuyenTau.getChuyenTau().getGiaCuocTrenChuyenTau() * gaTauDao.getCuLiBangTenGa(gaDen) + gheTrenChuyenTau.getGiaTienGhe();
+        }else {
+            giaGheHienTai = gheTrenChuyenTau.getGiaTienGhe();
+
+        }
 		mapTienGhe.put(gheTrenChuyenTau, giaGheHienTai);
 		tongCongThanhTien += gheTrenChuyenTau.getGiaTienGhe();
 
@@ -1154,7 +1178,8 @@ public class GioVe extends Application {
 					}
 					lblTrangThaiApDung.setText("");
 					loadLableTongCongValue(tongCongThanhTien);
-					lblGiamDoiTuongValue.setText(String.format("%.0f", tienGiam));
+                    String lblgdt = tienGiam + "(" +phanTramGiam + "% )";
+					lblGiamDoiTuongValue.setText(lblgdt);
 					lblThanhTienValue.setText(String.format("%.0f", thanhTienMoi));
 
 

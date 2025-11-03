@@ -6,14 +6,18 @@ import fourcore.GiaoDien.*;
 import fourcore.dao.ChuyenTauDAO;
 import fourcore.dao.GheNgoiDAO;
 import fourcore.dao.HanhTrinh_DAO;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.sql.SQLException;
+import java.sql.SQLXML;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -43,6 +47,9 @@ public class BanVeControl {
             VBox gdBanVeShow = gdBanVe.getGDBanVe();
             root.setCenter(gdBanVeShow);
 
+        }
+        public void initGioVe() throws SQLException {
+        gdGiove = new GioVe();
         }
         public void initChonVe() throws SQLException {
             gdChonve = new ChonVe();
@@ -116,11 +123,23 @@ public class BanVeControl {
                     throw new RuntimeException(ex);
                 }
                 listChuyenTau = chuyenTauDAO.listChuyenTau;
+
             ArrayList<ChuyenTau> listInsert = new ArrayList<>();
                 try {
                     listInsert = getListThoaDieuKien();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
+                }
+                if(listInsert.size()==0){
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Thông báo");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Không có chuyến tàu phù hợp!!");
+                    Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+                    alert.initOwner(stage);
+                    alert.initModality(Modality.WINDOW_MODAL);
+                    alert.showAndWait();
+                    return;
                 }
                 try {
                     gdChonve.hienThiDanhSachChuyenTau(listChuyenTau);
@@ -162,6 +181,19 @@ public class BanVeControl {
 
         });
     }
+    public void troLaiGDGioVe(BorderPane root) throws SQLException {
+        GioVe gdGioVe = new GioVe();
+
+        Stage gdGioVeStage = new Stage();
+        gdGioVe.start(gdGioVeStage);
+        VBox gdChinhGioVe = gdGioVe.getGDGioVe();
+            gdXuatHoaDon.getBtnTroLai().setOnMouseClicked(e -> {
+                root.setCenter(gdChinhGioVe);
+            });
+
+
+    }
+
     public void troLaiGDChonVe(BorderPane root){
         if(gdGiove != null && gdChonve != null){
             gdGiove.getGioVeTroLaiBtn().setOnMouseClicked(e -> {
@@ -185,6 +217,7 @@ public class BanVeControl {
         Stage stage = new Stage();
         gdXuatHoaDon.start(stage);
         root.setCenter(gdXuatHoaDon.getNoiDungChinhVe());
+        troLaiGDGioVe(root);
     }
 
 
@@ -223,8 +256,10 @@ public class BanVeControl {
             //FILTER THEO GA DEN + THEO NGAY
         for(ChuyenTau chuyenTau : listChuyenTau){
             listGa = hanhTrinh_DAO.getListGaByMaHanhTrinh(chuyenTau.getHanhTrinh().getMaHanhTrinh());
+
+
                 for(Ga g : listGa){
-                    if(g.getTenGa().equals(gaDen) && chuyenTau.getNgayGioDi().toLocalDate().equals(dateMotChieu)){
+                    if(g.getTenGa().equals(gaDen) && chuyenTau.getNgayGioDi().toLocalDate().equals(dateMotChieu) && checkHanhTrinh(chuyenTau)){
                         listChuyenTauFiltered.add(chuyenTau);
                         System.out.println("Them ghe....");
                     }
@@ -232,6 +267,12 @@ public class BanVeControl {
             }
             System.out.println("size: " + listChuyenTauFiltered.size());
             return listChuyenTauFiltered;
+    }
+    public boolean checkHanhTrinh(ChuyenTau chuyenTau){
+        if(chuyenTau.getHanhTrinh().getTenHanhTrinh().equals("Sài Gòn ↔ Hà Nội")){
+            return true;
+        }
+            return false;
     }
     public ArrayList<ChuyenTau> getListChuyenTauFiltered() {
             return listChuyenTauFiltered;

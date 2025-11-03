@@ -3,6 +3,7 @@ package fourcore.GiaoDien;
 import fourcore.Control.BanVeControl;
 import fourcore.Entity.*;
 import fourcore.dao.ChuyenTauDAO;
+import fourcore.dao.GaTauDao;
 import fourcore.dao.GheNgoiDAO;
 import fourcore.dao.ToaTauDAO;
 import javafx.animation.ScaleTransition;
@@ -26,12 +27,16 @@ import javafx.util.Duration;
 import java.io.*;
 import java.sql.Array;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
 public class ChonVe extends Application {
+    private GaTauDao gaTauDao =  new GaTauDao();
     private  BanVe banVe = new BanVe();
     private BorderPane manHinhChinh;
     private VBox menuList;
@@ -812,6 +817,28 @@ public class ChonVe extends Application {
     }
 
 
+    public LocalDateTime tinhThoiGian(String maHanhTrinh, LocalDateTime ngayGioDi) throws SQLException {
+        String gaDen = "";
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("gaDen.dat"))) {
+            gaDen = ois.readObject().toString();
+            System.out.println("Dữ liệu ga đến đọc được: " + gaDen);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        String maGa = gaTauDao.getMaGaTuTenGa(gaDen);
+        Time gioDen = gaTauDao.getGioDiKeHoach(maHanhTrinh, maGa);
+        int soNgayDiQua = gaTauDao.getSoNgayDiQua(maHanhTrinh, maGa);
+
+        LocalDateTime ngayGioDen = null;
+        if (gioDen != null && ngayGioDi != null) {
+            LocalDateTime baseDate = ngayGioDi.plusDays(soNgayDiQua);
+            LocalTime localTimeDen = gioDen.toLocalTime();
+            ngayGioDen = LocalDateTime.of(baseDate.toLocalDate(), localTimeDen);
+        }
+
+        return ngayGioDen;
+    }
 
 
     public void hienThiDanhSachChuyenTau(ArrayList<ChuyenTau> danhSachChuyenTau) throws SQLException {
@@ -835,7 +862,7 @@ public class ChonVe extends Application {
             StackPane chuyenTauBox = new StackPane();
             ImageView chuyenTauImage = new ImageView(defaultImage);
             chuyenTauBox.getChildren().addAll(chuyenTauImage);
-            String maChuyenTau = c.getTau().getMaTau();
+            String maChuyenTau = c.getTau().getLoaiTau().getTenLoaiTau();
             Label maChuyenTaulbl = new Label (maChuyenTau);
             maChuyenTaulbl.setFont(labelFont);
 //            maChuyenTaulbl.setTranslateX(-100);
@@ -864,7 +891,7 @@ public class ChonVe extends Application {
             Label tgDenLabel = new Label ("TG đến");
             tgDenLabel.setFont(interBold13);
             tgDenLabel.setTranslateX(-10);
-            LocalDateTime tgDenDuLieu = c.getNgayGioDen();
+            LocalDateTime tgDenDuLieu = tinhThoiGian(c.getHanhTrinh().getMaHanhTrinh(), c.getNgayGioDi());
             String tgDenDuLieuToString = tgDenDuLieu.format(formatter);
             Label tgDenDuLieuLbl = new Label(tgDenDuLieuToString);
             tgDenDuLieuLbl.setFont(interRegular13);
@@ -1059,7 +1086,7 @@ public class ChonVe extends Application {
         int cnt=0;
         for (GheTrenChuyenTau gtc : listGheTrenChuyenTau){
             if((gtc.getGheNgoi().getToaTau().getMaToaTau().equals(maToa)) && gtc.getGheNgoi().getToaTau().getLoaiToaTau().getMaLoaiToaTau().equals("LTToa01") ){
-                if(gtc.getTrangThaiGhe().equals("đã bán")){
+                if(gtc.getTrangThaiGhe().equals("Đã bán")){
                     cnt++;
                 }
                 if(cnt==36){
@@ -1067,7 +1094,7 @@ public class ChonVe extends Application {
                 }
             }
             if((gtc.getGheNgoi().getToaTau().getMaToaTau().equals(maToa)) && gtc.getGheNgoi().getToaTau().getLoaiToaTau().getMaLoaiToaTau().equals("LTToa02") ){
-                if(gtc.getTrangThaiGhe().equals("đã bán")){
+                if(gtc.getTrangThaiGhe().equals("Đã bán")){
                     cnt++;
                 }
                 if(cnt==18){
@@ -1205,7 +1232,7 @@ public class ChonVe extends Application {
 
                     final int soGheH = thuTuGhe;
                     GheTrenChuyenTau gtc = gheNgoiDAO.getGheTrenChuyenTau(soGheH,maToaTau,maChuyen);
-                    if(gtc.getTrangThaiGhe().equals("đã bán")){
+                    if(gtc.getTrangThaiGhe().equals("Đã bán")){
                         gheTrongImg.setImage(new Image(getClass().getResource("/img/gheDaDat.png").toExternalForm()));
                     }
                     if(gtc.getGheNgoi().isLuuDong() == true){
@@ -1261,33 +1288,35 @@ public class ChonVe extends Application {
 
                     gheTrongImg.setUserData(gtc);
 
+                    if(!gtc.getGheNgoi().isLuuDong()){
+                        Popup popup = new Popup();
+                        Label popupLabel = new Label();
+                        popupLabel.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-padding: 5; -fx-font-size: 13;");
+                        popup.getContent().add(popupLabel);
 
-                    Popup popup = new Popup();
-                    Label popupLabel = new Label();
-                    popupLabel.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-padding: 5; -fx-font-size: 13;");
-                    popup.getContent().add(popupLabel);
 
+                        ghePane.setOnMouseEntered(e -> {
+                            String content = String.format(
+                                    "Loại: %s\nGiá ghế: %.1f",
+                                    gtc.getGheNgoi().getLoaiGhe().getTenLoaiGhe(),
+                                    gtc.getGiaTienGhe()
 
-                    ghePane.setOnMouseEntered(e -> {
-                        String content = String.format(
-                                "Loại: %s\nGiá ghế: %.1f",
-                                gtc.getGheNgoi().getLoaiGhe().getTenLoaiGhe(),
-                                gtc.getGiaTienGhe()
+                            );
+                            popupLabel.setText(content);
+                            popup.show(gheTrongImg, e.getScreenX() + 10, e.getScreenY() + 10);
+                        });
+                        // Vi tri cua chuot
+                        ghePane.setOnMouseMoved(e -> {
+                            popup.setX(e.getScreenX() + 10);
+                            popup.setY(e.getScreenY() + 10);
+                        });
 
-                        );
-                        popupLabel.setText(content);
-                        popup.show(gheTrongImg, e.getScreenX() + 10, e.getScreenY() + 10);
-                    });
-                    // Vi tri cua chuot
-                    ghePane.setOnMouseMoved(e -> {
-                        popup.setX(e.getScreenX() + 10);
-                        popup.setY(e.getScreenY() + 10);
-                    });
+                        // An khi roi khoi
+                        ghePane.setOnMouseExited(e -> {
+                            popup.hide();
+                        });
+                    }
 
-                    // An khi roi khoi
-                    ghePane.setOnMouseExited(e -> {
-                        popup.hide();
-                    });
 
                     thuTuGhe--;
                 }
@@ -1326,7 +1355,7 @@ public class ChonVe extends Application {
                     }
 
                     danhSachGheGridPane.add(ghePane,col,row);
-                    if(gtc.getTrangThaiGhe().equals("còn trống") && gtc.getGheNgoi().isLuuDong() == true){
+                    if(gtc.getTrangThaiGhe().equals("Còn trống") && gtc.getGheNgoi().isLuuDong() == true){
                         final boolean[] isSelected = {false};
                         ghePane.setOnMouseClicked(event -> {
                             isSelected[0] = !isSelected[0]; // Toggle chọn / hủy chọn
@@ -1352,32 +1381,39 @@ public class ChonVe extends Application {
                     gheTrongImg.setUserData(gtc);
 
 
-                    Popup popup = new Popup();
-                    Label popupLabel = new Label();
-                    popupLabel.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-padding: 5; -fx-font-size: 13;");
-                    popup.getContent().add(popupLabel);
+                    if(gtc.getGheNgoi().isLuuDong()){
+                        Popup popup = new Popup();
+                        Label popupLabel = new Label();
+                        popupLabel.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-padding: 5; -fx-font-size: 13;");
+                        popup.getContent().add(popupLabel);
 
 
-                    ghePane.setOnMouseEntered(e -> {
-                        String content = String.format(
-                                "Loại: %s\nGiá ghế: %.1f",
-                                gtc.getGheNgoi().getLoaiGhe().getTenLoaiGhe(),
-                                gtc.getGiaTienGhe()
+                        ghePane.setOnMouseEntered(e -> {
+                            String content = null;
+                            try {
+                                content = String.format(
+                                        "Loại: %s\nGiá ghế: %.1f",
+                                        gtc.getGheNgoi().getLoaiGhe().getTenLoaiGhe(),
+                                        gtc.getChuyenTau().getGiaCuocTrenChuyenTau() * gaTauDao.getCuLiBangTenGa(gaDen) + gtc.getGiaTienGhe()
 
-                        );
-                        popupLabel.setText(content);
-                        popup.show(gheTrongImg, e.getScreenX() + 10, e.getScreenY() + 10);
-                    });
-                    // Vi tri cua chuot
-                    ghePane.setOnMouseMoved(e -> {
-                        popup.setX(e.getScreenX() + 10);
-                        popup.setY(e.getScreenY() + 10);
-                    });
+                                );
+                            } catch (SQLException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                            popupLabel.setText(content);
+                            popup.show(gheTrongImg, e.getScreenX() + 10, e.getScreenY() + 10);
+                        });
+                        // Vi tri cua chuot
+                        ghePane.setOnMouseMoved(e -> {
+                            popup.setX(e.getScreenX() + 10);
+                            popup.setY(e.getScreenY() + 10);
+                        });
 
-                    // An khi roi khoi
-                    ghePane.setOnMouseExited(e -> {
-                        popup.hide();
-                    });
+                        // An khi roi khoi
+                        ghePane.setOnMouseExited(e -> {
+                            popup.hide();
+                        });
+                    }
 
                     thuTuGhe--;
                 }
@@ -1405,7 +1441,7 @@ public class ChonVe extends Application {
                 GheTrenChuyenTau gtc = gheNgoiDAO.getGheTrenChuyenTau(soGheH, maToaTau, maChuyen);
                 if (gaDen.equals("TP HCM")) {
                     ImageView gheTrongImg = new ImageView(getClass().getResource("/img/giuongConTrong.png").toExternalForm());
-                    if(gtc.getTrangThaiGhe().equals("đã bán")){
+                    if(gtc.getTrangThaiGhe().equals("Đã bán")){
                         gheTrongImg.setImage(new Image(getClass().getResource("/img/giuongHetCho.png").toExternalForm()));
                     }
                     if(gtc.getGheNgoi().isLuuDong() == true){
@@ -1433,7 +1469,7 @@ public class ChonVe extends Application {
                         ghePane.setPadding(new Insets(0, 0, 0, 0));
                     }
 
-                    if(gtc.getTrangThaiGhe().equals("còn trống") && gtc.getGheNgoi().isLuuDong() != true){
+                    if(gtc.getTrangThaiGhe().equals("Còn trống") && gtc.getGheNgoi().isLuuDong() != true){
                         final boolean[] isSelected = {false};
                         ghePane.setOnMouseClicked(event -> {
                             isSelected[0] = !isSelected[0]; // Toggle chọn / hủy chọn
@@ -1490,7 +1526,7 @@ public class ChonVe extends Application {
                     thuTuGhe--; // giảm số giường vì bạn đếm từ 18 về 1
                 } else {
                     ImageView gheTrongImg = new ImageView(getClass().getResource("/img/ghegiuongnamluudong.png").toExternalForm());
-                    if(gtc.getTrangThaiGhe().equals("đã bán")){
+                    if(gtc.getTrangThaiGhe().equals("Đã bán")){
                         gheTrongImg.setImage(new Image(getClass().getResource("/img/giuongHetCho.png").toExternalForm()));
                     }
                     if(!gtc.getGheNgoi().isLuuDong()){
@@ -1519,7 +1555,7 @@ public class ChonVe extends Application {
                         ghePane.setPadding(new Insets(0, 0, 0, 0));
                     }
 
-                    if(gtc.getTrangThaiGhe().equals("còn trống") && gtc.getGheNgoi().isLuuDong() == true){
+                    if(gtc.getTrangThaiGhe().equals("Còn trống") && gtc.getGheNgoi().isLuuDong() == true){
                         final boolean[] isSelected = {false};
                         ghePane.setOnMouseClicked(event -> {
                             isSelected[0] = !isSelected[0]; // Toggle chọn / hủy chọn

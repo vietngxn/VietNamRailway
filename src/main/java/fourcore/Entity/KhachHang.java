@@ -88,7 +88,6 @@ public class KhachHang implements Serializable {
 
 	public KhachHang(String maKhachHang, String hoten, String sdt, String email, String cccd, String passport,
 			String doiTuong) {
-
 		setMaKhachHang(maKhachHang);
 		setHoten(hoten);
 		setSdt(sdt);

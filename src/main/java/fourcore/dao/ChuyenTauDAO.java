@@ -33,7 +33,7 @@ public class ChuyenTauDAO {
     }
 
     public ArrayList<ChuyenTau> getListChuyenTau() throws SQLException {
-        String query = "select * from ChuyenTau";
+        String query = "select * from ChuyenTau where isRemove = 'false'";
         ResultSet rs = myStmt.executeQuery(query);
         listHanhTrinh = hanhTrinh_DAO.getList();
         while (rs.next()) {
