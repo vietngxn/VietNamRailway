@@ -1,6 +1,7 @@
 package fourcore.util;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -103,7 +104,7 @@ public class ExcelExporter {
                 workbook.write(fos);
             }
             
-            showSuccessAlert("Xuất file thành công!", "File đã được lưu tại:\n" + filePath);
+//            showSuccessAlert("Xuất file thành công!", "File đã được lưu tại:\n" + filePath);
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -204,7 +205,7 @@ public class ExcelExporter {
                 workbook.write(fos);
             }
             
-            showSuccessAlert("Xuất file thành công!", "File đã được lưu tại:\n" + filePath);
+//            showSuccessAlert("Xuất file thành công!", "File đã được lưu tại:\n" + filePath);
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -271,28 +272,78 @@ public class ExcelExporter {
             }
             
             // Tạo tổng doanh thu
-//            int totalRowNum = rowNum + 1;
-//            XSSFRow totalRow = sheet.createRow(totalRowNum);
-//            
-//            XSSFCell totalLabelCell = totalRow.createCell(0);
-//            totalLabelCell.setCellValue("Tổng Doanh Thu:");
-//            totalLabelCell.setCellStyle(totalStyle);
-//            
-//            XSSFCell totalValueCell = totalRow.createCell(1);
-//            totalValueCell.setCellValue(tongDoanhThu);
-//            totalValueCell.setCellStyle(totalStyle);
+            int totalRowNum = rowNum + 1;
+            XSSFRow totalRow = sheet.createRow(totalRowNum);
+            
+            XSSFCell totalLabelCell = totalRow.createCell(0);
+            totalLabelCell.setCellValue("Tổng Doanh Thu:");
+            totalLabelCell.setCellStyle(totalStyle);
+            
+            XSSFCell totalValueCell = totalRow.createCell(1);
+            totalValueCell.setCellValue(tongDoanhThu);
+            totalValueCell.setCellStyle(totalStyle);
             
             // Ghi file
             try (FileOutputStream fos = new FileOutputStream(filePath)) {
                 workbook.write(fos);
             }
             
-            showSuccessAlert("Xuất file thành công!", "File đã được lưu tại:\n" + filePath);
+//            showSuccessAlert("Xuất file thành công!", "File đã được lưu tại:\n" + filePath);
             
         } catch (Exception e) {
             e.printStackTrace();
             showErrorAlert("Lỗi", "Không thể xuất file: " + e.getMessage());
         }
+    }
+    
+    
+    public static void exporthongKeDoanhThuPieChart(Map<String,Double> map,int nam ,double tongDoanhThu,String filepath ) throws IOException
+    {
+    	try(XSSFWorkbook work = new XSSFWorkbook())
+    	{
+    		XSSFSheet sheet = work.createSheet();
+    		
+    		CellStyle header = createHeaderStyle(work);
+    		CellStyle  title = createTitleStyle(work);
+    		CellStyle  data = createDataStyle(work);
+    		
+    		XSSFRow titlerow = sheet.createRow(0);
+    		XSSFCell titlecell = titlerow.createCell(0);
+    		titlecell.setCellValue("Thống Kê doanh thu theo piechart "+ nam);
+    		titlecell.setCellStyle(title);
+    		
+    		 XSSFRow timeRow = sheet.createRow(1);
+    		 XSSFCell timeCell = timeRow.createCell(0);
+    	     LocalDateTime now = LocalDateTime.now();
+    	     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+    	     timeCell.setCellValue("Thời gian xuất: " + now.format(formatter));
+    		
+    	     int headerRowNum = 3;
+    	        XSSFRow headerRow = sheet.createRow(headerRowNum);
+    	        
+    	        String[] headers = {"Loại Doanh Thu", "Giá trị (đ)", "Tỷ lệ (%)"};
+    	        for (int i = 0; i < headers.length; i++) {
+    	            XSSFCell cell = headerRow.createCell(i);
+    	            cell.setCellValue(headers[i]);
+    	            cell.setCellStyle(header);
+    	        }
+    	        
+    	       
+    	        sheet.setColumnWidth(0, 5000);
+    	        sheet.setColumnWidth(1, 6000);
+    	        sheet.setColumnWidth(2, 4000);
+    	        
+    	        int rowNum = 3;
+    	        
+    	        double totalValue = 0;
+    	        for (Map.Entry<String, Double> entry : map.entrySet()) {
+    	            totalValue += entry.getValue();
+    	        }
+    	        
+    	        
+    		
+    		
+    	}
     }
     
     private static CellStyle createHeaderStyle(XSSFWorkbook workbook) {

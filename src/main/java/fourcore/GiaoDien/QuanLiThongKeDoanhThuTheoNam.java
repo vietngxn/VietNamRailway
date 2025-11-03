@@ -1,47 +1,36 @@
 package fourcore.GiaoDien;
 
+import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 import fourcore.dao.ThongKeDAO;
 import fourcore.util.ExcelExporter;
-import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.ScaleTransition;
-import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArrayBase;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -53,13 +42,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 
 
 public class QuanLiThongKeDoanhThuTheoNam extends Application {
@@ -165,6 +151,7 @@ public class QuanLiThongKeDoanhThuTheoNam extends Application {
 		private ThongKeDAO thongkedao;
 		private Map<Integer, Double> map;
 		private boolean namchon = false;
+    NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
 		private double tongdoanhthu = 0;
 	@Override
 	public void start(Stage primaryStage) {
@@ -642,7 +629,7 @@ try {
 			
 			create_btnlayout();
 			primaryStage.setFullScreen(true);
-			primaryStage.show();
+//			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -906,9 +893,13 @@ try {
 		    }
 		    else {
 		        table_desc.getChildren().clear();
-		        create_piechart_nam();
-		        
-		    }
+                try {
+                    create_piechart_nam();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
 		});
 		
 		date.setOnAction(e -> {
@@ -985,11 +976,16 @@ try {
         		
 //        		noiDungChinh.getChildren().remove(layout_total);
         	}
-        	else {
+        	else if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("piechart")) {
         		table_desc.getChildren().clear();
         		btn_xuatThongKe.setDisable(false);
-        		create_piechart_nam();
-        		create_layout_total();
+                try {
+                    create_piechart_nam();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+                create_layout_total();
         	}
         });
 		
@@ -1039,8 +1035,8 @@ try {
 		PieChart pieChart = new PieChart();
 	    pieChart.setTitle("Tỷ lệ sản phẩm bán ra");
 
-	    pieChart.getData().add(new PieChart.Data("Doanh Thu", 90));
-	    pieChart.getData().add(new PieChart.Data("Thuế VAT", 10));
+	    pieChart.getData().add(new PieChart.Data("Doanh Thu", 92));
+	    pieChart.getData().add(new PieChart.Data("Thuế VAT", 8));
 	    
 	    
 	    table_desc.getChildren().add(pieChart);
@@ -1052,7 +1048,7 @@ try {
 		CategoryAxis ca = new CategoryAxis();
 		ca.setLabel("Năm");
 		NumberAxis na = new NumberAxis();
-		na.setLabel("Doanh thu(triệu)");
+		na.setLabel("Doanh thu(Đồng)");
 		
 		BarChart<String, Number> barchart = new BarChart<>(ca, na);
 		barchart.setTitle("Thống Kê Doanh Thu Theo Năm");
@@ -1076,18 +1072,43 @@ try {
 		table_desc.getChildren().clear();
 		table_desc.getChildren().add(barchart);
 	}
-	
-	public void create_piechart_nam()
-	{
-		PieChart pieChart = new PieChart();
-	    pieChart.setTitle("Tỷ lệ doanh thu bán ra");
 
-	    pieChart.getData().add(new PieChart.Data("Doanh Thu", 90));
-	    pieChart.getData().add(new PieChart.Data("Thuế VAT", 10));
-	    
-	    
-	    table_desc.getChildren().add(pieChart);
-	}
+    public void create_piechart_nam() throws SQLException {
+        NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
+
+
+        tongdoanhthu = 0;
+
+        LocalDate data1 = date.getValue();
+        int nam = data1.getYear();
+        map = thongkedao.getDoanhThuTheoThang(nam);
+        for (Double value : map.values()) {
+            tongdoanhthu += value;
+        }
+
+        PieChart pieChart = new PieChart();
+        pieChart.setTitle("Tỷ lệ doanh thu bán ra");
+        pieChart.setLabelsVisible(true);
+        pieChart.setLegendVisible(true);
+
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+                new PieChart.Data("Doanh Thu: " + nf.format(tongdoanhthu * 0.92), 92),
+                new PieChart.Data("Thuế VAT: " + nf.format(tongdoanhthu * 0.08), 8)
+        );
+        pieChart.setData(pieChartData);
+
+
+        for (PieChart.Data data : pieChart.getData()) {
+            String labelText = String.format("%s (%.1f%%)",
+                    data.getName(),
+                    (data.getPieValue() / 100) * 100
+            );
+            data.setName(labelText);
+        }
+
+        table_desc.getChildren().clear();
+        table_desc.getChildren().add(pieChart);
+    }
 	
 	public void create_barchart_chuyentau()
 	{
@@ -1277,9 +1298,8 @@ try {
 		lbl_doanhThu = new Label("Tổng Doanh Thu: ");
 		lbl_doanhThu.setTranslateY(-10);
 		lbl_doanhThu.setStyle(style+"-fx-font-family: 'Work Sans';-fx-font-size : 20px;");
-		
-		lbl_tongTien = new Label(""+tongdoanhthu);
-		lbl_tongTien.setTranslateX(15);
+
+        lbl_tongTien = new Label(""+nf.format(tongdoanhthu));		lbl_tongTien.setTranslateX(15);
 		lbl_tongTien.setTranslateY(-5);
 		
 		
@@ -1323,40 +1343,75 @@ try {
 		
 		
 		btn_xuatThongKe.setOnMouseClicked(e -> {
-		    FileChooser fileChooser = new FileChooser();
-		    fileChooser.setTitle("Lưu file Thống Kê Doanh Thu");
-		    fileChooser.getExtensionFilters().add(
-		        new FileChooser.ExtensionFilter("Excel Files (*.xlsx)", "*.xlsx")
-		    );
-		    
-		    // Đặt tên file mặc định
-		    LocalDateTime now = LocalDateTime.now();
-		    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss");
-		    if(date.getValue() != null) {
-		        int nam = date.getValue().getYear();
-		        fileChooser.setInitialFileName("ThongKeDoanhThu_" + nam + "_" + now.format(formatter) + ".xlsx");
-		    } else {
-		        fileChooser.setInitialFileName("ThongKeDoanhThu_" + now.format(formatter) + ".xlsx");
-		    }
-		    
-		    Stage stage = (Stage) noiDungChinh.getScene().getWindow();
-		    File file = fileChooser.showSaveDialog(stage);
-		    
-		    if (file != null) {
+		    try {
+		        // Tạo folder nếu chưa có
+		        String folderPath = "ThongKeExport";
+		        File folder = new File(folderPath);
+		        if (!folder.exists()) {
+		            folder.mkdirs();
+		        }
+		        
+		        // Tạo tên file với thời gian
+		        LocalDateTime now = LocalDateTime.now();
+		        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss");
+		        
 		        if(date.getValue() != null) {
 		            int nam = date.getValue().getYear();
-		            ExcelExporter.exportThongKeDoanhThuTheoNam(map, nam, tongdoanhthu, file.getAbsolutePath());
+		            String fileName = "ThongKeDoanhThu_" + nam + "_" + now.format(formatter) + ".xlsx";
+		            String filePath = folderPath + "/" + fileName;
+		            
+		            // Export trực tiếp
+		            ExcelExporter.exportThongKeDoanhThuTheoNam(map, nam, tongdoanhthu, filePath);
+		            
+		            // Mở file với WPS
+                    File pdfFile = new File(filePath);
+                    if (pdfFile.exists()) {
+                        if (Desktop.isDesktopSupported()) {
+                            Desktop.getDesktop().open(pdfFile); // mở file PDF bằng ứng dụng mặc định
+                        } else {
+                            System.out.println("Desktop không được hỗ trợ. Vui lòng mở file thủ công: " + pdfFile.getAbsolutePath());
+                        }
+                    } else {
+                        System.out.println("File PDF không tồn tại: " + filePath);
+                    }
+		            
+		            // Thông báo thành công
+		            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		            alert.setTitle("Thành công");
+		            alert.setHeaderText(null);
+		            alert.setContentText("Xuất file thành công!\n" + filePath);
+		            alert.showAndWait();
 		        } else {
 		            Alert alert = new Alert(Alert.AlertType.WARNING);
 		            alert.setTitle("Cảnh báo");
 		            alert.setContentText("Vui lòng chọn năm trước khi xuất file!");
 		            alert.showAndWait();
 		        }
+		        
+		    } catch (Exception ex) {
+		        Alert alert = new Alert(Alert.AlertType.ERROR);
+		        alert.setTitle("Lỗi");
+		        alert.setHeaderText(null);
+		        alert.setContentText("Lỗi khi xuất file: " + ex.getMessage());
+		        alert.showAndWait();
 		    }
 		});
 		
 		noiDungChinh.getChildren().add(btn_layout);
 	}
+	
+	private void openPDFWithWPS(String filePath) throws IOException {
+	    String wpsPath = "C:\\Users\\Admin\\AppData\\Local\\Kingsoft\\WPS Office\\12.2.0.23131\\office6\\wps.exe";
+	    
+	    File wpsFile = new File(wpsPath);
+	    if (!wpsFile.exists()) {
+	        throw new IOException("WPS Office không tìm thấy");
+	    }
+	    
+	    ProcessBuilder pb = new ProcessBuilder(wpsPath, filePath);
+	    pb.start();
+	}
+	
 	public VBox getQuanLiThongKe(){
         return this.noiDungChinh;
     }

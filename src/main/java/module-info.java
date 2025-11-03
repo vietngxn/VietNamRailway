@@ -21,6 +21,8 @@ module VietNamRailwayInterface {
     exports fourcore.GiaoDien;
     opens fourcore.Entity to javafx.base;
     opens fourcore.GiaoDien to javafx.fxml;
+    exports fourcore.Control;
+    opens fourcore.Control to javafx.fxml;
 }
 
 

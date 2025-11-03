@@ -149,6 +149,11 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 	private TextField txtTrangThai;
 	private Label lblTrangThai;
 	private DateTimeFormatter formatter;
+
+    public VBox getLayout(){
+        return layoutCapNhatCTKM;
+    }
+
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		khdao = new KhachHangDAO();

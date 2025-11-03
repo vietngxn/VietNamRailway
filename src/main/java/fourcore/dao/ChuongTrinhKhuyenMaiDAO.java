@@ -71,7 +71,7 @@ public class ChuongTrinhKhuyenMaiDAO {
     		    + Timestamp.valueOf(km.getNgayBatDau()) + "', '" 
     		    + Timestamp.valueOf(km.getNgayKetThuc()) + "', N'" 
     		    + km.getTrangThaiKhuyenMai() + "', N'" 
-    		    + km.getDieuKienApDung() + "')";
+    		    + km.getDieuKienApDung() + "'," + "'false')";
     	int kq = myStmt.executeUpdate(q);
     	return kq > 0;
     }

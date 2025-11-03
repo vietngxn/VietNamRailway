@@ -126,7 +126,15 @@ public class QuanLyCTKM extends Application {
 	private Button btn_khoiPhuc1;
 	private Stage window;
 	private Button btn_timkiem;
-	
+
+
+    public Button getBtn_themCTKM(){
+        return btn_themCTKM;
+    }
+    public Button getBtn_capnhat() {
+        return btn_capnhat;
+    }
+
     @Override
 	public void start(Stage primaryStage) {
 		try {

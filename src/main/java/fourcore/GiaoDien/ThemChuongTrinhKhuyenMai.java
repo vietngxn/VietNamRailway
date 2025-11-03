@@ -774,8 +774,11 @@ public class ThemChuongTrinhKhuyenMai extends Application {
 		
 		window.setScene(sceneThemCTKM);
 		window.setFullScreen(true);
-		window.show();
+//		window.show();
 	}
+    public VBox getLayoutThemCTKM() {
+        return layoutThemCTKM;
+    }
 	public void create_themchuongtrinhkm_layout() {
 		
 		//label đầu

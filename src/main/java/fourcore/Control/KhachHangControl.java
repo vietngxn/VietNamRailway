@@ -28,7 +28,6 @@ public class KhachHangControl {
         ThemKhachHang themKhachHang = new ThemKhachHang();
         themKhachHang.start(themKhachHangStage);
         gdQuanLyKhachHang.getThemKH_Button().setOnMouseClicked(e ->{
-
             root.setCenter(themKhachHang.getThemKHLayout());
         });
     }

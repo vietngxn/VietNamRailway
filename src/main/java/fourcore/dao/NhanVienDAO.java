@@ -59,6 +59,39 @@ public class NhanVienDAO {
 
 		return null;
 	}
+    public NhanVien getNhanVienByMa1(String manv) throws SQLException {
+        String q = "SELECT nv.maNhanVien, nv.hoTen, nv.maChucVu, nv.ngaySinh, nv.diaChi, nv.email, " +
+                "nv.sdt, nv.ngayVaoLam, nv.tinhTrangLamViec, nv.gioiTinh, nv.cccd, nv.isRemove, cv.tenChucVu " +
+                "FROM NhanVien nv JOIN ChucVu cv ON nv.maChucVu = cv.maChucVu " +
+                "WHERE nv.maNhanVien = '" + manv + "'";
+
+        Statement st = databaseConnector.connect();
+        ResultSet rs = st.executeQuery(q);
+
+        while (rs.next()) {
+            String maNhanVien = rs.getString(1);
+            String hoTen = rs.getString(2);
+            String maChucVu = rs.getString(3);
+            LocalDate ngaySinh = rs.getDate(4).toLocalDate();
+            String diaChi = rs.getString(5);
+            String email = rs.getString(6);
+            String sdt = rs.getString(7);
+            LocalDate ngayVaoLam = rs.getDate(8).toLocalDate();
+            String tinhTrang = rs.getString(9);
+            String gioiTinh = rs.getString(10);
+            String cccd = rs.getString(11);
+            int isRemove = rs.getInt(12);
+            String tenChucVu = rs.getString(13);
+
+            ChucVu cv = new ChucVu(maChucVu, tenChucVu);
+
+            // Gọi constructor mới có đủ tham số
+            NhanVien nv = new NhanVien(maNhanVien, hoTen, cv, ngaySinh, diaChi, email, sdt,ngayVaoLam, tinhTrang, gioiTinh, cccd, isRemove);
+            return nv;
+        }
+
+        return null;
+    }
 	
 	public NhanVien getNhanVienByCCCD(String cccd) throws SQLException {
 	    String q = "SELECT * FROM NhanVien WHERE cccd = '" + cccd + "'";

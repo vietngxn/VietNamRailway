@@ -3,6 +3,7 @@ package fourcore.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -19,24 +20,48 @@ public class HoaDonDAO {
 	public HoaDonDAO() throws SQLException {
 	}
 
-	public ArrayList<HoaDon> getListHoaDon() throws SQLException {
-		String q = "SELECT hd.maHoaDon, kh.hoTen , kh.sdt , hd.ngayThanhToan , hd.tongTien\r\n"
-				+ "				FROM [dbo].[HoaDon] hd, [dbo].[ChiTietHoaDon] chd , [dbo].[Ve] ve , [dbo].[KhachHang] kh\r\n"
-				+ "				WHERE hd.MaHoaDon = chd.MaHoaDon \r\n" + "				and\r\n"
-				+ "				chd.maVeTau = ve.maVeTau\r\n" + "				and\r\n"
-				+ "				ve.maKhachHang = kh.maKhachHang\r\n"
-				+ "				Group by hd.maHoaDon, kh.hoTen , kh.sdt , hd.ngayThanhToan , hd.tongTien";
-		ResultSet rs = st.executeQuery(q);
-		while (rs.next()) {
-			String mahd = rs.getString(1);
-			LocalDateTime ngaythanhtoan = rs.getTimestamp("ngayThanhToan").toLocalDateTime();
-			double TongTien = rs.getDouble(5);
-			HoaDon hd = new HoaDon(mahd, null, null, mahd, mahd, mahd, mahd, ngaythanhtoan, TongTien);
-			listHoaDon.add(hd);
-		}
+    public ArrayList<HoaDon> getListHoaDon() throws SQLException {
+        ArrayList<HoaDon> listHoaDon = new ArrayList<>();
+        String q = """
+	        SELECT maHoaDon, maLoaiHoaDon, maNhanVien, tenKhachHangThanhToan, 
+	               emailKhachHangThanhToan, cccdKhachHangThanhToan, 
+	               sdtKhachHangThanhToan, ngayThanhToan, tongTien, 
+	               diaChiKhachHangThanhToan
+	        FROM HoaDon
+	    """;
 
-		return listHoaDon;
-	}
+
+        ResultSet rs = st.executeQuery(q);
+
+        while (rs.next()) {
+            String maHoaDon = rs.getString(1);
+            String maLoaiHoaDon = rs.getString(2);
+            String maNhanVien = rs.getString(3);
+            String tenKH = rs.getString(4);
+            String emailKH = rs.getString(5);
+            String cccd = rs.getString(6);
+            String sdt = rs.getString(7);
+            // phòng trường hợp timestamp null
+            Timestamp ts = rs.getTimestamp(8);
+            LocalDateTime ngayThanhToan = ts != null ? ts.toLocalDateTime() : null;
+            double tongTien = rs.getDouble(9);
+            // int isRemove = rs.getInt(10); // nếu không dùng trong model thì bỏ qua
+            String diaChi = rs.getString(10);
+
+            // Tạo object hỗ trợ theo id (giả sử có constructor nhận id)
+            LoaiHoaDon loai = new LoaiHoaDon(maLoaiHoaDon);   // hoặc null nếu không cần
+            NhanVien nv = new NhanVien(maNhanVien);           // hoặc null nếu không cần
+
+            // Tạo HoaDon theo đúng thứ tự fields của class daddy
+            HoaDon hd = new HoaDon(
+                    maHoaDon,loai,nv,tenKH,emailKH,cccd,sdt,ngayThanhToan,tongTien
+            );
+
+            listHoaDon.add(hd);
+        }
+
+        return listHoaDon;
+    }
     public HoaDon getHoaDonByMaHoaDon(String maHoaDon) throws SQLException {
             String query = "  select * from HoaDon \n" +
                     "  where maHoaDon = '"+maHoaDon+"'";

@@ -22,26 +22,26 @@ public class ThongKeDAO {
     public void goiDAO(){
         System.out.println("Ve dao");
     }
-	public Map<Tau, Integer> getTauVaSoLanDi() throws SQLException {
-	    Map<Tau, Integer> list = new LinkedHashMap<>();
-	    String q = "SELECT \r\n"
-	    		+ "	               t.maTau,  \r\n"
-	    		+ "				   lt.tenLoaiTau, \r\n"
-	    		+ "	               COUNT(v.maVeTau) AS SoVeBan \r\n"
-	    		+ "	               FROM Ve v, ChuyenTau ct, Tau t , LoaiTau lt\r\n"
-	    		+ "	               WHERE v.maChuyenTau = ct.maChuyenTau \r\n"
-	    		+ "	               AND ct.maTau = t.maTau \r\n"
-	    		+ "				   and t.maLoaiTau = lt.maLoaiTau\r\n"
-	    		+ "	               GROUP BY t.maTau , lt.tenLoaiTau\r\n"
-	    		+ "	               ORDER BY SoVeBan DESC;";
-	    ResultSet rs = st.executeQuery(q);
-	    while (rs.next()) {
-	        Tau tau = new Tau(rs.getString(1), rs.getString(2), null);
-	        int soLanDi = rs.getInt("SoVeBan");
-	        list.put(tau, soLanDi);
-	    }
-	    return list;
-	}
+    public Map<Tau, Integer> getTauVaSoLanDi() throws SQLException {
+        Map<Tau, Integer> list = new LinkedHashMap<>();
+        String q = "SELECT \r\n"
+                + "	    			               ct.maChuyenTau,  \r\n"
+                + "	    						   lt.tenLoaiTau, \r\n"
+                + "	    		               COUNT(v.maVeTau) AS SoVeBan \r\n"
+                + "	    			               FROM Ve v, ChuyenTau ct, Tau t , LoaiTau lt\r\n"
+                + "	    			               WHERE v.maChuyenTau = ct.maChuyenTau \r\n"
+                + "	    		              AND ct.maTau = t.maTau \r\n"
+                + "	    					   and t.maLoaiTau = lt.maLoaiTau\r\n"
+                + "	    		               GROUP BY ct.maChuyenTau, lt.tenLoaiTau\r\n"
+                + "	    			               ORDER BY SoVeBan DESC;";
+        ResultSet rs = st.executeQuery(q);
+        while (rs.next()) {
+            Tau tau = new Tau(rs.getString(1), rs.getString(2), null);
+            int soLanDi = rs.getInt("SoVeBan");
+            list.put(tau, soLanDi);
+        }
+        return list;
+    }
 	
 	
 	
