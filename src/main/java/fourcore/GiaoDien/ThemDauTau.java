@@ -38,6 +38,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Node;
@@ -800,6 +801,14 @@ public VBox creat_themDauTau_layout() throws SQLException, IOException {
 	public boolean xuLyEventCu() {
 	    Tau tau = table.getSelectionModel().getSelectedItem();
 	    if (tau == null) {
+	    	Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("Lỗi");
+			alert.setHeaderText(null);
+			alert.setContentText("Vui lòng chọn đầu tàu");
+			 Stage stage = (Stage) table.getScene().getWindow();
+			alert.initOwner(stage);
+			alert.initModality(Modality.WINDOW_MODAL);
+			alert.showAndWait();
 	        System.out.println("vui long chon dau tau");
 	        return false;
 	    } else {

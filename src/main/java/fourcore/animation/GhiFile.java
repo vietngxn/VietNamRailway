@@ -34,7 +34,6 @@ public class GhiFile {
 	        int index = 0;
 	        while ((line = reader.readLine()) != null) {
 	            if (index == dongXoa) {
-	                lines.add(""); 
 	                daXoa = true;
 	            } else {
 	                lines.add(line);

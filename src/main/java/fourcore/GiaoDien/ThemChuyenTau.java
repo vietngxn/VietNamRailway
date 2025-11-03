@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Node;
@@ -790,7 +792,17 @@ public VBox creat_themchuyentau_layout() throws SQLException {
 		
 		ngayKhoiHanh.valueProperty().addListener((obs, oldDate, newDate) -> {
 		    if (newDate != null) {
-		        
+		        if(newDate.isBefore(LocalDate.now())) {
+		        	Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Lỗi");
+					alert.setHeaderText(null);
+					alert.setContentText("Ngày khởi hành không được trước ngày hiện tại");
+					 Stage stage = (Stage) ngayKhoiHanh.getScene().getWindow();
+					alert.initOwner(stage);
+					alert.initModality(Modality.WINDOW_MODAL);
+					alert.showAndWait();
+		        }
+		    	
 		        List<String> listMaHanhTrinhTheoNgay = chuyentaudao.getListMaHanhTrinhTheoNgay(newDate);
 
 		        ArrayList<HanhTrinh> listHanhTrinh = hanhtrinhdao.getList();
@@ -802,7 +814,17 @@ public VBox creat_themchuyentau_layout() throws SQLException {
 		                listHanhTrinh.remove(i);
 		            }
 		        }
-
+		        
+		        if(listHanhTrinh.size() == 0) {
+		        	Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Lỗi");
+					alert.setHeaderText(null);
+					alert.setContentText("Ngày đang chọn hiện không còn hành trình");
+					Stage stage = (Stage) ((Node) ((EventObject) obs).getSource()).getScene().getWindow();
+					alert.initOwner(stage);
+					alert.initModality(Modality.WINDOW_MODAL);
+					alert.showAndWait();
+		        }
 		        ObservableList<HanhTrinh> dataNew = themSpacer(listHanhTrinh);
 		       
 		        table.setItems(dataNew);
@@ -899,11 +921,27 @@ public VBox creat_themchuyentau_layout() throws SQLException {
 	public boolean xuLyEventCu() {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         if(txtNgayKhoiHanh.getText().isEmpty()) {
+        	Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("Lỗi");
+			alert.setHeaderText(null);
+			alert.setContentText("Vui lòng chọn ngày cần thêm chuyến");
+			 Stage stage = (Stage) txtNgayKhoiHanh.getScene().getWindow();
+			alert.initOwner(stage);
+			alert.initModality(Modality.WINDOW_MODAL);
+			alert.showAndWait();
             System.out.println("vui lòng chọn ngày cần thêm chuyến");
             return false; 
         }
         HanhTrinh hanhTrinh = table.getSelectionModel().getSelectedItem();
         if(hanhTrinh == null) {
+        	Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("Lỗi");
+			alert.setHeaderText(null);
+			alert.setContentText("Vui lòng chọn hành trình cho chuyến tàu");
+			 Stage stage = (Stage) txtNgayKhoiHanh.getScene().getWindow();
+			alert.initOwner(stage);
+			alert.initModality(Modality.WINDOW_MODAL);
+			alert.showAndWait();
             System.out.println("vui lòng chọn hành trình cho chuyến tàu");
             return false; 
         }
@@ -914,9 +952,17 @@ public VBox creat_themchuyentau_layout() throws SQLException {
         mapTmp.put("ngayDenDuKien", ngayDenDuKienLast.format(formatter));
         mapTmp.put("gioKhoiHanh", listHanhTrinhGa.get(0).getGioDiKeHoach().toString());
         mapTmp.put("gioDenDuKien", listHanhTrinhGa.getLast().getGioDiKeHoach().toString());
+        String maChuyenTauLast = chuyentaudao.getMaChuyenTauCuoiCung();
+		
+       
+		
         String tenLoaiTau = null;
-        if(hanhTrinh.getMaHanhTrinh().equalsIgnoreCase("HT001")) tenLoaiTau = "SE1";
-        else if(hanhTrinh.getMaHanhTrinh().equalsIgnoreCase("HT009")) tenLoaiTau = "SE9";
+        String chuTenLoaiTau = "SE";
+        
+        String soLoaiTau = hanhTrinh.getMaHanhTrinh().replaceAll("\\D", "");
+        int soLoaiTauNew = Integer.parseInt(soLoaiTau);
+        String tenLoaiTauLast = chuTenLoaiTau + String.format("%02d", soLoaiTauNew);
+ 
         mapTmp.put("tenLoaiTau", tenLoaiTau);
         Gson gson = new Gson();
         String json = gson.toJson(mapTmp);
