@@ -2,6 +2,7 @@ package fourcore.GiaoDien;
 
 import fourcore.Control.*;
 import fourcore.Entity.NhanVien;
+import fourcore.animation.GhiFile;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -27,12 +28,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 import fourcore.Entity.LichSuBanVe;
@@ -71,7 +76,8 @@ public class TrangChu extends Application {
 	private HBox xemLichSuVeBox;
 	VBox noiDungWrapper = new VBox(10);
 	BanVeControl banVeControl = new BanVeControl();
-
+	GhiFile ghiFile = new GhiFile();
+	private File fileTmp;
 	public TrangChu() throws SQLException {
 	}
 
@@ -1049,6 +1055,16 @@ public class TrangChu extends Application {
                 }
             });
 			quanLiChuyenTauBox.setOnMouseClicked(event -> {
+				fileTmp = new File("src/main/resources/tmp_ChuyenTau.txt");
+				List<String> allLine;
+				try {
+					allLine = Files.readAllLines(Paths.get("src/main/resources/tmp_ChuyenTau.txt"));
+					for(int i = allLine.size()-1; i >= 0; i--) ghiFile.xoaTrangDong(fileTmp, i);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
                 ChuyenTauControl chuyenTauControl = null;
                 try {
                     chuyenTauControl = new ChuyenTauControl();
@@ -1077,6 +1093,9 @@ public class TrangChu extends Application {
 			root.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 			primaryStage.setFullScreen(true);
 			primaryStage.show();
+			fileTmp = new File("src/main/resources/tmp_ChuyenTau.txt");
+			List<String> allLine = Files.readAllLines(Paths.get("src/main/resources/tmp_ChuyenTau.txt"));
+			for(int i = allLine.size()-1; i >= 0; i--) ghiFile.xoaTrangDong(fileTmp, i);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

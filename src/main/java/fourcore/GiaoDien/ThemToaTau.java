@@ -930,7 +930,7 @@ public VBox creat_themtoatau_layout() throws SQLException, IOException {
 	        System.out.println("Không có toa nào hợp lệ");
 	        return false;
 	    } else {
-	        sb.setLength(sb.length() - 1); // xóa dấu ',' cuối
+	        sb.setLength(sb.length() - 1); 
 	    }
 
 	    String dataLine = "[" + sb.toString() + "]";

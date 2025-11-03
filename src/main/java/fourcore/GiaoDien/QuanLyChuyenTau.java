@@ -6,14 +6,18 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import fourcore.Entity.KhuyenMai;
+import fourcore.Entity.Tau;
 import fourcore.dao.ChuongTrinhKhuyenMaiDAO;
+import fourcore.dao.ChuyenTauDAO;
 import fourcore.dao.QuanLiChuyenTauDAO;
+import fourcore.dao.Tau_DAO;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -117,6 +121,7 @@ public class QuanLyChuyenTau extends Application {
     private ImageView settingIcon;
     private ImageView moTaDoanhThuIcon;
     private HBox xemLichSuVeBox;
+    private Tau_DAO taudao = null; 
     ArrayList listChuyenTau;
     @Override
     public void start(Stage primaryStage) {
@@ -127,7 +132,7 @@ public class QuanLyChuyenTau extends Application {
             QuanLiChuyenTauDAO qlCTDao = new QuanLiChuyenTauDAO();
             listChuyenTau = qlCTDao.getListThongTinChuyenTau();
 //---------------------------------------------------------------------------------------------------
-
+            taudao = new Tau_DAO();
 
 
 
@@ -965,7 +970,8 @@ public class QuanLyChuyenTau extends Application {
         noiDungChinh.getChildren().add(title_layout);
     }
 
-    public void create_table_layout() {
+    public void create_table_layout() throws SQLException {
+    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
         table_layout = new VBox();
         table_layout.setPadding(new Insets(10));
         table_layout.setTranslateX(10);
@@ -1025,13 +1031,14 @@ public class QuanLyChuyenTau extends Application {
             Map<String, Object> chuyenTauInfo = (Map<String, Object>) listChuyenTau.get(i);
             String maChuyen = (String) chuyenTauInfo.get("maChuyen");
             String dauTau = (String) chuyenTauInfo.get("dauTau");
+            Tau tau = taudao.getTauByMaTau(dauTau);
             int soLuongToa = (int) chuyenTauInfo.get("soLuongToa");
             int soLuongVeTrong = (int) chuyenTauInfo.get("soLuongVeTrong");
             LocalDateTime thoiGianKhoiHanh = (LocalDateTime) chuyenTauInfo.get("thoiGianKhoiHanh");
             String gaDi = (String) chuyenTauInfo.get("gaDi");
             String gaDen = (String) chuyenTauInfo.get("gaDen");
-            create_layout_dong(maChuyen, dauTau,soLuongToa,soLuongVeTrong,thoiGianKhoiHanh.toLocalDate(),gaDi,gaDen);
-
+            create_layout_dong(maChuyen, tau.getLoaiTau().getTenLoaiTau(),soLuongToa,soLuongVeTrong, thoiGianKhoiHanh.format(formatter),gaDi,gaDen);
+ 
         }
 
 
@@ -1136,7 +1143,7 @@ public class QuanLyChuyenTau extends Application {
 
     }
 
-    public void create_layout_dong(String maChuyenTau, String dauTau, int soLuongToa, int veTrong, LocalDate thoiGianKhoiHanh, String gaDi, String gaDen) {
+    public void create_layout_dong(String maChuyenTau, String dauTau, int soLuongToa, int veTrong, String thoiGianKhoiHanh, String gaDi, String gaDen) {
         GridPane data = new GridPane();
         data.setHgap(10);
         data.setAlignment(Pos.CENTER);

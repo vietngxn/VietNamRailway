@@ -42,6 +42,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -392,8 +393,8 @@ public class ThietLapGiaGhe extends Application {
 						for(String maGhe : listGheChon) {
 						    String giaGoc = mapGheTheoToaGiaGoc.get(maGhe);
 						    String giaHienTai = mapGheTheoToaGiaHienTai.get(maGhe);
-						    chuoiGiaGoc.append(giaGoc + " ");
-						    chuoiGiaHienTai.append(giaHienTai + " ");
+						    chuoiGiaGoc.append(giaGoc + "vnd ");
+						    chuoiGiaHienTai.append(giaHienTai + "vnd ");
 						}
 						lblGiaGocGhe.setText(chuoiGiaGoc.toString());
 						lblGiaVeHienTai.setText(chuoiGiaHienTai.toString());
@@ -482,8 +483,8 @@ public class ThietLapGiaGhe extends Application {
 						for(String maGhe : listGheChon) {
 						    String giaGoc = mapGheTheoToaGiaGoc.get(maGhe);
 						    String giaHienTai = mapGheTheoToaGiaHienTai.get(maGhe);
-						    chuoiGiaGoc.append(giaGoc + " ");
-						    chuoiGiaHienTai.append(giaHienTai + " ");
+						    chuoiGiaGoc.append(giaGoc + "vnd ");
+						    chuoiGiaHienTai.append(giaHienTai + "vnd ");
 						}
 						lblGiaGocGhe.setText(chuoiGiaGoc.toString());
 						lblGiaVeHienTai.setText(chuoiGiaHienTai.toString());
@@ -625,8 +626,8 @@ public class ThietLapGiaGhe extends Application {
 						for(String maGhe : listGheChon) {
 						    String giaGoc = mapGheTheoToaGiaGoc.get(maGhe);
 						    String giaHienTai = mapGheTheoToaGiaHienTai.get(maGhe);
-						    chuoiGiaGoc.append(giaGoc + " ");
-						    chuoiGiaHienTai.append(giaHienTai + " ");
+						    chuoiGiaGoc.append(giaGoc + "vnd ");
+						    chuoiGiaHienTai.append(giaHienTai + "vnd ");
 						}
 						lblGiaGocGhe.setText(chuoiGiaGoc.toString());
 						lblGiaVeHienTai.setText(chuoiGiaHienTai.toString());
@@ -720,8 +721,8 @@ public class ThietLapGiaGhe extends Application {
 						for(String maGhe : listGheChon) {
 						    String giaGoc = mapGheTheoToaGiaGoc.get(maGhe);
 						    String giaHienTai = mapGheTheoToaGiaHienTai.get(maGhe);
-						    chuoiGiaGoc.append(giaGoc + " ");
-						    chuoiGiaHienTai.append(giaHienTai + " ");
+						    chuoiGiaGoc.append(giaGoc + "vnd ");
+						    chuoiGiaHienTai.append(giaHienTai + "vnd ");
 						}
 						lblGiaGocGhe.setText(chuoiGiaGoc.toString());
 						lblGiaVeHienTai.setText(chuoiGiaHienTai.toString());
@@ -1099,7 +1100,7 @@ public class ThietLapGiaGhe extends Application {
 		
 		Label lblGiaCuocHienTai = new Label("Giá cước hiện tại: " + df.format(tau.getLoaiTau().getGiaCuoc())+"/km");
 		lblGiaCuocHienTai.setStyle("-fx-font-size: 18px; -fx-font-weight: bold");
-		lblGiaVeHienTai = new Label("Giá vé hiện tại: ");
+		lblGiaVeHienTai = new Label("Giá vé tăng thêm: ");
 		lblGiaVeHienTai.setStyle("-fx-font-size: 18px; -fx-font-weight: bold");
 		
 		HBox boxGiaHienTai = new HBox(50);
@@ -1114,8 +1115,18 @@ public class ThietLapGiaGhe extends Application {
 		
 		buttonCapNhat.setOnMouseClicked(event -> {
 			lblGiaGocGhe.setText("Giá gốc: ");
-			lblGiaVeHienTai.setText("Giá vé hiện tại: ");
-			if(txtGiaCuoc.getText().isEmpty() && txtGiaGhe.getText().isEmpty()) System.out.println("loi r nhap chu vao di");
+			lblGiaVeHienTai.setText("Giá vé tăng thêm: ");
+			if(txtGiaCuoc.getText().isEmpty() && txtGiaGhe.getText().isEmpty()) {
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.setTitle("Lỗi");
+				alert.setHeaderText(null);
+				alert.setContentText("Vui lòng nhập giá trị muốn thay đổi");
+				 Stage stage = (Stage) txtGiaCuoc.getScene().getWindow();
+				alert.initOwner(stage);
+				alert.initModality(Modality.WINDOW_MODAL);
+				alert.showAndWait();
+				System.out.println("loi r nhap chu vao di");
+			}
 			else {
 				if(!txtGiaCuoc.getText().isEmpty()) {					
 					double giaCuocNew = Double.parseDouble(txtGiaCuoc.getText());
@@ -1123,7 +1134,7 @@ public class ThietLapGiaGhe extends Application {
 						LoaiTau giaCuocLoaiTauNew = new LoaiTau(tau.getLoaiTau().getMaLoaiTau(), tau.getLoaiTau().getTenLoaiTau(), giaCuocNew);
 						tau.setLoaiTau(giaCuocLoaiTauNew);
 						
-						lblGiaCuocHienTai.setText("Giá cước hiện tại: " + df.format(giaCuocNew));
+						lblGiaCuocHienTai.setText("Giá cước hiện tại: " + df.format(giaCuocNew) + "/km");
 						
 						String maToa = spToaDangChon.getUserData().toString();
 						
@@ -1150,9 +1161,37 @@ public class ThietLapGiaGhe extends Application {
 							}
 							animationUpdateToa(toaCu, toaUpdate);
 						}
+						Alert alert = new Alert(Alert.AlertType.INFORMATION);
+						alert.setTitle("Thành công");
+						alert.setHeaderText(null);
+						alert.setContentText("Đã thành công cập nhật giá cước");
+						 Stage stage = (Stage) txtGiaCuoc.getScene().getWindow();
+						alert.initOwner(stage);
+						alert.initModality(Modality.WINDOW_MODAL);
+						alert.showAndWait();
 					}
-				if(listGheChon.size() == 0 && !txtGiaGhe.getText().isEmpty()) System.out.println("vui long chon ghe can cap nhat gia");
-				else if(listGheChon.size() != 0 && txtGiaGhe.getText().isEmpty()) System.out.println("vui long nhap gia tien muon cap nhat cho ghe");
+				if(listGheChon.size() == 0 && !txtGiaGhe.getText().isEmpty()) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Lỗi");
+					alert.setHeaderText(null);
+					alert.setContentText("Vui lòng chọn ghế cần cập nhật giá trị tăng thêm");
+					 Stage stage = (Stage) txtGiaGhe.getScene().getWindow();
+					alert.initOwner(stage);
+					alert.initModality(Modality.WINDOW_MODAL);
+					alert.showAndWait();
+					System.out.println("vui long chon ghe can cap nhat gia");
+				}
+				else if(listGheChon.size() != 0 && txtGiaGhe.getText().isEmpty()) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Lỗi");
+					alert.setHeaderText(null);
+					alert.setContentText("Vui lòng nhập giá tiền muốn cập nhật cho ghế");
+					 Stage stage = (Stage) txtGiaGhe.getScene().getWindow();
+					alert.initOwner(stage);
+					alert.initModality(Modality.WINDOW_MODAL);
+					alert.showAndWait();
+					System.out.println("vui long nhap gia tien muon cap nhat cho ghe");
+				}
 				else if(listGheChon.size() != 0 && !txtGiaGhe.getText().isEmpty()){
 					double giaTriTangThemNew = Double.parseDouble(txtGiaGhe.getText());
 					
@@ -1189,7 +1228,14 @@ public class ThietLapGiaGhe extends Application {
 						}
 						animationUpdateToa(toaCu, toaUpdate);
 					}
-					
+					Alert alert = new Alert(Alert.AlertType.INFORMATION);
+					alert.setTitle("Thành công");
+					alert.setHeaderText(null);
+					alert.setContentText("Đã cập nhật giá ghế thành công");
+					 Stage stage = (Stage) txtGiaGhe.getScene().getWindow();
+					alert.initOwner(stage);
+					alert.initModality(Modality.WINDOW_MODAL);
+					alert.showAndWait();
 				}
 				listGheChon.clear();
 				
@@ -1295,6 +1341,14 @@ public class ThietLapGiaGhe extends Application {
 				System.out.println(gtct.getMaGheTrenChuyenTau());
 			}
 				if(ghetrenchuyentaudao.addGheTrenChuyenTauVaoDB(listGheTrenChuyenTau)) {
+					Alert alert = new Alert(Alert.AlertType.INFORMATION);
+					alert.setTitle("Thành công");
+					alert.setHeaderText(null);
+					alert.setContentText("Đã thành công thêm chuyến tàu");
+					 Stage stage = (Stage) txtGiaCuoc.getScene().getWindow();
+					alert.initOwner(stage);
+					alert.initModality(Modality.WINDOW_MODAL);
+					alert.showAndWait();
 					System.out.println("thanh cong r do");
 					
 					PrintWriter writer;
