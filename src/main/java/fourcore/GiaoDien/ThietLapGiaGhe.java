@@ -1270,7 +1270,7 @@ public class ThietLapGiaGhe extends Application {
 			
 			int soGTCTNew = Integer.parseInt(soGTCT);
 			soGTCTNew++;
-//			String maGTCTInsert = chuGTCT + soGTCTNew;
+
 			
 			for(String line : allLine) {
 				JsonElement jsonElement = JsonParser.parseString(line);
