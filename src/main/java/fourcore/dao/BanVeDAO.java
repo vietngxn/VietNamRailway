@@ -169,7 +169,7 @@ public class BanVeDAO {
         double giaTong  = giaGhe*((100-phanTramKhuyenMai)/100);
         giaTong = giaTong*((100-phanTramGiamDoiTuong)/100);
         tienTruocVAT += giaTong;
-        return  tienTruocVAT *1.08;
+        return  tienTruocVAT;
     }
     public DoiTuongGiamGia getDoiTuong(GheTrenChuyenTau gheTrenCT) throws SQLException {
         DoiTuongGiamGiaDAO doiTuongGiamGiaDAO = new DoiTuongGiamGiaDAO();
@@ -230,7 +230,7 @@ return hoaDon;
         return ma;
     }
 //    HoaDon hoaDon, Ve ve, String moTa, double donGia, double thueVAT, double thanhTien, String LoaiHoaDonChoVe
-    public void themCTHoaDon(HoaDon hoaDon, Ve ve,GheTrenChuyenTau gheTrenChuyenTau,KhuyenMai khuyenMai) throws SQLException {
+    public ChiTietHoaDon themCTHoaDon(HoaDon hoaDon, Ve ve,GheTrenChuyenTau gheTrenChuyenTau,KhuyenMai khuyenMai) throws SQLException {
         String maCTHoaDon = getMaCTHoaDon();
         String loaiHoaDon;
         if(listGheTrenChuyenTau.size()>=10){
@@ -238,7 +238,7 @@ return hoaDon;
         }else{
             loaiHoaDon = "Vé cá nhân";
         }
-            ChiTietHoaDon chiTietHoaDon = new ChiTietHoaDon(hoaDon,ve,ve.getTenTau(),tinhTienVe(khuyenMai,gheTrenChuyenTau),8,tinhTienVe(khuyenMai,gheTrenChuyenTau)*1.08,loaiHoaDon);
+            ChiTietHoaDon chiTietHoaDon = new ChiTietHoaDon(hoaDon,ve,ve.getTenTau(),gheTrenChuyenTau.getGiaTienGhe(),8,ve.getGiaVe(),loaiHoaDon);
         Connection con = (Connection) databaseConnector.getInstance().getConnection();
         String query = "Insert into ChiTietHoaDon " +
                 "Values (?,?,?,?,?,?,?,?)";
@@ -247,12 +247,13 @@ return hoaDon;
         sta.setString(2,chiTietHoaDon.getHoaDon().getMaHoaDon());
         sta.setString(3,chiTietHoaDon.getVeTau().getMaVeTau());
         sta.setString(4,chiTietHoaDon.getMoTa());
-        sta.setDouble(5,chiTietHoaDon.getDonGia());
+        sta.setDouble(5,gheTrenChuyenTau.getGiaTienGhe());
         sta.setDouble(6,chiTietHoaDon.getThueVAT());
-        sta.setDouble(7,chiTietHoaDon.getThanhTien());
+        sta.setDouble(7,ve.getGiaVe() * ((100-ctkmSelected.getGiaTriPhanTramKhuyenMai())/100));
         sta.setString(8,chiTietHoaDon.getLoaiHoaDonChoVe());
         sta.executeUpdate();
         System.out.println("Thêm ct hóa đơn thành công");
+        return chiTietHoaDon;
     }
     public String getMaLichSuTuongTac() throws SQLException {
         String query = "SELECT COUNT(*) AS soLuong FROM LichSuTuongTacVe";
@@ -322,7 +323,7 @@ return hoaDon;
             }
 
             maVeTau = getMaVe();
-            Ve veTau = new Ve(maVeTau,gaDi,gaDen,listGheTrenChuyenTau.get(i).getChuyenTau().getTau().getTenTau(),listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDi(),listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDen(),
+            Ve veTau = new Ve(maVeTau,gaDi,gaDen,listGheTrenChuyenTau.get(i).getChuyenTau().getTau().getLoaiTau().getTenLoaiTau(),listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDi(),listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDen(),
                     checkThuTuToa(listGheTrenChuyenTau.get(i)),listGheTrenChuyenTau.get(i).getGheNgoi().getKhoangTau().getSoKhoang(),listGheTrenChuyenTau.get(i).getGheNgoi().getTang().getSoTang(),
                     listGheTrenChuyenTau.get(i).getGheNgoi().getSoGhe(),loaiVe,mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getCccd(),tinhTienVe(ctkmSelected,listGheTrenChuyenTau.get(i)),
                     null,"chưa đổi","hoạt động",listGheTrenChuyenTau.get(i).getChuyenTau(),kh,ctkmSelected,getDoiTuong(listGheTrenChuyenTau.get(i)));
@@ -331,13 +332,13 @@ return hoaDon;
 
 
             String insertVe = "INSERT INTO Ve " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement sta = null;
             sta = con.prepareStatement(insertVe);
             sta.setString(1,maVeTau);
             sta.setString(2,gaDi);
             sta.setString(3,gaDen);
-            sta.setString(4, listGheTrenChuyenTau.get(i).getChuyenTau().getTau().getTenTau());
+            sta.setString(4, listGheTrenChuyenTau.get(i).getChuyenTau().getTau().getLoaiTau().getTenLoaiTau());
             sta.setObject(5,listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDi());
             sta.setObject(6, listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDen());
             sta.setInt(7,checkThuTuToa(listGheTrenChuyenTau.get(i)));
@@ -346,7 +347,7 @@ return hoaDon;
             sta.setInt(10,listGheTrenChuyenTau.get(i).getGheNgoi().getSoGhe());
             sta.setString(11, loaiVe);
             sta.setString(12, mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getCccd());
-            sta.setDouble(13,tinhTienVe(ctkmSelected,listGheTrenChuyenTau.get(i)));
+            sta.setDouble(13,listGheTrenChuyenTau.get(i).getGiaTienGhe() * ((100-getDoiTuong(listGheTrenChuyenTau.get(i)).getGiaTriPhanTramGiamGia())/100));
             sta.setString(14,null);
             sta.setString(15,null);
             sta.setString(16,"Hoạt động");
@@ -355,6 +356,7 @@ return hoaDon;
             sta.setString(19,ctkmSelected.getMaKhuyenMai());
             sta.setString(20,getDoiTuong(listGheTrenChuyenTau.get(i)).getMaDoiTuongGiamGia());
             sta.setString(21,"false");
+            sta.setString(22,listGheTrenChuyenTau.get(i).getMaGheTrenChuyenTau());
             sta.executeUpdate();
             System.out.println("Thêm vé thành công");
 
