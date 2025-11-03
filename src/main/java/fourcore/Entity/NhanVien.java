@@ -1,8 +1,9 @@
 package fourcore.Entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class NhanVien {
+public class NhanVien implements Serializable  {
 	private String maNhanVien;
 	private String hoTen;
 	private ChucVu chucVu;
@@ -14,6 +15,23 @@ public class NhanVien {
 	private String tinhTrangLamViec;
 	private String gioiTinh;
 	private String cccd;
+	private int isRemove;
+	public NhanVien(String maNhanVien, String hoTen, ChucVu chucVu, LocalDate ngaySinh, String diaChi, String email,
+			String sdt, LocalDate ngayVaoLam, String tinhTrangLamViec, String gioiTinh, String cccd, int isRemove) {
+		
+		this.maNhanVien = maNhanVien;
+		this.hoTen = hoTen;
+		this.chucVu = chucVu;
+		this.ngaySinh = ngaySinh;
+		this.diaChi = diaChi;
+		this.email = email;
+		this.sdt = sdt;
+		this.ngayVaoLam = ngayVaoLam;
+		this.tinhTrangLamViec = tinhTrangLamViec;
+		this.gioiTinh = gioiTinh;
+		this.cccd = cccd;
+		this.isRemove = isRemove;
+	}
 	public String getMaNhanVien() {
 		return maNhanVien;
 	}

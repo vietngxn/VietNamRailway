@@ -9,6 +9,26 @@ public class KhuyenMai implements Serializable {
 	private String maKhuyenMai, tenChuongTrinh, trangThaiKhuyenMai, dieuKienApDung;
 	private  double giaTriPhanTramKhuyenMai;
 	LocalDateTime ngayBatDau, ngayKetThuc;
+	private int rs ; 
+	
+	public KhuyenMai(String maKhuyenMai, String tenChuongTrinh, String trangThaiKhuyenMai, String dieuKienApDung,
+			double giaTriPhanTramKhuyenMai, LocalDateTime ngayBatDau, LocalDateTime ngayKetThuc, int rs) {
+	
+		this.maKhuyenMai = maKhuyenMai;
+		this.tenChuongTrinh = tenChuongTrinh;
+		this.trangThaiKhuyenMai = trangThaiKhuyenMai;
+		this.dieuKienApDung = dieuKienApDung;
+		this.giaTriPhanTramKhuyenMai = giaTriPhanTramKhuyenMai;
+		this.ngayBatDau = ngayBatDau;
+		this.ngayKetThuc = ngayKetThuc;
+		this.rs = rs;
+	}
+	public int getRs() {
+		return rs;
+	}
+	public void setRs(int rs) {
+		this.rs = rs;
+	}
 	public String getMaKhuyenMai() {
 		return maKhuyenMai;
 	}

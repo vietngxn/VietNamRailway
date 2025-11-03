@@ -80,7 +80,25 @@ public class Tau_DAO {
             if(maHanhTrinh.equalsIgnoreCase("HT04")) ps.setString(1, "LT04");
             else if(maHanhTrinh.equalsIgnoreCase("HT02")) ps.setString(1, "LT02");
             else if(maHanhTrinh.equalsIgnoreCase("HT03")) ps.setString(1, "LT03");
+            else if(maHanhTrinh.equalsIgnoreCase("HT04")) ps.setString(1, "LT04");
+            else if(maHanhTrinh.equalsIgnoreCase("HT05")) ps.setString(1, "LT05");
+            else if(maHanhTrinh.equalsIgnoreCase("HT06")) ps.setString(1, "LT06");
+            else if(maHanhTrinh.equalsIgnoreCase("HT07")) ps.setString(1, "LT07");
+            else if(maHanhTrinh.equalsIgnoreCase("HT08")) ps.setString(1, "LT08");
             else if(maHanhTrinh.equalsIgnoreCase("HT09")) ps.setString(1, "LT09");
+            else if(maHanhTrinh.equalsIgnoreCase("HT10")) ps.setString(1, "LT10");
+            else if(maHanhTrinh.equalsIgnoreCase("HT11")) ps.setString(1, "LT11");
+            else if(maHanhTrinh.equalsIgnoreCase("HT12")) ps.setString(1, "LT12");
+            else if(maHanhTrinh.equalsIgnoreCase("HT13")) ps.setString(1, "LT13");
+            else if(maHanhTrinh.equalsIgnoreCase("HT14")) ps.setString(1, "LT14");
+            else if(maHanhTrinh.equalsIgnoreCase("HT15")) ps.setString(1, "LT15");
+            else if(maHanhTrinh.equalsIgnoreCase("HT16")) ps.setString(1, "LT16");
+            else if(maHanhTrinh.equalsIgnoreCase("HT17")) ps.setString(1, "LT17");
+            else if(maHanhTrinh.equalsIgnoreCase("HT18")) ps.setString(1, "LT18");
+            else if(maHanhTrinh.equalsIgnoreCase("HT19")) ps.setString(1, "LT19");
+            else if(maHanhTrinh.equalsIgnoreCase("HT20")) ps.setString(1, "LT20");
+            else if(maHanhTrinh.equalsIgnoreCase("HT21")) ps.setString(1, "LT21");
+            else if(maHanhTrinh.equalsIgnoreCase("HT22")) ps.setString(1, "LT22");
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
                 String maTau = rs.getString(1);

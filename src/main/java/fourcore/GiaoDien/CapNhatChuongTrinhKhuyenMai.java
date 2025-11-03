@@ -48,10 +48,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class CapNhatChuongTrinhKhuyenMai extends Application {
-    public CapNhatChuongTrinhKhuyenMai() throws SQLException {
-    }
-
-    public static void main(String[] args) {
+	public static void main(String[] args) {
 		launch(args);
 //		Application.launch(ThemChuongTrinhKhuyenMai.class, args);
 	}
@@ -110,7 +107,7 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 	private ImageView userIcon;
 	private Labeled userLabel;
 	private ImageView settingIcon;
-	private KhachHangDAO khdao = new KhachHangDAO();
+	private KhachHangDAO khdao ;
 	
 	
 	private Scene sceneCapNhatCTKM;
@@ -151,11 +148,12 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 	private Label lblGiaTriKhuyenMai;
 	private TextField txtTrangThai;
 	private Label lblTrangThai;
+	private DateTimeFormatter formatter;
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		
+		khdao = new KhachHangDAO();
 		ctkmDAO= new ChuongTrinhKhuyenMaiDAO();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		lblAnimation = new Animation();
 		
 		window = primaryStage;
@@ -893,7 +891,7 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 		
 		window.setScene(sceneThemCTKM);
 		window.setFullScreen(true);
-		window.show();
+//		window.show();
 	}
 		public void create_themchuongtrinhkm_layout() {
 		

@@ -1084,7 +1084,7 @@ public class GiaoDienCapLaiVe extends Application {
                         LoaiTuongTacVe lttv1 = new LoaiTuongTacVe();
 
 
-                        lttv1.setMaLoaiTuongTac("LT04");
+                        lttv1.setMaLoaiTuongTac("LTT04");
                         lttv1.setTenLoaiTuongTac("Cấp Vé");
 
 

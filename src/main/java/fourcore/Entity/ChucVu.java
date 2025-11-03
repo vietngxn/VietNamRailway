@@ -1,6 +1,8 @@
 package fourcore.Entity;
 
-public class ChucVu {
+import java.io.Serializable;
+
+public class ChucVu implements Serializable {
 	private String maChucVu;
 	private String tenChucVu;
 	public String getMaChucVu() {

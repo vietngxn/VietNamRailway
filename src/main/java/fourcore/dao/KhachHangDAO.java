@@ -87,4 +87,25 @@ public class KhachHangDAO {
 	    int kq = st.executeUpdate(q);
 	    return kq > 0; 
 	}
+	
+	
+	public KhachHang getKhachHangTheoCCCD(String cccd) throws SQLException {
+	    
+	    String q = "SELECT * FROM KhachHang WHERE cccd = '" + cccd + "'";
+	    ResultSet rs = st.executeQuery(q);
+
+	    if (rs.next()) {
+	        KhachHang kh = new KhachHang();
+	        kh.setMaKhachHang(rs.getString(1));  
+	        kh.setHoten(q);        
+	        kh.setSdt(rs.getString(3));          
+	        kh.setEmail(rs.getString(4));        
+	        kh.setCccd(rs.getString(5));         
+	        kh.setPassport(rs.getString(6));     
+	        kh.setDoiTuong(rs.getString(7));     
+	        return kh;
+	    }
+	    return null;
+	}
+
 }

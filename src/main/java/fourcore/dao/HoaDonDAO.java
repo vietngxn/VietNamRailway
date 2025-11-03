@@ -7,17 +7,15 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import fourcore.DatabaseConnector.DatabaseConnector;
-import fourcore.Entity.ChiTietHoaDon;
-import fourcore.Entity.HoaDon;
-import fourcore.Entity.KhachHang;
-import fourcore.Entity.LoaiHoaDon;
-import fourcore.Entity.NhanVien;
+import fourcore.Entity.*;
 
 public class HoaDonDAO {
 	DatabaseConnector database = new DatabaseConnector();
 	ArrayList<HoaDon> listHoaDon = new ArrayList<HoaDon>();
 	Statement st = database.connect();
-
+    LoaiHoaDonDAO loaiHoaDonDAO = new LoaiHoaDonDAO();
+    NhanVienDAO nhanVienDAO = new NhanVienDAO();
+    ChuongTrinhKhuyenMaiDAO chuongTrinhKhuyenMaiDAO = new ChuongTrinhKhuyenMaiDAO();
 	public HoaDonDAO() throws SQLException {
 	}
 
@@ -39,6 +37,69 @@ public class HoaDonDAO {
 
 		return listHoaDon;
 	}
+    public HoaDon getHoaDonByMaHoaDon(String maHoaDon) throws SQLException {
+            String query = "  select * from HoaDon \n" +
+                    "  where maHoaDon = '"+maHoaDon+"'";
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                String mahd = rs.getString(1);
+                LoaiHoaDon loaiHoaDon = loaiHoaDonDAO.getLoaiHoaDonTheoMa(rs.getString(2));
+                NhanVien nhanVien = nhanVienDAO.getNhanVienByMa(rs.getString(3));
+                String tenKhachHang = rs.getString(4);
+                String emailKhachHang = rs.getString(5);
+                String cccd =  rs.getString(6);
+                String sdtKhachHang = rs.getString(7);
+                LocalDateTime ngayThanhToan =  LocalDateTime.parse(rs.getString(8));
+                double TongTien = rs.getDouble(9);
+                String diaChi = rs.getString(10);
+
+                HoaDon hoaDon = new HoaDon(mahd,loaiHoaDon,nhanVien,tenKhachHang,emailKhachHang,cccd,sdtKhachHang,ngayThanhToan,TongTien,diaChi);
+                return  hoaDon;
+            }
+            return null;
+    }
+    public ArrayList<ThongTinCtHoaDon> getThongTinCTHoaDon(String maHoaDon) throws SQLException {
+        ArrayList<ThongTinCtHoaDon> listThongTinCtHoaDon = new ArrayList<>();
+        String query = "SELECT \n" +
+                "    v.maVeTau AS MaVe,\n" +
+                "    lg.tenLoaiGhe AS TenLoaiGhe,\n" +
+                "    dt.tenDoiTuongGiamGia AS DoiTuong,\n" +
+                "    gtc.giaTienGhe AS DonGia,\n" +
+                "    v.giaVe AS ThanhTien\n" +
+                "FROM ChiTietHoaDon cthd\n" +
+                "JOIN Ve v ON cthd.maVeTau = v.maVeTau\n" +
+                "JOIN GheTrenChuyenTau gtc ON v.maGheTrenChuyen = gtc.maGheTrenChuyenTau\n" +
+                "JOIN GheNgoi g ON gtc.maGheNgoi = g.maGheNgoi\n" +
+                "JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe\n" +
+                "JOIN DoiTuongGiamGia dt ON v.maDoiTuongGiamGia = dt.maDoiTuongGiamGia\n" +
+                "WHERE cthd.maHoaDon = '"+maHoaDon+"';";
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next()) {
+            String maVeTau = rs.getString(1);
+            String tenLoaiGhe = rs.getString(2);
+            String doiTuong = rs.getString(3);
+            double donGia = rs.getDouble(4);
+            double thanhTien = rs.getDouble(5);
+
+            ThongTinCtHoaDon thongTinCtHoaDon= new ThongTinCtHoaDon(maVeTau,tenLoaiGhe,doiTuong,donGia,thanhTien);
+            listThongTinCtHoaDon.add(thongTinCtHoaDon);
+        }
+        return listThongTinCtHoaDon;
+    }
+
+    public KhuyenMai getKhuyenMaiByMaHoaDon(String maHoaDon) throws SQLException {
+
+        String query = "select v.giaVe, v.maKhuyenMai from ve v, ChiTietHoaDon c\n" +
+                "where c.maHoaDon = '"+maHoaDon+"' and v.maVeTau = c.maVeTau\n";
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next()) {
+            String  maKhuyenMai = rs.getString(2);
+            KhuyenMai ctkm = chuongTrinhKhuyenMaiDAO.getKhuyenMaiBangMa(maKhuyenMai);
+
+            return ctkm;
+        }
+        return null;
+    }
 
 	public HoaDon getHoaDonBangMaVe(String maVe) throws SQLException {
 		String q = "select hd.*\r\n" + "from HoaDon as hd\r\n"
@@ -109,4 +170,33 @@ public class HoaDonDAO {
 		return kh1;
 	}
 
+	
+	public HoaDon getHoaDonTheoMa(String maHD) throws SQLException {
+	    
+	    String q = "SELECT * FROM HoaDon WHERE maHoaDon = '" + maHD + "'";
+	    ResultSet rs = st.executeQuery(q);
+
+	    if (rs.next()) {
+	    	HoaDon hd = new HoaDon();
+	    	String mahd = rs.getString("maHoaDon");
+			String maloaihd = rs.getString("maLoaiHoaDon");
+			String manv = rs.getString("maNhanVien");
+			String tenkh = rs.getString("tenKhachHangThanhToan");
+			String email = rs.getString("emailKhachHangThanhToan");
+			String cccd = rs.getString("cccdKhachHangThanhToan");
+			String sdt = rs.getString("sdtKhachHangThanhToan");
+			LocalDateTime ngaytt = rs.getTimestamp("ngayThanhToan").toLocalDateTime();
+			double tongtien = rs.getDouble("tongTien");
+			NhanVienDAO nvDao = new NhanVienDAO();
+			NhanVien nv = nvDao.getNhanVienByMa(manv);
+			LoaiHoaDonDAO loaihdDao = new LoaiHoaDonDAO();
+			LoaiHoaDon loaiHD = loaihdDao.getLoaiHoaDonTheoMa(maloaihd);
+			hd = new HoaDon(mahd, loaiHD, nv, tenkh, email, cccd, sdt, ngaytt, tongtien);
+			System.out.println("lấy thông tin hóa đơn " + mahd);
+	        return hd;
+	    }
+	    return null;
+	}
+
+	
 }

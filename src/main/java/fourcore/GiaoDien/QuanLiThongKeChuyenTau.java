@@ -1,9 +1,11 @@
 package fourcore.GiaoDien;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import java.util.Map;
 
 import fourcore.Entity.Tau;
 import fourcore.dao.ThongKeDAO;
+import fourcore.util.ExcelExporter;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -26,6 +29,7 @@ import javafx.collections.ObservableArrayBase;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Group;
@@ -913,11 +917,15 @@ try {
 		table_desc = new VBox();
 		table_desc.setPrefHeight(400);
 		
+		
+		
 		comboBox.setOnAction(event  -> { 
         	if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
         		table_desc.getChildren().clear();
         		try {
+					btn_xuatThongKe.setDisable(false);
 					create_barchart_chuyentau();
+					
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -927,6 +935,7 @@ try {
         	else {
         		table_desc.getChildren().clear();
         		create_table();
+        		btn_xuatThongKe.setDisable(false);
         		
         	}
         });
@@ -1023,62 +1032,61 @@ try {
 	    table_desc.getChildren().add(pieChart);
 	}
 	
-	public void create_barchart_chuyentau() throws SQLException
-	{
-			
-			CategoryAxis ca = new CategoryAxis();
-			ca.setLabel("Chuyến Tàu");
-			NumberAxis na = new NumberAxis();
-			
-			
-			na.setLabel("Số Chuyến Đi");
+	
+	public void create_barchart_chuyentau() throws SQLException {
+	    CategoryAxis ca = new CategoryAxis();
+	    ca.setLabel("Chuyến Tàu");
+	    NumberAxis na = new NumberAxis();
+	    na.setLabel("Số Chuyến Đi");
 
-			
-			BarChart<String, Number> barchart = new BarChart<String, Number>(ca, na);
-			barchart.setTitle("Thống kê top 10 chuyến tàu chạy nhiều nhất");
-			barchart.setLegendVisible(false);
-			barchart.setAnimated(false);
-			
-			
-			ArrayList<XYChart.Data<String, Number>> listdata = new ArrayList<>();
-			
-			for(Map.Entry<Tau, Integer> x : map.entrySet())
-			{
-				Tau tau = x.getKey();
-				int soLan = x.getValue();
-				listdata.add(new XYChart.Data<>(tau.getTenTau(),soLan));
-			}
-			
-			
-			for(int i = 0; i < listdata.size() - 1;i++)
-			{
-				for(int j = i+1 ; j < listdata.size();j++)
-				{
-					if(listdata.get(i).getYValue().doubleValue() < listdata.get(j).getYValue().doubleValue())
-					{
-						XYChart.Data<String, Number> temp = listdata.get(i);
-						listdata.set(i, listdata.get(j));
-						listdata.set(j, temp);
-					}
-				}
-			}
-			double max = listdata.get(0).getYValue().doubleValue();
-			na.setTickUnit(1);
-			na.setAutoRanging(false);
-			na.setLowerBound(0);
-			na.setUpperBound(max + 1);
-			
-			XYChart.Series<String, Number> list = new XYChart.Series<String, Number>();
-			
-			for(XYChart.Data<String, Number> s : listdata)
-			{
-				list.getData().add(s);
-			}
-			barchart.getData().add(list);
-			
-			table_desc.getChildren().clear();
-			
-			table_desc.getChildren().add(barchart);
+	    BarChart<String, Number> barchart = new BarChart<String, Number>(ca, na);
+	    barchart.setTitle("Thống kê top 10 chuyến tàu chạy nhiều nhất");
+	    barchart.setLegendVisible(false);
+	    barchart.setAnimated(true); // ← BẬT ANIMATION TỰ ĐỘNG
+
+	    ArrayList<XYChart.Data<String, Number>> listdata = new ArrayList<>();
+
+	    for(Map.Entry<Tau, Integer> x : map.entrySet()) {
+	        Tau tau = x.getKey();
+	        int soLan = x.getValue();
+	        listdata.add(new XYChart.Data<>(tau.getTenTau(), soLan));
+	    }
+
+	    // Sắp xếp
+	    for(int i = 0; i < listdata.size() - 1; i++) {
+	        for(int j = i+1; j < listdata.size(); j++) {
+	            if(listdata.get(i).getYValue().doubleValue() < listdata.get(j).getYValue().doubleValue()) {
+	                XYChart.Data<String, Number> temp = listdata.get(i);
+	                listdata.set(i, listdata.get(j));
+	                listdata.set(j, temp);
+	            }
+	        }
+	    }
+
+	    double max = listdata.get(0).getYValue().doubleValue();
+	    na.setTickUnit(1);
+	    na.setAutoRanging(false);
+	    na.setLowerBound(0);
+	    na.setUpperBound(max + 1);
+
+	    XYChart.Series<String, Number> list = new XYChart.Series<String, Number>();
+
+	    for(XYChart.Data<String, Number> s : listdata) {
+	        list.getData().add(s);
+	    }
+	    barchart.getData().add(list);
+
+	    // Hiển thị số trên bar (đơn giản)
+	    Platform.runLater(() -> {
+	        for(XYChart.Data<String, Number> data : list.getData()) {
+	            Text dataText = new Text(data.getYValue().toString());
+	            dataText.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-fill: #333;");
+	            data.setNode(dataText);
+	        }
+	    });
+
+	    table_desc.getChildren().clear();
+	    table_desc.getChildren().add(barchart);
 	}
 	
 	public void create_table()
@@ -1104,7 +1112,7 @@ try {
 		
 		
 		colsoLanSuDung = new Label("Tổng");
-		colsoLanSuDung.setTranslateX(300);
+		colsoLanSuDung.setTranslateX(330);
 		colsoLanSuDung.setStyle(styleHeader);
 		
 		
@@ -1242,7 +1250,7 @@ try {
 		btn_layout.setTranslateY(250);
 		btn_xuatThongKe = new Button("Xuất Thống Kê");
 		btn_xuatThongKe.setPrefSize(200,40);
-		
+		btn_xuatThongKe.setDisable(true);
 		String style = "-fx-font-family: 'Inter';-fx-font-weight: bold;-fx-font-size: 20px;-fx-text-fill:#00BACB;-fx-background-color:white;-fx-background-color:white;-fx-background-radius:20px;-fx-border-radius:20px;-fx-border-color:#00BACB;-fx-border-width:2px;";
 		btn_xuatThongKe.setStyle(style+"-fx-background-color:#00BACB;-fx-text-fill:white;");
 		btn_layout.getChildren().add(btn_xuatThongKe);
@@ -1262,10 +1270,34 @@ try {
 			st.play();
 		});
 		
+		btn_xuatThongKe.setOnMouseClicked(e -> {
+		    FileChooser fileChooser = new FileChooser();
+		    fileChooser.setTitle("Lưu file Thống Kê");
+		    fileChooser.getExtensionFilters().add(
+		        new FileChooser.ExtensionFilter("Excel Files (*.xlsx)", "*.xlsx")
+		    );
+		    
+		    // Đặt tên file mặc định
+		    LocalDateTime now = LocalDateTime.now();
+		    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss");
+		    fileChooser.setInitialFileName("ThongKeChuyenTau_" + now.format(formatter) + ".xlsx");
+		    
+		    Stage stage = (Stage) noiDungChinh.getScene().getWindow();
+		    File file = fileChooser.showSaveDialog(stage);
+		    
+		    if (file != null) {
+		        ExcelExporter.exportThongKeTau(map, file.getAbsolutePath());
+		    }
+		});
+		
 		
 		
 		noiDungChinh.getChildren().add(btn_layout);
 	}
+	
+	
+	
+	
 	public VBox getQuanLiThongKe(){
         return this.noiDungChinh;
     }
