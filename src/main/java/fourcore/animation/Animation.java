@@ -1,5 +1,7 @@
 package fourcore.animation;
 
+import java.time.LocalDateTime;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -57,6 +59,9 @@ public class Animation extends Label {
         img.setFitHeight(40);
         img.setFitWidth(40);
         return img;
+    }
+    public static boolean checkNgay(LocalDateTime check, LocalDateTime start, LocalDateTime end) {
+        return (check.isEqual(start) || check.isAfter(start)) && (check.isEqual(end) || check.isBefore(end));
     }
 
 }

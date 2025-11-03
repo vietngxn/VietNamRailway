@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import com.google.gson.JsonParser;
 import fourcore.Entity.*;
 import fourcore.animation.Animation;
 import fourcore.animation.GhiFile;
+import fourcore.dao.ChuyenTauDAO;
 import fourcore.dao.Tau_DAO;
 import fourcore.dao.ToaTauDAO;
 import javafx.animation.FadeTransition;
@@ -131,6 +133,9 @@ public class ThemDauTau extends Application {
 	private TableView<Tau> table;
 	private Map<String, Object> mapTmp;
 	private Button buttonTiepTuc;
+	private ChuyenTauDAO chuyentaudao = new ChuyenTauDAO();
+	private Button buttonTroLai;
+	
 
     public ThemDauTau() throws SQLException {
     }
@@ -624,6 +629,7 @@ public class ThemDauTau extends Application {
 public VBox creat_themDauTau_layout() throws SQLException, IOException {
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 		mapTmp = new HashMap<>();
 		fileTmp = new File("src/main/resources/tmp_ChuyenTau.txt");
 		
@@ -699,8 +705,26 @@ public VBox creat_themDauTau_layout() throws SQLException, IOException {
 		String line = allLine.get(0); 
 		JsonObject obj = JsonParser.parseString(line).getAsJsonObject();
 		String maHanhTrinh = obj.get("maHanhTrinh").getAsString();
+		String ngayKhoiHanh = obj.get("ngayKhoiHanh").getAsString();
+		String gioKhoiHanh = obj.get("gioKhoiHanh").getAsString();
+		String fullTime = ngayKhoiHanh + " " + gioKhoiHanh;
+		LocalDateTime dateTimeDi = LocalDateTime.parse(fullTime, formatterTime);
 		
-		ObservableList<Tau> data = themSpacer(taudao.getListTauTheoHanhTrinh(maHanhTrinh));
+		
+		ArrayList<ChuyenTau> listChuyenTau = chuyentaudao.getListChuyenTau();
+		ArrayList<Tau> listTauTheoHanhTrinh = taudao.getListTauTheoHanhTrinh(maHanhTrinh);
+		ArrayList<Tau> listTauRemove = new ArrayList<>();
+		
+		for(ChuyenTau ct : listChuyenTau) {
+			for(Tau t : listTauTheoHanhTrinh) {
+				if(ct.getTau().getMaTau().equalsIgnoreCase(t.getMaTau())) {
+					if(animation.checkNgay(dateTimeDi, ct.getNgayGioDi(), ct.getNgayGioDen())) listTauRemove.add(t);
+				}
+			}
+		}
+		listTauTheoHanhTrinh.removeAll(listTauRemove);
+//		ObservableList<Tau> data = themSpacer(taudao.getListTauTheoHanhTrinh(maHanhTrinh));
+		ObservableList<Tau> data = themSpacer(listTauTheoHanhTrinh);
 
 		table.setRowFactory(tv -> {
 		    TableRow<Tau> row = new TableRow<Tau>() {
@@ -744,8 +768,7 @@ public VBox creat_themDauTau_layout() throws SQLException, IOException {
 		buttonTiepTuc.setPrefHeight(60);
 		buttonTiepTuc.setId("button_Blue");
 		
-		Button buttonTroLai = new Button();
-		buttonTroLai.setText("Trở lại");
+		buttonTroLai = new Button("Trở lại");
 		buttonTroLai.setPrefWidth(200);
 		buttonTroLai.setPrefHeight(60);
 		buttonTroLai.setId("button_Red");
@@ -789,6 +812,9 @@ public VBox creat_themDauTau_layout() throws SQLException, IOException {
 	}
 	public Button getButtonTiepTucQuaChonToa() {
 		return this.buttonTiepTuc;
+	}
+	public Button getButtonTroLai() {
+		return this.buttonTroLai;
 	}
 	public static void main(String[] args) {
 		launch(args);

@@ -18,20 +18,10 @@ import java.util.Map;
 public class QRGenerator {
 
     public static void main(String[] args) {
-        String data = "abc";
-        String filePath = "qr/qrcode.png";
-        int width = 300;
-        int height = 300;
 
-        try {
-            generateQRCodeImage(data, width, height, filePath);
-            System.out.println("✅ Đã tạo QR Code tại: " + filePath);
-        } catch (Exception e) {
-            System.err.println("❌ Lỗi khi tạo QR Code: " + e.getMessage());
-        }
     }
 
-    public static void generateQRCodeImage(String text, int width, int height, String filePath)
+    public void generateQRCodeImage(String text)
             throws WriterException, IOException {
 
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
@@ -39,9 +29,9 @@ public class QRGenerator {
         Map<EncodeHintType, Object> hints = new HashMap<>();
         hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
 
-        BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height, hints);
+        BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, 300, 300, hints);
 
-        Path path = FileSystems.getDefault().getPath(filePath);
+        Path path = FileSystems.getDefault().getPath("qr/qrcode.png");
         MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
     }
 }

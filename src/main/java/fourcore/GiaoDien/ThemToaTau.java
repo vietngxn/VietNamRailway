@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import com.google.gson.JsonParser;
 import fourcore.Entity.*;
 import fourcore.animation.Animation;
 import fourcore.animation.GhiFile;
+import fourcore.dao.ChuyenTauDAO;
 import fourcore.dao.Tau_DAO;
 import fourcore.dao.ToaTauDAO;
 import javafx.animation.FadeTransition;
@@ -126,6 +128,8 @@ public class ThemToaTau extends Application {
 	private File fileTmp;
 	private GhiFile ghiFile = new GhiFile();
 	private Button buttonTiepTuc;
+	private ChuyenTauDAO chuyentaudao = new ChuyenTauDAO();
+	private Button buttonTroLai;
 
     public ThemToaTau() throws SQLException {
     }
@@ -728,9 +732,33 @@ public VBox creat_themtoatau_layout() throws SQLException, IOException {
 		table.getColumns().addAll(maToaCol, loaiToaCol, soGheCol, tenToaCol);
 		table.setMaxWidth(1200);
 		
+	
+		String line0 = allLine.get(0);
+		JsonObject objNgayKhoiHanh = JsonParser.parseString(line0).getAsJsonObject();
 		
+		DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+		String ngayKhoiHanh = objNgayKhoiHanh.get("ngayKhoiHanh").getAsString();
+		String gioKhoiHanh = objNgayKhoiHanh.get("gioKhoiHanh").getAsString();
+		String fullTime = ngayKhoiHanh + " " + gioKhoiHanh;
+		LocalDateTime dateTimeDi = LocalDateTime.parse(fullTime, formatterTime);
 		
-		ObservableList<ToaTau> data = themSpacer(toataudao.getListToaTauTenToaTau(tau.getLoaiTau().getTenLoaiTau()));
+		ArrayList<String> listChuyenTauTheoNgay = chuyentaudao.getListMaChuyenTauTheoNgay(dateTimeDi);
+//		for(String a : listChuyenTauTheoNgay) System.out.println("a " + a);
+		ArrayList<ToaTau> listToaTauTheoTenToaTau = toataudao.getListToaTauTheoListMaChuyenTau(listChuyenTauTheoNgay);
+//		for(ToaTau b : listToaTauTheoTenToaTau) System.out.println("b " + b.getMaToaTau());
+		ArrayList<ToaTau> listToaTauTheoHanhTrinh = toataudao.getListToaTauTenToaTau(tau.getLoaiTau().getTenLoaiTau());
+//		for(ToaTau c : listToaTauTheoHanhTrinh) System.out.println("c " + c.getMaToaTau());
+		
+	
+		listToaTauTheoHanhTrinh.removeAll(listToaTauTheoTenToaTau);
+		for(int i = 0; i < listToaTauTheoHanhTrinh.size()-1; i++) {
+			for(int j = 0; j < listToaTauTheoTenToaTau.size()-1; j++) {
+				if(listToaTauTheoHanhTrinh.get(i).getMaToaTau().equalsIgnoreCase(listToaTauTheoTenToaTau.get(j).getMaToaTau())) listToaTauTheoHanhTrinh.remove(i);
+			}
+		} 
+//		for(ToaTau d : listToaTauTheoHanhTrinh) System.out.println("d " + d.getMaToaTau());
+		
+		ObservableList<ToaTau> data = themSpacer(listToaTauTheoHanhTrinh);
 		
 //		table.setRowFactory(tv -> new TableRow<ToaTau>() {
 //		    @Override
@@ -804,8 +832,7 @@ public VBox creat_themtoatau_layout() throws SQLException, IOException {
 		buttonTiepTuc.setPrefHeight(60);
 		buttonTiepTuc.setId("button_Blue");
 		
-		Button buttonTroLai = new Button();
-		buttonTroLai.setText("Trở lại");
+		buttonTroLai = new Button("Trở lại");
 		buttonTroLai.setPrefWidth(200);
 		buttonTroLai.setPrefHeight(60);
 		buttonTroLai.setId("button_Red");
@@ -967,9 +994,9 @@ public VBox creat_themtoatau_layout() throws SQLException, IOException {
 		        imgToa.setOpacity(0.5);
 		    }
 	}
-	public void checkToaGheNgoi(ArrayList<ToaTau> listToa) {
-		
-	}			  
+	public Button getButtonTroLai() {
+		return this.buttonTroLai;
+	}	  
 	public static void main(String[] args) {
 		launch(args);
 //		Application.launch(QuanLyKhachHang.class, args);

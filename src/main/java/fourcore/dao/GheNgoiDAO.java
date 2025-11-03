@@ -78,7 +78,7 @@ public class GheNgoiDAO {
         int count=0;
         for (int i = 0; i < listGheTrenChuyenTau.size(); i++) {
             if(listGheTrenChuyenTau.get(i).getChuyenTau().getMaChuyenTau().equals(maChuyenTau)){
-                if(listGheTrenChuyenTau.get(i).getTrangThaiGhe().equals("đã bán")){
+                if(listGheTrenChuyenTau.get(i).getTrangThaiGhe().equals("Đã bán")){
                     count++;
                 }
             }
