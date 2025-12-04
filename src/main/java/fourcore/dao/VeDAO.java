@@ -3,6 +3,7 @@ package fourcore.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -184,12 +185,12 @@ public class VeDAO {
 			KhuyenMai km = kmDAO.getKhuyenMaiBangMa(maKhuyenMai);
 
 			System.out.println(maChuyenTau);
-			v = new Ve(maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe,
+			return v = new Ve(maVeTau, gaDi, gaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soKhoang, soTang, soGhe, loaiVe,
 					maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, new ChuyenTau(maChuyenTau), kh, km, dt);
 		}
 
-		System.out.println("lấy dữ liệu vé theo mã hoàn thành công");
-		return v;
+		System.out.println("lấy dữ liệu vé theo mã không thành công");
+		return null;
 	}
 
 	public ArrayList<Ve> getListHoanVe() throws SQLException {
@@ -302,12 +303,10 @@ public class VeDAO {
 
 	public Double layGiaTienGheTheoMaVe(String maVeTau) throws SQLException {
 		Double giaTienGhe = 0.0;
-		String sql = "SELECT gtc.giaTienGhe "
-		           + "FROM Ve AS v "
-		           + "JOIN ChuyenTau AS ct ON ct.maChuyenTau = v.maChuyenTau "
-		           + "JOIN GheTrenChuyenTau AS gtc ON gtc.maChuyenTau = ct.maChuyenTau "
-		           + "WHERE v.maVeTau = N'" + maVeTau + "' "
-		           + "AND v.maGheTrenChuyenTau = gtc.maGheTrenChuyenTau";
+		String sql = "SELECT gtc.giaTienGhe " + "FROM Ve AS v "
+				+ "JOIN ChuyenTau AS ct ON ct.maChuyenTau = v.maChuyenTau "
+				+ "JOIN GheTrenChuyenTau AS gtc ON gtc.maChuyenTau = ct.maChuyenTau " + "WHERE v.maVeTau = N'" + maVeTau
+				+ "' " + "AND v.maGheTrenChuyenTau = gtc.maGheTrenChuyenTau";
 		ResultSet rs = st.executeQuery(sql);
 		if (rs.next()) {
 			giaTienGhe = rs.getDouble("giaTienGhe");
@@ -319,5 +318,23 @@ public class VeDAO {
 		String q = "UPDATE Ve SET trangThaiVe = N'" + trangthaimoi + "' WHERE maVeTau = '" + mave + "'";
 		int rows = st.executeUpdate(q);
 		return rows > 0;
+	}
+
+	public int CapNhatTrangThaiVe( ArrayList<Ve> list) throws SQLException {
+		LocalDateTime ngayHienTai = LocalDateTime.now();
+		int rows = 0;
+		int cnt=0;
+		for (Ve x : list) {
+			cnt++;
+			if (x.getTrangThaiVe().equalsIgnoreCase("hoạt động")) {
+				if (x.getNgayGioDi().isBefore(ngayHienTai)) {
+					String q = "update Ve set trangThaiVe = N'Kết thúc' where maVeTau = '" + x.getMaVeTau() + "'";
+					System.out.println(x.getMaVeTau());
+					rows = st.executeUpdate(q);
+				}
+			}
+		}
+		System.out.println(cnt);
+		return rows;
 	}
 }

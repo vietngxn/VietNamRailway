@@ -1,9 +1,12 @@
 package fourcore.GiaoDien;
 
+import java.awt.Image;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.text.NumberFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -107,6 +110,7 @@ public class GiaoDienHoanTraVe extends Application {
 	private VeDAO dao;
 	private ArrayList<Ve> list;
 	NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
+	DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	int selected = 0;
 	private HBox pnlTongConglbl;
 	private Label lblTongCong;
@@ -121,6 +125,8 @@ public class GiaoDienHoanTraVe extends Application {
 	private Tau_DAO tDao;
 	private Tau t;
 	private ChuyenTau ct;
+	private Button btnCapNhatTrangThaiVe;
+	private StackPane pnlImg_Refesh;
 	private static double tongCongPhiHoanTra;
 
 	public void loadLableTongCongValue(double tongCongThanhTien) {
@@ -768,7 +774,7 @@ public class GiaoDienHoanTraVe extends Application {
 
 			layout_lbl_timkiem = new HBox();
 			layout_lbl_timkiem.setPrefSize(1200, 40);
-			lbl_timkiem = new Label("Nhập mã vé");
+			lbl_timkiem = new Label("Nhập mã vé hoặc số giấy tờ người mua trên hóa đơn");
 			lbl_timkiem.setTranslateX(10);
 			lbl_timkiem.setTranslateY(0);
 			lbl_timkiem.setStyle(
@@ -825,10 +831,16 @@ public class GiaoDienHoanTraVe extends Application {
 			btnTimKiemTheoNguoiMua.setMaxSize(350, 320);
 			btnTimKiemTheoNguoiMua.setStyle(btnStyle);
 
-			pnlTimKiem = new HBox(100);
+			pnlTimKiem = new HBox(150);
 			pnlTimKiem.setMaxSize(1200, 500);
 
-			pnlTimKiem.getChildren().addAll(btnTimKiemTheoMaVe, btnTimKiemTheoNguoiMua);
+			pnlImg_Refesh = new StackPane();
+			ImageView img_Refesh = new ImageView(getClass().getResource("/images/refesh_icon.png").toExternalForm());
+			img_Refesh.setFitWidth(50);
+			img_Refesh.setFitHeight(50);
+			pnlImg_Refesh.getChildren().add(img_Refesh);
+			pnlImg_Refesh.setPrefSize(50, 50);
+			pnlTimKiem.getChildren().addAll(btnTimKiemTheoMaVe, btnTimKiemTheoNguoiMua, pnlImg_Refesh);
 			pnlTimKiem.setAlignment(Pos.CENTER);
 
 			btnTimKiemTheoMaVe.setAlignment(Pos.CENTER);
@@ -845,54 +857,20 @@ public class GiaoDienHoanTraVe extends Application {
 			tableCol.setMaxWidth(1330);
 			VBox.setMargin(tableCol, new Insets(30, 10, 10, 0));
 
-			String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 24px; -fx-font-weight: bold;";
+			String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 22px; -fx-font-weight: bold;";
+			String[] tenCot = { "Mã vé", "Loại vé", "Ga đi - Ga đến", "Ngày khởi hành", "Vị trí ghế", "Chuyến",
+					"Trạng thái" };
+			double[] sizeCot = { 200, 200, 180, 250, 270, 220, 220 };
 
-			colMaVe = new Label("Mã vé");
-			colMaVe.setStyle(styleHeader);
-			colChuyen = new Label("Chuyến");
-			colChuyen.setStyle(styleHeader);
-			colGaDiGaDen = new Label("Ga đi - Ga đến");
-			colGaDiGaDen.setStyle(styleHeader);
-			colNgayKhoiHanh = new Label("Ngày khởi hành");
-			colNgayKhoiHanh.setStyle(styleHeader);
-			colViTriGhe = new Label("Vị trí ghế");
-			colViTriGhe.setStyle(styleHeader);
-			colLoaiHoaDon = new Label("Loại vé");
-			colLoaiHoaDon.setStyle(styleHeader);
-			colTrangThai = new Label("Trạng thái");
-			colTrangThai.setStyle(styleHeader);
-
-			paneCol1 = new StackPane(colMaVe);
-			paneCol2 = new StackPane(colLoaiHoaDon);
-			paneCol3 = new StackPane(colChuyen);
-			paneCol4 = new StackPane(colGaDiGaDen);
-			paneCol5 = new StackPane(colNgayKhoiHanh);
-			paneCol6 = new StackPane(colViTriGhe);
-			paneCol7 = new StackPane(colTrangThai);
-
-			paneCol1.setPrefWidth(200);
-			paneCol2.setPrefWidth(200);
-			paneCol3.setPrefWidth(180);
-			paneCol4.setPrefWidth(250);
-			paneCol5.setPrefWidth(270);
-			paneCol6.setPrefWidth(220);
-			paneCol7.setPrefWidth(220);
-
-			paneCol1.setAlignment(Pos.CENTER);
-			paneCol2.setAlignment(Pos.CENTER);
-			paneCol3.setAlignment(Pos.CENTER);
-			paneCol4.setAlignment(Pos.CENTER);
-			paneCol5.setAlignment(Pos.CENTER);
-			paneCol6.setAlignment(Pos.CENTER);
-			paneCol7.setAlignment(Pos.CENTER);
-
-			tableCol.add(paneCol1, 0, 0);
-			tableCol.add(paneCol2, 1, 0);
-			tableCol.add(paneCol3, 2, 0);
-			tableCol.add(paneCol4, 3, 0);
-			tableCol.add(paneCol5, 4, 0);
-			tableCol.add(paneCol6, 5, 0);
-			tableCol.add(paneCol7, 6, 0);
+			for (int i = 0; i < tenCot.length; i++) {
+				Label lbl = new Label(tenCot[i]);
+				lbl.setStyle(styleHeader);
+				StackPane pnl = new StackPane(lbl);
+				pnl.setPrefWidth(sizeCot[i]);
+				pnl.setAlignment(Pos.CENTER);
+				tableCol.add(pnl, i, 0);
+				System.out.println(i);
+			}
 
 			noiDungChinh.getChildren().add(tableCol);
 
@@ -912,7 +890,6 @@ public class GiaoDienHoanTraVe extends Application {
 					    -fx-border-width: 0;
 					""");
 
-			// Chỉ hiện thanh cuộn dọ
 			scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 			scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 			noiDungChinh.getChildren().add(scrollPane);
@@ -935,19 +912,24 @@ public class GiaoDienHoanTraVe extends Application {
 			btnHoanVe = new Button("Hoàn vé");
 			btnHoanVe.setPrefSize(350, 60);
 			btnHoanVe.setStyle(btnStyle);
-			pnlCapNhatVe.getChildren().add(btnHoanVe);
+
+			btnCapNhatTrangThaiVe = new Button("Cập nhật trạng thái vé");
+			btnCapNhatTrangThaiVe.setPrefSize(350, 60);
+			btnCapNhatTrangThaiVe.setStyle(btnStyle);
+			pnlCapNhatVe.getChildren().addAll(btnCapNhatTrangThaiVe, btnHoanVe);
 			noiDungChinh.getChildren().add(pnlCapNhatVe);
 
 			// add su kien disable btn
 			btnTimKiemTheoMaVe.setOnMouseClicked(event -> {
-				String regex = "^V\\d{3}$";
+				String regex = "VE\\d+";
 				String input = txt_timkiem.getText().trim();
+				System.out.println(input);
 
 				if (input.isEmpty() || !Pattern.matches(regex, input)) {
 					Alert alert = new Alert(Alert.AlertType.ERROR);
 					alert.setTitle("Lỗi định dạng");
 					alert.setHeaderText(null);
-					alert.setContentText("Mã vé không hợp lệ! (Định dạng hợp lệ: VX123)");
+					alert.setContentText("Mã vé không hợp lệ! (Định dạng hợp lệ: VE123)");
 					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 					alert.initOwner(stage);
 					alert.initModality(Modality.WINDOW_MODAL);
@@ -958,22 +940,23 @@ public class GiaoDienHoanTraVe extends Application {
 						pnlDataHoanTraVe.getChildren().clear();
 						Ve x = new Ve();
 						x = dao.getHoanVeBangMaVe(input);
+						if (x == null) {
+							Label thongBaoKhongTimThay = new Label("Không tìm thấy vé!");
+							thongBaoKhongTimThay.setStyle(lblStyle);
+							String css = " -fx-font-family: 'Inter';" + "-fx-font-weight: bold;"
+									+ "-fx-font-size: 20px;"
+									+ "-fx-text-fill: linear-gradient(to top, #00BACB, #8EE6ED);";
+
+							thongBaoKhongTimThay.setStyle(css);
+							StackPane tbao = new StackPane(thongBaoKhongTimThay);
+							tbao.setAlignment(Pos.CENTER);
+							pnlDataHoanTraVe.getChildren().add(tbao);
+						}
 						ChiTietHoaDonDAO ctDao = new ChiTietHoaDonDAO();
 						String tenloai = ctDao.getLoaiHoaDonChoVeTau(x.getMaVeTau());
 						ct = ctDAO.getChuyenTauBangMa(x.getChuyenTau().getMaChuyenTau());
 						t = tDao.getTauByMaTau(ct.getTau().getMaTau());
-						pnlDataHoanTraVe.getChildren()
-								.add(taoDataChoTableHoanVe(x.getMaVeTau(), t.getLoaiTau().getTenLoaiTau(),
-										x.getGaDi() + " - " + x.getGaDen(),
-										x.getNgayGioDi().toLocalDate() + " - " + x.getNgayGioDi().toLocalTime(),
-										"Toa số " + x.getSoToa() + " chỗ " + x.getSoGhe(), tenloai, x.getTrangThaiVe(),
-										x.getKhachHang().getHoten(), x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
-										x.getKhachHang().getCccd(), x.getGiaVe(),
-										nf.format(x.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
-										nf.format(x.getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%",
-										x.tinhPhiHoanTra(x.getNgayGioDi(), x.getGiaVe(), tenloai),
-										x.tinhThanhTienThanhToanHoanTra(
-												x.tinhPhiHoanTra(x.getNgayGioDi(), x.getGiaVe(), tenloai))));
+						setDuLieu(pnlDataHoanTraVe, x, tenloai);
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
@@ -999,6 +982,18 @@ public class GiaoDienHoanTraVe extends Application {
 						pnlDataHoanTraVe.getChildren().clear();
 						list.removeAll(list);
 						list = dao.getListHoanVeTheoCCCDKhachHang(input);
+						if (list == null || list.isEmpty()) {
+							Label thongBaoKhongTimThay = new Label("Không tìm thấy vé!");
+							thongBaoKhongTimThay.setStyle(lblStyle);
+							String css = " -fx-font-family: 'Inter';" + "-fx-font-weight: bold;"
+									+ "-fx-font-size: 20px;"
+									+ "-fx-text-fill: linear-gradient(to top, #00BACB, #8EE6ED);";
+
+							thongBaoKhongTimThay.setStyle(css);
+							StackPane tbao = new StackPane(thongBaoKhongTimThay);
+							tbao.setAlignment(Pos.CENTER);
+							pnlDataHoanTraVe.getChildren().add(tbao);
+						}
 						ctDAO = new ChuyenTauDAO();
 						tDao = new Tau_DAO();
 						for (Ve x : list) {
@@ -1006,17 +1001,7 @@ public class GiaoDienHoanTraVe extends Application {
 							String tenloai = ctDao.getLoaiHoaDonChoVeTau(x.getMaVeTau());
 							ct = ctDAO.getChuyenTauBangMa(x.getChuyenTau().getMaChuyenTau());
 							t = tDao.getTauByMaTau(ct.getTau().getMaTau());
-							pnlDataHoanTraVe.getChildren().add(taoDataChoTableHoanVe(x.getMaVeTau(),
-									t.getLoaiTau().getTenLoaiTau(), x.getGaDi() + " - " + x.getGaDen(),
-									x.getNgayGioDi().toLocalDate() + " - " + x.getNgayGioDi().toLocalTime(),
-									"Toa số " + x.getSoToa() + " chỗ " + x.getSoGhe(), tenloai, x.getTrangThaiVe(),
-									x.getKhachHang().getHoten(), x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
-									x.getKhachHang().getCccd(), x.getGiaVe(),
-									nf.format(x.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
-									nf.format(x.getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%",
-									x.tinhPhiHoanTra(x.getNgayGioDi(), x.getGiaVe(), tenloai),
-									x.tinhThanhTienThanhToanHoanTra(
-											x.tinhPhiHoanTra(x.getNgayGioDi(), x.getGiaVe(), tenloai))));
+							setDuLieu(pnlDataHoanTraVe, x, tenloai);
 						}
 					} catch (SQLException e) {
 						e.printStackTrace();
@@ -1024,12 +1009,42 @@ public class GiaoDienHoanTraVe extends Application {
 				}
 			});
 
-			this.btnHoanVe.setOnMouseClicked(event -> {
+			btnCapNhatTrangThaiVe.setOnMouseClicked(event -> {
+				try {
+					dao = new VeDAO(0);
+					int soLuongVeCapNhat = dao.CapNhatTrangThaiVe(list);
+					System.out.println(soLuongVeCapNhat);
+					if (soLuongVeCapNhat > 0) {
+						pnlDataHoanTraVe.getChildren().clear();
+						list.removeAll(list);
+						pnlDataHoanTraVe.getChildren().add(loadDuLieuLenTable());
+					}
 
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			});
+			pnlImg_Refesh.setOnMouseClicked(event -> {
+				pnlDataHoanTraVe.getChildren().clear();
+				list.removeAll(list);
+				listVeThanhToan.clear();
+				tongCongPhiHoanTra = 0;
+				try {
+					pnlDataHoanTraVe.getChildren().add(loadDuLieuLenTable());
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		hieuUngHover(btnCapNhatTrangThaiVe);
+		hieuUngHover(btnHoanVe);
+		hieuUngHover(btnTimKiemTheoMaVe);
+		hieuUngHover(btnTimKiemTheoNguoiMua);
+		hieuUngHoverPnl(pnlImg_Refesh);
+
 	}
 
 	public Button traVeNutHoanVe() {
@@ -1040,7 +1055,52 @@ public class GiaoDienHoanTraVe extends Application {
 		return this.listVeThanhToan;
 	}
 
+	public void hieuUngHover(Button btn) {
+		btn.setOnMouseEntered(e -> {
+			ScaleTransition scaleUp = new ScaleTransition(Duration.millis(150), btn);
+			scaleUp.setToX(1.1);
+			scaleUp.setToY(1.1);
+			scaleUp.play();
+		});
+
+		btn.setOnMouseExited(e -> {
+			ScaleTransition scaleDown = new ScaleTransition(Duration.millis(150), btn);
+			scaleDown.setToX(1.0);
+			scaleDown.setToY(1.0);
+			scaleDown.play();
+		});
+	}
+
+	public void hieuUngHoverPnl(StackPane pnl) {
+		pnl.setOnMouseEntered(e -> {
+			ScaleTransition scaleUp = new ScaleTransition(Duration.millis(150), pnl);
+			scaleUp.setToX(1.1);
+			scaleUp.setToY(1.1);
+			scaleUp.play();
+		});
+
+		pnl.setOnMouseExited(e -> {
+			ScaleTransition scaleDown = new ScaleTransition(Duration.millis(150), pnl);
+			scaleDown.setToX(1.0);
+			scaleDown.setToY(1.0);
+			scaleDown.play();
+		});
+	}
+
+	public void setDuLieu(VBox pnlDataHoanTraVe, Ve x, String tenloai) {
+		pnlDataHoanTraVe.getChildren().add(taoDataChoTableHoanVe(x.getMaVeTau(), t.getLoaiTau().getTenLoaiTau(),
+				x.getGaDi() + " - " + x.getGaDen(),
+				format.format(x.getNgayGioDi().toLocalDate()) + " - " + x.getNgayGioDi().toLocalTime(),
+				"Toa số " + x.getSoToa() + " chỗ " + x.getSoGhe(), tenloai, x.getTrangThaiVe(),
+				x.getKhachHang().getHoten(), x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(), x.getKhachHang().getCccd(),
+				x.getGiaVe(), nf.format(x.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
+				nf.format(x.getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%",
+				x.tinhPhiHoanTra(x.getNgayGioDi(), x.getGiaVe(), tenloai),
+				x.tinhThanhTienThanhToanHoanTra(x.tinhPhiHoanTra(x.getNgayGioDi(), x.getGiaVe(), tenloai))));
+	}
+
 	public VBox loadDuLieuLenTable() throws SQLException {
+		lblTongCongValue.setText("0");
 		dao = new VeDAO(0);
 		list = dao.getListVe();
 		VBox box = new VBox(10);
@@ -1054,7 +1114,7 @@ public class GiaoDienHoanTraVe extends Application {
 			t = tDao.getTauByMaTau(ct.getTau().getMaTau());
 			box.getChildren().add(taoDataChoTableHoanVe(x.getMaVeTau(), t.getLoaiTau().getTenLoaiTau(),
 					x.getGaDi() + " - " + x.getGaDen(),
-					x.getNgayGioDi().toLocalDate() + " - " + x.getNgayGioDi().toLocalTime(),
+					format.format(x.getNgayGioDi().toLocalDate()) + " - " + x.getNgayGioDi().toLocalTime(),
 					"Toa số " + x.getSoToa() + " chỗ " + x.getSoGhe(), tenloai, x.getTrangThaiVe(),
 					x.getKhachHang().getHoten(), x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
 					x.getKhachHang().getCccd(), x.getGiaVe(),

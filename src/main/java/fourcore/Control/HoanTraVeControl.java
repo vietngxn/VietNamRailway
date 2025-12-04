@@ -14,6 +14,7 @@ import fourcore.GiaoDien.GiaoDienCapLaiVe;
 import fourcore.GiaoDien.GiaoDienHoanTraVe;
 import fourcore.GiaoDien.GiaoDienLichSuMuaBanDoiVe;
 import fourcore.GiaoDien.GiaoDienXuatHoaDonHoanTraVe;
+import fourcore.GiaoDien.HoaDonHoanTraVe;
 import fourcore.GiaoDien.QuanLyKhachHang;
 import fourcore.dao.ChiTietHoaDonDAO;
 import fourcore.dao.VeDAO;
@@ -28,6 +29,7 @@ import javafx.stage.Stage;
 public class HoanTraVeControl {
 	GiaoDienHoanTraVe gdHoan;
 	GiaoDienXuatHoaDonHoanTraVe gdXuat;
+	HoaDonHoanTraVe gdXuatHD;
 	Node gdHoanBackUp;
 	VeDAO dao;
 	Map<Ve, Double> listVeThanhToan;
@@ -141,7 +143,14 @@ public class HoanTraVeControl {
 		});
 		gdXuat.traVeNutTroVe().setOnMouseClicked(event -> {
 			root.setCenter(gdHoanBackUp);
+			System.out.println("Thanh toán thành công, trả về trang hoàn vé");
 		});
+		
+		gdXuatHD.traVeBtnXuatHoaDon().setOnMouseClicked(event -> {
+			System.out.println("Thanh toán thành công, trả về trang hoàn vé");
+			root.setCenter(gdHoanBackUp);
+		});
+
 	}
 
 	public void loadDuLieuThanhToan(Map<Ve, Double> listVe, Label lblTongCong, Label lblSoLuong) {

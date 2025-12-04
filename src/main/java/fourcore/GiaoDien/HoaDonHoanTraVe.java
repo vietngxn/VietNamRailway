@@ -21,6 +21,7 @@ import fourcore.dao.GheTrenChuyenTau_dao;
 import fourcore.dao.HoaDonDAO;
 import fourcore.dao.LichSuTuongTacVe_Dao;
 import fourcore.dao.VeDAO;
+import javafx.animation.ScaleTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -35,6 +36,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class HoaDonHoanTraVe extends Application {
 
@@ -302,6 +304,7 @@ public class HoaDonHoanTraVe extends Application {
 						e.printStackTrace();
 					}
 					showConfirm(currentStage, "Thông báo", "Bạn đã thanh toán hóa đơn thành công");
+
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -313,7 +316,8 @@ public class HoaDonHoanTraVe extends Application {
 
 		footer_layout.getChildren().addAll(tongCong_layout, button_layout);
 		root.setBottom(footer_layout);
-
+		hieuUngHover(btn_thoat);
+		hieuUngHover(btn_xuatHoaDon);
 	}
 
 	public static boolean showConfirm(Stage ownerStage, String title, String message) {
@@ -332,6 +336,26 @@ public class HoaDonHoanTraVe extends Application {
 
 		Optional<ButtonType> result = alert.showAndWait();
 		return result.isPresent() && result.get() == buttonYes;
+	}
+
+	public void hieuUngHover(Button btn) {
+		btn.setOnMouseEntered(e -> {
+			ScaleTransition scaleUp = new ScaleTransition(Duration.millis(150), btn);
+			scaleUp.setToX(1.1);
+			scaleUp.setToY(1.1);
+			scaleUp.play();
+		});
+
+		btn.setOnMouseExited(e -> {
+			ScaleTransition scaleDown = new ScaleTransition(Duration.millis(150), btn);
+			scaleDown.setToX(1.0);
+			scaleDown.setToY(1.0);
+			scaleDown.play();
+		});
+	}
+
+	public Button traVeBtnXuatHoaDon() {
+		return this.btn_xuatHoaDon;
 	}
 
 	public static void main(String[] args) {
