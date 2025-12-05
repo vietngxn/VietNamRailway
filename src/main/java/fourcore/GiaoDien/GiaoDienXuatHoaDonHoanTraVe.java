@@ -863,6 +863,7 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 		Application.launch(GiaoDienXuatHoaDonHoanTraVe.class, args);
 	}
 
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub

@@ -120,12 +120,11 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 	public VBox taoDataChoTableLichSuMuaBanDoiVe(String mave, String chuyen, String loai, String gaDiGaDen,
 			String ngayKhoiHanh, String vitrighe, LocalDate ngayMua, String hoten, String doituong, String sogiayto,
 			double giave, String giamdoituong, String khuyenmai, double giatrichenhlech, double thanhtien) {
-
-		VBox pnlReturn = new VBox();
-		VBox.setMargin(pnlReturn, new Insets(0, 30, 0, 45));
+		VBox pnlTraVe = new VBox();
+		VBox.setMargin(pnlTraVe, new Insets(0, 30, 0, 45));
 		// ======= DÒNG DỮ LIỆU CHÍNH =======
 		GridPane data = new GridPane();
-		pnlReturn.getChildren().add(data);
+		pnlTraVe.getChildren().add(data);
 
 		data.setHgap(10);
 		data.setAlignment(Pos.CENTER);
@@ -134,26 +133,19 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 		data.setPadding(new Insets(0, 0, 0, 10));
 
 		String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
+
 		Label[] labels = { new Label(mave), new Label(chuyen), new Label(loai), new Label(gaDiGaDen),
-				new Label(ngayKhoiHanh.toString()), new Label(vitrighe), new Label(formatter.format(ngayMua)) };
+				new Label(ngayKhoiHanh), new Label(vitrighe), new Label(formatter.format(ngayMua)) };
 		double[] widths = { 200, 200, 250, 250, 230, 210, 250 };
 
 		for (int i = 0; i < labels.length; i++) {
 			Label lbl = labels[i];
 			lbl.setStyle(baseStyle);
-
-			if (i == 5) { // trạng thái
-				String text = lbl.getText().toLowerCase();
-				if (text.equals("sẵn sàng"))
-					lbl.setStyle(baseStyle + "-fx-font-size: 18px; -fx-text-fill: #009D75;");
-				else if (text.equals("đã khởi hành"))
-					lbl.setStyle(baseStyle + "-fx-font-size: 18px; -fx-text-fill: rgba(203, 0, 44, 0.83);");
-			}
-
 			StackPane pane = new StackPane(lbl);
 			pane.setPrefSize(widths[i], 70);
 			pane.setAlignment(Pos.CENTER);
 			data.add(pane, i, 0);
+			
 		}
 
 		String normalStyle = """
@@ -247,13 +239,10 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 			pnlThongTinChiTiet.setManaged(false);
 			pnlThongTinChiTiet.setVisible(false);
 
-			pnlReturn.setOnMouseClicked(event -> {
-				boolean check = pnlThongTinChiTiet.isVisible();
-				pnlThongTinChiTiet.setManaged(!check);
-				pnlThongTinChiTiet.setVisible(!check);
-			});
-			pnlReturn.getChildren().add(pnlThongTinChiTiet);
-			return pnlReturn;
+			checkVisible(pnlTraVe, pnlThongTinChiTiet);
+
+			pnlTraVe.getChildren().add(pnlThongTinChiTiet);
+			return pnlTraVe;
 		}
 
 		pnlsubCT1.setPrefWidth(400);
@@ -263,14 +252,17 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 		pnlThongTinChiTiet.getChildren().addAll(pnlsubCT1, pnlsubCT2, pnlsubCT5, pnlsubCT6);
 		pnlThongTinChiTiet.setManaged(false);
 		pnlThongTinChiTiet.setVisible(false);
+		checkVisible(pnlTraVe, pnlThongTinChiTiet);
+		pnlTraVe.getChildren().add(pnlThongTinChiTiet);
+		return pnlTraVe;
+	}
 
-		pnlReturn.setOnMouseClicked(event -> {
-			boolean check = pnlThongTinChiTiet.isVisible();
-			pnlThongTinChiTiet.setManaged(!check);
-			pnlThongTinChiTiet.setVisible(!check);
+	private void checkVisible(VBox pnl, HBox Hpnl) {
+		pnl.setOnMouseClicked(event -> {
+			boolean check = Hpnl.isVisible();
+			Hpnl.setManaged(!check);
+			Hpnl.setVisible(!check);
 		});
-		pnlReturn.getChildren().add(pnlThongTinChiTiet);
-		return pnlReturn;
 	}
 
 	private HBox taoSubCT1(String label, String value, String leftStyle, String rightStyle) {
@@ -837,11 +829,9 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 			for (int i = 0; i < headers.length; i++) {
 				Label label = new Label(headers[i]);
 				label.setStyle(styleHeader);
-
 				StackPane pane = new StackPane(label);
 				pane.setPrefWidth(widths[i]);
 				pane.setAlignment(Pos.CENTER);
-
 				tableColLichSu.add(pane, i, 0);
 			}
 
