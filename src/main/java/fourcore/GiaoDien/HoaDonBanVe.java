@@ -33,11 +33,13 @@ public class HoaDonBanVe extends Application {
 	private Button btn_xuatHoaDon;
 	private Button btn_thoat;
 	private VBox table_desc;
-    HoaDon hoaDon = new HoaDon();
+    HoaDon hoaDon;
     HoaDonDAO hoaDonDAO = new HoaDonDAO();
-    ArrayList<ThongTinCtHoaDon> listThongTinCtHoaDon = hoaDonDAO.getThongTinCTHoaDon(hoaDon.getMaHoaDon());
+    ArrayList<ThongTinCtHoaDon> listThongTinCtHoaDon;
     public HoaDonBanVe(HoaDon hoaDon) throws SQLException {
         this.hoaDon = hoaDon;
+        listThongTinCtHoaDon = hoaDonDAO.getThongTinCTHoaDon(hoaDon.getMaHoaDon());
+
     }
 
     @Override
@@ -261,6 +263,7 @@ public class HoaDonBanVe extends Application {
         btn_xuatHoaDon.setOnAction(e -> {
             HoaDonExportPDF hoaDonExportPDF = new HoaDonExportPDF();
             try {
+                System.out.println("kich thuoc list thong tin ct hoadon: "+ listThongTinCtHoaDon.size());
                 hoaDonExportPDF.exportHoaDon(hoaDon,listThongTinCtHoaDon,hoaDonDAO.getKhuyenMaiByMaHoaDon(hoaDon.getMaHoaDon()));
             } catch (IOException ex) {
                 throw new RuntimeException(ex);

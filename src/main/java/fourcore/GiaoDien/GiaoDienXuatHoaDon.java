@@ -737,7 +737,7 @@ public class GiaoDienXuatHoaDon extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Hệ thống quản lý vé tàu");
 			primaryStage.setFullScreen(true);
-//			primaryStage.show();
+			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

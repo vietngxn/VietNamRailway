@@ -199,7 +199,7 @@ public class BanVe extends Application {
 		noidungtieude.setTranslateX(20);
 		
 		InputStream is = getClass().getResourceAsStream("/fonts/Inter/static/Inter_28pt-Bold.ttf");
-	    Font font_title = Font.loadFont(is, 50);
+	    Font font_title = Font.loadFont(is, 36);
 	    noidungtieude.setFont(font_title);
 		
 		header_layout.getChildren().add(noidungtieude);
@@ -214,7 +214,7 @@ public class BanVe extends Application {
 		// chua 4 combo box
 		center_layout1 = new VBox();
 		center_layout1.setPrefSize(1000, 300);
-		center_layout1.setTranslateX(100);
+		center_layout1.setTranslateX(250);
 		
 		//chua 2 combobox dau tien
 		combobox1 = new HBox();
@@ -233,9 +233,9 @@ public class BanVe extends Application {
 		
 		//btn TimKiem
 		layout_btn_timkiem = new VBox();
-		layout_btn_timkiem.setPrefSize(400, 50);
-        btn_timkiem = new Button("Tìm kiếm");
-        btn_timkiem.setPrefSize(200, 50);
+		layout_btn_timkiem.setPrefSize(400, 80);
+        btn_timkiem = new Button("TÌM KIẾM");
+        btn_timkiem.setPrefSize(200, 80);
         InputStream is1 = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-SemiBold.ttf");
         InputStream is2 = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-SemiBold.ttf");
         Font font_timkiem = Font.loadFont(is1, 20);
@@ -259,7 +259,7 @@ public class BanVe extends Application {
         thongBao.setStyle("");
         layout_btn_timkiem.getChildren().add(thongBao);
         layout_btn_timkiem.getChildren().add(btn_timkiem);
-        layout_btn_timkiem.setTranslateX(350);
+        layout_btn_timkiem.setTranslateX(570);
         layout_btn_timkiem.setTranslateY(-100);
 
         center_layout.getChildren().add(layout_btn_timkiem);
@@ -292,8 +292,9 @@ public class BanVe extends Application {
 //		ComboBox<String> comboBox1 = createSearchableComboBox(items);
         comboBox1 = new ComboBox(items);
 	    comboBox1.setPromptText("Ga đi");
-	    comboBox1.setPrefWidth(300);
-	    //comboBox1.setStyle("-fx-background-color  : rgb(121,217,225)");
+	    comboBox1.setPrefWidth(500);
+        comboBox1.setPrefHeight(45);
+        //comboBox1.setStyle("-fx-background-color  : rgb(121,217,225)");
 
 	    comboBox1.setId("combo-box");
 	    combolayout1.getChildren().add(comboBox1);
@@ -312,7 +313,9 @@ public class BanVe extends Application {
         comboBox2 = new ComboBox(item);
 
         comboBox2.setPromptText("Ga đến");
-        comboBox2.setPrefWidth(300);
+        comboBox2.setPrefWidth(500);
+        comboBox2.setPrefHeight(45);
+        comboBox2.setTranslateX(20);
 	   // combobox.setStyle("-fx-background-color  : rgb(121,217,225)");
         comboBox2.setId("combo-box");
         combolayout2.getChildren().add(comboBox2);
@@ -338,7 +341,7 @@ public class BanVe extends Application {
 		combolayout3 = new VBox();
 		combolayout3.setPrefSize(400,50);
 		date = new DatePicker();
-		date.setPrefSize(300, 35);
+		date.setPrefSize(500, 45);
 		date.setId("date");
 		date.setPromptText("Ngày đi");
 		date.setOnAction(e -> {
@@ -358,8 +361,9 @@ public class BanVe extends Application {
 		combolayout4 = new VBox();
 		combolayout4.setPrefSize(400, 50);
 		date1 = new DatePicker();
-		date1.setPrefSize(300,35);
+		date1.setPrefSize(500,45);
 		date1.setPromptText("Ngày về");
+        date1.setTranslateX(20);
 		date1.setOnAction(e -> {
 			LocalDate ngayve = date1.getValue();
 			date1.setValue(ngayve);
@@ -381,10 +385,9 @@ public class BanVe extends Application {
 		Font font_combobox = Font.loadFont(is, 15);
 		
 		radio_layout1 = new VBox();
-		
 		rb_motchieu = new RadioButton("Một Chiều");
         rb_motchieu.setUserData("motchieu");
-		rb_motchieu.setPrefSize(150,30);
+		rb_motchieu.setPrefSize(200,30);
 		rb_motchieu.setStyle("-fx-font-size:15px;-fx-font-weight:bold;");
 		rb_motchieu.setToggleGroup(loaive);
 		
@@ -404,7 +407,7 @@ public class BanVe extends Application {
 		
 		radio_layout.getChildren().addAll(radio_layout1,radio_layout2);
 		radio_layout2.setTranslateX(50);
-		radio_layout.setTranslateX(515);
+		radio_layout.setTranslateX(680);
 		radio_layout.setTranslateY(-140);
 		
 		loaive.selectedToggleProperty().addListener((obs,oval,nval) -> {

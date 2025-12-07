@@ -717,7 +717,7 @@ public class ChonVe extends Application {
             noiDungChinh.getChildren().add(danhSachGheBox);
 
             chuThichVaBtnBox = new HBox();
-            chuThichVaBtnBox.setTranslateY(150);
+            chuThichVaBtnBox.setTranslateY(120);
             chuThichVaBtnBox.setTranslateX(40);
 
             VBox chuThichToaBox =  new VBox();
@@ -763,28 +763,36 @@ public class ChonVe extends Application {
 
             HBox chuThichGheFull = new HBox();
             ImageView gheFullImg = new ImageView(getClass().getResource("/img/gheDaDat.png").toExternalForm());
-            Label gheFullLabel = new Label("Ghế đã được đặt");
+            ImageView giuongFullImg = new ImageView(getClass().getResource("/img/giuongHetCho.png").toExternalForm());
+            giuongFullImg.setTranslateX(20);
+            Label gheFullLabel = new Label("Ghế/Giường đã được bán");
             gheFullLabel.setFont(fontTieuDeToaTau);
             gheFullLabel.setStyle("-fx-text-fill: #EC6BC5;");
-            gheFullLabel.setTranslateY(5);
-            gheFullLabel.setTranslateX(12);
-            chuThichGheFull.getChildren().addAll(gheFullImg,gheFullLabel);
+            gheFullLabel.setTranslateY(8);
+            gheFullLabel.setTranslateX(22);
+            chuThichGheFull.getChildren().addAll(gheFullImg,giuongFullImg,gheFullLabel);
 
             chuThichGheBox.getChildren().addAll(chuThichGheFull);
 
             HBox chuThichGheChon = new HBox();
+            chuThichGheChon.setTranslateY(10);
+
             ImageView gheChonImg = new ImageView(getClass().getResource("/img/gheDangChon.png").toExternalForm());
-            Label gheChonLabel = new Label("Ghế đang được chọn");
+            ImageView giuongChonImg = new ImageView(getClass().getResource("/img/giuongDangChon.png").toExternalForm());
+            giuongChonImg.setTranslateX(20);
+            Label gheChonLabel = new Label("Ghế/Giường đang được chọn");
             gheChonLabel.setFont(fontTieuDeToaTau);
             gheChonLabel.setStyle("-fx-text-fill: #00EAC3;");
-            gheChonLabel.setTranslateY(5);
-            gheChonLabel.setTranslateX(12);
-            chuThichGheChon.getChildren().addAll(gheChonImg,gheChonLabel);
+            gheChonLabel.setTranslateY(8);
+            gheChonLabel.setTranslateX(22);
+            chuThichGheChon.getChildren().addAll(gheChonImg,giuongChonImg,gheChonLabel);
 
             chuThichGheBox.getChildren().addAll(chuThichGheChon);
 
 
             HBox chuThichGheTrong = new HBox();
+            chuThichGheTrong.setTranslateY(20);
+
             ImageView gheTrongImg = new ImageView(getClass().getResource("/img/gheTrong.png").toExternalForm());
             Label gheTrongLabel = new Label("Ghế đang trống");
             gheTrongLabel.setFont(fontTieuDeToaTau);
@@ -794,6 +802,37 @@ public class ChonVe extends Application {
             chuThichGheTrong.getChildren().addAll(gheTrongImg,gheTrongLabel);
 
             chuThichGheBox.getChildren().addAll(chuThichGheTrong);
+
+            HBox chuThichGheLuuDong = new HBox();
+            chuThichGheLuuDong.setTranslateY(30);
+
+            ImageView gheLuuDongImg = new ImageView(getClass().getResource("/img/gheluudong.png").toExternalForm());
+            gheLuuDongImg.setFitWidth(37);
+            gheLuuDongImg.setFitHeight(43);
+            Label gheLuuDongLabel = new Label("Ghế lưu động");
+            gheLuuDongLabel.setFont(fontTieuDeToaTau);
+            gheLuuDongLabel.setStyle("-fx-text-fill: #CBC400;");
+            gheLuuDongLabel.setTranslateY(8);
+            gheLuuDongLabel.setTranslateX(12);
+            chuThichGheLuuDong.getChildren().addAll(gheLuuDongImg,gheLuuDongLabel);
+
+            chuThichGheBox.getChildren().addAll(chuThichGheLuuDong);
+
+            HBox chuThichGheKhongKhaDung = new HBox();
+            chuThichGheKhongKhaDung.setTranslateY(40);
+
+            ImageView gheKhongKhaDungImg = new ImageView(getClass().getResource("/img/gheDisable.png").toExternalForm());
+            gheKhongKhaDungImg.setFitWidth(37);
+            gheKhongKhaDungImg.setFitHeight(43);
+            Label gheKhongKhaDungLabel = new Label("Ghế không khả dụng");
+            gheKhongKhaDungLabel.setFont(fontTieuDeToaTau);
+            gheKhongKhaDungLabel.setStyle("-fx-text-fill: #929292;");
+            gheKhongKhaDungLabel.setTranslateY(8);
+            gheKhongKhaDungLabel.setTranslateX(12);
+            chuThichGheKhongKhaDung.getChildren().addAll(gheKhongKhaDungImg,gheKhongKhaDungLabel);
+
+            chuThichGheBox.getChildren().addAll(chuThichGheKhongKhaDung);
+
 
             chuThichVaBtnBox.getChildren().addAll(chuThichToaBox,chuThichGheBox);
 
@@ -810,7 +849,7 @@ public class ChonVe extends Application {
             root.setCenter(noiDungChinh);
             primaryStage.setFullScreen(true);
 
-//            primaryStage.show();
+            primaryStage.show();
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -827,9 +866,10 @@ public class ChonVe extends Application {
         }
 
         String maGa = gaTauDao.getMaGaTuTenGa(gaDen);
+        System.out.println(maGa);
         Time gioDen = gaTauDao.getGioDiKeHoach(maHanhTrinh, maGa);
         int soNgayDiQua = gaTauDao.getSoNgayDiQua(maHanhTrinh, maGa);
-
+        System.out.println(soNgayDiQua);
         LocalDateTime ngayGioDen = null;
         if (gioDen != null && ngayGioDi != null) {
             LocalDateTime baseDate = ngayGioDi.plusDays(soNgayDiQua);

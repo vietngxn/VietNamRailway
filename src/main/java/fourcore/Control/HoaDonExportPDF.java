@@ -74,11 +74,13 @@ public class HoaDonExportPDF {
         // Dữ liệu từng dòng
         int stt = 1;
         for (ThongTinCtHoaDon item : chiTietList) {
+            System.out.println(stt + " " + item.getMaVe() + " " + item.getTenLoaiGhe());
+
             table.addCell(String.valueOf(stt++));
             table.addCell(item.getMaVe());
             table.addCell(item.getTenLoaiGhe());
             table.addCell(item.getDoiTuong());
-            table.addCell(String.format("%,.0f", item.getDonGia())); // Định dạng tiền không thập phân
+            table.addCell(String.format("%,.0f", item.getDonGia()));
             table.addCell(String.format("%,.0f", item.getThanhTien()));
         }
 
