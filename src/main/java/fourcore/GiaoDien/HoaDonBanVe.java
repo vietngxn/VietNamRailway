@@ -47,7 +47,7 @@ public class HoaDonBanVe extends Application {
         root = new BorderPane();
 
         create_title_layout(hoaDon);
-            create_table_layout(listThongTinCtHoaDon);
+        create_table_layout(listThongTinCtHoaDon);
 
         create_footer_layout(listThongTinCtHoaDon,hoaDonDAO.getKhuyenMaiByMaHoaDon(hoaDon.getMaHoaDon()));
 
@@ -288,7 +288,6 @@ public class HoaDonBanVe extends Application {
         popupStage.setTitle("Hóa đơn bán vé");
 
         try {
-            ArrayList<ThongTinCtHoaDon> listThongTinCtHoaDon = hoaDonDAO.getThongTinCTHoaDon(hoaDon.getMaHoaDon());
             root = new BorderPane();
             create_title_layout(hoaDon);
             create_table_layout(listThongTinCtHoaDon);

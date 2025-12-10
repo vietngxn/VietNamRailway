@@ -1,6 +1,9 @@
 package fourcore.GiaoDien;
 
 import java.io.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
@@ -18,6 +21,8 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -97,8 +102,8 @@ public class GiaoDienXuatHoaDon extends Application {
 	private HBox pnlThanhToanButtonSub1;
 	private HBox pnlThanhToanButtonSub2;
 	private double tongCongThanhTien=0.0;
-	private Button btnTroLai;
-	private VBox pnlThongTinXuatHoaDonCaNhan;
+    Button btnTroLai = new Button("Trở lại");
+    private VBox pnlThongTinXuatHoaDonCaNhan;
 	private Button btnThanhToan;
 	private TextField txtHoTen;
 	private TextField txtEMail;
@@ -115,14 +120,24 @@ public class GiaoDienXuatHoaDon extends Application {
     GaTauDao gaTauDao = new GaTauDao();
     public ArrayList<DoiTuongGiamGia> listDoiTuongGiamGia;
     String gaDen = "";
+    private VBox table_layout;
+    private VBox table_desc;
+    private int cnt = 1;
+    BorderPane root;
+    ArrayList<Ve> listVe = new ArrayList<>();
+    private ArrayList<GheTrenChuyenTau> listGheTrenChuyenTau;
+    public ArrayList<KhachHang> listKhachHang =  new ArrayList<>();
+    String gaDi;
+    String loaiVe;
     public GiaoDienXuatHoaDon() throws SQLException {
     }
-        public Button getBtnTroLai(){
+    public Button getBtnTroLai(){
         return btnTroLai;
         }
     @Override
 	public void start(Stage primaryStage) {
 		try {
+
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("gaDen.dat"))) {
                 gaDen = ois.readObject().toString();
                 System.out.println("Dữ liệu ga den đọc được: " + gaDen);
@@ -142,6 +157,7 @@ public class GiaoDienXuatHoaDon extends Application {
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
+            loadDataFromFile();
 			menuList = new VBox();
 			menuList.setStyle("-fx-background-color: #F7F7F7;");
 			menuList.setPrefWidth(500);
@@ -593,7 +609,7 @@ public class GiaoDienXuatHoaDon extends Application {
 					    -fx-alignment: center-left;
 					    -fx-font-weight: bold;
 					    -fx-font-family: "Kanit";
-					    -fx-padding: 8 12 8 12;
+					    -fx-padding: 5 12 5 12;
 					""";
 
 			String rightStyle = """
@@ -604,30 +620,35 @@ public class GiaoDienXuatHoaDon extends Application {
 					    -fx-alignment: center-left;
 					    -fx-font-weight: bold;
 					    -fx-font-family: "Kanit";
-					    -fx-padding: 8 12 8 12;
+					    -fx-padding: 5 12 5 12;
 					""";
 
 
 
 			pnlXuatHDlbl = new Pane();
-			lblXuatHD = new Label("Lập hóa đơn");
+			lblXuatHD = new Label("Nhập thông tin người mua");
 			pnlXuatHDlbl.getChildren().add(lblXuatHD);
 			lblXuatHD.setStyle("-fx-font-size: 25px;-fx-font-weight: bold;");
 			noiDungChinh.getChildren().add(pnlXuatHDlbl);
 			VBox.setMargin(pnlXuatHDlbl, new Insets(20, 0, 0, 50));
 
 
-			pnlThongTinXuatHoaDonCaNhan = taoXuatHoaDonCaNhanPane("", "", "0962051111111", "Nguyễn Thị Kiều Trinh",
-					"180A, absn,bnbcm, nacn", leftStyle, rightStyle);
+			pnlThongTinXuatHoaDonCaNhan = taoXuatHoaDonCaNhanPane("", "", "", "",
+					"", leftStyle, rightStyle);
+            pnlThongTinXuatHoaDonCaNhan.setTranslateY(50);
 			noiDungChinh.getChildren().add(pnlThongTinXuatHoaDonCaNhan);
 
 			VBox.setMargin(pnlThongTinXuatHoaDonCaNhan, new Insets(20, 0, 100, 150));
 
+
 			pnlThongTinXuatHoaDonCaNhan.setVisible(true);
 			pnlThongTinXuatHoaDonCaNhan.setManaged(true);
 
+
 			BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
 
+            create_table_layout(getListThongTinCTHD());
+            noiDungChinh.getChildren().add(table_layout);
 			pnlThanhToanButton = new VBox();
 			pnlThanhToanButtonSub1 = new HBox();
 			pnlThanhToanButtonSub2 = new HBox();
@@ -649,6 +670,10 @@ public class GiaoDienXuatHoaDon extends Application {
             lblTongCong.setPrefWidth(200);
 			lblTongCong.setWrapText(true);
 			lblTongCong.setStyle(lblStyle);
+            pnlTongCong.setPrefWidth(800);
+            pnlTongCong.setTranslateY(10);
+            pnlTongCong.setTranslateX(-70);
+            pnlTongCong.setPadding(new Insets(0,50,0,0));
             for(int i=0; i< mapChuyenTauVaUser.size();i++){
 
             }
@@ -670,7 +695,7 @@ public class GiaoDienXuatHoaDon extends Application {
 
 			pnlThanhToanButtonSub1.getChildren().addAll(btnRong, pnlTongCong);
 
-			btnTroLai = new Button("Trở lại");
+
 			btnTroLai.setStyle(btnRedStyle);
 			btnTroLai.setPrefSize(270, 50);
 			btnThanhToan = new Button("Thanh toán");
@@ -681,6 +706,7 @@ public class GiaoDienXuatHoaDon extends Application {
             pnlThanhToanButtonSub2.setTranslateY(100);
 			HBox.setMargin(btnTroLai, new Insets(0, 750, 0, 0));
 			pnlThanhToanButton.getChildren().addAll(pnlThanhToanButtonSub1, pnlThanhToanButtonSub2);
+            pnlThanhToanButton.setTranslateY(-100);
 			VBox.setMargin(pnlThanhToanButtonSub1, new Insets(20, 0, 0, 0));
 			VBox.setMargin(pnlThanhToanButtonSub2, new Insets(50, 0, 0, 0));
 			noiDungChinh.getChildren().addAll(pnlThanhToanButton);
@@ -693,24 +719,110 @@ public class GiaoDienXuatHoaDon extends Application {
 			btnThanhToan.setOnMouseClicked(event -> {
                 boolean flag = true;
                 System.out.println(listTxtFieldHoaDon.size());
-                    for(TextField tf : listTxtFieldHoaDon){
-                        if(listTxtFieldHoaDon.get(2)!=tf){
-                            if(tf.getText().isEmpty()){
-                                Alert alert2 = new Alert(Alert.AlertType.ERROR);
-                                alert2.setTitle("Lỗi");
-                                alert2.setHeaderText(null);
-                                alert2.setContentText("Vui lòng nhập đầy đủ thông tin!");
-                                Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                                alert2.initOwner(stage2);
-                                alert2.initModality(Modality.WINDOW_MODAL);
-                                alert2.showAndWait();
-                                flag = false;
-                                break;
-                            }
+                for(TextField tf : listTxtFieldHoaDon){
+                    tf.getText().trim();
+                    if(listTxtFieldHoaDon.get(4)!=tf){
+                        if(tf.getText().isEmpty()){
+                            Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                            alert2.setTitle("Lỗi");
+                            alert2.setHeaderText(null);
+                            alert2.setContentText("Vui lòng nhập đầy đủ thông tin!");
+                            Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                            alert2.initOwner(stage2);
+                            alert2.initModality(Modality.WINDOW_MODAL);
+                            alert2.showAndWait();
+                            flag = false;
+                            return;
                         }
 
-
+                    }
                 }
+                //Xử lí tên họ
+                if(!listTxtFieldHoaDon.get(0).getText().matches("^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÖØÙÚĂĐĨŨƠƯàáâãèéêìíòóôõöøùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵỷỹ\\s]+$")){
+                    Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                    alert2.setTitle("Lỗi");
+                    alert2.setHeaderText(null);
+                    alert2.setContentText("Tên họ không hợp lệ! Quy tắc:\n- Chỉ chứa chữ cái (A-Z, a-z, có dấu tiếng Việt) và khoảng trắng.\n- Không số, ký tự đặc biệt (!@#$...), không khoảng trắng đầu/cuối thừa.\nVí dụ: 'Nguyễn Văn A' (đúng), 'Nguyen123!' (sai).\nVui lòng sửa và thử lại.");
+                    Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    alert2.initOwner(stage2);
+                    alert2.initModality(Modality.WINDOW_MODAL);
+                    alert2.showAndWait();
+                    flag = false;
+                    return;
+                }
+
+                if(!listTxtFieldHoaDon.get(1).getText().matches("^[0-9]{12}$")){
+                    Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                    alert2.setTitle("Lỗi");
+                    alert2.setHeaderText(null);
+                    alert2.setContentText("CCCD phải bao gồm 12 kí tự");
+                    Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    alert2.initOwner(stage2);
+                    alert2.initModality(Modality.WINDOW_MODAL);
+                    alert2.showAndWait();
+                    flag = false;
+                    return;
+                }
+
+                if(!listTxtFieldHoaDon.get(1).getText().matches("^[0-9]{12}$")){
+                    Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                    alert2.setTitle("Lỗi");
+                    alert2.setHeaderText(null);
+                    alert2.setContentText("CCCD phải bao gồm 12 kí tự số");
+                    Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    alert2.initOwner(stage2);
+                    alert2.initModality(Modality.WINDOW_MODAL);
+                    alert2.showAndWait();
+                    flag = false;
+                    return;
+                }
+
+                if(!listTxtFieldHoaDon.get(1).getText().matches("^(0(0[1-9]|[1-9][0-9])|[1-9][0-8][0-9]|9[0-6][0-9])([0-9])([0-9]{2})([0-9]{6})$")){
+                    Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                    alert2.setTitle("Lỗi");
+                    alert2.setHeaderText(null);
+                    alert2.setContentText("CCCD không hợp lệ");
+                    Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    alert2.initOwner(stage2);
+                    alert2.initModality(Modality.WINDOW_MODAL);
+                    alert2.showAndWait();
+                    flag = false;
+                    return;
+                }
+
+                if(!listTxtFieldHoaDon.get(2).getText().matches("^(03|05|07|08|09)[0-9]{8}$")){
+                    Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                    alert2.setTitle("Lỗi");
+                    alert2.setHeaderText(null);
+                    alert2.setContentText("Vui lòng nhập số điện thoại hợp lệ (10 số, bắt đầu bằng 03, 05, 07, 08 hoặc 09)!");
+                    Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    alert2.initOwner(stage2);
+                    alert2.initModality(Modality.WINDOW_MODAL);
+                    alert2.showAndWait();
+                    flag = false;
+                    return;
+                }
+
+                if(!listTxtFieldHoaDon.get(4).getText().isEmpty()){
+                    if(!listTxtFieldHoaDon.get(4).getText().matches("^[^\s@]+@[^\s@]+\\.[^\s@]+$")){
+                        Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                        alert2.setTitle("Lỗi");
+                        alert2.setHeaderText(null);
+                        alert2.setContentText("Định dạng email không hợp lệ!");
+                        Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                        alert2.initOwner(stage2);
+                        alert2.initModality(Modality.WINDOW_MODAL);
+                        alert2.showAndWait();
+                        flag = false;
+                        return;
+                    }
+                }
+
+
+
+
+
+
                 if(flag == true){
 
                     try {
@@ -729,7 +841,7 @@ public class GiaoDienXuatHoaDon extends Application {
                 }
 			});
 
-			BorderPane root = new BorderPane();
+			root = new BorderPane();
 			root.setLeft(menuList);
 			root.setCenter(noiDungChinh);
 
@@ -737,7 +849,7 @@ public class GiaoDienXuatHoaDon extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Hệ thống quản lý vé tàu");
 			primaryStage.setFullScreen(true);
-			primaryStage.show();
+//			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -776,7 +888,15 @@ public class GiaoDienXuatHoaDon extends Application {
         double tongGiaKhiApDungCTKM  =tienTruocVAT*((100-phanTramKhuyenMai)/100);
         tongCongThanhTien = tongGiaKhiApDungCTKM * 1.08;
     }
+    public void getListVeTau(){
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("veTau.dat"))) {
+            listVe = (ArrayList<Ve>) ois.readObject();
+            System.out.println("vé đã đọc: " + listVe);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
 
+        }
+    }
 
 	private boolean showConfirm(Stage parentStage, String message) throws Exception {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -794,12 +914,27 @@ public class GiaoDienXuatHoaDon extends Application {
         if(result.get() == yes) {
             System.out.println("ClickYes");
             BanVeDAO banVeDAO = new BanVeDAO();
+            for(int i=0; i<banVeDAO.listGheTrenChuyenTau.size();i++){
+                if(banVeDAO.listGheTrenChuyenTau.get(i).getGheNgoi().isLuuDong()){
+                    banVeDAO.updateGiaGheLuuDong(banVeDAO.listGheTrenChuyenTau.get(i));
+                    System.out.println("Update ghe luu dong thanh cong");
+                }
+            }
+
+            for(int i=0; i<banVeDAO.listGheTrenChuyenTau.size();i++){
+                if (banVeDAO.listGheTrenChuyenTau.get(i).getGheNgoi().isLuuDong()){
+                    double giaVeTrenChuyenTauNew = banVeDAO.getGiaGheTrenChuyenTauNew(banVeDAO.listGheTrenChuyenTau.get(i));
+                    banVeDAO.listGheTrenChuyenTau.get(i).setGiaTienGhe(giaVeTrenChuyenTauNew);
+                    System.out.println("set gia ve tren chuyen tau luu dong moi la: "+ giaVeTrenChuyenTauNew);
+                }
+            }
+
             banVeDAO.themVe();
             String txtHoTenValue = listTxtFieldHoaDon.get(0).getText();
             String txtSoGiayToValue = listTxtFieldHoaDon.get(1).getText();
-            String txtEmailValue = listTxtFieldHoaDon.get(2).getText();
-            String txtSDTValue = listTxtFieldHoaDon.get(3).getText();
-            String txtDiaChiaValue = listTxtFieldHoaDon.get(4).getText();
+            String txtEmailValue = listTxtFieldHoaDon.get(4).getText();
+            String txtSDTValue = listTxtFieldHoaDon.get(2).getText();
+            String txtDiaChiaValue = listTxtFieldHoaDon.get(3).getText();
             LoaiHoaDonDAO loaiHoaDonDAO = new LoaiHoaDonDAO();
             LoaiHoaDon loaiHoaDon = new LoaiHoaDon();
             loaiHoaDon = loaiHoaDonDAO.getLoaiHoaDonTheoMa("LHD01");
@@ -810,16 +945,10 @@ public class GiaoDienXuatHoaDon extends Application {
             System.out.println(ngayThanhToan.toString());
             HoaDon hoaDon = new HoaDon(nhanVien,loaiHoaDon,txtHoTenValue,txtEmailValue,txtSoGiayToValue,txtSDTValue,txtDiaChiaValue,ngayThanhToan,tongTien);
             HoaDon hoaDon2 = banVeDAO.themHoaDon(hoaDon);
-
-            ArrayList<Ve> listVe = new ArrayList<>();
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("veTau.dat"))) {
-                listVe = (ArrayList<Ve>) ois.readObject();
-                System.out.println("vé đã đọc: " + listVe);
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            getListVeTau();
             ArrayList<ChiTietHoaDon>  listChiTietHoaDon = new ArrayList<>();
             for(int i =0 ; i< banVeDAO.listGheTrenChuyenTau.size();i++){
+
                 listChiTietHoaDon.add(banVeDAO.themCTHoaDon(hoaDon2,listVe.get(i),banVeDAO.listGheTrenChuyenTau.get(i),banVeDAO.ctkmSelected)) ;
                 banVeDAO.themLichSuTuongTacVe(listVe.get(i),ctkmSelected,banVeDAO.listGheTrenChuyenTau.get(i));
                 System.out.println("them lich su ");
@@ -836,13 +965,132 @@ public class GiaoDienXuatHoaDon extends Application {
             }
             HoaDonBanVe hoaDonBanVe = new HoaDonBanVe(hoaDon2);
             hoaDonBanVe.showAsPopup(null);
-
-
+            //Reset all file
+            resetFile();
         }
 
 		return result.isPresent() && result.get() == yes;
 	}
+    public void resetFile(){
+        File file1 = new File("KMSelected.dat");
+        File file2 = new File("ds_ghe_dang_chon.dat");
+        File file3 = new File("gaDen.dat");
+        File file4 = new File("gadi.dat");
+        File file5 = new File("loaive.dat");
+        File file6 = new File("mapGheVaKhachHang.dat");
+        File file7 = new File("veTau.dat");
+        ArrayList<File> listFile = new ArrayList<>();
+        listFile.add(file1);
+        listFile.add(file2);
+        listFile.add(file3);
+        listFile.add(file4);
+        listFile.add(file5);
+        listFile.add(file6);
+        listFile.add(file7);
+        for(File file : listFile){
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+                oos.writeObject(null);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
+    }
+
+    public ArrayList<ThongTinCtHoaDon> getListThongTinCTHD() throws SQLException {
+        ArrayList<ThongTinCtHoaDon> listThongTinCtHoaDon = new ArrayList<>();
+        double donGia=0;
+        double thanhTien = 0;
+        for(int i=0;i<listGheTrenChuyenTau.size();i++) {
+            if(listGheTrenChuyenTau.get(i).getGheNgoi().isLuuDong()){
+                donGia = listGheTrenChuyenTau.get(i).getChuyenTau().getGiaCuocTrenChuyenTau() * gaTauDao.getCuLiBangTenGa(gaDen) + listGheTrenChuyenTau.get(i).getGiaTienGhe();
+            }else{
+                donGia  = listGheTrenChuyenTau.get(i).getGiaTienGhe();
+            }
+            String maKhachHang="";
+
+            KhachHang kh = new KhachHang(mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getHoten(), mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getCccd(), mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getDoiTuong());
+            Ve veTau = new Ve(gaDi,gaDen,
+                    loaiVe,tinhTienVe(listGheTrenChuyenTau.get(i))
+                  ,kh,getDoiTuong(listGheTrenChuyenTau.get(i)));
+            listVe.add(veTau);
+            thanhTien = donGia * ((100-veTau.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia())/100);
+
+            ThongTinCtHoaDon thongTinCtHoaDon = new ThongTinCtHoaDon(listGheTrenChuyenTau.get(i).getGheNgoi().getLoaiGhe().getTenLoaiGhe(),
+                                                                    veTau.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),donGia,thanhTien);
+            listThongTinCtHoaDon.add(thongTinCtHoaDon);
+        }
+
+        return  listThongTinCtHoaDon;
+    }
+    public DoiTuongGiamGia getDoiTuong(GheTrenChuyenTau gheTrenCT) throws SQLException {
+        DoiTuongGiamGiaDAO doiTuongGiamGiaDAO = new DoiTuongGiamGiaDAO();
+        String doiTuong = mapChuyenTauVaUser.get(gheTrenCT).getDoiTuong();
+        ArrayList<DoiTuongGiamGia> dtggList = doiTuongGiamGiaDAO.getListDoiTuongGiamGia();
+        for (DoiTuongGiamGia dtgg : dtggList) {
+            if(dtgg.getTenDoiTuongGiamGia().equals(doiTuong)){
+                return dtgg;
+            }
+        }
+        return null;
+    }
+    public double tinhTienVe(GheTrenChuyenTau gheTrenCT) {
+        double tienVe= 0;
+        double tienVKm = 0;
+        double tienTruocVAT=0;
+        double giaGhe = gheTrenCT.getGiaTienGhe();
+        String tenDoiTuong = mapChuyenTauVaUser.get(gheTrenCT).getDoiTuong();
+        double phanTramKhuyenMai = 0;
+        double phanTramGiamDoiTuong = 0;
+        for(int x=0; x<listDoiTuongGiamGia.size(); x++){
+            if(listDoiTuongGiamGia.get(x).getTenDoiTuongGiamGia().equals(tenDoiTuong)){
+                phanTramGiamDoiTuong = listDoiTuongGiamGia.get(x).getGiaTriPhanTramGiamGia();
+                break;
+            }
+        }
+        if(ctkmSelected!=null){
+            phanTramKhuyenMai = ctkmSelected.getGiaTriPhanTramKhuyenMai();
+        }
+        double giaTong  = giaGhe*((100-phanTramKhuyenMai)/100);
+        giaTong = giaTong*((100-phanTramGiamDoiTuong)/100);
+        tienTruocVAT += giaTong;
+        return  tienTruocVAT;
+    }
+    public void loadDataFromFile(){
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("mapGheVaKhachHang.dat"))) {
+            mapChuyenTauVaUser = (Map<GheTrenChuyenTau, KhachHang>) ois.readObject();
+            System.out.println("map đã đọc: " + mapChuyenTauVaUser);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("KMSelected.dat"))) {
+            ctkmSelected = (KhuyenMai) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        listGheTrenChuyenTau= new ArrayList<>(mapChuyenTauVaUser.keySet());
+        for(int i=0;i<listGheTrenChuyenTau.size();i++){
+            listKhachHang.add(mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)));
+            System.out.println("add list kh");
+        }
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("gaDen.dat"))) {
+            gaDen = ois.readObject().toString();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("gadi.dat"))) {
+            gaDi = ois.readObject().toString();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("loaiVe.dat"))) {
+            loaiVe = ois.readObject().toString();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
 	public void hieuUngHover(Button btn) {
 		btn.setOnMouseEntered(e -> {
 			ScaleTransition scaleUp = new ScaleTransition(Duration.millis(150), btn);
@@ -880,21 +1128,112 @@ public class GiaoDienXuatHoaDon extends Application {
 		VBox pnl = new VBox(15);
 		pnl.setAlignment(Pos.CENTER);
 
-		pnl.getChildren().add(taoSubXuatHoaDonPane("Người mua", hoten, leftstyle, rightstyle));
-		pnl.getChildren().add(taoSubXuatHoaDonPane("Số CCCD", sogiayto, leftstyle, rightstyle));
-        pnl.getChildren().add(taoSubXuatHoaDonPane("Địa chỉ email",email, leftstyle, rightstyle));
-        pnl.getChildren().add(taoSubXuatHoaDonPane("Số điện thoại",sdt,leftstyle, rightstyle));
-		pnl.getChildren().add(taoSubXuatHoaDonPane("Địa chỉ", diachi, leftstyle, rightstyle));
+		pnl.getChildren().add(taoSubXuatHoaDonPane("Người mua", hoten, leftstyle, rightstyle,"true"));
+		pnl.getChildren().add(taoSubXuatHoaDonPane("Số CCCD", sogiayto, leftstyle, rightstyle,"true"));
+        pnl.getChildren().add(taoSubXuatHoaDonPane("Số điện thoại",sdt,leftstyle, rightstyle,"true"));
+		pnl.getChildren().add(taoSubXuatHoaDonPane("Địa chỉ", diachi, leftstyle, rightstyle, "true"));
+        pnl.getChildren().add(taoSubXuatHoaDonPane("Địa chỉ email",email, leftstyle, rightstyle , "false"));
 
-		return pnl;
+
+        return pnl;
 
 	}
 
+    private void create_table_layout(ArrayList<ThongTinCtHoaDon> thongTinCtHoaDonList) {
+        table_layout = new VBox(10);
+        table_layout.setPadding(new Insets(0, 50, 20, 0));
+        table_layout.setMaxWidth(800);
+        table_layout.setAlignment(Pos.CENTER);
+        table_layout.setTranslateX(300);
+        table_layout.setTranslateY(-10);
+        table_layout.setMaxHeight(300);
+        GridPane table_header = new GridPane();
+        table_header.setHgap(15);
+        table_header.setVgap(10);
+        table_header.setAlignment(Pos.CENTER);
+        String style = "-fx-font-family:'Inter';-fx-font-size : 14px;-fx-font-weight:bold;";
+        String[] headers = {"STT", "Ga đi", "Ga đến", "Loại ghế","Đối tượng", "Đơn giá", "Thành tiền"};
+        for (int i = 0; i < headers.length; i++) {
+            Label lbl_header = new Label(headers[i]);
+            lbl_header.setStyle("-fx-font-weight: bold;");
+            lbl_header.setPrefWidth(100);
+            lbl_header.setAlignment(Pos.CENTER);
+            lbl_header.setStyle(style);
+            table_header.add(lbl_header, i, 0);
+        }
 
-	private HBox taoSubXuatHoaDonPane(String label, String value, String leftStyle, String rightStyle) {
-		StackPane left = new StackPane(new Label(label));
+        table_layout.getChildren().add(table_header);
+
+
+        table_desc = new VBox();
+        table_desc.setSpacing(10);         // <-- đây là setSpacing đúng chỗ
+        table_desc.setPadding(new Insets(6, 0, 6, 0));
+        cnt = 1;
+        for(int i=0;i<thongTinCtHoaDonList.size();i++){
+            create_table_row(cnt,gaDi,gaDen,thongTinCtHoaDonList.get(i).getTenLoaiGhe(),thongTinCtHoaDonList.get(i).getDoiTuong(),thongTinCtHoaDonList.get(i).getDonGia()+"",thongTinCtHoaDonList.get(i).getThanhTien()+"");
+
+        }
+        ScrollPane scrPane = new ScrollPane(table_desc);
+
+        scrPane.setPrefViewportHeight(400);
+        scrPane.setFitToWidth(true);
+        scrPane.setPannable(true);
+        scrPane.setStyle("""
+                    -fx-background-color: transparent;
+                    -fx-border-color: transparent;
+                    -fx-border-width: 0;
+                """);
+
+        scrPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        table_layout.getChildren().add(scrPane);
+
+    }
+
+
+    private void create_table_row(int stt, String gaDi, String gaDen, String tenLoaiGhe, String doiTuong,
+                                  String donGia, String thanhTien) {
+        GridPane layout_dong = new GridPane();
+        layout_dong.setHgap(15);
+        layout_dong.setVgap(5);
+        layout_dong.setAlignment(Pos.CENTER);
+        layout_dong.setPrefHeight(70);
+        String style = "-fx-font-family:'Inter';-fx-font-size : 12px;-fx-font-weight:bold;";
+        layout_dong.setStyle("-fx-background-color :  #00BACB;-fx-background-radius:15px;-fx-border-radius:15px;");
+
+        String[] values = {String.valueOf(cnt),gaDi,gaDen, tenLoaiGhe, doiTuong, donGia, thanhTien};
+
+        for (int i = 0; i < values.length; i++) {
+            Label lbl_cell = new Label(values[i]);
+            lbl_cell.setPrefWidth(100);
+            lbl_cell.setAlignment(Pos.CENTER);
+            lbl_cell.setStyle(style);
+            layout_dong.add(lbl_cell, i, 0);
+            if(i == 2)
+            {
+                lbl_cell.setWrapText(true);
+            }
+        }
+        cnt++;
+        table_desc.getChildren().add(layout_dong);
+    }
+	private HBox taoSubXuatHoaDonPane(String label, String value, String leftStyle, String rightStyle, String flag) {
+        StackPane left;
+        if (flag.equals("true")) {
+            Label mainLabel = new Label(label);
+            mainLabel.setTextAlignment(TextAlignment.LEFT);
+            Label requiredLabel = new Label(" (*)");
+            requiredLabel.setTextFill(Color.RED);
+            HBox hbox = new HBox(2, mainLabel, requiredLabel);
+            hbox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+            left = new StackPane(hbox);
+        } else {
+            left = new StackPane(new Label(label));
+        }
 		StackPane right = new StackPane();
-		right.setPrefSize(200, 40);
+		right.setPrefSize(200, 30);
 		TextField txtRight = new TextField();
 		txtRight.setStyle(rightStyle + " -fx-border-color: transparent;");
 		txtRight.setMaxWidth(Double.MAX_VALUE);
@@ -904,9 +1243,9 @@ public class GiaoDienXuatHoaDon extends Application {
 		right.getChildren().add(txtRight);
 
 
-		left.setPrefSize(200, 50);
+		left.setPrefSize(200, 30);
 		left.setAlignment(Pos.CENTER);
-		right.setPrefSize(1000, 50);
+		right.setPrefSize(1000, 30);
 		left.setStyle(leftStyle);
 		right.setStyle(rightStyle);
 

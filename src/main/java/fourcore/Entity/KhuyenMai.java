@@ -88,6 +88,10 @@ public class KhuyenMai implements Serializable {
 		setNgayBatDau(ngayBatDau);
 		setNgayKetThuc(ngayKetThuc);
 	}
+    public KhuyenMai(String maKhuyenMai, double giaTriPhanTramKhuyenMai){
+        setMaKhuyenMai(maKhuyenMai);
+        setGiaTriPhanTramKhuyenMai(giaTriPhanTramKhuyenMai);
+    }
 	public KhuyenMai(String maKhuyenMai) {
 		
 		this.maKhuyenMai = maKhuyenMai;

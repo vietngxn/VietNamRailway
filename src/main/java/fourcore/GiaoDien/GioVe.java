@@ -48,7 +48,7 @@ public class GioVe extends Application {
 	private VBox menuList;
 	private VBox noiDungChinh;
 	private ImageView logoImgView;
-
+    KhuyenMai kmnull = new KhuyenMai("KM000",0);
 	NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
 	Class<?> clazz = this.getClass();
 	private ScrollPane scrollPaneMenu;
@@ -679,7 +679,7 @@ public class GioVe extends Application {
 				}
 
 					try {
-						listCTKM = ctkmDAO.getListKhuyenMai();
+						listCTKM = ctkmDAO.getListKhuyenMaiCoXoa();
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -794,7 +794,7 @@ public class GioVe extends Application {
                         File file2 = new File("KMSelected.dat");
                         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file2))) {
                             oos.writeObject(khuyenMaiSelect);
-                            System.out.println("✅ Đã ghi khuyen mai: "+khuyenMaiSelect.getTenChuongTrinh()+" vào file: " + file.getAbsolutePath());
+                            System.out.println("✅ Đã ghi khuyen mai: "+khuyenMaiSelect.getTenChuongTrinh()+" vào file: " + file2.getAbsolutePath());
                         }
                         catch (IOException e) {
                             e.printStackTrace();
@@ -802,8 +802,8 @@ public class GioVe extends Application {
                     }else{
                         File file2 = new File("KMSelected.dat");
                         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file2))) {
-                            oos.writeObject(null);
-                            System.out.println("✅ Đã ghi khuyen mai null vào file: " + file.getAbsolutePath());
+                            oos.writeObject(kmnull);
+                            System.out.println("✅ Đã ghi khuyen mai null vào file: " + file2.getAbsolutePath());
                         }
                         catch (IOException e) {
                             e.printStackTrace();
@@ -1000,7 +1000,6 @@ public class GioVe extends Application {
 		pnlsubCT1.addRow(0, taoSubCT1("Họ tên", "", leftStyle, rightStyle, 1));
 		pnlsubCT1.addRow(1, taoSubCT1("Đối tượng", "", leftStyle, rightStyle, 2, giaTienGhe,
 				lblGiamDoiTuongValue, lblThanhTienValue, gheTrenChuyenTau));
-
 		pnlsubCT1.addRow(2, taoSubCT1("Số giấy tờ", "", leftStyle, rightStyle, 3));
 
 		// Các panel giá trị

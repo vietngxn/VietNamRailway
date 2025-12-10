@@ -13,6 +13,13 @@ public class ThongTinCtHoaDon {
         this.donGia = donGia;
         this.thanhTien = thanhTien;
     }
+    public ThongTinCtHoaDon(String tenLoaiGhe, String doiTuong, double donGia, double thanhTien){
+        this.maVe = maVe;
+        this.tenLoaiGhe = tenLoaiGhe;
+        this.doiTuong = doiTuong;
+        this.donGia = donGia;
+        this.thanhTien = thanhTien;
+    }
 
     public String getMaVe() {
         return maVe;

@@ -67,6 +67,18 @@ public class Ve implements Serializable {
 		setKhuyenMai(khuyenMai);
 		setDoiTuongGiamGia(doiTuongGiamGia);
 	}
+//    Ve veTau = new Ve(listVe.get(i).getMaVeTau(),gaDi,gaDen,
+//            loaiVe,tinhTienVe(listGheTrenChuyenTau.get(i))
+//            ,kh,getDoiTuong(listGheTrenChuyenTau.get(i)));
+    public Ve(String gaDi,String gaDen, String loaiVe, double giaVe, KhachHang kh, DoiTuongGiamGia doiTuongGiamGia) {
+        setGaDi(gaDi);
+        setGaDen(gaDen);
+        setTenTau(loaiVe);
+        setGiaVe(giaVe);
+        setKhachHang(kh);
+        setDoiTuongGiamGia(doiTuongGiamGia);
+    }
+
 
 	public String getMaVeTau() {
 		return maVeTau;

@@ -30,15 +30,13 @@ public class VeTauPdfExporter {
 
     public void exportVeTauToPdf(Ve ve) throws Exception {
         String dest = "VeTauExport/"+ve.getMaVeTau()+".pdf";
-        String qrImagePath = "qr/qrcode.png"; // đường dẫn QR code
-        String fontPath = "C:/Windows/Fonts/arial.ttf"; // font Unicode, thay theo hệ thống nếu cần
+        String qrImagePath = "qr/qrcode.png";
+        String fontPath = "C:/Windows/Fonts/arial.ttf";
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
         PdfWriter writer = new PdfWriter(dest);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
-
-        // Tạo font Unicode với nhúng font
         PdfFont font = PdfFontFactory.createFont(
                 fontPath,
                 com.itextpdf.io.font.PdfEncodings.IDENTITY_H,
@@ -63,7 +61,7 @@ public class VeTauPdfExporter {
                 .setMarginBottom(10);
         document.add(title);
 
-        // Thêm ảnh QR code
+        // Thêm QR
         ImageData qrData = ImageDataFactory.create(qrImagePath);
         Image qrCode = new Image(qrData)
                 .scaleToFit(150, 150)

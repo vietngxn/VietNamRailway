@@ -19,7 +19,27 @@ public class ChuongTrinhKhuyenMaiDAO {
 	public ChuongTrinhKhuyenMaiDAO() throws SQLException {
 
 	}
+    public ArrayList<KhuyenMai> getListKhuyenMaiCoXoa() throws SQLException {
 
+        String query = "select * from KhuyenMai where isRemove = 0";
+        ArrayList<KhuyenMai> listKhuyenMai = new ArrayList<>();
+        ResultSet rs = myStmt.executeQuery(query);
+        while (rs.next()) {
+            String maKhuyenMai = rs.getString(1);
+            String tenChuongTrinh = rs.getString(2);
+            double giaTriPhanTramKhuyenMai = rs.getDouble(3);
+            LocalDateTime ngayBatDau = rs.getTimestamp(4).toLocalDateTime();
+            LocalDateTime ngayKetThuc = rs.getTimestamp(5).toLocalDateTime();
+            String trangThai = rs.getString(6);
+            String dieuKienApDung = rs.getString(7);
+            int remove = rs.getInt(8);
+            KhuyenMai khuyenMai = new KhuyenMai(maKhuyenMai, tenChuongTrinh, trangThai, dieuKienApDung,
+                    giaTriPhanTramKhuyenMai, ngayBatDau, ngayKetThuc,remove);
+            listKhuyenMai.add(khuyenMai);
+            // maKhuyenMai,tenChuongTrinh,trangThaiKhuyenMai,dieuKienApDung,iaTriPhanTramKhuyenMai,ngayBatDau,ngayKetThuc)
+        }
+        return listKhuyenMai;
+    }
 	public ArrayList<KhuyenMai> getListKhuyenMai() throws SQLException {
 
 		String query = "select * from KhuyenMai";
