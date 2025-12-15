@@ -61,21 +61,9 @@ public class GiaoDienHoanTraVe extends Application {
 	private Label lblHoanVe;
 	private Pane pnlHoanVe;
 	private HBox pnlTimKiem;
-	private Label colMaVe;
-	private Label colChuyen;
-	private Label colNgayKhoiHanh;
-	private Label colViTriGhe;
-	private Label colTrangThai;
 	private VBox pnlDataHoanTraVe;
-	private Label colGaDiGaDen;
 	private ScrollPane scrollPane;
 	private GridPane tableCol;
-	private StackPane paneCol1;
-	private StackPane paneCol2;
-	private StackPane paneCol3;
-	private StackPane paneCol4;
-	private StackPane paneCol5;
-	private StackPane paneCol6;
 	private HBox pnlCapNhatVe;
 	private HBox doiVeBox;
 	private HBox banVeBox;
@@ -99,11 +87,6 @@ public class GiaoDienHoanTraVe extends Application {
 	private ImageView userIcon;
 	private Label userLabel;
 	private ImageView settingIcon;
-	private VBox layout_timkiem;
-	private HBox layout_lbl_timkiem;
-	private Label lbl_timkiem;
-	private VBox layout_txt_timkiem;
-	private TextField txt_timkiem;
 	private Button btnHoanVe;
 	private Button btnTimKiemTheoMaVe;
 	private Button btnTimKiemTheoNguoiMua;
@@ -115,18 +98,21 @@ public class GiaoDienHoanTraVe extends Application {
 	private HBox pnlTongConglbl;
 	private Label lblTongCong;
 	private Label lblTongCongValue = new Label();
-	private Label colLoaiHoaDon;
-	private StackPane paneCol7;
 
 	Map<Ve, Double> listVeThanhToan = new HashMap<>();
-	private BorderPane root;
-	private HoanTraVeControl ctrl = new HoanTraVeControl();
+
 	private ChuyenTauDAO ctDAO;
 	private Tau_DAO tDao;
 	private Tau t;
 	private ChuyenTau ct;
 	private Button btnCapNhatTrangThaiVe;
-	private StackPane pnlImg_Refesh;
+
+	private VBox layoutTimKiem;
+	private HBox layoutLblTimkiem;
+	private Label lblTimKiem;
+	private VBox layoutTxtTimKiem;
+	private TextField txtTimKiem;
+	private StackPane pnlImgRefesh;
 	private static double tongCongPhiHoanTra;
 
 	public void loadLableTongCongValue(double tongCongThanhTien) {
@@ -758,61 +744,64 @@ public class GiaoDienHoanTraVe extends Application {
 			menuList.getChildren().add(userBox);
 
 			// Noi dung chinh lam phan chinh o day. T lam sidebar truoc r update sau
+			
 			noiDungChinh = new VBox();
 			noiDungChinh.setStyle("-fx-background-color: #F7F7F7;");
 			noiDungChinh.setPrefWidth(1300);
 			BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
 
+			
+			//title
 			pnlHoanVe = new Pane();
 			lblHoanVe = new Label("Hoàn trả vé");
-			pnlHoanVe.getChildren().add(lblHoanVe);
 			lblHoanVe.setStyle("-fx-font-size: 40px;-fx-font-weight: bold;");
+			pnlHoanVe.getChildren().add(lblHoanVe);
 			VBox.setMargin(pnlHoanVe, new Insets(20, 0, 0, 50));
 			noiDungChinh.getChildren().add(pnlHoanVe);
 
-			layout_timkiem = new VBox();
-
-			layout_lbl_timkiem = new HBox();
-			layout_lbl_timkiem.setPrefSize(1200, 40);
-			lbl_timkiem = new Label("Nhập mã vé hoặc số giấy tờ người mua trên hóa đơn");
-			lbl_timkiem.setTranslateX(10);
-			lbl_timkiem.setTranslateY(0);
-			lbl_timkiem.setStyle(
+			//thanh tim kiem
+			layoutTimKiem = new VBox();
+			layoutLblTimkiem = new HBox();
+			layoutLblTimkiem.setPrefSize(1200, 40);
+			lblTimKiem = new Label("Nhập mã vé hoặc số giấy tờ người mua trên hóa đơn");
+			lblTimKiem.setTranslateX(10);
+			lblTimKiem.setTranslateY(0);
+			lblTimKiem.setStyle(
 					"-fx-font-family: 'Inter';-fx-font-weight:bold;-fx-font-size:18px;-fx-text-fill : #00BACB;");
+			ImageView imgTimKiem = new ImageView(getClass().getResource("/images/copy/lookup.png").toExternalForm());
+			imgTimKiem.setTranslateX(1050);
+			imgTimKiem.setFitHeight(25);
+			imgTimKiem.setFitWidth(25);
 
-			ImageView img_timkiem = new ImageView(getClass().getResource("/images/copy/lookup.png").toExternalForm());
-			img_timkiem.setTranslateX(1050);
-			img_timkiem.setFitHeight(25);
-			img_timkiem.setFitWidth(25);
+			layoutLblTimkiem.getChildren().addAll(lblTimKiem, imgTimKiem);
+			layoutLblTimkiem.setTranslateY(48);
+			layoutTimKiem.getChildren().add(layoutLblTimkiem);
 
-			layout_lbl_timkiem.getChildren().addAll(lbl_timkiem, img_timkiem);
-			layout_lbl_timkiem.setTranslateY(48);
-			layout_timkiem.getChildren().add(layout_lbl_timkiem);
-
-			layout_txt_timkiem = new VBox();
-			txt_timkiem = new TextField();
-			txt_timkiem.setPrefHeight(40);
-			txt_timkiem.setMaxSize(1200, 45);
-			txt_timkiem.setPadding(new Insets(10));
-			txt_timkiem.setStyle(
+			layoutTxtTimKiem = new VBox();
+			txtTimKiem = new TextField();
+			txtTimKiem.setPrefHeight(40);
+			txtTimKiem.setMaxSize(1200, 45);
+			txtTimKiem.setPadding(new Insets(10));
+			txtTimKiem.setStyle(
 					"-fx-background-color: transparent;-fx-border-color: #00BACB;-fx-border-width: 0.5;-fx-border-radius: 15px;-fx-font-family: 'Inter';-fx-font-weight:bold;-fx-text-fill : #00BACB;-fx-font-size:15px;");
-			txt_timkiem.setFocusTraversable(false);
-			layout_txt_timkiem.getChildren().add(txt_timkiem);
-			layout_timkiem.getChildren().add(layout_txt_timkiem);
+			txtTimKiem.setFocusTraversable(false);
+			layoutTxtTimKiem.getChildren().add(txtTimKiem);
+			layoutTimKiem.getChildren().add(layoutTxtTimKiem);
 
-			layout_timkiem.setTranslateX(100);
+			layoutTimKiem.setTranslateX(100);
 
-			txt_timkiem.focusedProperty().addListener((obs, oval, nval) -> {
-				TranslateTransition tt = new TranslateTransition(Duration.millis(350), lbl_timkiem);
+			txtTimKiem.focusedProperty().addListener((obs, oval, nval) -> {
+				TranslateTransition tt = new TranslateTransition(Duration.millis(350), lblTimKiem);
 				if (nval) {
 					tt.setToY(-40);
 				}
 				tt.play();
 			});
 
-			VBox.setMargin(layout_timkiem, new Insets(0, 0, 10, 0));
-			noiDungChinh.getChildren().add(layout_timkiem);
+			VBox.setMargin(layoutTimKiem, new Insets(0, 0, 10, 0));
+			noiDungChinh.getChildren().add(layoutTimKiem);
 
+			//button tim kiem theo ma ve va so giay to nguoi mua
 			String btnStyle = """
 					      -fx-font-family: 'Inter';
 					   -fx-font-weight: bold;
@@ -834,13 +823,14 @@ public class GiaoDienHoanTraVe extends Application {
 			pnlTimKiem = new HBox(150);
 			pnlTimKiem.setMaxSize(1200, 500);
 
-			pnlImg_Refesh = new StackPane();
-			ImageView img_Refesh = new ImageView(getClass().getResource("/images/refesh_icon.png").toExternalForm());
-			img_Refesh.setFitWidth(50);
-			img_Refesh.setFitHeight(50);
-			pnlImg_Refesh.getChildren().add(img_Refesh);
-			pnlImg_Refesh.setPrefSize(50, 50);
-			pnlTimKiem.getChildren().addAll(btnTimKiemTheoMaVe, btnTimKiemTheoNguoiMua, pnlImg_Refesh);
+			//Button refesh list
+			pnlImgRefesh = new StackPane();
+			ImageView imgRefesh = new ImageView(getClass().getResource("/images/refesh_icon.png").toExternalForm());
+			imgRefesh.setFitWidth(50);
+			imgRefesh.setFitHeight(50);
+			pnlImgRefesh.getChildren().add(imgRefesh);
+			pnlImgRefesh.setPrefSize(50, 50);
+			pnlTimKiem.getChildren().addAll(btnTimKiemTheoMaVe, btnTimKiemTheoNguoiMua, pnlImgRefesh);
 			pnlTimKiem.setAlignment(Pos.CENTER);
 
 			btnTimKiemTheoMaVe.setAlignment(Pos.CENTER);
@@ -849,7 +839,7 @@ public class GiaoDienHoanTraVe extends Application {
 			VBox.setMargin(pnlTimKiem, new Insets(30, 0, 0, 0));
 			noiDungChinh.getChildren().add(pnlTimKiem);
 
-			// table
+			// table col
 			tableCol = new GridPane();
 			tableCol.setHgap(10);
 			tableCol.setVgap(20);
@@ -873,7 +863,8 @@ public class GiaoDienHoanTraVe extends Application {
 			}
 
 			noiDungChinh.getChildren().add(tableCol);
-
+			
+			// table row
 			pnlDataHoanTraVe = new VBox(10);
 			pnlDataHoanTraVe.setAlignment(Pos.CENTER);
 			pnlDataHoanTraVe.getChildren().clear();
@@ -891,9 +882,10 @@ public class GiaoDienHoanTraVe extends Application {
 					""");
 
 			scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-			scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+			scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 			noiDungChinh.getChildren().add(scrollPane);
 
+			//label tong cong
 			pnlTongConglbl = new HBox();
 			String lblStyle = "-fx-font-size: 36px;" + "-fx-font-weight: bold;";
 			lblTongCong = new Label("Tổng cộng: ");
@@ -904,25 +896,29 @@ public class GiaoDienHoanTraVe extends Application {
 			pnlTongConglbl.getChildren().addAll(lblTongCong, lblTongCongValue);
 			HBox.setMargin(lblTongCong, new Insets(0, 0, 0, 800));
 			noiDungChinh.getChildren().add(pnlTongConglbl);
-
+			
+		
 			pnlCapNhatVe = new HBox(30);
 			VBox.setMargin(pnlCapNhatVe, new Insets(30, 0, 0, 500));
 			pnlCapNhatVe.setAlignment(Pos.CENTER);
 
+			//button hoanve
 			btnHoanVe = new Button("Hoàn vé");
 			btnHoanVe.setPrefSize(350, 60);
 			btnHoanVe.setStyle(btnStyle);
 
+			//button cap nhat trang thai ve
 			btnCapNhatTrangThaiVe = new Button("Cập nhật trạng thái vé");
 			btnCapNhatTrangThaiVe.setPrefSize(350, 60);
 			btnCapNhatTrangThaiVe.setStyle(btnStyle);
+			
 			pnlCapNhatVe.getChildren().addAll(btnCapNhatTrangThaiVe, btnHoanVe);
 			noiDungChinh.getChildren().add(pnlCapNhatVe);
 
-			// add su kien disable btn
+			// su kien tim kiem theo ma ve
 			btnTimKiemTheoMaVe.setOnMouseClicked(event -> {
 				String regex = "VE\\d+";
-				String input = txt_timkiem.getText().trim();
+				String input = txtTimKiem.getText().trim();
 				System.out.println(input);
 
 				if (input.isEmpty() || !Pattern.matches(regex, input)) {
@@ -963,10 +959,10 @@ public class GiaoDienHoanTraVe extends Application {
 
 				}
 			});
-
+			// su kien tim kiem theo so giay to nguoi mua
 			btnTimKiemTheoNguoiMua.setOnMouseClicked(event -> {
 				String regex = "^\\d+$";
-				String input = txt_timkiem.getText().trim();
+				String input = txtTimKiem.getText().trim();
 
 				if (input.isEmpty() || !Pattern.matches(regex, input)) {
 					Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -1008,7 +1004,7 @@ public class GiaoDienHoanTraVe extends Application {
 					}
 				}
 			});
-
+			// su kien cap nhat lai trang thai ve
 			btnCapNhatTrangThaiVe.setOnMouseClicked(event -> {
 				try {
 					dao = new VeDAO(0);
@@ -1024,7 +1020,8 @@ public class GiaoDienHoanTraVe extends Application {
 					e.printStackTrace();
 				}
 			});
-			pnlImg_Refesh.setOnMouseClicked(event -> {
+			// su kien load lai danh sach
+			pnlImgRefesh.setOnMouseClicked(event -> {
 				pnlDataHoanTraVe.getChildren().clear();
 				list.removeAll(list);
 				listVeThanhToan.clear();
@@ -1039,11 +1036,12 @@ public class GiaoDienHoanTraVe extends Application {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		//cac hieu ung hover cho cac button
 		hieuUngHover(btnCapNhatTrangThaiVe);
 		hieuUngHover(btnHoanVe);
 		hieuUngHover(btnTimKiemTheoMaVe);
 		hieuUngHover(btnTimKiemTheoNguoiMua);
-		hieuUngHoverPnl(pnlImg_Refesh);
+		hieuUngHoverPnl(pnlImgRefesh);
 
 	}
 

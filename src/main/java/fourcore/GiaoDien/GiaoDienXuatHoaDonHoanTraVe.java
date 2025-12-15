@@ -109,10 +109,6 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 	private Button btnTroLai = new Button("Trở lại");;
 	private VBox pnlThongTinXuatHoaDonCaNhan;
 	private Button btnThanhToan;
-	private TextField txtHoTen;
-	private TextField txtEMail;
-	private TextField txtSoGiayTo;
-	private TextField txtSdt;
 
 	String hoTen;
 	String cccd;
@@ -126,17 +122,11 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 	private Scene scene;
 	private BorderPane root;
 	private HoanTraVeControl ctrl = new HoanTraVeControl();
-	private Window anyNodeInScene;
-	private VeDAO vedao;
-	private LichSuTuongTacVe_Dao lsttDao;
-	private HoaDonDAO hddao;
-	private ChiTietHoaDonDAO cthdDao;
-	private GheTrenChuyenTau_dao gtctDao;
+
 	Map<Ve, Double> listVeThanhToan;
 
 	ArrayList<TextField> txtList = new ArrayList<TextField>();
-	private String soLuong;
-	private String newMa;
+
 
 	public GiaoDienXuatHoaDonHoanTraVe(Map<Ve, Double> list) {
 		listVeThanhToan = list;

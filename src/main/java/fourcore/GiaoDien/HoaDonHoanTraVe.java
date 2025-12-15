@@ -1,6 +1,9 @@
 package fourcore.GiaoDien;
 
+import java.io.EOFException;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
@@ -14,6 +17,7 @@ import fourcore.Entity.ChiTietHoaDon;
 import fourcore.Entity.HoaDon;
 import fourcore.Entity.LichSuTuongTacVe;
 import fourcore.Entity.LoaiTuongTacVe;
+import fourcore.Entity.NhanVien;
 import fourcore.Entity.ThongTinCtHoaDonHoanTraVe;
 import fourcore.Entity.Ve;
 import fourcore.dao.ChiTietHoaDonDAO;
@@ -47,6 +51,7 @@ public class HoaDonHoanTraVe extends Application {
 	Button btn_thoat;
 	private VBox table_desc;
 
+	NhanVien nvOn;
 	Map<Ve, Double> listVe = new HashMap();
 	String hoTen;
 	String sdt;
@@ -88,6 +93,18 @@ public class HoaDonHoanTraVe extends Application {
 		this.cccd = cccd;
 		this.diaChi = diaChi;
 		this.listVe = listVe;
+	}
+
+	public void docFile(String tenFile) {
+		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(tenFile))) {
+			while (true) {
+				nvOn = (NhanVien) ois.readObject();
+			}
+		} catch (EOFException e) {
+			System.out.println("Đọc file xong!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// --------------------- PHẦN TIÊU ĐỀ ---------------------
@@ -256,7 +273,8 @@ public class HoaDonHoanTraVe extends Application {
 			Optional<ButtonType> result = alert.showAndWait();
 
 			if (result.isPresent() && result.get() == buttonYes) {
-				HoaDon hd = new HoaDon("NV01", hoTen, email, cccd, sdt, diaChi, tongCongThanhTien);
+				docFile("NhanVien.dat");
+				HoaDon hd = new HoaDon(nvOn.getMaNhanVien(), hoTen, email, cccd, sdt, diaChi, tongCongThanhTien);
 				System.out.println("Số lượng vé trong listVeThanhToan: " + listVe.size());
 				try {
 					this.vedao = new VeDAO(0);

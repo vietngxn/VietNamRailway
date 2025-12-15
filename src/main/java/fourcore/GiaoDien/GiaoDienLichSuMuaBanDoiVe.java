@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
+import com.itextpdf.kernel.colors.WebColors;
+
 import fourcore.Entity.ChuyenTau;
 import fourcore.Entity.LichSuTuongTacVe;
 import fourcore.Entity.Tau;
@@ -116,6 +118,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 	private ChuyenTau ct;
 	private Tau t;
 	private VeDAO veDao;
+	private Label lblLoai;
 
 	public VBox taoDataChoTableLichSuMuaBanDoiVe(String mave, String chuyen, String loai, String gaDiGaDen,
 			String ngayKhoiHanh, String vitrighe, LocalDate ngayMua, String hoten, String doituong, String sogiayto,
@@ -141,11 +144,19 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 		for (int i = 0; i < labels.length; i++) {
 			Label lbl = labels[i];
 			lbl.setStyle(baseStyle);
+			if (i == 2) {
+				if ("bán vé".equalsIgnoreCase(loai)) {
+					lbl.setStyle("-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px; -fx-text-fill: #009D75");
+				} else if ("hoàn trả vé".equalsIgnoreCase(loai)) {
+					lbl.setStyle("-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px; -fx-text-fill: #CB002C");
+				}
+
+			}
 			StackPane pane = new StackPane(lbl);
 			pane.setPrefSize(widths[i], 70);
 			pane.setAlignment(Pos.CENTER);
 			data.add(pane, i, 0);
-			
+
 		}
 
 		String normalStyle = """
@@ -789,7 +800,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 			pnlLichSuMuaBanDoiVeButton = new HBox(200);
 			pnlLichSuMuaBanDoiVeButton.setAlignment(Pos.CENTER);
 
-			btnLichSuMuaVe = new Button("Lịch sử mua vé");
+			btnLichSuMuaVe = new Button("Lịch sử bán vé");
 			btnLichSuDoiVe = new Button("Lịch sử đổi vé");
 			btnLichSuHoanVe = new Button("Lịch sử hoàn vé");
 
@@ -1159,6 +1170,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 		veDao = new VeDAO();
 		VBox box = new VBox(10);
 		for (LichSuTuongTacVe x : list) {
+
 			ct = ctDAO.getChuyenTauBangMa(x.getVeTau().getChuyenTau().getMaChuyenTau());
 			t = tDao.getTauByMaTau(ct.getTau().getMaTau());
 			box.getChildren().add(taoDataChoTableLichSuMuaBanDoiVe(x.getVeTau().getMaVeTau(),
