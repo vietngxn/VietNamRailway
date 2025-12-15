@@ -6,6 +6,7 @@ public class ThongTinCtHoaDon {
     String doiTuong;
     double donGia;
     double thanhTien;
+    boolean isKhuHoi = false;
     public ThongTinCtHoaDon(String maVe, String tenLoaiGhe, String doiTuong, double donGia, double thanhTien){
         this.maVe = maVe;
         this.tenLoaiGhe = tenLoaiGhe;
@@ -20,7 +21,12 @@ public class ThongTinCtHoaDon {
         this.donGia = donGia;
         this.thanhTien = thanhTien;
     }
-
+    public void setKhuHoi(boolean isKhuHoi){
+        this.isKhuHoi = isKhuHoi;
+    }
+    public boolean isKhuHoi(){
+        return isKhuHoi;
+    }
     public String getMaVe() {
         return maVe;
     }

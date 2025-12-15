@@ -108,6 +108,7 @@ public class GioVe extends Application {
 	private List<TextField> listTxtHoTen = new ArrayList<>();
 	private List<TextField> listTxtSoGiayTo = new ArrayList<>();
 	private List<ComboBox<String>> listCmbDoiTuong = new ArrayList<>();
+    ArrayList<GheTrenChuyenTau> listKhuHoiSelected= new ArrayList<GheTrenChuyenTau>();
 
 	double phanTramGG = 0;
 	double tongCongThanhTien;
@@ -582,7 +583,6 @@ public class GioVe extends Application {
 			pnlDataGioVe = new VBox(10);
 			pnlDataGioVe.setAlignment(Pos.CENTER);
 
-
 			try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("ds_ghe_dang_chon.dat"))) {
                 listGheSelected.clear();
 
@@ -591,10 +591,24 @@ public class GioVe extends Application {
 			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("ds_ghe_khuhoi_dang_chon.dat"))) {
+                listKhuHoiSelected = (ArrayList<GheTrenChuyenTau>) ois.readObject();
+                System.out.println("Dữ liệu đọc được: " + listKhuHoiSelected);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
             pnlDataGioVe.getChildren().clear();
 			for (int i = 0; i < listGheSelected.size(); i++) {
-				pnlDataGioVe.getChildren().add(taoDataChoTableGioVe(listGheSelected.get(i)));
+				pnlDataGioVe.getChildren().add(taoDataChoTableGioVe(listGheSelected.get(i),"di"));
 			}
+            if(listKhuHoiSelected.size()>0){
+                for(int i = 0; i < listKhuHoiSelected.size(); i++){
+                    listKhuHoiSelected.get(i).setKhuHoi(true);
+                    pnlDataGioVe.getChildren().add(taoDataChoTableGioVe(listKhuHoiSelected.get(i),"ve"));
+
+                }
+            }
+
 
 			scrollPane = new ScrollPane();
 			scrollPane.setContent(pnlDataGioVe);
@@ -758,6 +772,10 @@ public class GioVe extends Application {
             BanVeControl banVeControl = new BanVeControl();
 			btnTiepTuc.setOnMouseClicked(event -> {
                 mapChuyenTauVaUser.clear();
+                ArrayList<GheTrenChuyenTau> tongGheTrenChuyenTau = listGheSelected;
+                for(int i = 0; i < listKhuHoiSelected.size(); i++){
+                    tongGheTrenChuyenTau.add(listKhuHoiSelected.get(i));
+                }
 				for (int i = 0; i < listTxtHoTen.size(); i++) {
                     if(listTxtHoTen.get(i).getText()==null || listTxtSoGiayTo.get(i).getText().trim().isEmpty() ||  listCmbDoiTuong.get(i).getValue()==null){
                         System.out.println("so giay to: " + listTxtSoGiayTo.get(i).getText());
@@ -776,11 +794,11 @@ public class GioVe extends Application {
 					KhachHang kh = new KhachHang(listTxtHoTen.get(i).getText(), listTxtSoGiayTo.get(i).getText(),
 							listCmbDoiTuong.get(i).getValue());
 					GheTrenChuyenTau ghe;
-					ghe = listGheSelected.get(i);
+					ghe = tongGheTrenChuyenTau.get(i);
 					mapChuyenTauVaUser.put(ghe, kh);
 			        System.out.println("Thêm vào map: " + ghe + " -> " + kh.toString2());
 				}
-                if(mapChuyenTauVaUser.size()==listGheSelected.size()) {
+                if(mapChuyenTauVaUser.size()==tongGheTrenChuyenTau.size()) {
                     // Ghi danh sách ghế ra file
                     File file = new File("mapGheVaKhachHang.dat");
                     try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
@@ -856,7 +874,7 @@ public class GioVe extends Application {
 		});
 	}
 
-	public VBox taoDataChoTableGioVe(GheTrenChuyenTau gheTrenChuyenTau) throws SQLException {
+	public VBox taoDataChoTableGioVe(GheTrenChuyenTau gheTrenChuyenTau, String flag) throws SQLException {
 		Label lblGiamDoiTuongValue = new Label("0");
 		Label lblKhuyenMaiValue = new Label("0");
         double giaVe1Value = 0;
@@ -892,9 +910,17 @@ public class GioVe extends Application {
 				break;
 			}
 		}
-		Label[] labels = { new Label(gheTrenChuyenTau.getChuyenTau().getMaChuyenTau()), new Label("TPHCM - " + gaDen),
-				new Label(gheTrenChuyenTau.getChuyenTau().getNgayGioDi().format(formatter)),
-				new Label("Ghế số: " + gheTrenChuyenTau.getGheNgoi().getSoGhe() + " Toa số: " + soToa) };
+        Label[] labels = null;
+        if(flag.equals("di")){
+            labels = new Label[]{new Label(gheTrenChuyenTau.getChuyenTau().getMaChuyenTau()), new Label("TPHCM - " + gaDen),
+                    new Label(gheTrenChuyenTau.getChuyenTau().getNgayGioDi().format(formatter)),
+                    new Label("Ghế số: " + gheTrenChuyenTau.getGheNgoi().getSoGhe() + " Toa số: " + soToa)};
+        }else{
+            labels = new Label[]{new Label(gheTrenChuyenTau.getChuyenTau().getMaChuyenTau()), new Label(gaDen + " - " + "TPHCM"),
+                    new Label(gheTrenChuyenTau.getChuyenTau().getNgayGioDi().format(formatter)),
+                    new Label("Ghế số: " + gheTrenChuyenTau.getGheNgoi().getSoGhe() + " Toa số: " + soToa)};
+        }
+
 		double[] widths = { 200, 200, 200, 200 };
 
 		for (int i = 0; i < labels.length; i++) {

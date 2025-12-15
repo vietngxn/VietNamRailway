@@ -7,6 +7,7 @@ public class GheTrenChuyenTau implements Serializable {
     private String trangThaiGhe;
     private double giaTienGhe;
     private ChuyenTau chuyenTau;
+    private boolean isKhuHoi = false;
 
 
 	private GheNgoi gheNgoi;
@@ -17,6 +18,13 @@ public class GheTrenChuyenTau implements Serializable {
         setGiaTienGhe(giaTienGhe);
         setChuyenTau(chuyenTau);
         setGheNgoi(gheNgoi);
+    }
+
+    public void setKhuHoi(boolean khuHoi) {
+        isKhuHoi = khuHoi;
+    }
+    public boolean isKhuHoi() {
+        return isKhuHoi;
     }
 
     public GheTrenChuyenTau() {

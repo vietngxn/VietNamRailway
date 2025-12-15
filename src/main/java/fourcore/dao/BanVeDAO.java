@@ -55,6 +55,7 @@ public class BanVeDAO {
         }
         listGheTrenChuyenTau= new ArrayList<>(mapChuyenTauVaUser.keySet());
         for(int i=0;i<listGheTrenChuyenTau.size();i++){
+            System.out.println(listGheTrenChuyenTau.get(i).isKhuHoi());
             listKhachHang.add(mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)));
             System.out.println("add list kh");
         }
@@ -335,13 +336,25 @@ return hoaDon;
                 }
                 maKhachHang = kh.getMaKhachHang();
             }
-
+            Ve veTau;
             maVeTau = getMaVe();
-            Ve veTau = new Ve(maVeTau,gaDi,gaDen,listGheTrenChuyenTau.get(i).getChuyenTau().getTau().getLoaiTau().getTenLoaiTau(),listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDi(),listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDen(),
-                    checkThuTuToa(listGheTrenChuyenTau.get(i)),listGheTrenChuyenTau.get(i).getGheNgoi().getKhoangTau().getSoKhoang(),listGheTrenChuyenTau.get(i).getGheNgoi().getTang().getSoTang(),
-                    listGheTrenChuyenTau.get(i).getGheNgoi().getSoGhe(),loaiVe,mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getCccd(),tinhTienVe(listGheTrenChuyenTau.get(i)),
-                    null,"chưa đổi","hoạt động",listGheTrenChuyenTau.get(i).getChuyenTau(),kh,ctkmSelected,getDoiTuong(listGheTrenChuyenTau.get(i)));
-            listVe.add(veTau);
+            if(listGheTrenChuyenTau.get(i).isKhuHoi()){
+                System.out.println("ve khu hoi");
+                veTau = new Ve(maVeTau,gaDen,gaDi,listGheTrenChuyenTau.get(i).getChuyenTau().getTau().getLoaiTau().getTenLoaiTau(),listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDi(),listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDen(),
+                        checkThuTuToa(listGheTrenChuyenTau.get(i)),listGheTrenChuyenTau.get(i).getGheNgoi().getKhoangTau().getSoKhoang(),listGheTrenChuyenTau.get(i).getGheNgoi().getTang().getSoTang(),
+                        listGheTrenChuyenTau.get(i).getGheNgoi().getSoGhe(),loaiVe,mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getCccd(),tinhTienVe(listGheTrenChuyenTau.get(i)),
+                        null,"chưa đổi","hoạt động",listGheTrenChuyenTau.get(i).getChuyenTau(),kh,ctkmSelected,getDoiTuong(listGheTrenChuyenTau.get(i)));
+                listVe.add(veTau);
+            }else{
+                System.out.println("ve mot chieu");
+
+                veTau = new Ve(maVeTau,gaDi,gaDen,listGheTrenChuyenTau.get(i).getChuyenTau().getTau().getLoaiTau().getTenLoaiTau(),listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDi(),listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDen(),
+                        checkThuTuToa(listGheTrenChuyenTau.get(i)),listGheTrenChuyenTau.get(i).getGheNgoi().getKhoangTau().getSoKhoang(),listGheTrenChuyenTau.get(i).getGheNgoi().getTang().getSoTang(),
+                        listGheTrenChuyenTau.get(i).getGheNgoi().getSoGhe(),loaiVe,mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getCccd(),tinhTienVe(listGheTrenChuyenTau.get(i)),
+                        null,"chưa đổi","hoạt động",listGheTrenChuyenTau.get(i).getChuyenTau(),kh,ctkmSelected,getDoiTuong(listGheTrenChuyenTau.get(i)));
+                listVe.add(veTau);
+            }
+
 
 
 
@@ -350,8 +363,8 @@ return hoaDon;
             PreparedStatement sta = null;
             sta = con.prepareStatement(insertVe);
             sta.setString(1,maVeTau);
-            sta.setString(2,gaDi);
-            sta.setString(3,gaDen);
+            sta.setString(2,veTau.getGaDi());
+            sta.setString(3,veTau.getGaDen());
             sta.setString(4, listGheTrenChuyenTau.get(i).getChuyenTau().getTau().getLoaiTau().getTenLoaiTau());
             sta.setObject(5,listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDi());
             sta.setObject(6, listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDen());

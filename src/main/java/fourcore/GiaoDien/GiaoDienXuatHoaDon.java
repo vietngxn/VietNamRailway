@@ -979,6 +979,8 @@ public class GiaoDienXuatHoaDon extends Application {
         File file5 = new File("loaive.dat");
         File file6 = new File("mapGheVaKhachHang.dat");
         File file7 = new File("veTau.dat");
+        File file8 = new File("ds_ghe_khuhoi_dang_chon.dat");
+        File file9 = new File("listChieuVe.dat");
         ArrayList<File> listFile = new ArrayList<>();
         listFile.add(file1);
         listFile.add(file2);
@@ -987,6 +989,8 @@ public class GiaoDienXuatHoaDon extends Application {
         listFile.add(file5);
         listFile.add(file6);
         listFile.add(file7);
+        listFile.add(file8);
+        listFile.add(file9);
         for(File file : listFile){
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
                 oos.writeObject(null);
@@ -1011,14 +1015,25 @@ public class GiaoDienXuatHoaDon extends Application {
             String maKhachHang="";
 
             KhachHang kh = new KhachHang(mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getHoten(), mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getCccd(), mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getDoiTuong());
-            Ve veTau = new Ve(gaDi,gaDen,
-                    loaiVe,tinhTienVe(listGheTrenChuyenTau.get(i))
-                  ,kh,getDoiTuong(listGheTrenChuyenTau.get(i)));
-            listVe.add(veTau);
-            thanhTien = donGia * ((100-veTau.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia())/100);
+            Ve veTau = null;
+            if(listGheTrenChuyenTau.get(i).isKhuHoi()){
+                veTau = new Ve(gaDen,gaDi,
+                        loaiVe,tinhTienVe(listGheTrenChuyenTau.get(i))
+                        ,kh,getDoiTuong(listGheTrenChuyenTau.get(i)));
+                listVe.add(veTau);
+            }else {
+                veTau = new Ve(gaDi,gaDen,
+                        loaiVe,tinhTienVe(listGheTrenChuyenTau.get(i))
+                        ,kh,getDoiTuong(listGheTrenChuyenTau.get(i)));
+                listVe.add(veTau);
+            }
 
+            thanhTien = donGia * ((100-veTau.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia())/100);
             ThongTinCtHoaDon thongTinCtHoaDon = new ThongTinCtHoaDon(listGheTrenChuyenTau.get(i).getGheNgoi().getLoaiGhe().getTenLoaiGhe(),
-                                                                    veTau.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),donGia,thanhTien);
+                    veTau.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),donGia,thanhTien);
+            if(listGheTrenChuyenTau.get(i).isKhuHoi()){
+                thongTinCtHoaDon.setKhuHoi(true);
+            }
             listThongTinCtHoaDon.add(thongTinCtHoaDon);
         }
 
@@ -1170,7 +1185,12 @@ public class GiaoDienXuatHoaDon extends Application {
         table_desc.setPadding(new Insets(6, 0, 6, 0));
         cnt = 1;
         for(int i=0;i<thongTinCtHoaDonList.size();i++){
-            create_table_row(cnt,gaDi,gaDen,thongTinCtHoaDonList.get(i).getTenLoaiGhe(),thongTinCtHoaDonList.get(i).getDoiTuong(),thongTinCtHoaDonList.get(i).getDonGia()+"",thongTinCtHoaDonList.get(i).getThanhTien()+"");
+            if(thongTinCtHoaDonList.get(i).isKhuHoi()){
+                create_table_row(cnt,gaDen,gaDi,thongTinCtHoaDonList.get(i).getTenLoaiGhe(),thongTinCtHoaDonList.get(i).getDoiTuong(),thongTinCtHoaDonList.get(i).getDonGia()+"",thongTinCtHoaDonList.get(i).getThanhTien()+"");
+            }else {
+                create_table_row(cnt,gaDi,gaDen,thongTinCtHoaDonList.get(i).getTenLoaiGhe(),thongTinCtHoaDonList.get(i).getDoiTuong(),thongTinCtHoaDonList.get(i).getDonGia()+"",thongTinCtHoaDonList.get(i).getThanhTien()+"");
+
+            }
 
         }
         ScrollPane scrPane = new ScrollPane(table_desc);
