@@ -40,7 +40,7 @@ public class Tau_DAO {
                     rs.getDouble("giaCuoc")
                 );
             Tau tau = new Tau(maTau, tenTau, lt);
-			System.out.println("Lấy dữ liệu thành công");
+//			System.out.println("Lấy dữ liệu thành công");
 		}
 		return list;
 	}
@@ -62,7 +62,7 @@ public class Tau_DAO {
                     rs.getDouble("giaCuoc")
             );
             Tau tau = new Tau(maTau, tenTau, lt);
-            System.out.println("Lấy dữ liệu thành công");
+//            System.out.println("Lấy dữ liệu thành công");
             listTau.add(tau);
         }
         for(Tau t : listTau){

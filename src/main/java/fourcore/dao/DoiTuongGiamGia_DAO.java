@@ -24,7 +24,7 @@ public class DoiTuongGiamGia_DAO {
 			DoiTuongGiamGia dt = new DoiTuongGiamGia(rs.getString("maDoiTuongGiamGia"),
 					rs.getString("tenDoiTuongGiamGia"), rs.getString("trangThaiGiamGia"),
 					rs.getDouble("giaTriPhanTramGiamGia"));
-			System.out.println("Lấy dữ liệu thành công");
+//			System.out.println("Lấy dữ liệu thành công");
 			list.add(dt);
 		}
 		return list;

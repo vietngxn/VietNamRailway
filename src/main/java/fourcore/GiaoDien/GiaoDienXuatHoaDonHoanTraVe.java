@@ -690,9 +690,8 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 					+ "-fx-text-fill:white;" + "-fx-background-color: linear-gradient(to top, #00BACB, #B6D0D3);"
 					+ "-fx-background-radius:15px;";
 			String lblStyle = "-fx-font-size: 36px;";
+			
 			btnRong = new Pane();
-			;
-
 			pnlTongCong = new HBox();
 			pnlSoLuongVe = new HBox(5);
 			lblSoLuongVe = new Label("Số lượng vé:");
