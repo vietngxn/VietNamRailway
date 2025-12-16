@@ -17,7 +17,7 @@ module VietNamRailwayInterface {
 	requires org.apache.poi.poi;
 	requires org.apache.xmlbeans;
     exports fourcore.Entity;
-      exports fourcore.util;
+    exports fourcore.util;
     exports fourcore.GiaoDien;
     opens fourcore.Entity to javafx.base;
     opens fourcore.GiaoDien to javafx.fxml;
