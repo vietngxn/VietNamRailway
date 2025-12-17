@@ -152,7 +152,7 @@ public class HoaDonHoanTraVe extends Application {
 		table_header.setAlignment(Pos.CENTER);
 		String style = "-fx-font-family:'Inter';-fx-font-size : 14px;-fx-font-weight:bold;";
 		String[] headers = { "STT", "Mã vé", "Tên dịch vụ", "Đơn giá", "VAT", "Khuyến mãi", "Phí hoàn trả",
-				"Thành tiền" };
+				"Tiền hoàn trả" };
 		for (int i = 0; i < headers.length; i++) {
 			Label lbl_header = new Label(headers[i]);
 			lbl_header.setStyle("-fx-font-weight: bold;");
@@ -171,8 +171,8 @@ public class HoaDonHoanTraVe extends Application {
 		for (Map.Entry<Ve, Double> entry : listVe.entrySet()) {
 			Ve v = entry.getKey();
 			double thanhtien = entry.getValue();
-			create_table_row(cnt, v.getMaVeTau(), "Hoàn trả vé", v.getGiaVe(), 0.0, 0.0, v.getGiaVe() - thanhtien,
-					thanhtien);
+			create_table_row(cnt, v.getMaVeTau(), "Hoàn trả vé", v.getGiaVe(), 0.0, 0.0,
+					(v.getGiaVe() - thanhtien) * -1, thanhtien);
 			tongCongThanhTien += thanhtien;
 		}
 

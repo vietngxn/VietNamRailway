@@ -1,18 +1,16 @@
 package fourcore.GiaoDien;
 
-import java.io.InputStream;
-import java.net.URL;
+import java.io.InputStream; 
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Locale;
-import java.util.Stack;
+import java.util.Map;
 import java.util.regex.Pattern;
 
-import com.itextpdf.kernel.colors.WebColors;
 
 import fourcore.Entity.ChuyenTau;
 import fourcore.Entity.LichSuTuongTacVe;
@@ -22,43 +20,30 @@ import fourcore.dao.ChuyenTauDAO;
 import fourcore.dao.LichSuTuongTacVe_Dao;
 import fourcore.dao.Tau_DAO;
 import fourcore.dao.VeDAO;
-import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
+
 
 public class GiaoDienLichSuMuaBanDoiVe extends Application {
 
@@ -82,6 +67,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 	NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
 	private LichSuTuongTacVe_Dao dao;
 	private ArrayList<LichSuTuongTacVe> list;
+	private Map<LichSuTuongTacVe, Double> listXuatThongKe = new HashMap<LichSuTuongTacVe, Double>();
 	private Tau_DAO tDao;
 	private ChuyenTauDAO ctDAO;
 	private ChuyenTau ct;
@@ -93,14 +79,11 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 	private Label lblTimKiem;
 	private VBox layoutTxtTimKiem;
 	private TextField txtTimKiem;
-	private StackPane combolayout3;
-	private DatePicker date;
 	private HBox comboboxPnl;
 	private LocalDate ngaydi;
 	private DatePicker dateTu;
 	private DatePicker dateDen;
 	private LocalDate ngayDen;
-	private StackPane xuatTKBtnPnl;
 	private StackPane pnlXuatTKBtn;
 	private Button btnXuatTK;
 
@@ -337,25 +320,6 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 		return box;
 	}
 
-//	public void create_combobox_layout2()
-//	{
-//		//combo 3
-//		combolayout3 = new VBox();
-//		combolayout3.setPrefSize(400,50);
-//		date = new DatePicker();
-//		date.setPrefSize(500, 45);
-//		date.setId("date");
-//		date.setPromptText("Ngày đi");
-//		date.setOnAction(e -> {
-//			LocalDate ngaydi = date.getValue();
-//			date.setValue(ngaydi);
-//		});
-//		InputStream is = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Bold.ttf");
-//	    Font font_combobox = Font.loadFont(is, 15);
-//	    date.getEditor().setFont(font_combobox);
-//		combolayout3.getChildren().add(date);
-//	}
-//	
 	public GridPane taoSubCTDoiVe(String ma, String loai, LocalDate ngayMua) throws SQLException {
 		veDao = new VeDAO();
 		ctDAO = new ChuyenTauDAO();
@@ -665,7 +629,13 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 			btnXuatTK.setOnMouseClicked(event -> {
 				if (!pnlDataDoiVe.getChildren().isEmpty() && dateTu.getValue() != null && dateTu.getValue() != null
 						&& (cnt1 == 1 || cnt2 == 1 || cnt3 == 1)) {
+					for (LichSuTuongTacVe x : list) {
+						double value = x.getVeTau().getGiaVe();
+						listXuatThongKe.put(x, value);
+					}
+					for (Map.Entry<LichSuTuongTacVe, Double> entry : listXuatThongKe.entrySet()) {
 
+					}
 				} else {
 					Alert alert = new Alert(Alert.AlertType.ERROR);
 					alert.setTitle("Lỗi xuất thống kê");
