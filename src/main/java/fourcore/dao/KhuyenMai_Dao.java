@@ -33,7 +33,7 @@ public class KhuyenMai_Dao {
 			LocalDateTime ngayKT = rs.getTimestamp("ngayKetThuc").toLocalDateTime();
 
 			list1.add(new KhuyenMai(ma, ten, trangThai, dieuKien, phanTram, ngayBD, ngayKT));
-			System.out.println("Lấy dữ liệu thành công");
+//			System.out.println("Lấy dữ liệu thành công");
 		}
 		return list1;
 	}
