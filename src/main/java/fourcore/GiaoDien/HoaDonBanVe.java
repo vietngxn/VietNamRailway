@@ -128,7 +128,7 @@ public class HoaDonBanVe extends Application {
         table_desc.setPadding(new Insets(10, 0, 10, 0));
         cnt = 1;
         for(int i=0;i<thongTinCtHoaDon.size();i++){
-            create_table_row(cnt, thongTinCtHoaDon.get(i).getMaVe(), thongTinCtHoaDon.get(i).getTenLoaiGhe(), thongTinCtHoaDon.get(i).getDoiTuong(), thongTinCtHoaDon.get(i).getDonGia()+"",  thongTinCtHoaDon.get(i).getThanhTien()+"");
+            create_table_row(cnt, thongTinCtHoaDon.get(i).getMaVe(), thongTinCtHoaDon.get(i).getTenLoaiGhe(), thongTinCtHoaDon.get(i).getDoiTuong(), String.format("%, .0f đ", thongTinCtHoaDon.get(i).getDonGia()),  String.format("%, .0f đ", thongTinCtHoaDon.get(i).getThanhTien()));
 
         }
         ScrollPane scrPane = new ScrollPane(table_desc);

@@ -1361,7 +1361,7 @@ public class ChonVe extends Application {
 
                         ghePane.setOnMouseEntered(e -> {
                             String content = String.format(
-                                    "Loại: %s\nGiá ghế: %.1f",
+                                    "Loại: %s\nGiá ghế: %, .0f đ",
                                     gtc.getGheNgoi().getLoaiGhe().getTenLoaiGhe(),
                                     gtc.getGiaTienGhe()
 
@@ -1456,7 +1456,7 @@ public class ChonVe extends Application {
                             String content = null;
                             try {
                                 content = String.format(
-                                        "Loại: %s\nGiá ghế: %.1f",
+                                        "Loại: %s\nGiá ghế: %, .0f đ",
                                         gtc.getGheNgoi().getLoaiGhe().getTenLoaiGhe(),
                                         gtc.getChuyenTau().getGiaCuocTrenChuyenTau() * gaTauDao.getCuLiBangTenGa(gaDen) + gtc.getGiaTienGhe()
 
@@ -1573,7 +1573,7 @@ public class ChonVe extends Application {
                     popup.getContent().add(popupLabel);
 
                     ghePane.setOnMouseEntered(e -> {
-                        String content = String.format("Loại: %s\nGiá ghế: %.1f",
+                        String content = String.format("Loại: %s\nGiá ghế: %, .0f đ",
                                 gtc.getGheNgoi().getLoaiGhe().getTenLoaiGhe(),
                                 gtc.getGiaTienGhe());  // Giản hóa, dùng giá ghế trực tiếp (bỏ tính cu li nếu không cần)
 
@@ -1581,7 +1581,7 @@ public class ChonVe extends Application {
                             try {
                                 double giaCuoc = gtc.getChuyenTau().getGiaCuocTrenChuyenTau() *
                                         gaTauDao.getCuLiBangTenGa(gaDen) + gtc.getGiaTienGhe();
-                                content = String.format("Loại: %s\nGiá ghế: %.1f",
+                                content = String.format("Loại: %s\nGiá ghế: %, .0f đ",
                                         gtc.getGheNgoi().getLoaiGhe().getTenLoaiGhe(), giaCuoc);
                             } catch (SQLException ex) {
                                 System.err.println("Lỗi tính giá: " + ex.getMessage());  // Log lỗi, không throw

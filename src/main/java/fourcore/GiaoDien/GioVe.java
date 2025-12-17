@@ -601,7 +601,7 @@ public class GioVe extends Application {
 			for (int i = 0; i < listGheSelected.size(); i++) {
 				pnlDataGioVe.getChildren().add(taoDataChoTableGioVe(listGheSelected.get(i),"di"));
 			}
-            if(listKhuHoiSelected.size()>0){
+            if(listKhuHoiSelected!=null){
                 for(int i = 0; i < listKhuHoiSelected.size(); i++){
                     listKhuHoiSelected.get(i).setKhuHoi(true);
                     pnlDataGioVe.getChildren().add(taoDataChoTableGioVe(listKhuHoiSelected.get(i),"ve"));
@@ -773,9 +773,12 @@ public class GioVe extends Application {
 			btnTiepTuc.setOnMouseClicked(event -> {
                 mapChuyenTauVaUser.clear();
                 ArrayList<GheTrenChuyenTau> tongGheTrenChuyenTau = listGheSelected;
-                for(int i = 0; i < listKhuHoiSelected.size(); i++){
-                    tongGheTrenChuyenTau.add(listKhuHoiSelected.get(i));
+                if(listKhuHoiSelected!=null){
+                    for(int i = 0; i < listKhuHoiSelected.size(); i++){
+                        tongGheTrenChuyenTau.add(listKhuHoiSelected.get(i));
+                    }
                 }
+
 				for (int i = 0; i < listTxtHoTen.size(); i++) {
                     if(listTxtHoTen.get(i).getText()==null || listTxtSoGiayTo.get(i).getText().trim().isEmpty() ||  listCmbDoiTuong.get(i).getValue()==null){
                         System.out.println("so giay to: " + listTxtSoGiayTo.get(i).getText());
@@ -883,7 +886,7 @@ public class GioVe extends Application {
         }else {
             giaVe1Value = gheTrenChuyenTau.getGiaTienGhe();
         }
-		Label lblThanhTienValue = new Label(String.valueOf(giaVe1Value));
+		Label lblThanhTienValue = new Label(String.format("%, .0f đ", giaVe1Value));
         System.out.println("Ga den:"+ gaTauDao.getCuLiBangTenGa(gaDen)+" Gia tri thanh tien khoi tao "+ giaVe1Value +" gia ghe" + gheTrenChuyenTau.getGiaTienGhe());
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
 		VBox pnlReturn = new VBox();
@@ -1203,9 +1206,10 @@ public class GioVe extends Application {
 					}
 					lblTrangThaiApDung.setText("");
 					loadLableTongCongValue(tongCongThanhTien);
-                    String lblgdt = tienGiam + "(" +phanTramGiam + "% )";
+                    String tgiam = String.format("%, .0f đ", tienGiam);
+                    String lblgdt = tgiam + "(" +phanTramGiam + "% )";
 					lblGiamDoiTuongValue.setText(lblgdt);
-					lblThanhTienValue.setText(String.format("%.0f", thanhTienMoi));
+					lblThanhTienValue.setText(String.format("%, .0f đ", thanhTienMoi));
 
 
 			});
@@ -1226,7 +1230,7 @@ public class GioVe extends Application {
 	private VBox taoSubCT2(String title, double value, String labelStyle, String valueStyle) {
 		Label lblTitle = new Label(title);
 		lblTitle.setStyle(labelStyle);
-		Label lblValue = new Label("" + value);
+		Label lblValue = new Label(String.format("%, .0f đ", value));
 		lblValue.setStyle(valueStyle);
 		VBox box = new VBox(5, new StackPane(lblTitle), new StackPane(lblValue));
 		box.setAlignment(Pos.CENTER);
@@ -1234,7 +1238,7 @@ public class GioVe extends Application {
 	}
 
 	public void loadLableTongCongValue(double tongCongThanhTien) {
-		lblTongCongValue.setText(nf.format(tongCongThanhTien));
+		lblTongCongValue.setText(String.format("%, .0f đ", tongCongThanhTien));
 	}
 
 	public static void main(String[] args) {

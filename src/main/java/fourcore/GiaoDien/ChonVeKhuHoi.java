@@ -112,7 +112,7 @@ public class ChonVeKhuHoi extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            System.out.println("Run Chon ve");
+            System.out.println("Run Chon ve khu hoi");
             System.out.println("Get list:....");
 
             BorderPane root = new BorderPane();
@@ -593,7 +593,7 @@ public class ChonVeKhuHoi extends Application {
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
-            Label hanhTrinhLabel = new Label(gaDen + "Sài Gòn");
+            Label hanhTrinhLabel = new Label(gaDen + "- Sài Gòn");
             InputStream interFontItalic = getClass().getResourceAsStream("/fonts/Inter/static/Inter_18pt-Italic.ttf");
             Font hanhTrinhFont = Font.loadFont(interFontItalic, 30);
             hanhTrinhLabel.setFont(hanhTrinhFont);
@@ -1360,7 +1360,7 @@ public class ChonVeKhuHoi extends Application {
 
                         ghePane.setOnMouseEntered(e -> {
                             String content = String.format(
-                                    "Loại: %s\nGiá ghế: %.1f",
+                                    "Loại: %s\nGiá ghế: %, .0f đ",
                                     gtc.getGheNgoi().getLoaiGhe().getTenLoaiGhe(),
                                     gtc.getGiaTienGhe()
 
@@ -1455,7 +1455,7 @@ public class ChonVeKhuHoi extends Application {
                             String content = null;
                             try {
                                 content = String.format(
-                                        "Loại: %s\nGiá ghế: %.1f",
+                                        "Loại: %s\nGiá ghế: %, .0f đ",
                                         gtc.getGheNgoi().getLoaiGhe().getTenLoaiGhe(),
                                         gtc.getChuyenTau().getGiaCuocTrenChuyenTau() * gaTauDao.getCuLiBangTenGa(gaDen) + gtc.getGiaTienGhe()
 
@@ -1574,7 +1574,7 @@ public class ChonVeKhuHoi extends Application {
                     popup.getContent().add(popupLabel);
 
                     ghePane.setOnMouseEntered(e -> {
-                        String content = String.format("Loại: %s\nGiá ghế: %.1f",
+                        String content = String.format("Loại: %s\nGiá ghế: %, .0f đ",
                                 gtc.getGheNgoi().getLoaiGhe().getTenLoaiGhe(),
                                 gtc.getGiaTienGhe());  // Giản hóa, dùng giá ghế trực tiếp (bỏ tính cu li nếu không cần)
 
@@ -1582,7 +1582,7 @@ public class ChonVeKhuHoi extends Application {
                             try {
                                 double giaCuoc = gtc.getChuyenTau().getGiaCuocTrenChuyenTau() *
                                         gaTauDao.getCuLiBangTenGa(gaDen) + gtc.getGiaTienGhe();
-                                content = String.format("Loại: %s\nGiá ghế: %.1f",
+                                content = String.format("Loại: %s\nGiá ghế: %, .0f đ",
                                         gtc.getGheNgoi().getLoaiGhe().getTenLoaiGhe(), giaCuoc);
                             } catch (SQLException ex) {
                                 System.err.println("Lỗi tính giá: " + ex.getMessage());  // Log lỗi, không throw
@@ -1623,7 +1623,7 @@ public class ChonVeKhuHoi extends Application {
         return this.chuyenTauMenu;
     }
     public static void main(String[] args) throws SQLException {
-        Application.launch(ChonVe.class, args);
+        Application.launch(ChonVeKhuHoi.class, args);
 
     }
 

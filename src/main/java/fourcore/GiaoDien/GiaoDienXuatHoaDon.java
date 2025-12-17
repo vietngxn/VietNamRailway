@@ -849,7 +849,7 @@ public class GiaoDienXuatHoaDon extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Hệ thống quản lý vé tàu");
 			primaryStage.setFullScreen(true);
-//			primaryStage.show();
+			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1178,17 +1178,15 @@ public class GiaoDienXuatHoaDon extends Application {
         }
 
         table_layout.getChildren().add(table_header);
-
-
         table_desc = new VBox();
         table_desc.setSpacing(10);         // <-- đây là setSpacing đúng chỗ
         table_desc.setPadding(new Insets(6, 0, 6, 0));
         cnt = 1;
         for(int i=0;i<thongTinCtHoaDonList.size();i++){
             if(thongTinCtHoaDonList.get(i).isKhuHoi()){
-                create_table_row(cnt,gaDen,gaDi,thongTinCtHoaDonList.get(i).getTenLoaiGhe(),thongTinCtHoaDonList.get(i).getDoiTuong(),thongTinCtHoaDonList.get(i).getDonGia()+"",thongTinCtHoaDonList.get(i).getThanhTien()+"");
+                create_table_row(cnt,gaDen,gaDi,thongTinCtHoaDonList.get(i).getTenLoaiGhe(),thongTinCtHoaDonList.get(i).getDoiTuong(),String.format("%, .0f đ", thongTinCtHoaDonList.get(i).getDonGia()),String.format("%, .0f đ", thongTinCtHoaDonList.get(i).getThanhTien()));
             }else {
-                create_table_row(cnt,gaDi,gaDen,thongTinCtHoaDonList.get(i).getTenLoaiGhe(),thongTinCtHoaDonList.get(i).getDoiTuong(),thongTinCtHoaDonList.get(i).getDonGia()+"",thongTinCtHoaDonList.get(i).getThanhTien()+"");
+                create_table_row(cnt,gaDi,gaDen,thongTinCtHoaDonList.get(i).getTenLoaiGhe(),thongTinCtHoaDonList.get(i).getDoiTuong(),String.format("%, .0f đ", thongTinCtHoaDonList.get(i).getDonGia()),String.format("%, .0f đ", thongTinCtHoaDonList.get(i).getThanhTien()));
 
             }
 
