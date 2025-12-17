@@ -146,7 +146,7 @@ public class VeDAO {
 		String sql = "SELECT DISTINCT v.* " + "FROM Ve AS v " + "JOIN ChiTietHoaDon AS ct ON v.maVeTau = ct.maVeTau "
 				+ "JOIN HoaDon AS hd ON ct.maHoaDon = hd.maHoaDon "
 				+ "JOIN LoaiHoaDon AS lhd ON hd.maLoaiHoaDon = lhd.maLoaiHoaDon "
-				+ "WHERE v.trangThaiVe = N'hoạt động' " + "AND v.ngayGioDi > GETDATE() " + "AND ( "
+				+ "WHERE " + " v.ngayGioDi > GETDATE() " + "AND ( "
 				+ "    (ct.loaiHoaDonChoVeTau = N'Vé tập thể' AND v.ngayGioDi > DATEADD(HOUR, 24, GETDATE())) "
 				+ " OR (ct.loaiHoaDonChoVeTau = N'Vé cá nhân' AND v.ngayGioDi > DATEADD(HOUR, 4, GETDATE())) " + ") "
 				+ "AND v.maVeTau = '" + maVe + "'";

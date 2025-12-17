@@ -54,7 +54,7 @@ public class LichSuTuongTacVe_Dao {
 			Ve v = veDao.getVeBangMaVe(maVeTau);
 			LichSuTuongTacVe ls = new LichSuTuongTacVe(maTuongTac, tt, v, giaTriChenhLech, ngayTuongTac);
 			list1.add(ls);
-			System.out.println("Lấy dữ liệu thành công");
+//			System.out.println("Lấy dữ liệu thành công");
 		}
 
 		return list1;
