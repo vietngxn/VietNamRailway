@@ -955,7 +955,7 @@ public class ThemChuongTrinhKhuyenMai extends Application {
 			{
 				ma = "KM0"+n;
 			}
-			else if(n >= 10 && n <= 99)
+			else if(n >= 10 && n <= 99)	
 			{
 				ma = "KM"+n;
 			}
@@ -963,9 +963,59 @@ public class ThemChuongTrinhKhuyenMai extends Application {
 			String tenCTKM = txtTenCT.getText();
 			LocalDate nbd = ngayBatDau.getValue();
 			LocalDate nkt = ngayKetThuc.getValue();
+			
+			String doiTuong = txtcomboDoiTuong.getText();
+			String giaTriKM = txtGiaTriKhuyenMai.getText();
+			
+			
+			if(tenCTKM.isEmpty())
+			{
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+	        	alert.setHeaderText(null);
+	        	alert.setContentText("Không được để trống tên CTKM!");
+	        	alert.showAndWait();
+	        	return;
+			}
+			else if(nbd == null)
+			{
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+	        	alert.setHeaderText(null);
+	        	alert.setContentText("Không được để trống Ngày bắt đầu CTKM!");
+	        	alert.showAndWait();
+	        	return;
+			}
+			else if(nkt == null)
+			{
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+	        	alert.setHeaderText(null);
+	        	alert.setContentText("Không được để trống Ngày kết thúc CTKM!");
+	        	alert.showAndWait();
+	        	return;
+			}
+			else if(doiTuong.isEmpty())
+			{
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+	        	alert.setHeaderText(null);
+	        	alert.setContentText("Không được để trống đối tượng của CTKM!");
+	        	alert.showAndWait();
+	        	return;
+			}
+			else if(giaTriKM.isEmpty())
+			{
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+	        	alert.setHeaderText(null);
+	        	alert.setContentText("Không được để trống giá trị % của CTKM!");
+	        	alert.showAndWait();
+	        	return;
+			}
+		
+			
+				
+			
+			
+			
 			LocalDate hienTai = LocalDate.now();
-			String trangThai = "";
-			double giaTri = Double.valueOf(txtGiaTriKhuyenMai.getText());
+			String trangThai = "";			
 			if(hienTai.isAfter(nkt) && hienTai.isBefore(nbd))
 			{
 				trangThai = "Kích Hoạt";
@@ -976,16 +1026,31 @@ public class ThemChuongTrinhKhuyenMai extends Application {
 			
 			
 			
-			String doiTuong = txtcomboDoiTuong.getText();
-			String giaTriKM = txtGiaTriKhuyenMai.getText();
+			if(nbd.isBefore(hienTai)) {
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+	        	alert.setHeaderText(null);
+	        	alert.setContentText("Ngày bắt đầu phải bằng hoặc sau ngày hiện tại");
+	        	alert.showAndWait();
+	        	return;
+			}
+			
+			if(nkt.isBefore(nbd) || nkt.isEqual(nbd)) {
+			    Alert alert = new Alert(Alert.AlertType.ERROR);
+			    alert.setHeaderText(null);
+			    alert.setContentText("Ngày kết thúc phải sau ngày bắt đầu!");
+			    alert.showAndWait();
+			    return;
+			}
+
 			
 			LocalDateTime nbd1 = nbd.atStartOfDay();
 		    LocalDateTime nkt1 = nkt.atStartOfDay();
 		    
 		    
 		    
+		    
 			try {
-				if(ctkmDAO.themKhuyenMai(new KhuyenMai(ma, tenCTKM, trangThai, doiTuong, giaTri, nbd1, nkt1)))
+				if(ctkmDAO.themKhuyenMai(new KhuyenMai(ma, tenCTKM, trangThai, doiTuong, Double.valueOf(txtGiaTriKhuyenMai.getText()), nbd1, nkt1)))
 				{
 					Alert alert = new Alert(AlertType.INFORMATION);
 					alert.setTitle("Thông Báo");

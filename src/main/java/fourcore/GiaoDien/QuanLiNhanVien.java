@@ -18,6 +18,7 @@ import fourcore.Entity.KhuyenMai;
 import fourcore.Entity.NhanVien;
 import fourcore.dao.ChuongTrinhKhuyenMaiDAO;
 import fourcore.dao.NhanVienDAO;
+import fourcore.dao.TaiKhoanDAO;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -136,7 +137,7 @@ public class QuanLiNhanVien extends Application {
 	private Button btn_khoiPhuc1; 
 	private GridPane[] hangchonPopup = null;
 	private Button btn_timkiem;
-
+	private TaiKhoanDAO tkdao;
     public Button getBtn_themNhanVien() {
         return btn_themNhanVien;
     }
@@ -151,7 +152,7 @@ public class QuanLiNhanVien extends Application {
 //			======================
             nhanvienDAO = new NhanVienDAO();
             listnhanVien = nhanvienDAO.getListNhanVien();
-            
+            tkdao = new TaiKhoanDAO();
 //----------------------------------------------------------------------------------------------------------------------------------------
             BorderPane root = new BorderPane();
             Scene scene = new Scene(root,1920,1000);
@@ -1380,7 +1381,7 @@ public class QuanLiNhanVien extends Application {
 		        
 		        try {
 		            // Cập nhật trạng thái nhân viên về "còn làm"
-		            if(nhanvienDAO.capNhatTrangThaidiLam(maNhanVien)) {
+		        	 if(nhanvienDAO.capNhatTrangThaidiLam(maNhanVien) && tkdao.capNhatIsRemove(maNhanVien, 0)){
 		                // Xóa dòng từ table recovery
 		                FadeTransition ft = new FadeTransition(Duration.millis(400), hangchonPopup[0]);
 		                ft.setFromValue(1.0);
@@ -1441,7 +1442,7 @@ public class QuanLiNhanVien extends Application {
 					String manv =  ((Label)((StackPane)hangchon.getChildren().get(0)).getChildren().get(0)).getText();
 					
 					try {
-						if(nhanvienDAO.capNhatTrangThaiNghiLam(manv))
+						if(nhanvienDAO.capNhatTrangThaiNghiLam(manv) && tkdao.capNhatIsRemove(manv, 1) )
 						{
 							Alert alert = new Alert(Alert.AlertType.INFORMATION);
 							alert.setContentText("Xóa Nhân Viên Thành Công");

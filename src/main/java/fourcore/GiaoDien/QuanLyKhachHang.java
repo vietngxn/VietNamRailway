@@ -1062,7 +1062,7 @@ public class QuanLyKhachHang extends Application {
 		
 		
 		
-		colCCCD = new Label("CCCD/Passport");
+		colCCCD = new Label("CCCD");
 		colCCCD.setStyle(styleHeader);
 
 		

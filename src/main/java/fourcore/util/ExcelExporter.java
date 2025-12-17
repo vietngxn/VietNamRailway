@@ -346,6 +346,94 @@ public class ExcelExporter {
     	}
     }
     
+    
+    public static void exportThongKeDoanhThutheoTau(Map<Tau, Double> map, String filePath) {
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Thống Kê Chuyến Tàu");
+            
+            // Tạo header style
+            CellStyle headerStyle = createHeaderStyle(workbook);
+            CellStyle titleStyle = createTitleStyle(workbook);
+            CellStyle dataStyle = createDataStyle(workbook);
+            CellStyle totalStyle = createTotalStyle(workbook);
+            
+            // Tạo title
+            XSSFRow titleRow = sheet.createRow(0);
+            XSSFCell titleCell = titleRow.createCell(0);
+            titleCell.setCellValue("THỐNG KÊ CHUYẾN TÀU DOANH THU CAO NHẤT");
+            titleCell.setCellStyle(titleStyle);
+            sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(0, 0, 0, 2));
+            
+            // Tạo timestamp
+            XSSFRow timeRow = sheet.createRow(1);
+            XSSFCell timeCell = timeRow.createCell(0);
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+            timeCell.setCellValue("Thời gian xuất: " + now.format(formatter));
+            
+            // Tạo header cho bảng
+            int headerRowNum = 3;
+            XSSFRow headerRow = sheet.createRow(headerRowNum);
+            
+            double doanhthu = 0;
+            String[] headers = {"Mã Tàu", "Tên Tàu", "Doanh Thu"};
+            for (int i = 0; i < headers.length; i++) {
+                XSSFCell cell = headerRow.createCell(i);
+                cell.setCellValue(headers[i]);
+                cell.setCellStyle(headerStyle);
+            }
+            
+            // Điều chỉnh độ rộng cột
+            sheet.setColumnWidth(0, 4000);
+            sheet.setColumnWidth(1, 5000);
+            sheet.setColumnWidth(2, 4000);
+            
+            // Điền dữ liệu
+            int rowNum = 4;
+            for (Map.Entry<Tau, Double> entry : map.entrySet()) {
+                Tau tau = entry.getKey();
+                double soLan = entry.getValue();
+                
+                XSSFRow row = sheet.createRow(rowNum++);
+                
+                XSSFCell cell0 = row.createCell(0);
+                cell0.setCellValue(tau.getMaTau());
+                cell0.setCellStyle(dataStyle);
+                
+                XSSFCell cell1 = row.createCell(1);
+                cell1.setCellValue(tau.getTenTau());
+                cell1.setCellStyle(dataStyle);
+                
+                XSSFCell cell2 = row.createCell(2);
+                cell2.setCellValue(soLan);
+                cell2.setCellStyle(dataStyle);
+                doanhthu += entry.getValue();
+            }
+            
+//             Tạo tổng cộng
+            double totalRowNum = rowNum + 1;
+            XSSFRow totalRow = sheet.createRow((int) totalRowNum);
+            XSSFCell totalLabelCell = totalRow.createCell(1);
+            totalLabelCell.setCellValue("Tổng Cộng:");
+            totalLabelCell.setCellStyle(totalStyle);
+            
+            XSSFCell totalValueCell = totalRow.createCell(2);
+            totalValueCell.setCellValue(doanhthu);
+            totalValueCell.setCellStyle(totalStyle);
+            
+            // Ghi file
+            try (FileOutputStream fos = new FileOutputStream(filePath)) {
+                workbook.write(fos);
+            }
+            
+//            showSuccessAlert("Xuất file thành công!", "File đã được lưu tại:\n" + filePath);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorAlert("Lỗi", "Không thể xuất file: " + e.getMessage());
+        }
+    }
+    
     private static CellStyle createHeaderStyle(XSSFWorkbook workbook) {
         CellStyle style = workbook.createCellStyle();
         XSSFFont font = workbook.createFont();

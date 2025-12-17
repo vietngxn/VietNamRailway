@@ -133,4 +133,24 @@ public class KhachHangDAO {
 	    return null;
 	}
 
+	
+	public boolean checkCCCD(String cccd) throws SQLException
+	{
+		String  q = "select * \r\n"
+				+ "from KhachHang kh\r\n"
+				+ "where kh.cccd = '"+cccd+"'";
+		ResultSet rs = st.executeQuery(q);
+		return rs.next();
+	}
+	
+	public boolean checkPP(String pp) throws SQLException
+	{
+		String  q = "select * \r\n"
+				+ "from KhachHang kh\r\n"
+				+ "where kh.passport = '"+pp+"'";
+		ResultSet rs = st.executeQuery(q);
+		return rs.next();
+	}
+	
+	
 }
