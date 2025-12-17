@@ -915,7 +915,7 @@ public class QuanLyKhachHang extends Application {
 			
 			create_layout_button();
 			primaryStage.setFullScreen(true);
-//			primaryStage.show();
+			primaryStage.show();
 //			primaryStag	();
 
 		} catch(Exception e) {
@@ -1062,7 +1062,7 @@ public class QuanLyKhachHang extends Application {
 		
 		
 		
-		colCCCD = new Label("CCCD/Passport");
+		colCCCD = new Label("CCCD");
 		colCCCD.setStyle(styleHeader);
 
 		

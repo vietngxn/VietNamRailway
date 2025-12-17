@@ -1674,17 +1674,32 @@ public class QuanLyCTKM extends Application {
 	    data.setPrefHeight(70);
 	    data.setPadding(new Insets(0, 0, 0, 10));
 	    
+	    
+	    String trangthai1 = "";
+	    LocalDate hientai = LocalDate.now();
+	    if(!hientai.isBefore(ngaybatdau) && !hientai.isAfter(ngayketthuc))
+	    {
+	    	trangthai1 = "Kích Hoạt";
+	    }
+	    else
+	    	trangthai1 = "Kết Thúc";
+	    
+	    
+	    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	    String ngaybd = ngaybatdau.format(dtf);
+	    String ngaykt = ngayketthuc.format(dtf);
+	    
 	    String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
 	    
 	    Label lblMaCT = new Label(maCT);
 	    Label lblTenCT = new Label(tenCT);
-	    Label lblNgayBD = new Label(ngaybatdau.toString());
-	    Label lblNgayKT = new Label(ngayketthuc.toString());
+	    Label lblNgayBD = new Label(ngaybd);
+	    Label lblNgayKT = new Label(ngaykt);
 	    Label lbldieuKienApDung = new Label(doituong);
 	    
-	    Label lblTrangThai = new Label(trangthai);
+	    Label lblTrangThai = new Label(trangthai1);
 	    String colorStyle = "";
-	    if(trangthai.equalsIgnoreCase("kích hoạt"))
+	    if(trangthai1.equalsIgnoreCase("kích hoạt"))
 	    {	    	
 	     colorStyle = "-fx-text-fill: green;";
 	    }

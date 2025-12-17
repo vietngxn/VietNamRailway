@@ -203,6 +203,14 @@ public class NhanVienDAO {
 	    return rows > 0;
 	}
 	
+	public boolean checkCCCD(String cccd) throws SQLException
+	{
+		String  q = "select * \r\n"
+				+ "from NhanVien nv\r\n"
+				+ "where nv.cccd = '"+cccd+"'";
+		ResultSet rs = st.executeQuery(q);
+		return rs.next();
+	}
 	
 	
 }

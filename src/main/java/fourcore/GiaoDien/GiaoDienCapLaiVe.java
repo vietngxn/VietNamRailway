@@ -1109,11 +1109,10 @@ public class GiaoDienCapLaiVe extends Application {
                         String s = "";
                         int sl = listtt.size() + 1;
                         if (sl >= 0 && sl <= 9) {
-                            s = "TT00" + sl;
-                        } else if (sl >= 10 && sl <= 99) {
-                            s = "TT0" + sl;
-                        } else
-                            s = "TT" + sl;
+                            s = "LSTT0" + sl;
+                        }else
+                            s = "LSTT" + sl;
+
 
 
                         Ve ve1 = vedao.getVeBangMaVe(mave);

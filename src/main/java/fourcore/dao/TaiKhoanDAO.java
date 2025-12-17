@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import fourcore.DatabaseConnector.DatabaseConnector;
 import fourcore.Entity.ChucVu;
 import fourcore.Entity.NhanVien;
+import fourcore.Entity.TaiKhoan;
 
 public class TaiKhoanDAO {
 
@@ -62,5 +63,63 @@ public class TaiKhoanDAO {
         return nv;
     }
 
+    
+    public boolean themTaiKhoan(TaiKhoan tk) {
+        try {
+            String sql = "INSERT INTO TaiKhoan (maTaiKhoan, maNhanVien, tenDangNhap, matKhau, isRemove) VALUES ('"
+                    + tk.getMaTaiKhoan() + "', '"
+                    + tk.getMaNhanVien() + "', '"
+                    + tk.getTenDangNhap() + "', '"
+                    + tk.getMatKhau() + "', "
+                    + tk.getIsRemove() + ")";
+
+            int rows = st.executeUpdate(sql);
+            return rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public int getSoLuongNhanVien() throws SQLException {
+        String sql = "SELECT COUNT(*) AS SoLuong FROM NhanVien";
+        ResultSet rs = st.executeQuery(sql);
+        int sl = 0;
+        if (rs.next()) {
+            sl = rs.getInt("SoLuong");
+        }
+        return sl;
+    }
+
+    
+    public boolean capNhatIsRemove(String maTaiKhoan, int isRemove) {
+        try {
+            String sql = "UPDATE TaiKhoan SET isRemove = " + isRemove
+                       + " WHERE maTaiKhoan = '" + maTaiKhoan + "'";
+
+            int rows = st.executeUpdate(sql);
+            return rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public TaiKhoan getTaiKhoanTheoMaNhanVien(String sdt) throws SQLException {
+        String sql = "SELECT * FROM TaiKhoan WHERE tenDangNhap = '" + sdt + "'";
+        ResultSet rs = st.executeQuery(sql);
+
+        TaiKhoan tk = null;
+        if (rs.next()) {
+            tk = new TaiKhoan(
+                rs.getString("maTaiKhoan"),
+                rs.getString("maNhanVien"),
+                rs.getString("tenDangNhap"),
+                rs.getString("matKhau"),
+                rs.getInt("isRemove")
+            );
+        }
+        return tk;
+    }
 
 }

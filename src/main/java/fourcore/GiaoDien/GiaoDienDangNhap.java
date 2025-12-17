@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 
 import fourcore.Entity.NhanVien;
+import fourcore.Entity.TaiKhoan;
 import fourcore.dao.TaiKhoanDAO;
 import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
@@ -287,6 +288,7 @@ public class GiaoDienDangNhap extends Application {
 			}
 			st.play();
 		});
+		
 		btn_dangnhap.setOnMouseClicked(event -> {
 			
 			
@@ -304,9 +306,9 @@ public class GiaoDienDangNhap extends Application {
 			else {
 			try {
 				String mkdao = tkdao.getMatKhau(ten);
-				if(mkdao.equals(matKhau))
+				TaiKhoan tk = tkdao.getTaiKhoanTheoMaNhanVien(ten);
+				if(tk.getMatKhau().equals(matKhau) && tk.getIsRemove() == 0 )
 				{
-					
 					NhanVien nv = tkdao.getNhanVien(ten);
 					File file = new File("NhanVien.dat");
 				    if (file.exists()) {
