@@ -1197,6 +1197,7 @@ public class GiaoDienCapLaiVe extends Application {
 
 			});
 
+//            primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -15,7 +15,7 @@ public class TestingGiaoDien {
         ChuyenTau chuyen1 = new ChuyenTau(10000 , LocalDateTime.of(2025, 10, 14, 15, 30),LocalDateTime.of(2025, 10, 14, 15, 30),tau1, "TauHihi");
         ArrayList<ChuyenTau> chuyenTauArrayList = new ArrayList<>();
         chuyenTauArrayList.add(chuyen1);
-        ChonVe chonVeGiaoDien = new ChonVe();
+        ChonVe chonVeGiaoDien = new ChonVe("");
 
     }
 }

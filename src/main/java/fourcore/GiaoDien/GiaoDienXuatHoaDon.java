@@ -849,7 +849,7 @@ public class GiaoDienXuatHoaDon extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Hệ thống quản lý vé tàu");
 			primaryStage.setFullScreen(true);
-			primaryStage.show();
+//			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -948,7 +948,6 @@ public class GiaoDienXuatHoaDon extends Application {
             getListVeTau();
             ArrayList<ChiTietHoaDon>  listChiTietHoaDon = new ArrayList<>();
             for(int i =0 ; i< banVeDAO.listGheTrenChuyenTau.size();i++){
-
                 listChiTietHoaDon.add(banVeDAO.themCTHoaDon(hoaDon2,listVe.get(i),banVeDAO.listGheTrenChuyenTau.get(i),banVeDAO.ctkmSelected)) ;
                 banVeDAO.themLichSuTuongTacVe(listVe.get(i),ctkmSelected,banVeDAO.listGheTrenChuyenTau.get(i));
                 System.out.println("them lich su ");
