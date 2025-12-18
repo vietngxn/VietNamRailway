@@ -976,6 +976,13 @@ public class TrangChu extends Application {
 				CapVeControl capVeControl = new CapVeControl();
 				capVeControl.handleMenuTrangChuSelect(root);
 			});
+            DoiVeControl doiVeControl = new DoiVeControl();
+            doiVeControl.initChonVe();
+            doiVeBox.setOnMouseClicked(event -> {
+
+                doiVeControl.handleMenuTrangChuSelect(root);
+                doiVeControl.handleSearchChuyenTau(root);
+            });
 			xemLichSuVeBox.setOnMouseClicked(event -> {
 				XemLichSuVeBoxControl lichSuVeControl = new XemLichSuVeBoxControl();
 				try {

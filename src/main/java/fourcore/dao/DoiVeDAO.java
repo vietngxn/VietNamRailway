@@ -14,7 +14,7 @@ import java.util.Map;
 //Tao Ve
 //Tao HoaDon
 //Tao CT Hoa Don
-public class BanVeDAO {
+public class DoiVeDAO {
     DatabaseConnector databaseConnector = new DatabaseConnector();
     private Map<GheTrenChuyenTau, KhachHang> mapChuyenTauVaUser;
     public   KhuyenMai ctkmSelected;
@@ -23,9 +23,9 @@ public class BanVeDAO {
     KhachHangDAO  khachHangDAO = new KhachHangDAO();
     DoiTuongGiamGiaDAO doiTuongGiamGiaDAO = new DoiTuongGiamGiaDAO();
     ArrayList<DoiTuongGiamGia> listDoiTuongGiamGia = new ArrayList<>();
-    String gaDi;
     String gaDen;
     String loaiVe;
+    Ve vechon;
     ToaTauDAO toaTauDAO = new ToaTauDAO();
     ArrayList<String> listMaVe = new ArrayList<>();
     private String maHoaDon;
@@ -36,7 +36,7 @@ public class BanVeDAO {
     public void goiDAO(){
         System.out.println("Ban Ve dao");
     }
-    public BanVeDAO() throws SQLException {
+    public DoiVeDAO() throws SQLException {
         goiDAO();
         listDoiTuongGiamGia = doiTuongGiamGiaDAO.getListDoiTuongGiamGia();
         loadDataFromFile();
@@ -64,16 +64,12 @@ public class BanVeDAO {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("gadi.dat"))) {
-            gaDi = ois.readObject().toString();
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("veDoi.dat"))) {
+            vechon = (Ve)ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("loaiVe.dat"))) {
-            loaiVe = ois.readObject().toString();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+
 
     }
     public double getGiaGheTrenChuyenTauNew(GheTrenChuyenTau gheTrenChuyenTau) throws SQLException {
@@ -200,7 +196,7 @@ public class BanVeDAO {
 
         sta.executeUpdate();
         System.out.println("Thêm hóa đơn thành công");
-return hoaDon;
+        return hoaDon;
 
     }
     public String getMaCTHoaDon() throws SQLException {
@@ -214,7 +210,7 @@ return hoaDon;
         String ma = String.format("CTHD%02d", soLuong+1);
         return ma;
     }
-//    HoaDon hoaDon, Ve ve, String moTa, double donGia, double thueVAT, double thanhTien, String LoaiHoaDonChoVe
+    //    HoaDon hoaDon, Ve ve, String moTa, double donGia, double thueVAT, double thanhTien, String LoaiHoaDonChoVe
     public ChiTietHoaDon themCTHoaDon(HoaDon hoaDon, Ve ve,GheTrenChuyenTau gheTrenChuyenTau,KhuyenMai khuyenMai) throws SQLException {
         String maCTHoaDon = getMaCTHoaDon();
         String loaiHoaDon;
@@ -224,7 +220,7 @@ return hoaDon;
             loaiHoaDon = "Vé cá nhân";
         }
 
-            ChiTietHoaDon chiTietHoaDon = new ChiTietHoaDon(hoaDon,ve,ve.getTenTau(),gheTrenChuyenTau.getGiaTienGhe(),8,ve.getGiaVe(),loaiHoaDon);
+        ChiTietHoaDon chiTietHoaDon = new ChiTietHoaDon(hoaDon,ve,ve.getTenTau(),gheTrenChuyenTau.getGiaTienGhe(),8,ve.getGiaVe(),loaiHoaDon);
         Connection con = (Connection) databaseConnector.getInstance().getConnection();
         System.out.println("gia ve: "+ ve.getGiaVe());
 
@@ -254,11 +250,10 @@ return hoaDon;
         String ma = String.format("LSTT%02d", soLuong+1);
         return ma;
     }
-    public void themLichSuTuongTacVe(Ve veTau,KhuyenMai khuyenMai, GheTrenChuyenTau gheTrenChuyenTau) throws SQLException {
+    public void themLichSuTuongTacVe(Ve veTau,KhuyenMai khuyenMai, double giaTriChenhLech) throws SQLException {
         String maLichSuTuongTac =  getMaLichSuTuongTac();
-        String maLoaiTuongTac = "LTT01";
+        String maLoaiTuongTac = "LTT02";
         String maVeTau = veTau.getMaVeTau();
-        double giaTriChenhLech = tinhTienVe(gheTrenChuyenTau);
         LocalDateTime ngayTuongTac =  LocalDateTime.now();
         Connection con = (Connection) databaseConnector.getInstance().getConnection();
         String query = "Insert into LichSuTuongTacVe " +
@@ -294,7 +289,15 @@ return hoaDon;
         sta.setDouble(1, giaTienGhe);
         sta.setString(2,g.getMaGheTrenChuyenTau());
         sta.executeUpdate();
-
+    }
+    public String maGheTrenChuyenTauFromVe(String maVe) throws SQLException {
+        String maGheTrenChuyenTau = "";
+        String query = "select maGheTrenChuyenTau from Ve where maVeTau = '"+maVe+"'";
+        ResultSet rs = myStmt.executeQuery(query);
+        while (rs.next()) {
+            maGheTrenChuyenTau = rs.getString(1);
+        }
+        return maGheTrenChuyenTau;
     }
     public void themVe() throws SQLException {
         ArrayList<Ve> listVe = new ArrayList<>();
@@ -313,24 +316,33 @@ return hoaDon;
             }
             Ve veTau;
             maVeTau = getMaVe();
-            if(listGheTrenChuyenTau.get(i).isKhuHoi()){
-                System.out.println("ve khu hoi");
-                veTau = new Ve(maVeTau,gaDen,gaDi,listGheTrenChuyenTau.get(i).getChuyenTau().getTau().getLoaiTau().getTenLoaiTau(),listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDi(),listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDen(),
+                veTau = new Ve(maVeTau,vechon.getGaDi(),vechon.getGaDen(),listGheTrenChuyenTau.get(i).getChuyenTau().getTau().getLoaiTau().getTenLoaiTau(),listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDi(),listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDen(),
                         checkThuTuToa(listGheTrenChuyenTau.get(i)),listGheTrenChuyenTau.get(i).getGheNgoi().getKhoangTau().getSoKhoang(),listGheTrenChuyenTau.get(i).getGheNgoi().getTang().getSoTang(),
                         listGheTrenChuyenTau.get(i).getGheNgoi().getSoGhe(),loaiVe,mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getCccd(),tinhTienVe(listGheTrenChuyenTau.get(i)),
                         null,"chưa đổi","hoạt động",listGheTrenChuyenTau.get(i).getChuyenTau(),kh,ctkmSelected,getDoiTuong(listGheTrenChuyenTau.get(i)));
                 listVe.add(veTau);
-            }else{
-                System.out.println("ve mot chieu");
 
-                veTau = new Ve(maVeTau,gaDi,gaDen,listGheTrenChuyenTau.get(i).getChuyenTau().getTau().getLoaiTau().getTenLoaiTau(),listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDi(),listGheTrenChuyenTau.get(i).getChuyenTau().getNgayGioDen(),
-                        checkThuTuToa(listGheTrenChuyenTau.get(i)),listGheTrenChuyenTau.get(i).getGheNgoi().getKhoangTau().getSoKhoang(),listGheTrenChuyenTau.get(i).getGheNgoi().getTang().getSoTang(),
-                        listGheTrenChuyenTau.get(i).getGheNgoi().getSoGhe(),loaiVe,mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getCccd(),tinhTienVe(listGheTrenChuyenTau.get(i)),
-                        null,"chưa đổi","hoạt động",listGheTrenChuyenTau.get(i).getChuyenTau(),kh,ctkmSelected,getDoiTuong(listGheTrenChuyenTau.get(i)));
-                listVe.add(veTau);
+
+            String setGhiChuDaDoiVe = "Update Ve set ghiChu = N'Đã được đổi', trangThaiVe=N'Kết thúc' where maVeTau = '"+vechon.getMaVeTau()+"'";
+            PreparedStatement pst = null;
+            pst = con.prepareStatement(setGhiChuDaDoiVe);
+            pst.executeUpdate();
+
+            System.out.println(vechon.getGaDen());
+            if(vechon.getGaDen().trim().equals("Hà Nội") || vechon.getGaDen().trim().equals("Sài Gòn")){
+                String setGiaGheLuuDongVaTrangThaiGhe = "Update GheTrenChuyenTau set trangThaiGhe = N'Còn trống' where maGheTrenChuyenTau='"+maGheTrenChuyenTauFromVe(vechon.getMaVeTau())+"'";
+                PreparedStatement pst1 = null;
+                pst1 = con.prepareStatement(setGiaGheLuuDongVaTrangThaiGhe);
+                pst1.executeUpdate();
+
+            }else{
+                String setGiaGheLuuDongVaTrangThaiGhe = "Update GheTrenChuyenTau set trangThaiGhe = N'Còn trống', giaTienGhe = 0 where maGheTrenChuyenTau='"+maGheTrenChuyenTauFromVe(vechon.getMaVeTau())+"'";
+                PreparedStatement pst1 = null;
+                pst1 = con.prepareStatement(setGiaGheLuuDongVaTrangThaiGhe);
+                pst1.executeUpdate();
             }
 
-
+            System.out.println("Đã set ghi chú ves cũ");
 
 
             String insertVe = "INSERT INTO Ve " +
@@ -351,7 +363,7 @@ return hoaDon;
             sta.setString(12, mapChuyenTauVaUser.get(listGheTrenChuyenTau.get(i)).getCccd());
             sta.setDouble(13,listGheTrenChuyenTau.get(i).getGiaTienGhe() * ((100-getDoiTuong(listGheTrenChuyenTau.get(i)).getGiaTriPhanTramGiamGia())/100));
             sta.setString(14,null);
-            sta.setString(15,null);
+            sta.setString(15,vechon.getMaVeTau());
             sta.setString(16,"Hoạt động");
             sta.setString(17,listGheTrenChuyenTau.get(i).getChuyenTau().getMaChuyenTau());
             sta.setString(18,maKhachHang);
@@ -360,7 +372,7 @@ return hoaDon;
             sta.setString(21,"false");
             sta.setString(22,listGheTrenChuyenTau.get(i).getMaGheTrenChuyenTau());
             sta.executeUpdate();
-            System.out.println("Thêm vé thành công");
+            System.out.println("Thêm vé đổi thành công");
 
             updateTrangThaiGheTrenChuyenTau(listGheTrenChuyenTau.get(i));
             File file = new File("veTau.dat");
@@ -375,9 +387,9 @@ return hoaDon;
         }
 
     }
-public static void main(String args[]) throws SQLException {
-	BanVeDAO bvdao = new BanVeDAO();
-    System.out.println(bvdao.listGheTrenChuyenTau.get(0).getGheNgoi().getKhoangTau().getMaKhoang());
-}
+    public static void main(String args[]) throws SQLException {
+        BanVeDAO bvdao = new BanVeDAO();
+        System.out.println(bvdao.listGheTrenChuyenTau.get(0).getGheNgoi().getKhoangTau().getMaKhoang());
+    }
 }
 
