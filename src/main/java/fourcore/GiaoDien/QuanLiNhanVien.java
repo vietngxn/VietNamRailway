@@ -310,7 +310,12 @@ public class QuanLiNhanVien extends Application {
             xemLichSuVeBox.setOnMouseClicked(event -> {
                 GiaoDienLichSuMuaBanDoiVe lichSuMuaBanDoiVe = new GiaoDienLichSuMuaBanDoiVe();
                 Stage lichSuMuaBanDoiVeStage = new Stage();
-                lichSuMuaBanDoiVe.start(lichSuMuaBanDoiVeStage);
+                try {
+					lichSuMuaBanDoiVe.start(lichSuMuaBanDoiVeStage);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                 VBox giaoDienLichSuMuaBanDoiVe = lichSuMuaBanDoiVe.getLichSuMuaVe();
                 root.setCenter(giaoDienLichSuMuaBanDoiVe);
             });

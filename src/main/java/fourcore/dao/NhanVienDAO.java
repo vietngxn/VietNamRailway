@@ -13,18 +13,19 @@ import java.util.ArrayList;
 
 public class NhanVienDAO {
 	DatabaseConnector databaseConnector = new DatabaseConnector();
-    Statement st = databaseConnector.connect();
+	Statement st = databaseConnector.connect();
 
-    public NhanVienDAO() throws SQLException {
-        goiDao();
-    }
-    public void goiDao(){
-        System.out.println("Nhan vien dao");
-    }
+	public NhanVienDAO() throws SQLException {
+		goiDao();
+	}
 
-    public ArrayList<NhanVien> getListNhanVien() throws SQLException {
+	public void goiDao() {
+		System.out.println("Nhan vien dao");
+	}
 
-    	ArrayList<NhanVien> listKhachHang = new ArrayList<NhanVien>();
+	public ArrayList<NhanVien> getListNhanVien() throws SQLException {
+
+		ArrayList<NhanVien> listKhachHang = new ArrayList<NhanVien>();
 		String q = "Select * from NhanVien";
 		ResultSet rs = st.executeQuery(q);
 		while (rs.next()) {
@@ -43,7 +44,7 @@ public class NhanVienDAO {
 	}
 
 	public NhanVien getNhanVienByMa(String manv) throws SQLException {
-        String q = "Select * from NhanVien where maNhanVien = " + "'" + manv + "'";
+		String q = "Select * from NhanVien where maNhanVien = " + "'" + manv + "'";
 		ResultSet rs = st.executeQuery(q);
 		while (rs.next()) {
 			String maNhanVien = rs.getString(1);
@@ -59,158 +60,169 @@ public class NhanVienDAO {
 
 		return null;
 	}
-    public NhanVien getNhanVienByMa1(String manv) throws SQLException {
-        String q = "SELECT nv.maNhanVien, nv.hoTen, nv.maChucVu, nv.ngaySinh, nv.diaChi, nv.email, " +
-                "nv.sdt, nv.ngayVaoLam, nv.tinhTrangLamViec, nv.gioiTinh, nv.cccd, nv.isRemove, cv.tenChucVu " +
-                "FROM NhanVien nv JOIN ChucVu cv ON nv.maChucVu = cv.maChucVu " +
-                "WHERE nv.maNhanVien = '" + manv + "'";
 
-        Statement st = databaseConnector.connect();
-        ResultSet rs = st.executeQuery(q);
+	public NhanVien getNhanVienByMa1(String manv) throws SQLException {
+		String q = "SELECT nv.maNhanVien, nv.hoTen, nv.maChucVu, nv.ngaySinh, nv.diaChi, nv.email, " +
+				"nv.sdt, nv.ngayVaoLam, nv.tinhTrangLamViec, nv.gioiTinh, nv.cccd, nv.isRemove, cv.tenChucVu " +
+				"FROM NhanVien nv JOIN ChucVu cv ON nv.maChucVu = cv.maChucVu " +
+				"WHERE nv.maNhanVien = '" + manv + "'";
 
-        while (rs.next()) {
-            String maNhanVien = rs.getString(1);
-            String hoTen = rs.getString(2);
-            String maChucVu = rs.getString(3);
-            LocalDate ngaySinh = rs.getDate(4).toLocalDate();
-            String diaChi = rs.getString(5);
-            String email = rs.getString(6);
-            String sdt = rs.getString(7);
-            LocalDate ngayVaoLam = rs.getDate(8).toLocalDate();
-            String tinhTrang = rs.getString(9);
-            String gioiTinh = rs.getString(10);
-            String cccd = rs.getString(11);
-            boolean isRemove = rs.getBoolean(12);
-            String tenChucVu = rs.getString(13);
+		Statement st = databaseConnector.connect();
+		ResultSet rs = st.executeQuery(q);
 
-            ChucVu cv = new ChucVu(maChucVu, tenChucVu);
+		while (rs.next()) {
+			String maNhanVien = rs.getString(1);
+			String hoTen = rs.getString(2);
+			String maChucVu = rs.getString(3);
+			LocalDate ngaySinh = rs.getDate(4).toLocalDate();
+			String diaChi = rs.getString(5);
+			String email = rs.getString(6);
+			String sdt = rs.getString(7);
+			LocalDate ngayVaoLam = rs.getDate(8).toLocalDate();
+			String tinhTrang = rs.getString(9);
+			String gioiTinh = rs.getString(10);
+			String cccd = rs.getString(11);
+			boolean isRemove = rs.getBoolean(12);
+			String tenChucVu = rs.getString(13);
 
-            // Gọi constructor mới có đủ tham số
-            NhanVien nv = new NhanVien(maNhanVien, hoTen, cv, ngaySinh, diaChi, email, sdt,ngayVaoLam, tinhTrang, gioiTinh, cccd, isRemove);
-            return nv;
-        }
+			ChucVu cv = new ChucVu(maChucVu, tenChucVu);
 
-        return null;
-    }
-	
+			// Gọi constructor mới có đủ tham số
+			NhanVien nv = new NhanVien(maNhanVien, hoTen, cv, ngaySinh, diaChi, email, sdt, ngayVaoLam, tinhTrang,
+					gioiTinh, cccd, isRemove);
+			return nv;
+		}
+
+		return null;
+	}
+
 	public NhanVien getNhanVienByCCCD(String cccd) throws SQLException {
-	    String q = "SELECT * FROM NhanVien WHERE cccd = '" + cccd + "'";
-	    ResultSet rs = st.executeQuery(q);
+		String q = "SELECT * FROM NhanVien WHERE cccd = '" + cccd + "'";
+		ResultSet rs = st.executeQuery(q);
 
-	    while (rs.next()) {
-	        String maNhanVien = rs.getString(1);
-	        String hoTen = rs.getString(2);
-	        ChucVu cv = new ChucVu(rs.getString(3));
-	        LocalDate ngaySinh = rs.getDate(4).toLocalDate();
-	        String diaChi = rs.getString(5);
-	        String email = rs.getString(6);
-	        String sdt = rs.getString(7);
-	        LocalDate ngayVaoLam = rs.getDate(8).toLocalDate();
-	        String tinhTrang = rs.getString(9);
-	        String gioiTinh = rs.getString(10);
-	        String cccdNhanVien = rs.getString(11);
+		while (rs.next()) {
+			String maNhanVien = rs.getString(1);
+			String hoTen = rs.getString(2);
+			ChucVu cv = new ChucVu(rs.getString(3));
+			LocalDate ngaySinh = rs.getDate(4).toLocalDate();
+			String diaChi = rs.getString(5);
+			String email = rs.getString(6);
+			String sdt = rs.getString(7);
+			LocalDate ngayVaoLam = rs.getDate(8).toLocalDate();
+			String tinhTrang = rs.getString(9);
+			String gioiTinh = rs.getString(10);
+			String cccdNhanVien = rs.getString(11);
 
-	        NhanVien nv = new NhanVien(
-	            maNhanVien,
-	            hoTen,
-	            cv,
-	            ngaySinh,
-	            diaChi,
-	            email,
-	            sdt,
-	            ngayVaoLam,
-	            tinhTrang,
-	            gioiTinh,
-	            cccdNhanVien
-	        );
-	        return nv;
-	    }
+			NhanVien nv = new NhanVien(
+					maNhanVien,
+					hoTen,
+					cv,
+					ngaySinh,
+					diaChi,
+					email,
+					sdt,
+					ngayVaoLam,
+					tinhTrang,
+					gioiTinh,
+					cccdNhanVien);
+			return nv;
+		}
 
-	    return null;
+		return null;
 	}
-	
+
 	public boolean themNhanVien(NhanVien nv) throws SQLException {
-	    String q = "INSERT INTO NhanVien (maNhanVien, hoTen, maChucVu, ngaySinh, diaChi, email, sdt, ngayVaoLam, tinhTrangLamViec, gioiTinh, cccd, isRemove) VALUES (" +
-	            "'" + nv.getMaNhanVien() + "', " +
-	            "N'" + nv.getHoTen() + "', " +
-	            "'" + nv.getChucVu().getMaChucVu() + "', " +
-	            "'" + nv.getNgaySinh().toString() + "', " +
-	            "N'" + nv.getDiaChi() + "', " +
-	            "'" + nv.getEmail() + "', " +
-	            "'" + nv.getSdt() + "', " +
-	            "'" + nv.getNgayVaoLam().toString() + "', " +
-	            "N'" + nv.getTinhTrangLamViec() + "', " +
-	            "N'" + nv.getGioiTinh() + "', " +
-	            "'" + nv.getCccd() + "', " +
-	            "0" + 
-	            ")";
+		String q = "INSERT INTO NhanVien (maNhanVien, hoTen, maChucVu, ngaySinh, diaChi, email, sdt, ngayVaoLam, tinhTrangLamViec, gioiTinh, cccd, isRemove) VALUES ("
+				+
+				"'" + nv.getMaNhanVien() + "', " +
+				"N'" + nv.getHoTen() + "', " +
+				"'" + nv.getChucVu().getMaChucVu() + "', " +
+				"'" + nv.getNgaySinh().toString() + "', " +
+				"N'" + nv.getDiaChi() + "', " +
+				"'" + nv.getEmail() + "', " +
+				"'" + nv.getSdt() + "', " +
+				"'" + nv.getNgayVaoLam().toString() + "', " +
+				"N'" + nv.getTinhTrangLamViec() + "', " +
+				"N'" + nv.getGioiTinh() + "', " +
+				"'" + nv.getCccd() + "', " +
+				"0" +
+				")";
 
-	    int rows = st.executeUpdate(q);
-	    return rows > 0;
+		int rows = st.executeUpdate(q);
+		return rows > 0;
 	}
 
-
-	
 	public boolean suaNhanVien(NhanVien nv) throws SQLException {
-	    String q = "UPDATE NhanVien SET " +
-	            "hoTen = N'" + nv.getHoTen() + "', " +
-	            "maChucVu = '" + nv.getChucVu().getMaChucVu() + "', " +
-	            "ngaySinh = " + (nv.getNgaySinh() == null ? "NULL" : "'" + nv.getNgaySinh() + "'") + ", " +
-	            "diaChi = " + (nv.getDiaChi() == null ? "NULL" : "N'" + nv.getDiaChi() + "'") + ", " +
-	            "email = " + (nv.getEmail() == null ? "NULL" : "'" + nv.getEmail() + "'") + ", " +
-	            "sdt = " + (nv.getSdt() == null ? "NULL" : "'" + nv.getSdt() + "'") + ", " +
-	            "ngayVaoLam = " + (nv.getNgayVaoLam() == null ? "NULL" : "'" + nv.getNgayVaoLam() + "'") + ", " +
-	            "tinhTrangLamViec = N'" + nv.getTinhTrangLamViec() + "', " +
-	            "gioiTinh = N'" + nv.getGioiTinh() + "', " +
-	            "cccd = " + (nv.getCccd() == null ? "NULL" : "'" + nv.getCccd() + "'") +
-	            " WHERE maNhanVien = '" + nv.getMaNhanVien() + "'";
+		String q = "UPDATE NhanVien SET " +
+				"hoTen = N'" + nv.getHoTen() + "', " +
+				"maChucVu = '" + nv.getChucVu().getMaChucVu() + "', " +
+				"ngaySinh = " + (nv.getNgaySinh() == null ? "NULL" : "'" + nv.getNgaySinh() + "'") + ", " +
+				"diaChi = " + (nv.getDiaChi() == null ? "NULL" : "N'" + nv.getDiaChi() + "'") + ", " +
+				"email = " + (nv.getEmail() == null ? "NULL" : "'" + nv.getEmail() + "'") + ", " +
+				"sdt = " + (nv.getSdt() == null ? "NULL" : "'" + nv.getSdt() + "'") + ", " +
+				"ngayVaoLam = " + (nv.getNgayVaoLam() == null ? "NULL" : "'" + nv.getNgayVaoLam() + "'") + ", " +
+				"tinhTrangLamViec = N'" + nv.getTinhTrangLamViec() + "', " +
+				"gioiTinh = N'" + nv.getGioiTinh() + "', " +
+				"cccd = " + (nv.getCccd() == null ? "NULL" : "'" + nv.getCccd() + "'") +
+				" WHERE maNhanVien = '" + nv.getMaNhanVien() + "'";
 
-	    int rows = st.executeUpdate(q);
-	    return rows > 0;
+		int rows = st.executeUpdate(q);
+		return rows > 0;
 	}
 
-	public ArrayList<String> getListChucVu() throws SQLException
-	{
-		
-		String q ="select cv.tenChucVu\r\n"
+	public ArrayList<String> getListChucVu() throws SQLException {
+
+		String q = "select cv.tenChucVu\r\n"
 				+ "from ChucVu cv";
 		ResultSet rs = st.executeQuery(q);
 		ArrayList<String> listcv = new ArrayList<String>();
-		while(rs.next())
-		{
+		while (rs.next()) {
 			String a = rs.getString(1);
 			listcv.add(a);
 		}
 		return listcv;
 	}
+
 	public boolean capNhatTrangThaiNghiLam(String maNhanVien) throws SQLException {
-	    
-	    String q = "UPDATE NhanVien " +
-	               "SET tinhTrangLamViec = N'đã nghỉ' " +
-	               "WHERE maNhanVien = '" + maNhanVien + "'";
-	    
-	    int rows = st.executeUpdate(q);
-	    return rows > 0;
+
+		String q = "UPDATE NhanVien " +
+				"SET tinhTrangLamViec = N'đã nghỉ' " +
+				"WHERE maNhanVien = '" + maNhanVien + "'";
+
+		int rows = st.executeUpdate(q);
+		return rows > 0;
 	}
-	
+
 	public boolean capNhatTrangThaidiLam(String maNhanVien) throws SQLException {
-	    
-	    String q = "UPDATE NhanVien " +
-	               "SET tinhTrangLamViec = N'còn làm' " +
-	               "WHERE maNhanVien = '" + maNhanVien + "'";
-	    
-	    int rows = st.executeUpdate(q);
-	    return rows > 0;
+
+		String q = "UPDATE NhanVien " +
+				"SET tinhTrangLamViec = N'còn làm' " +
+				"WHERE maNhanVien = '" + maNhanVien + "'";
+
+		int rows = st.executeUpdate(q);
+		return rows > 0;
 	}
-	
-	public boolean checkCCCD(String cccd) throws SQLException
-	{
-		String  q = "select * \r\n"
+
+	public boolean checkCCCD(String cccd) throws SQLException {
+		String q = "select * \r\n"
 				+ "from NhanVien nv\r\n"
-				+ "where nv.cccd = '"+cccd+"'";
+				+ "where nv.cccd = '" + cccd + "'";
 		ResultSet rs = st.executeQuery(q);
 		return rs.next();
 	}
-	
-	
+
+	public String getMaNhanVienBangMaVeVaLoaiTuongTac(String maVe, String loai) throws SQLException {
+		String sql = "SELECT distinct hd.maNhanVien " + "FROM HoaDon hd "
+				+ "JOIN ChiTietHoaDon ct ON hd.maHoaDon = ct.maHoaDon "
+				+ "JOIN Ve v ON ct.maVeTau = v.maVeTau " + "JOIN LichSuTuongTacVe lstt ON v.maVeTau = lstt.maVeTau "
+				+ "WHERE v.maVeTau = '" + maVe + "' AND lstt.maLoaiTuongTac = '" + loai + "'";
+		ResultSet rs = st.executeQuery(sql);
+		String maNV = null;
+		while (rs.next()) {
+			maNV = rs.getString("maNhanVien");
+		}
+		rs.close();
+		return maNV;
+	}
+
 }

@@ -1,5 +1,6 @@
 package fourcore.GiaoDien;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.sql.SQLException;
@@ -281,7 +282,12 @@ public class QuanLiHoaDon extends Application {
             xemLichSuVeBox.setOnMouseClicked(event -> {
                 GiaoDienLichSuMuaBanDoiVe lichSuMuaBanDoiVe = new GiaoDienLichSuMuaBanDoiVe();
                 Stage lichSuMuaBanDoiVeStage = new Stage();
-                lichSuMuaBanDoiVe.start(lichSuMuaBanDoiVeStage);
+                try {
+					lichSuMuaBanDoiVe.start(lichSuMuaBanDoiVeStage);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                 VBox giaoDienLichSuMuaBanDoiVe = lichSuMuaBanDoiVe.getLichSuMuaVe();
                 root.setCenter(giaoDienLichSuMuaBanDoiVe);
             });
