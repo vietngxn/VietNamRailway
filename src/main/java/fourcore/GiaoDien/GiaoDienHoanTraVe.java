@@ -52,12 +52,6 @@ public class GiaoDienHoanTraVe extends Application {
 	private VBox noiDungChinh;
 	private ImageView logoImgView;
 	Class<?> clazz = this.getClass();
-	private ScrollPane scrollPaneMenu;
-	private VBox danhSachMenuItem;
-	private HBox quanLiVeTauMenu;
-	private Label quanLiVeTauLabel;
-	private ImageView quanLiVeTauIconView;
-	private ImageView showMenuPhuIconView;
 	private Label lblHoanVe;
 	private Pane pnlHoanVe;
 	private HBox pnlTimKiem;
@@ -65,28 +59,6 @@ public class GiaoDienHoanTraVe extends Application {
 	private ScrollPane scrollPane;
 	private GridPane tableCol;
 	private HBox pnlCapNhatVe;
-	private HBox doiVeBox;
-	private HBox banVeBox;
-	private HBox hoanVeBox;
-	private HBox capVeBox;
-	private HBox quanLiKhachHangMenu;
-	private ImageView quanLiKhachHangIconView;
-	private Label quanLiKhachHangLabel;
-	private HBox quanLiHoaDonMenu;
-	private ImageView quanLiHoaDonIconView;
-	private Label quanLiHoaDonLabel;
-	private ImageView quanLiThongKeIconView;
-	private HBox quanLiThongKeMenu;
-	private Label quanLiThongKeLabel;
-	private HBox quanLiNhanVienMenu;
-	private ImageView quanLiNhanVienIconView;
-	private HBox quanLiCTKMMenu;
-	private ImageView quanLiCTKMIconView;
-	private HBox quanLiChuyenTauMenu;
-	private ImageView quanLiChuyenTauIconView;
-	private ImageView userIcon;
-	private Label userLabel;
-	private ImageView settingIcon;
 	private Button btnHoanVe;
 	private Button btnTimKiemTheoMaVe;
 	private Button btnTimKiemTheoNguoiMua;
@@ -105,7 +77,6 @@ public class GiaoDienHoanTraVe extends Application {
 	private Tau_DAO tDao;
 	private Tau t;
 	private ChuyenTau ct;
-	private Button btnCapNhatTrangThaiVe;
 
 	private VBox layoutTimKiem;
 	private HBox layoutLblTimkiem;
@@ -320,7 +291,7 @@ public class GiaoDienHoanTraVe extends Application {
 			noiDungChinh.setPrefWidth(1300);
 			BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
 
-			//title
+			// title
 			pnlHoanVe = new Pane();
 			lblHoanVe = new Label("Hoàn trả vé");
 			lblHoanVe.setStyle("-fx-font-size: 40px;-fx-font-weight: bold;");
@@ -328,7 +299,7 @@ public class GiaoDienHoanTraVe extends Application {
 			VBox.setMargin(pnlHoanVe, new Insets(20, 0, 0, 50));
 			noiDungChinh.getChildren().add(pnlHoanVe);
 
-			//thanh tim kiem
+			// thanh tim kiem
 			layoutTimKiem = new VBox();
 			layoutLblTimkiem = new HBox();
 			layoutLblTimkiem.setPrefSize(1200, 40);
@@ -370,7 +341,7 @@ public class GiaoDienHoanTraVe extends Application {
 			VBox.setMargin(layoutTimKiem, new Insets(0, 0, 10, 0));
 			noiDungChinh.getChildren().add(layoutTimKiem);
 
-			//button tim kiem theo ma ve va so giay to nguoi mua
+			// button tim kiem theo ma ve va so giay to nguoi mua
 			String btnStyle = """
 					      -fx-font-family: 'Inter';
 					   -fx-font-weight: bold;
@@ -392,7 +363,7 @@ public class GiaoDienHoanTraVe extends Application {
 			pnlTimKiem = new HBox(150);
 			pnlTimKiem.setMaxSize(1200, 500);
 
-			//Button refesh list
+			// Button refesh list
 			pnlImgRefesh = new StackPane();
 			ImageView imgRefesh = new ImageView(getClass().getResource("/images/refesh_icon.png").toExternalForm());
 			imgRefesh.setFitWidth(50);
@@ -417,7 +388,7 @@ public class GiaoDienHoanTraVe extends Application {
 			VBox.setMargin(tableCol, new Insets(30, 10, 10, 0));
 
 			String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 22px; -fx-font-weight: bold;";
-			String[] tenCot = { "Mã vé", "Loại vé", "Ga đi - Ga đến", "Ngày khởi hành", "Vị trí ghế", "Chuyến",
+			String[] tenCot = { "Mã vé", "Loại vé", "Chuyến", "Ga đi - Ga đến", "Ngày khởi hành", "Vị trí ghế",
 					"Trạng thái" };
 			double[] sizeCot = { 200, 200, 180, 250, 270, 220, 220 };
 
@@ -432,7 +403,7 @@ public class GiaoDienHoanTraVe extends Application {
 			}
 
 			noiDungChinh.getChildren().add(tableCol);
-			
+
 			// table row
 			pnlDataHoanTraVe = new VBox(10);
 			pnlDataHoanTraVe.setAlignment(Pos.CENTER);
@@ -454,7 +425,7 @@ public class GiaoDienHoanTraVe extends Application {
 			scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 			noiDungChinh.getChildren().add(scrollPane);
 
-			//label tong cong
+			// label tong cong
 			pnlTongConglbl = new HBox();
 			String lblStyle = "-fx-font-size: 36px;" + "-fx-font-weight: bold;";
 			lblTongCong = new Label("Tổng cộng: ");
@@ -465,23 +436,17 @@ public class GiaoDienHoanTraVe extends Application {
 			pnlTongConglbl.getChildren().addAll(lblTongCong, lblTongCongValue);
 			HBox.setMargin(lblTongCong, new Insets(0, 0, 0, 800));
 			noiDungChinh.getChildren().add(pnlTongConglbl);
-			
-		
+
 			pnlCapNhatVe = new HBox(30);
 			VBox.setMargin(pnlCapNhatVe, new Insets(30, 0, 0, 500));
 			pnlCapNhatVe.setAlignment(Pos.CENTER);
 
-			//button hoanve
+			// button hoanve
 			btnHoanVe = new Button("Hoàn vé");
 			btnHoanVe.setPrefSize(350, 60);
 			btnHoanVe.setStyle(btnStyle);
 
-			//button cap nhat trang thai ve
-			btnCapNhatTrangThaiVe = new Button("Cập nhật trạng thái vé");
-			btnCapNhatTrangThaiVe.setPrefSize(350, 60);
-			btnCapNhatTrangThaiVe.setStyle(btnStyle);
-			
-			pnlCapNhatVe.getChildren().addAll(btnCapNhatTrangThaiVe, btnHoanVe);
+			pnlCapNhatVe.getChildren().add(btnHoanVe);
 			noiDungChinh.getChildren().add(pnlCapNhatVe);
 
 			// su kien tim kiem theo ma ve
@@ -573,8 +538,9 @@ public class GiaoDienHoanTraVe extends Application {
 					}
 				}
 			});
-			// su kien cap nhat lai trang thai ve
-			btnCapNhatTrangThaiVe.setOnMouseClicked(event -> {
+
+			// su kien load lai danh sach
+			pnlImgRefesh.setOnMouseClicked(event -> {
 				try {
 					dao = new VeDAO(0);
 					int soLuongVeCapNhat = dao.CapNhatTrangThaiVe(list);
@@ -582,31 +548,26 @@ public class GiaoDienHoanTraVe extends Application {
 					if (soLuongVeCapNhat > 0) {
 						pnlDataHoanTraVe.getChildren().clear();
 						list.removeAll(list);
+						listVeThanhToan.clear();
+						lblTongCongValue.setText("0");
+						tongCongPhiHoanTra = 0;
+						pnlDataHoanTraVe.getChildren().add(loadDuLieuLenTable());
+					} else {
+						pnlDataHoanTraVe.getChildren().clear();
+						list.removeAll(list);
+						listVeThanhToan.clear();
+						lblTongCongValue.setText("0");
+						tongCongPhiHoanTra = 0;
 						pnlDataHoanTraVe.getChildren().add(loadDuLieuLenTable());
 					}
-
 				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			});
-			// su kien load lai danh sach
-			pnlImgRefesh.setOnMouseClicked(event -> {
-				pnlDataHoanTraVe.getChildren().clear();
-				list.removeAll(list);
-				listVeThanhToan.clear();
-				tongCongPhiHoanTra = 0;
-				try {
-					pnlDataHoanTraVe.getChildren().add(loadDuLieuLenTable());
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//cac hieu ung hover cho cac button
-		hieuUngHover(btnCapNhatTrangThaiVe);
+		// cac hieu ung hover cho cac button
 		hieuUngHover(btnHoanVe);
 		hieuUngHover(btnTimKiemTheoMaVe);
 		hieuUngHover(btnTimKiemTheoNguoiMua);

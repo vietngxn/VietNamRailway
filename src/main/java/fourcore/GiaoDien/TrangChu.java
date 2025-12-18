@@ -85,6 +85,7 @@ public class TrangChu extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+
 			BorderPane root = new BorderPane();
 			Scene scene = new Scene(root, 1920, 1000);
 			primaryStage.setScene(scene);

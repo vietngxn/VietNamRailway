@@ -290,6 +290,7 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 					alert.initOwner(currentStage);
 					alert.initModality(Modality.WINDOW_MODAL);
 					alert.showAndWait();
+					txtList.get(0).requestFocus();
 					return;
 				} else if (txtSDTValue.isEmpty() || !txtSDTValue.matches("^0[2389]\\d{8}$")) {
 					Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -300,16 +301,7 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 					alert.initOwner(currentStage);
 					alert.initModality(Modality.WINDOW_MODAL);
 					alert.showAndWait();
-					return;
-				} else if (txtEmailValue.isEmpty() || !txtEmailValue.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-					Alert alert = new Alert(Alert.AlertType.INFORMATION);
-					alert.setTitle("Lỗi");
-					alert.setHeaderText(null);
-					alert.setContentText("Email không được bỏ trống và phải có đúng định dạng!");
-					Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-					alert.initOwner(currentStage);
-					alert.initModality(Modality.WINDOW_MODAL);
-					alert.showAndWait();
+					txtList.get(1).requestFocus();
 					return;
 				} else if (txtSoGiayToValue.isEmpty() || !txtSoGiayToValue.matches("^[0-9]{12}$")) {
 					Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -320,6 +312,7 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 					alert.initOwner(currentStage);
 					alert.initModality(Modality.WINDOW_MODAL);
 					alert.showAndWait();
+					txtList.get(3).requestFocus();
 					return;
 				} else if (txtDiaChiValue.isEmpty()) {
 					Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -330,6 +323,7 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 					alert.initOwner(currentStage);
 					alert.initModality(Modality.WINDOW_MODAL);
 					alert.showAndWait();
+					txtList.get(4).requestFocus();
 					return;
 				}
 
@@ -350,28 +344,23 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 				if (result.isPresent() && result.get() == buttonYes) {
 					// Lấy stage hiện tại (đang fullscreen)
 					Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
 					System.out.println(txtHoTenValue);
 					System.out.println(txtSDTValue);
 					// Tạo cửa sổ mới
 					HoaDonHoanTraVe gd = new HoaDonHoanTraVe(txtHoTenValue, txtDiaChiValue, txtSDTValue,
 							txtSoGiayToValue, txtEmailValue, listVeThanhToan);
 					Stage gdStage = new Stage();
-
 					gdStage.initOwner(currentStage);
 					gdStage.initStyle(StageStyle.UTILITY);
 					gdStage.setTitle("Hóa đơn hoàn trả vé");
 					gdStage.setWidth(1200);
 					gdStage.setHeight(1000);
 					gdStage.centerOnScreen();
-
 					gd.start(gdStage);
-
 					gdStage.show();
 
 				} else {
 					System.out.println("Người dùng chọn No: hủy thanh toán");
-
 				}
 
 			});

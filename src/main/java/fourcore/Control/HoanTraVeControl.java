@@ -50,14 +50,15 @@ public class HoanTraVeControl {
 
 	public void traVeGiaoDienXuatHoaDon(BorderPane root) throws Exception {
 		handleMenuTrangChuSelect(root);
-		
+
 		listVeThanhToan = gdHoan.traVeListVeThanhToan();
-		
+
 		gdXuat = new GiaoDienXuatHoaDonHoanTraVe(listVeThanhToan);
-		
+
 		gdHoan.traVeNutHoanVe().setOnMouseClicked(event -> {
 			int kTraHopLe = 1;
-			//ktra size cua map Ve thanh toan
+			// ktra size cua map Ve thanh toan
+
 			if (listVeThanhToan.size() == 0) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("Lỗi");
@@ -69,7 +70,7 @@ public class HoanTraVeControl {
 				alert.showAndWait();
 				kTraHopLe = 0;
 			}
-			
+
 			for (Map.Entry<Ve, Double> entry : listVeThanhToan.entrySet()) {
 				String key = entry.getKey().getMaVeTau();
 				try {
@@ -78,7 +79,7 @@ public class HoanTraVeControl {
 					String loai = cthd.getLoaiHoaDonChoVeTau(key);
 					Ve v = dao.getVeBangMaVe(key);
 					System.out.println(v.toString());
-					
+
 					if (v.getTrangThaiVe().equalsIgnoreCase("đã hoàn trả")
 							|| v.getTrangThaiVe().equalsIgnoreCase("kết thúc")
 							|| v.getTrangThaiVe().equalsIgnoreCase("đã được đổi")) {
@@ -149,9 +150,12 @@ public class HoanTraVeControl {
 		});
 		gdXuat.traVeNutTroVe().setOnMouseClicked(event -> {
 			root.setCenter(gdHoanBackUp);
+			for (Map.Entry<Ve, Double> entry : listVeThanhToan.entrySet()) {
+				System.out.println(entry.getKey().getMaVeTau() + entry.getValue());
+			}
 			System.out.println("Thanh toán thành công, trả về trang hoàn vé");
 		});
-		
+
 		gdXuatHD.traVeBtnXuatHoaDon().setOnMouseClicked(event -> {
 			System.out.println("Thanh toán thành công, trả về trang hoàn vé");
 			root.setCenter(gdHoanBackUp);
