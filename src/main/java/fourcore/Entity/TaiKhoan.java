@@ -6,6 +6,7 @@ public class TaiKhoan {
 	private String tenDangNhap;
 	private String vaiTro;
 	private String matKhau;
+	private boolean isRemove;
 	public String getMaTaiKhoan() {
 		return maTaiKhoan;
 	}
@@ -34,13 +35,19 @@ public class TaiKhoan {
 	public TaiKhoan() {
 		
 	}
-	public TaiKhoan(String maTaiKhoan, String maNhanVien, String tenDangNhap, String vaiTro, String matKhau) {
+	public TaiKhoan(String maTaiKhoan, String maNhanVien, String tenDangNhap, String matKhau,boolean isRemove) {
 		
 		this.maTaiKhoan = maTaiKhoan;
 		this.maNhanVien = maNhanVien;
 		this.tenDangNhap = tenDangNhap;
-		this.vaiTro = vaiTro;
 		this.matKhau = matKhau;
+		this.isRemove = isRemove;
+	}
+	public boolean getIsRemove() {
+		return isRemove;
+	}
+	public void setIsRemove(boolean isRemove) {
+		this.isRemove = isRemove;
 	}
 	@Override
 	public String toString() {

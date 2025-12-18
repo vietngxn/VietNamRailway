@@ -84,4 +84,32 @@ public class ThongKeDAO {
 	    }
 	    return list;
 	}
+	
+	public Map<Tau,Double> getDoanhThutheoChuyenTau(int nam) throws SQLException
+	{
+		Map<Tau,Double> list = new LinkedHashMap<Tau, Double>();
+		String q = "select ct.maChuyenTau,lt.tenLoaiTau,sum(cthd.thanhTien) as thanhTien\r\n"
+				+ "from ChiTietHoaDon cthd, Ve v,ChuyenTau ct,Tau t, LoaiTau lt,HoaDon hd\r\n"
+				+ "where cthd.maVeTau = v.maVeTau\r\n"
+				+ "and\r\n"
+				+ "ct.maChuyenTau = v.maChuyenTau\r\n"
+				+ "and\r\n"
+				+ "t.maTau = ct.maTau\r\n"
+				+ "and\r\n"
+				+ "lt.maLoaiTau = t.maLoaiTau\r\n"
+				+ "and \r\n"
+				+ "hd.maHoaDon = cthd.maHoaDon\r\n"
+				+ "and\r\n"
+				+ "Year(hd.ngayThanhToan) = "+nam+"\r\n"
+				+ "group by ct.maChuyenTau,lt.tenLoaiTau\r\n"
+				+ "order by thanhTien DESC";
+		ResultSet rs = st.executeQuery(q);
+		while(rs.next())
+		{
+			Tau tau =  new Tau(rs.getString(1),rs.getString(2), null);
+			double doanhthu = rs.getDouble(3);
+			list.put(tau, doanhthu);
+		}
+			return list;
+	}
 }

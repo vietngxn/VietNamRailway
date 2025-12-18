@@ -1,7 +1,10 @@
 package fourcore.GiaoDien;
 
 
+import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -75,7 +78,7 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 	private VBox vboxNgayKetThuc;
 
 	private HBox buttonThemCTKMBox;
-	private Button buttoncapNhat;
+	
 
 	private Animation lblAnimation;
 	private VBox menuList;
@@ -136,7 +139,7 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 	private StackPane spcomboDoiTuong;
 	private HBox buttonCapNhatCTKMBox;
 	private Button buttonCapNhat;
-	private Button buttonThoat;
+	private Button button_Thoat;
 	private ComboBox comboTrangThai;
 	private Label lblcomboTrangThai;
 	private Button buttoncomboTrangThai;
@@ -151,9 +154,15 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 	private DateTimeFormatter formatter;
 
     public VBox getLayout(){
+    	loadFromFile();
         return layoutCapNhatCTKM;
     }
-
+    
+    public Button getButtonThoat()
+    {
+    	return this.button_Thoat;
+    }
+    
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		khdao = new KhachHangDAO();
@@ -1074,13 +1083,13 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 		buttonCapNhat.setPrefHeight(50);
 		buttonCapNhat.setId("button_Blue");
 		
-		buttonThoat = new Button();
-		buttonThoat.setText("Thoát");
-		buttonThoat.setPrefWidth(150);
-		buttonThoat.setPrefHeight(50);
-		buttonThoat.setId("button_White");
+		button_Thoat = new Button();
+		button_Thoat.setText("Thoát");
+		button_Thoat.setPrefWidth(150);
+		button_Thoat.setPrefHeight(50);
+		button_Thoat.setId("button_White");
 		
-		buttonCapNhatCTKMBox.getChildren().addAll(buttonCapNhat, buttonThoat);
+		buttonCapNhatCTKMBox.getChildren().addAll(buttonCapNhat, button_Thoat);
 		buttonCapNhatCTKMBox.setAlignment(Pos.BOTTOM_RIGHT);
 		buttonCapNhatCTKMBox.setPadding(new Insets(200, 40, 20, 0));
 		
@@ -1096,5 +1105,88 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 		layoutCapNhatCTKM.setAlignment(Pos.CENTER);
 		layoutCapNhatCTKM.setStyle("-fx-background-color: #FFFFFF");
 	}
+		
+		public void loadFromFile() {
+			File file = new File("KhuyenMai.dat");
+			
+			// ✅ Kiểm tra file trước khi đọc
+			if (!file.exists()) {
+				System.out.println("⚠️ File không tồn tại");
+				return;
+			}
+			
+			try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("KhuyenMai.dat"))) {
+				KhuyenMai km = (KhuyenMai) ois.readObject();
 
+				// ✅ Lấy mã KM và phần trăm khuyến mãi
+				makm = km.getMaKhuyenMai();
+				double phanTram = ctkmDAO.getPhanTramKhuyenMai(makm);
+
+				// ✅ Tên chương trình
+				txtTenCT.setText(km.getTenChuongTrinh());
+				if (!txtTenCT.getText().trim().isEmpty()) lblAnimation.scaleUp(lblTenCT);
+
+				// ✅ Giá trị KM (% Giảm Giá)
+				txtphanTram.setText(String.valueOf(phanTram));
+				if (!txtphanTram.getText().trim().isEmpty()) lblAnimation.scaleUp(lblphanTram);
+
+				// ✅ Ngày bắt đầu
+				LocalDate nbd = km.getNgayBatDau().toLocalDate();
+				ngayBatDau.setValue(nbd);
+				txtNgayBatDau.setText(nbd.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+				if (!txtNgayBatDau.getText().trim().isEmpty()) lblAnimation.scaleUp(lblNgayBatDau);
+
+				// ✅ Ngày kết thúc
+				LocalDate nkt = km.getNgayKetThuc().toLocalDate();
+				ngayKetThuc.setValue(nkt);
+				txtNgayKetThuc.setText(nkt.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+				if (!txtNgayKetThuc.getText().trim().isEmpty()) lblAnimation.scaleUp(lblNgayKetThuc);
+
+				// ✅ Trạng thái
+				String trangThai = km.getTrangThaiKhuyenMai();
+				comboTrangThai.setValue(trangThai);
+				txtcomboTrangThai.setText(trangThai);
+				if (!txtcomboTrangThai.getText().trim().isEmpty()) lblAnimation.scaleUp(lblcomboTrangThai);
+
+				// ✅ Đối tượng áp dụng
+				String doiTuong = km.getDieuKienApDung();
+				comboDoiTuong.setValue(doiTuong);
+				txtcomboDoiTuong.setText(doiTuong);
+				if (!txtcomboDoiTuong.getText().trim().isEmpty()) lblAnimation.scaleUp(lblcomboDoiTuong);
+
+				System.out.println("✅ Load dữ liệu từ file thành công!");
+
+			} catch (Exception e) {
+				System.out.println("⚠️ File không tồn tại");
+			}
+			 buttonCapNhat.setOnAction(e-> {
+		    	 try {
+		    		 String ten = txtTenCT.getText();
+		    		 String trangthai = txtcomboTrangThai.getText();
+		    		 String dieuKien = txtcomboDoiTuong.getText();
+		    		 double giaTri =   Double.valueOf(txtphanTram.getText());
+		    		 
+		    		 LocalDate ngaybatdau1 = ngayBatDau.getValue();
+		    		 LocalDate ngayketthuc1 = ngayKetThuc.getValue();
+		    		 
+		    		 
+		    		 LocalDateTime nbd1 = ngaybatdau1.atStartOfDay();
+		    		 LocalDateTime nbkt1 = ngayketthuc1.atStartOfDay();
+		    		 
+		    		 
+		    		 KhuyenMai km1 = new KhuyenMai(makm, ten, trangthai, dieuKien, giaTri, nbd1, nbkt1);
+					if(ctkmDAO.capNhatKhuyenMai(km1)) {
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Thông Báo");
+						alert.setHeaderText(null);
+						alert.setContentText("Cập Nhật CTKM Thành Công");
+						alert.showAndWait();
+					 }
+				 } catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				 }
+		     });
+		}
+		
 }

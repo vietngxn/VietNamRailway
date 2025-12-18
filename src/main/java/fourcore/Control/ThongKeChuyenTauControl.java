@@ -4,6 +4,7 @@ import fourcore.GiaoDien.QuanLiHoaDon;
 import fourcore.GiaoDien.QuanLiThongKeChuyenTau;
 import fourcore.GiaoDien.QuanLiThongKeDoanhThuTheoNam;
 import fourcore.GiaoDien.QuanLiThongKeKhachHang;
+import fourcore.GiaoDien.QuanLyThongKeDoanhThuTheoChuyenTau;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -24,4 +25,14 @@ public class ThongKeChuyenTauControl {
         VBox quanLiThongKeVBox = gdQuanLiThongKe.getQuanLiThongKe();
         root.setCenter(quanLiThongKeVBox);
     }
+    
+    public void handleshowthongke2(BorderPane root)
+    {
+    	QuanLyThongKeDoanhThuTheoChuyenTau qltk = new QuanLyThongKeDoanhThuTheoChuyenTau();
+    	Stage Stage_thongke = new Stage();
+    	qltk.start(Stage_thongke);
+    	root.setCenter(qltk.getLayout());
+    }
+    
+    
 }

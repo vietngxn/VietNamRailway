@@ -10,9 +10,11 @@ import java.util.ArrayList;
 import fourcore.Entity.ChucVu;
 import fourcore.Entity.KhachHang;
 import fourcore.Entity.NhanVien;
+import fourcore.Entity.TaiKhoan;
 import fourcore.animation.Animation;
 import fourcore.dao.KhachHangDAO;
 import fourcore.dao.NhanVienDAO;
+import fourcore.dao.TaiKhoanDAO;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -22,6 +24,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -40,6 +43,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
 
 public class ThemNhanVien extends Application {
 	public static void main(String[] args) {
@@ -152,15 +156,17 @@ public class ThemNhanVien extends Application {
 	private NhanVienDAO nvdao;
 	private ArrayList<NhanVien> listNhanVien;
 	private ArrayList<String> listChucVu;
+	private TaiKhoanDAO tkdao;
+	private int soluongnv;
 
 
-    public VBox getLayoutThemNhanVIen(){
-        return layoutThemNhanVIen;
-    }
+    
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		khdao = new KhachHangDAO();
 		nvdao = new NhanVienDAO();
+		tkdao = new TaiKhoanDAO();
+		soluongnv = tkdao.getSoLuongNhanVien();
 		listNhanVien = nvdao.getListNhanVien();
 		listChucVu = nvdao.getListChucVu();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -790,6 +796,130 @@ public class ThemNhanVien extends Application {
 		    String gioiTinh = txtGioiTinh.getText();
 		    
 		    
+		    String regexsdt = "^0\\d{9}";
+	        String regexcccd = "^0\\d{11}";
+	        String regexemail = "^[a-zA-Z0-9]+@(.+)$";
+	        
+		    
+		    if(ten.isEmpty())
+		    {
+		    	Alert alert = new Alert(Alert.AlertType.ERROR);
+		    	alert.setContentText("Tên không được để trống!");
+		    	alert.setHeaderText(null);
+		    	alert.showAndWait();
+		    	return;
+		    }
+		    else if(chucvu.isEmpty())
+		    {
+		    	Alert alert = new Alert(Alert.AlertType.ERROR);
+		    	alert.setContentText("Chức vụ không được để trống!");
+		    	alert.setHeaderText(null);
+		    	alert.showAndWait();
+		    	return;
+		    }
+		    else if(ngaysinh == null)
+		    {
+		    	Alert alert = new Alert(Alert.AlertType.ERROR);
+		    	alert.setContentText("Vui lòng chọn ngày sinh");
+		    	alert.setHeaderText(null);
+		    	alert.showAndWait();
+		    	return;
+		    }
+		    else if(diaChi.isEmpty())
+		    {
+		    	Alert alert = new Alert(Alert.AlertType.ERROR);
+		    	alert.setContentText("Địa chỉ không được để trống!");
+		    	alert.setHeaderText(null); 
+		    	alert.showAndWait();
+		    	return;
+		    }
+		    else if(email.isEmpty())
+		    {
+		    	Alert alert = new Alert(Alert.AlertType.ERROR);
+		    	alert.setContentText("Email không được để trống!");
+		    	alert.setHeaderText(null);
+		    	alert.showAndWait();
+		    	return;
+		    }
+		    else if(sdt.isEmpty())
+		    {
+		    	Alert alert = new Alert(Alert.AlertType.ERROR);
+		    	alert.setContentText("Số điện thoại không được để trống!");
+		    	alert.setHeaderText(null);
+		    	alert.showAndWait();
+		    	return;
+		    }
+		    else if(ngayvaolam == null)
+		    {
+		    	Alert alert = new Alert(Alert.AlertType.ERROR);
+		    	alert.setContentText("Ngày vào làm Không được để trống!");
+		    	alert.setHeaderText(null);
+		    	alert.showAndWait();
+		    	return;
+		    }
+		    else if(gioiTinh.isEmpty())
+		    {
+		    	Alert alert = new Alert(Alert.AlertType.ERROR);
+		    	alert.setContentText("Giới tính không được để trống!");
+		    	alert.setHeaderText(null);
+		    	alert.showAndWait();
+		    	return;
+		    }
+		    else if(cccd.isEmpty())
+		    {
+		    	Alert alert = new Alert(Alert.AlertType.ERROR);
+		    	alert.setContentText("CCCD không được để trống!");
+		    	alert.setHeaderText(null);
+		    	alert.showAndWait();
+		    	return;
+		    }
+		    
+		    int year = LocalDate.now().getYear() - ngaysinh.getYear();
+		    if(year < 18)
+		    {
+		    	Alert alert = new Alert(Alert.AlertType.ERROR);
+		    	alert.setContentText("Nhân viên phải trên 18 tuổi!");
+		    	alert.setHeaderText(null);
+		    	alert.showAndWait();
+		    	return;
+		    }
+		    
+		    
+		    if(ngayvaolam.isAfter(LocalDate.now()))
+		    {
+		    	Alert alert = new Alert(Alert.AlertType.ERROR);
+		    	alert.setContentText("Ngày vào làm phải trước ngày hiện tại!");
+		    	alert.setHeaderText(null);
+		    	alert.showAndWait();
+		    	return;
+		    }
+		    
+		    if(!sdt.matches(regexsdt)) {
+	        	Alert alert = new Alert(Alert.AlertType.ERROR);
+	        	alert.setHeaderText(null);
+	        	alert.setContentText("Số điện thoại không đúng định dạng.SDT phải bao gồm 10 chữ số, bắt đầu bằng số 0 ");
+	        	alert.showAndWait();
+	        	return;
+	        }
+	        else if(!email.matches(regexemail))
+	        {
+	        	Alert alert = new Alert(Alert.AlertType.ERROR);
+	        	alert.setHeaderText(null);
+	        	alert.setContentText("Email phải đúng định dạng : abc@gmail.com");
+	        	alert.showAndWait();
+	        	return;
+	        }
+	        else if(!cccd.matches(regexcccd))
+	        {
+	        	Alert alert = new Alert(Alert.AlertType.ERROR);
+	        	alert.setHeaderText(null);
+	        	alert.setContentText("CCCD phải đúng định dạng : 0XXXXXXXXXXX");
+	        	alert.showAndWait();
+	        	return;
+	        }
+		    
+		    
+		    
 		    if(chucvu.equalsIgnoreCase("nhân viên bán vé"))
 		    {
 		    	chucvu = "CV01";
@@ -798,6 +928,7 @@ public class ThemNhanVien extends Application {
 		    {
 		    	chucvu = "CV02";
 		    }
+		    
 		    try {
 		        // Lấy số lượng khách hàng hiện tại từ database
 		        int sl = listNhanVien.size();
@@ -812,10 +943,39 @@ public class ThemNhanVien extends Application {
 		        }
 		        
 		        
-		        NhanVien nv = new NhanVien(manv, ten, new ChucVu(chucvu), ngaysinh, diaChi, email, sdt, ngayvaolam, "còn làm", gioiTinh, cccd,1);
+		        if(nvdao.checkCCCD(cccd))
+		        {
+		        	Alert alert = new Alert(Alert.AlertType.ERROR);
+		        	alert.setContentText("CCCD đã tồn tại");
+		        	alert.setHeaderText(null);
+		        	alert.showAndWait();
+		        	return;
+		        }
+		        
+		        
+		        
+		        NhanVien nv = new NhanVien(manv, ten, new ChucVu(chucvu), ngaysinh, diaChi, email, sdt, ngayvaolam, "còn làm", gioiTinh, cccd,true);
 		        
 		        if(nvdao.themNhanVien(nv)) {
-		            System.out.println("Thêm Thành Công - Mã KH: " + manv);
+		        	
+		        	soluongnv +=1;
+		        	String matk = "";
+		        	if(soluongnv <= 9)
+		        	{
+		        		matk = "TK0"+soluongnv;
+		        	}
+		        	else
+		        		matk = "TK"+soluongnv;
+		        	
+		        	TaiKhoan tk = new TaiKhoan(matk, manv, sdt, "123456",false);
+		        	tkdao.themTaiKhoan(tk);
+		            System.out.println("Thêm Thành Công\nTên đăng nhập của nhân viên là :"+sdt+"\nMật Khẩu : 123456");
+		            
+		            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			    	alert.setContentText("Thêm nhân viên "+ten+"\n"+"Tên đăng nhập của nhân viên là :"+sdt+"\nMật Khẩu : 123456");
+			    	alert.setHeaderText(null);
+			    	alert.showAndWait();
+			    	
 		            // Clear form sau khi thêm thành công
 		            txtTenNhanVien.clear();
 		            txtSoDienThoai.clear();
@@ -1169,11 +1329,11 @@ public class ThemNhanVien extends Application {
     	
     	buttonThem = new Button();
     	buttonThem.setText("Thêm Nhân Viên");
-    	buttonThem.setPrefWidth(150);
+    	buttonThem.setPrefWidth(300);
     	buttonThem.setPrefHeight(50);
     	buttonThem.setId("button_Blue");
     	
-    	Button buttonThoat = new Button();
+    	buttonThoat = new Button();
     	buttonThoat.setText("Thoát");
     	buttonThoat.setPrefWidth(150);
     	buttonThoat.setPrefHeight(50);
@@ -1194,14 +1354,22 @@ public class ThemNhanVien extends Application {
     	gridThemKH.add(spEmail, 0, 2);
     	gridThemKH.add(spSoDienThoai, 1, 2);
     	gridThemKH.add(spNgayVaoLam, 0, 3);
-    	gridThemKH.add(spTinhTrangLamViec, 1, 3);
-    	gridThemKH.add(spGioiTinh, 0, 4);
-    	gridThemKH.add(spCCCD, 1, 4);
+//    	gridThemKH.add(spTinhTrangLamViec, 1, 3);
+    	gridThemKH.add(spGioiTinh, 1, 3);
+    	gridThemKH.add(spCCCD, 0, 4);
     	
     	
     	layoutThemNhanVIen.getChildren().addAll(lblThemKH, gridThemKH, buttonThemCTKMBox);
     	layoutThemNhanVIen.setAlignment(Pos.CENTER);
     	layoutThemNhanVIen.setStyle("-fx-background-color: #FFFFFF");
     }
-
+    
+    public VBox getLayoutThemNhanVIen(){
+        return layoutThemNhanVIen;
+    }
+    
+    public Button getButtonThoat()
+    {
+    	return buttonThoat;
+    }
 }
