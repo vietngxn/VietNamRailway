@@ -977,7 +977,12 @@ public class TrangChu extends Application {
 			});
 			xemLichSuVeBox.setOnMouseClicked(event -> {
 				XemLichSuVeBoxControl lichSuVeControl = new XemLichSuVeBoxControl();
-				lichSuVeControl.handleMenuTrangChuSelect(root);
+				try {
+					lichSuVeControl.handleMenuTrangChuSelect(root);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			});
             banVeControl.initChonVe();
 			banVeBox.setOnMouseClicked(event -> {
