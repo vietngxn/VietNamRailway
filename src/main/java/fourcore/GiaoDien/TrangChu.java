@@ -85,7 +85,6 @@ public class TrangChu extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-
 			BorderPane root = new BorderPane();
 			Scene scene = new Scene(root, 1920, 1000);
 			primaryStage.setScene(scene);
@@ -554,19 +553,21 @@ public class TrangChu extends Application {
 			menuPhuQuanLiChuyenTau.setStyle("-fx-background-color: #D2EEF0;");
 			HBox quanLiChuyenTauBox = new HBox();
 			HBox thongKeLoaiGhe = new HBox();
-
+			HBox thongkedoanhthutheotau1 = new HBox();
+			
 			Label quanLiChuyenTauuLabel = new Label("Quản lí chuyến tàu");
-			Label thongKeLoaiTauBest = new Label("Thống kê chuyến tàu");
-
+			Label thongKeLoaiTauBest = new Label("Thống kê chuyến tàu chạy nhiều nhất");
+			Label thongkedoanhthutheotau = new Label("Thống kê Doanh thu theo chuyến tàu");
+			
 			quanLiChuyenTauBox.getChildren().add(quanLiChuyenTauuLabel);
 			thongKeLoaiGhe.getChildren().add(thongKeLoaiTauBest);
-
+			thongkedoanhthutheotau1.getChildren().add(thongkedoanhthutheotau);
 			//
 			// InputStream interSemiBold =
 			// getClass().getResourceAsStream("/fonts/Inter/static/Inter_18pt-SemiBold.ttf");
 			// Font labelMenuPhu = Font.loadFont(interSemiBold,15);
 
-			for (Label label : new Label[] { quanLiChuyenTauuLabel, thongKeLoaiTauBest }) {
+			for (Label label : new Label[] { quanLiChuyenTauuLabel, thongKeLoaiTauBest,thongkedoanhthutheotau }) {
 				label.setStyle("-fx-background-color: #D2EEF0;");
 				label.setTranslateY(-10);
 				label.setFont(labelMenuPhu);
@@ -582,7 +583,7 @@ public class TrangChu extends Application {
 				hbox.setOnMouseExited(e -> hbox.setStyle("-fx-background-color: #D2EEF0;"));
 			}
 
-			menuPhuQuanLiChuyenTau.getChildren().addAll(quanLiChuyenTauBox, thongKeLoaiGhe);
+			menuPhuQuanLiChuyenTau.getChildren().addAll(quanLiChuyenTauBox, thongKeLoaiGhe,thongkedoanhthutheotau1);
 			danhSachMenuItem.getChildren().add(menuPhuQuanLiChuyenTau);
 
 			// Sự kiện onclick vào menu
@@ -1011,15 +1012,13 @@ public class TrangChu extends Application {
 
 			quanLiKhachHangBox.setOnMouseClicked(event -> {
                 KhachHangControl khachHangControl = null;
-                try {
-                    khachHangControl = new KhachHangControl();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+                khachHangControl = new KhachHangControl();
                 khachHangControl.handleMenuTrangChuSelect(root);
                 try {
                     khachHangControl.handleThemKhachHangSelect(root);
+                    khachHangControl.handleThoat(root);
                     khachHangControl.suaThongTinKhachHangSelect(root);
+                    khachHangControl.handleThoat2(root);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -1028,6 +1027,8 @@ public class TrangChu extends Application {
 			thongKeKhachHang.setOnMouseClicked(event -> {
 				ThongKeKhachHangControl thongKeKhachHangControl = new ThongKeKhachHangControl();
 				thongKeKhachHangControl.handleMenuTrangChuSelect(root);
+				
+				
 			});
 
 			quanLiHoaDonBox.setOnMouseClicked(event -> {
@@ -1041,10 +1042,17 @@ public class TrangChu extends Application {
 			});
 			quanLiNhanVienMenu.setOnMouseClicked(event -> {
 				NhanVienControl nhanVienControl = new NhanVienControl();
-				nhanVienControl.handleMenuTrangChuSelect(root);
+				try {
+					nhanVienControl.handleMenuTrangChuSelect(root);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                 try {
                     nhanVienControl.handleThemNhanVien(root);
+                    nhanVienControl.handlethoat(root);
                     nhanVienControl.handlecapNhatbtn(root);
+                    nhanVienControl.handlethoat2(root);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -1055,7 +1063,9 @@ public class TrangChu extends Application {
 				khuyenMaiControl.handleMenuTrangChuSelect(root);
                 try {
                     khuyenMaiControl.handleThemCTKM(root);
-                    khuyenMaiControl.suaThongTinKhachHangSelect(root);
+                    khuyenMaiControl.handlethoatCTKM(root);
+                    khuyenMaiControl.suaThongTinCTKMSelect(root);
+                    khuyenMaiControl.handlethoatCTKM2(root);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -1090,6 +1100,12 @@ public class TrangChu extends Application {
                 thongKeChuyenTauControl = new ThongKeChuyenTauControl();
                 thongKeChuyenTauControl.handleMenuTrangChuSelect(root);
             });
+            
+            thongkedoanhthutheotau.setOnMouseClicked(e-> {
+            	ThongKeChuyenTauControl tk = null;
+            	tk = new ThongKeChuyenTauControl();
+            	tk.handleshowthongke2(root);
+            });
 
 			// ------------------------------------------------------------------------------------------------------
 			BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
@@ -1107,7 +1123,10 @@ public class TrangChu extends Application {
 		}
 
 	}
-
+	
+	
+	
+	
 	public static void main(String[] args) {
 		Application.launch(TrangChu.class, args);
 	}

@@ -1,6 +1,7 @@
 package fourcore.GiaoDien;
 
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -167,9 +168,18 @@ public class CapNhatNhanVien extends Application {
 	private ChucVuDAO cvdao;
 
 
-    public VBox getLayout(){
-        return layoutCapNhatCTKM;
+
+    
+    public VBox getcapNhatNhanVienLayout(){
+    	loadForm();
+        return this.layoutCapNhatNhanVien;
     }
+    
+    public Button getthoatButton()
+    {
+    	return this.buttonThoat;
+    }
+    
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		khdao = new KhachHangDAO();
@@ -909,15 +919,7 @@ public class CapNhatNhanVien extends Application {
 		window.setFullScreen(true);
 //		window.show();
 	}
-    public VBox getcapNhatNhanVienLayout(){
-        return layoutCapNhatNhanVien;
-    }
-    
-    
-    public Button getthoatButton()
-    {
-    	return this.buttonThoat;
-    }
+   
     
     public void create_themchuongtrinhkm_layout() {
     	
@@ -1289,5 +1291,135 @@ public class CapNhatNhanVien extends Application {
     	layoutCapNhatNhanVien.setAlignment(Pos.CENTER);
     	layoutCapNhatNhanVien.setStyle("-fx-background-color: #FFFFFF");
     }
+    
+    
+    public void loadForm() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        
+        try {
+        File file = new File("NhanVienCapNhat.dat");
+        
+        if (!file.exists()) {
+            System.err.println("❌ File NhanVienCapNhat.dat không tồn tại!");
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText("Không tìm thấy file");
+            alert.setContentText("File NhanVienCapNhat.dat không tồn tại!");
+            alert.showAndWait();
+            return;
+        }
+        
+        // Đọc object NhanVien từ file
+        try (FileInputStream fis = new FileInputStream(file);
+             ObjectInputStream ois = new ObjectInputStream(fis)) {
+            
+            nv = (NhanVien) ois.readObject();
+            System.out.println("✅ Đọc file thành công!");
+            System.out.println("   Mã NV: " + nv.getMaNhanVien());
+            System.out.println("   Tên: " + nv.getHoTen());
+        }
+        }catch (Exception e) {
+			// TODO: handle exception
+		}
+        
+        try {
+            // 1. Tên Nhân Viên
+            if (txtTenNhanVien != null && nv.getHoTen() != null) {
+                txtTenNhanVien.setText(nv.getHoTen());
+                if (!nv.getHoTen().trim().isEmpty()) {
+                    lblAnimation.scaleUp(lblTenNhanVien);
+                }
+            }
 
+            // 2. Địa Chỉ
+            if (txtDiaChi != null && nv.getDiaChi() != null) {
+                txtDiaChi.setText(nv.getDiaChi());
+                if (!nv.getDiaChi().trim().isEmpty()) {
+                    lblAnimation.scaleUp(lblDiaChi);
+                }
+            }
+
+            // 3. Email
+            if (txtemail != null && nv.getEmail() != null) {
+                txtemail.setText(nv.getEmail());
+                if (!nv.getEmail().trim().isEmpty()) {
+                    lblAnimation.scaleUp(lblEmail);
+                }
+            }
+
+            // 4. Số Điện Thoại
+            if (txtSoDienThoai != null && nv.getSdt() != null) {
+                txtSoDienThoai.setText(nv.getSdt());
+                if (!nv.getSdt().trim().isEmpty()) {
+                    lblAnimation.scaleUp(lblSoDienThoai);
+                }
+            }
+
+            // 5. CCCD
+            if (txtCCCD != null && nv.getCccd() != null) {
+                txtCCCD.setText(nv.getCccd());
+                if (!nv.getCccd().trim().isEmpty()) {
+                    lblAnimation.scaleUp(lblCCCD);
+                }
+            }
+
+            // 6. Chức Vụ
+            if (nv.getChucVu() != null && nv.getChucVu().getMaChucVu() != null) {
+                String chucVu = cvdao.getTenChucVu(nv.getChucVu().getMaChucVu());
+                if (comboChucVu != null && txtChucVu != null && chucVu != null && !chucVu.isEmpty()) {
+                    comboChucVu.setValue(chucVu);
+                    txtChucVu.setText(chucVu);
+                    lblAnimation.scaleUp(lblChucVu);
+                }
+            }
+
+            // 7. Giới Tính
+            if (comboGioiTinh != null && txtGioiTinh != null && nv.getGioiTinh() != null) {
+                String gioiTinh = nv.getGioiTinh();
+                if (!gioiTinh.isEmpty()) {
+                    comboGioiTinh.setValue(gioiTinh);
+                    txtGioiTinh.setText(gioiTinh);
+                    lblAnimation.scaleUp(lblGioiTinh);
+                }
+            }
+
+            // 8. Ngày Sinh
+            if (ngaySinh != null && ngaysinh1 != null && nv.getNgaySinh() != null) {
+                LocalDate ns = nv.getNgaySinh();
+                ngaySinh.setValue(ns);
+                ngaysinh1.setText(ns.format(formatter));
+                lblAnimation.scaleUp(lblNgaySinh);
+            }
+
+            // 9. Ngày Vào Làm
+            if (ngayVaoLam != null && txtNgayVaoLam != null && nv.getNgayVaoLam() != null) {
+                LocalDate nvl = nv.getNgayVaoLam();
+                ngayVaoLam.setValue(nvl);
+                txtNgayVaoLam.setText(nvl.format(formatter));
+                lblAnimation.scaleUp(lblNgayVaoLam);
+            }
+
+            // 10. Tình Trạng Làm Việc
+            if (comboTinhTrangLamViec != null && txtTinhTrangLamViec != null && nv.getTinhTrangLamViec() != null) {
+                String tinhTrang = nv.getTinhTrangLamViec();
+                if (!tinhTrang.isEmpty()) {
+                    comboTinhTrangLamViec.setValue(tinhTrang);
+                    txtTinhTrangLamViec.setText(tinhTrang);
+                    lblAnimation.scaleUp(lblTinhTrangLamViec);
+                }
+            }
+            
+            System.out.println("✓ Load form nhân viên thành công!");
+            
+        } catch (Exception e) {
+            System.err.println("❌ Lỗi khi load form: " + e.getMessage());
+            e.printStackTrace();
+            
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText("Không thể load dữ liệu nhân viên");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+    }
 }

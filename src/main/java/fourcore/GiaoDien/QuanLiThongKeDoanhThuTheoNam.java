@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import fourcore.util.ExcelExporter;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -1046,7 +1048,7 @@ try {
 	public void create_barchart_nam() throws SQLException
 	{
 		CategoryAxis ca = new CategoryAxis();
-		ca.setLabel("Năm");
+		ca.setLabel("Tháng");
 		NumberAxis na = new NumberAxis();
 		na.setLabel("Doanh thu(Đồng)");
 		
@@ -1055,19 +1057,45 @@ try {
 		barchart.setLegendVisible(false);
 		barchart.setAnimated(false);
 		
+		
 		LocalDate data1 = date.getValue();
 		int nam = data1.getYear(); 
 		map = thongkedao.getDoanhThuTheoThang(nam);
 		
 		XYChart.Series<String, Number> data = new XYChart.Series<>();
 		tongdoanhthu =0 ;
+		double max = 0 ;
 		for (int thang = 1; thang <= 12; thang++) {
 		    double doanhThu = map.getOrDefault(thang, 0.0);
 		     tongdoanhthu += doanhThu;
-		    data.getData().add(new XYChart.Data<>(String.valueOf(thang), doanhThu));
+		     if(doanhThu > max)
+		     {
+		    	 max = doanhThu;
+		     }
+		    data.getData().add(new XYChart.Data<>(String.valueOf(thang),doanhThu*1.1));
 		}
 		
+		    
 		barchart.getData().add(data);
+		
+		// no se tao 1 con so nam tren moi barchart
+		Platform.runLater(() -> {
+		    for (XYChart.Data<String, Number> item : data.getData()) { 
+		        Node node = item.getNode();
+		        if (node != null) {
+		            double tien = (double) item.getYValue() / 1.1;
+		            DecimalFormat df = new DecimalFormat("#,###");
+		            String tf = df.format(tien);
+
+		            Label label = new Label(tf + " đ");
+		            label.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+		            StackPane bar = (StackPane) node;
+		            bar.getChildren().add(label);
+		            StackPane.setAlignment(label, Pos.TOP_CENTER);
+		            StackPane.setMargin(label, new Insets(-20, 0, 0, 0));
+		        }
+		    }
+		});
 		
 		table_desc.getChildren().clear();
 		table_desc.getChildren().add(barchart);

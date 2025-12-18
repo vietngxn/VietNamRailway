@@ -1067,7 +1067,7 @@ public class QuanLyKhachHang extends Application {
 		
 		
 		
-		colCCCD = new Label("CCCD/Passport");
+		colCCCD = new Label("CCCD");
 		colCCCD.setStyle(styleHeader);
 
 		
@@ -1122,16 +1122,16 @@ public class QuanLyKhachHang extends Application {
 		table_desc.setSpacing(20);
 	
 		
-		for(KhachHang kh : listkh)
-		{
-			if(kh.getCccd() != null)
-			{
-			create_layout_dong(kh.getMaKhachHang(), kh.getHoten(), kh.getSdt(), kh.getCccd(), kh.getEmail(), kh.getDoiTuong());
-			}
-			else {
-				create_layout_dong(kh.getMaKhachHang(), kh.getHoten(), kh.getSdt(), kh.getPassport(), kh.getEmail(), kh.getDoiTuong());	
-			}
-		}
+//		for(KhachHang kh : listkh)
+//		{
+//			if(kh.getCccd() != null)
+//			{
+//			create_layout_dong(kh.getMaKhachHang(), kh.getHoten(), kh.getSdt(), kh.getCccd(), kh.getEmail(), kh.getDoiTuong());
+//			}
+//			else {
+//				create_layout_dong(kh.getMaKhachHang(), kh.getHoten(), kh.getSdt(), kh.getPassport(), kh.getEmail(), kh.getDoiTuong());	
+//			}
+//		}
 		
 		scrollPane = new ScrollPane();
 		scrollPane.setContent(table_desc);
@@ -1426,9 +1426,65 @@ public class QuanLyKhachHang extends Application {
 	    table_desc.getChildren().add(data);
 	}
 	
+	
+	
+	public void hienThi() {
+	    if (table_desc != null) {
+	        table_desc.getChildren().clear();
+	    }
+	    hangchon = null;
+	    btn_xoakh.setDisable(true);
+	    btn_capnhat.setDisable(true);
+
+	    try {
+	    	listkh.clear();
+	        listkh = khdao.getListKhachHang();
+
+	        // Load dữ liệu vào table
+	        for (KhachHang kh : listkh) {
+	            if (kh.getCccd() != null) {
+	                create_layout_dong(
+	                    kh.getMaKhachHang(),
+	                    kh.getHoten(),
+	                    kh.getSdt(),
+	                    kh.getCccd(),
+	                    kh.getEmail(),
+	                    kh.getDoiTuong()
+	                );
+	            } else {
+	                create_layout_dong(
+	                    kh.getMaKhachHang(),
+	                    kh.getHoten(),
+	                    kh.getSdt(),
+	                    kh.getPassport(),
+	                    kh.getEmail(),
+	                    kh.getDoiTuong()
+	                );
+	            }
+	        }
+
+	        
+
+	    } catch (SQLException e) {
+	        System.err.println("❌ Lỗi khi refresh table: " + e.getMessage());
+	        e.printStackTrace();
+	        
+	        Alert alert = new Alert(AlertType.ERROR);
+	        alert.setTitle("Lỗi");
+	        alert.setHeaderText("Không thể tải danh sách khách hàng");
+	        alert.setContentText(e.getMessage());
+	        alert.showAndWait();
+	    }
+	}
+	
+	
 	public VBox getQuanLiKhachHang(){
+		hienThi();
         return this.noiDungChinh;
     }
+	
+	
+	
 	
 	public static void main(String[] args) {
 		launch(args);
