@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import fourcore.util.ExcelExporter;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -639,7 +641,7 @@ try {
 		title_layout.setPadding(new Insets(30));
 		title_layout.setSpacing(20);
 		
-		lbl_title = new Label("Quản Lí Thống Kê"); 
+		lbl_title = new Label("Quản Lí Thống Kê theo chuyến tàu chạy nhiều nhất"); 
 		lbl_title.setStyle("-fx-font-family: 'Inter';-fx-font-weight:bold;-fx-font-size:30px;");
 		title_layout.getChildren().add(lbl_title);
 		
@@ -1035,7 +1037,7 @@ try {
 	    for(Map.Entry<Tau, Integer> x : map.entrySet()) {
 	        Tau tau = x.getKey();
 	        int soLan = x.getValue();
-	        listdata.add(new XYChart.Data<>(tau.getTenTau(), soLan));
+	        listdata.add(new XYChart.Data<>(tau.getTenTau(), soLan * 1.1));
 	    }
 
 	    for(int i = 0; i < listdata.size() - 1; i++) {
@@ -1049,10 +1051,10 @@ try {
 	    }
 
 	    double max = listdata.get(0).getYValue().doubleValue();
-	    na.setTickUnit(1);
+	    na.setTickUnit(max / 5);
 	    na.setAutoRanging(false);
 	    na.setLowerBound(0);
-	    na.setUpperBound(max + 1);
+	    na.setUpperBound(max * 1.1);
 
 	    XYChart.Series<String, Number> list = new XYChart.Series<String, Number>();
 
@@ -1060,7 +1062,25 @@ try {
 	        list.getData().add(s);
 	    }
 	    barchart.getData().add(list);
+	    
+	    Platform.runLater(() -> {
+	        for (XYChart.Data<String, Number> data : list.getData()) {
+	            Node node = data.getNode();
+	            if (node != null) {
+	                double solan = data.getYValue().doubleValue() / 1.1;  
+	                DecimalFormat df = new DecimalFormat("#,###");
+	                String tf = df.format(solan);
 
+	                Label label = new Label(tf + " lần");
+	                label.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+	                StackPane bar = (StackPane) node;
+	                bar.getChildren().add(label);
+	                StackPane.setAlignment(label, Pos.TOP_CENTER);
+	                StackPane.setMargin(label, new Insets(-20, 0, 0, 0));
+	            }
+	        }
+	    });
+	    
 	    table_desc.getChildren().clear();
 	    table_desc.getChildren().add(barchart);
 	}

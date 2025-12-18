@@ -18,6 +18,7 @@ import fourcore.Entity.KhuyenMai;
 import fourcore.Entity.NhanVien;
 import fourcore.dao.ChuongTrinhKhuyenMaiDAO;
 import fourcore.dao.NhanVienDAO;
+import fourcore.dao.TaiKhoanDAO;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -136,13 +137,18 @@ public class QuanLiNhanVien extends Application {
 	private Button btn_khoiPhuc1; 
 	private GridPane[] hangchonPopup = null;
 	private Button btn_timkiem;
-
-    public Button getBtn_themNhanVien() {
-        return btn_themNhanVien;
+	private TaiKhoanDAO tkdao;
+    
+	public Button getButtonthem() {
+        return this.btn_themNhanVien;
     }
-    public Button getBtn_capnhat(){
-        return btn_capnhat;
+    public Button getButtoncapnhat(){
+        return this.btn_capnhat;
     }
+    public VBox getQuanLiNhanVien() throws SQLException {
+    	loaddata();
+        return this.noiDungChinh;
+       }
     @Override
 	public void start(Stage primaryStage) {
 		try {
@@ -150,8 +156,9 @@ public class QuanLiNhanVien extends Application {
 //			||     GET DATA     ||
 //			======================
             nhanvienDAO = new NhanVienDAO();
-            listnhanVien = nhanvienDAO.getListNhanVien();
             
+            listnhanVien = nhanvienDAO.getListNhanVien();
+            tkdao = new TaiKhoanDAO();
 //----------------------------------------------------------------------------------------------------------------------------------------
             BorderPane root = new BorderPane();
             Scene scene = new Scene(root,1920,1000);
@@ -761,8 +768,14 @@ public class QuanLiNhanVien extends Application {
                QuanLiNhanVien quanLyCTKM = new QuanLiNhanVien();
                Stage stage = new Stage();
                quanLyCTKM.start(stage);
-               VBox quanLyCTKMMenu = quanLyCTKM.getQuanLiNhanVien();
-               root.setCenter(quanLyCTKMMenu);
+               VBox quanLyCTKMMenu;
+			try {
+				quanLyCTKMMenu = quanLyCTKM.getQuanLiNhanVien();
+				root.setCenter(quanLyCTKMMenu);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             });
             danhSachMenuItem.getChildren().add(quanLiCTKMMenu);
             scrollPaneMenu.setContent(danhSachMenuItem);
@@ -920,7 +933,7 @@ public class QuanLiNhanVien extends Application {
 			
 			create_table_layout();
 			
-			loaddata();
+			
 			
 			create_layout_button();
 			
@@ -931,9 +944,7 @@ public class QuanLiNhanVien extends Application {
 			e.printStackTrace();
 		}
 	}
-    public VBox getQuanLiNhanVien() {
-     return this.noiDungChinh;
-    }
+
 	
 	public void create_title_layout() {
 		title_layout  = new VBox();
@@ -1161,8 +1172,12 @@ public class QuanLiNhanVien extends Application {
 	
 	public void loaddata() throws SQLException
 	{
-		ArrayList<NhanVien> listnhanvien1 = nhanvienDAO.getListNhanVien();
-		for (NhanVien nv : listnhanvien1) {
+		listnhanVien.clear();
+		if (table_desc != null) {
+	        table_desc.getChildren().clear();
+	    }
+		listnhanVien = nhanvienDAO.getListNhanVien();
+		for (NhanVien nv : listnhanVien) {
 	        if(nv.getTinhTrangLamViec().equalsIgnoreCase("còn làm")) {
 	            loadCTKMData(nv.getMaNhanVien(), nv.getHoTen(), nv.getSdt(), nv.getGioiTinh(), nv.getEmail(), nv.getCccd(), nv.getTinhTrangLamViec());
 	            
@@ -1380,7 +1395,7 @@ public class QuanLiNhanVien extends Application {
 		        
 		        try {
 		            // Cập nhật trạng thái nhân viên về "còn làm"
-		            if(nhanvienDAO.capNhatTrangThaidiLam(maNhanVien)) {
+		        	 if(nhanvienDAO.capNhatTrangThaidiLam(maNhanVien)){
 		                // Xóa dòng từ table recovery
 		                FadeTransition ft = new FadeTransition(Duration.millis(400), hangchonPopup[0]);
 		                ft.setFromValue(1.0);
@@ -1390,6 +1405,7 @@ public class QuanLiNhanVien extends Application {
 		                    table_desc_recovery.getChildren().remove(hangchonPopup[0]);
 		                    btn_khoiPhuc1.setDisable(true);
 		                    hangchonPopup[0] = null;
+		                    tkdao.capNhatIsRemove(maNhanVien, false);
 		                });
 		                
 		                Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -1447,7 +1463,7 @@ public class QuanLiNhanVien extends Application {
 							alert.setContentText("Xóa Nhân Viên Thành Công");
 							alert.setHeaderText(null);
 							alert.show();
-							FadeTransition ft = new FadeTransition(Duration.millis(300),hangchon);
+							FadeTransition ft = new FadeTransition(Duration.millis(400 ),hangchon);
 							ft.setFromValue(1.0);
 							ft.setToValue(0);
 							ft.play();
@@ -1455,7 +1471,7 @@ public class QuanLiNhanVien extends Application {
 								table_desc.getChildren().remove(hangchon);
 //								table_desc.getChildren().clear();
 //								reloaddata();
-								
+								tkdao.capNhatIsRemove(manv, true);
 								
 							});
 						}
@@ -1641,6 +1657,7 @@ public class QuanLiNhanVien extends Application {
 
 	
 	public void loadCTKMData(String maNhanVien, String tenNhanVien, String soDienThoai,String gioiTinh,String email,String cccd, String tinhtranglamviec) {
+		
 	    GridPane data = new GridPane();
 	    
 	    data.setHgap(10);
@@ -1681,9 +1698,12 @@ public class QuanLiNhanVien extends Application {
 	    lblTenNhanVien.setTranslateX(-80);
 	    lblsoDienThoai.setTranslateX(-40);
 	    lblgioiTinh.setTranslateX(-50);
-	    lblemail.setTranslateX(-55);
+	    lblemail.setTranslateX(-45);
 	    lblCCCD.setTranslateX(-40);
 	    lblTenNhanVien.setWrapText(true);
+	    
+	    lblemail.setWrapText(true);
+	    
 	    
 	    StackPane paneData1 = new StackPane(lblMaNhanVien);
 	    StackPane paneData2 = new StackPane(lblTenNhanVien);
@@ -1698,7 +1718,7 @@ public class QuanLiNhanVien extends Application {
 	    paneData2.setPrefWidth(180);
 	    paneData3.setPrefWidth(150);
 	    paneData4.setPrefWidth(150);
-	    paneData5.setPrefWidth(200);
+	    paneData5.setPrefWidth(220);
 	    paneData6.setPrefWidth(130);
 	    paneData7.setPrefWidth(130);
 	    
@@ -1829,16 +1849,9 @@ public class QuanLiNhanVien extends Application {
 	} 
 	
 	
-
 	
-	public VBox getGDQlyNhanVien(){
-        return this.noiDungChinh;
-    }
 	
-	public Button getCapnhat_btn()
-	{
-		return this.btn_capnhat;
-	}
+	
 	
 	public static void main(String[] args) {
 		launch(args);

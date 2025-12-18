@@ -18,6 +18,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -38,8 +39,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class ThemKhachHang extends Application {
-    public ThemKhachHang() throws SQLException {
-    }
 
     public static void main(String[] args) {
 		launch(args);
@@ -106,13 +105,13 @@ public class ThemKhachHang extends Application {
 	private ImageView userIcon;
 	private Labeled userLabel;
 	private ImageView settingIcon;
-	private KhachHangDAO khdao = new KhachHangDAO();
+	private KhachHangDAO khdao;
 	private TextField txtCCCD;
 	private TextField txtPassport;
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
-		KhachHangDAO khdao = new KhachHangDAO();
+		khdao = new KhachHangDAO();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		lblAnimation = new Animation();
 		
@@ -734,26 +733,129 @@ public class ThemKhachHang extends Application {
 		    String passport = txtPassport.getText();
 		    String doiTuong = txtcomboDoiTuong.getText();
 		    
+		   
+		    
+		    
 		    try {
 		        // Lấy số lượng khách hàng hiện tại từ database
+		    	
 		        String makh = khdao.getMaKH();
-		        
+
 		        KhachHang kh = new KhachHang(makh, ten, sdt, email, cccd, passport, doiTuong);
 		        
-		        if(khdao.themKhachHang(kh)) {
-		            System.out.println("Thêm Thành Công - Mã KH: " + makh);
-		            // Clear form sau khi thêm thành công
-		            txtTenKH.clear();
-		            txtSoDienThoai.clear();
-		            txtemail.clear();
-		            txtCCCD.clear();
-		            txtPassport.clear();
-		            txtcomboDoiTuong.clear();
-		            comboDoiTuong.setValue(null);
+		        String regexsdt = "^0\\d{9}";
+		        String regexcccd = "^0\\d{11}";
+		        String regexemail = "^[a-zA-Z0-9]+@(.+)$";
+//		        String regexpp = "PP\\d{6}";
+		        
+		        if(ten.isEmpty())
+		        {
+		        	Alert alert = new Alert(Alert.AlertType.ERROR);
+		        	alert.setHeaderText(null);
+		        	alert.setContentText("Tên Khách Hàng không được để trống");
+		        	
+		        	alert.showAndWait();
+		        	return;
 		        }
+		        else if(sdt.isEmpty())
+		        {
+		        	Alert alert = new Alert(Alert.AlertType.ERROR);
+		        	alert.setHeaderText(null);
+		        	alert.setContentText("Số Điện Thoại không được để trống");
+		        	alert.showAndWait();
+		        	return;
+		        }
+		        else if(email.isEmpty())
+		        {
+		        	Alert alert = new Alert(Alert.AlertType.ERROR);
+		        	alert.setHeaderText(null);
+		        	alert.setContentText("Email không được để trống");
+		        	alert.showAndWait();
+		        	return;
+		        }
+		        else if(cccd.isEmpty())
+		        {
+		        	Alert alert = new Alert(Alert.AlertType.ERROR);
+		        	alert.setHeaderText(null);
+		        	alert.setContentText("Bạn phải điền thông tin về cccd cho khách hàng ");
+		        	alert.showAndWait();
+		        	return;
+		        }
+		        else if(doiTuong.isEmpty())
+		        {
+		        	Alert alert = new Alert(Alert.AlertType.ERROR);
+		        	alert.setHeaderText(null);
+		        	alert.setContentText("Bạn phải chọn đối tượng cho khách hàng");
+		        	alert.showAndWait();
+		        	return;
+		        }
+		        
+		        
+		        
+		        if(khdao.checkCCCD(cccd) && cccd.matches(regexcccd))
+			    {
+			    		Alert alert = new Alert(Alert.AlertType.ERROR);
+			        	alert.setHeaderText(null);
+			        	alert.setContentText("Số CCCD đã tồn tại");
+			        	txtCCCD.setText("");
+			        	alert.showAndWait();
+			        	return;
+			    }
+
+		        
+		        if(!sdt.matches(regexsdt)) {
+		        	Alert alert = new Alert(Alert.AlertType.ERROR);
+		        	alert.setHeaderText(null);
+		        	alert.setContentText("Số điện thoại không đúng định dạng.SDT phải bao gồm 10 chữ số, bắt đầu bằng số 0 ");
+		        	alert.showAndWait();
+		        	return;
+		        }
+		        else if(!email.matches(regexemail))
+		        {
+		        	Alert alert = new Alert(Alert.AlertType.ERROR);
+		        	alert.setHeaderText(null);
+		        	alert.setContentText("Email phải đúng định dạng : abc@gmail.com");
+		        	alert.showAndWait();
+		        	return;
+		        }
+		        else if(!cccd.matches(regexcccd))
+		        {
+		        	Alert alert = new Alert(Alert.AlertType.ERROR);
+		        	alert.setHeaderText(null);
+		        	alert.setContentText("CCCD phải đúng định dạng : 0XXXXXXXXXXX");
+		        	alert.showAndWait();
+		        	return;
+		        }
+//		        else if(!passport.matches(regexpp) && cccd.isEmpty())
+//		        {
+//		        	Alert alert = new Alert(Alert.AlertType.ERROR);
+//		        	alert.setHeaderText(null);
+//		        	alert.setContentText("Passport phải đúng định dạng: PPXXXXXX");
+//		        	alert.showAndWait();
+//		        	return;
+//		        }
+//		        
+		        
+		        
+		        if(khdao.themKhachHang(kh)) {
+			            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+			            alert.setContentText("Thêm Khách Hàng Thành Công");
+			            alert.setHeaderText(null);
+			            alert.showAndWait();
+			            System.out.println("Them Thanh Cong  makh"+makh);
+			            txtTenKH.clear();
+			            txtSoDienThoai.clear();
+			            txtemail.clear();
+			            txtCCCD.clear();
+			            txtPassport.clear();
+			            txtcomboDoiTuong.clear();
+			            comboDoiTuong.setValue(null);
+	        	}
+		        	
 		    } catch (SQLException e1) {
 		        e1.printStackTrace();
 		    }
+		    
 		});
 
 
@@ -766,6 +868,10 @@ public class ThemKhachHang extends Application {
 	}
     public VBox getThemKHLayout(){
         return layoutThemCTKM;
+    }
+    
+    public Button getButton() {
+    	return this.buttonThoat;
     }
 
 	public void create_themchuongtrinhkm_layout() throws SQLException {
@@ -907,8 +1013,8 @@ public class ThemKhachHang extends Application {
 		gridThemKH.add(spNgayBatDau, 1, 0);
 		gridThemKH.add(spNgayKetThuc, 0, 1);
 		gridThemKH.add(spCCCD, 1, 1);
-		gridThemKH.add(spPassport, 0, 2);
-		gridThemKH.add(spcomboDoiTuong, 1, 2);
+//		gridThemKH.add(spPassport, 0, 2);
+		gridThemKH.add(spcomboDoiTuong, 0, 2);
 		
 		layoutThemCTKM.getChildren().addAll(lblThemKH, gridThemKH, buttonThemCTKMBox);
 		layoutThemCTKM.setAlignment(Pos.CENTER);

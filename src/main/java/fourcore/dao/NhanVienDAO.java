@@ -80,7 +80,7 @@ public class NhanVienDAO {
             String tinhTrang = rs.getString(9);
             String gioiTinh = rs.getString(10);
             String cccd = rs.getString(11);
-            int isRemove = rs.getInt(12);
+            boolean isRemove = rs.getBoolean(12);
             String tenChucVu = rs.getString(13);
 
             ChucVu cv = new ChucVu(maChucVu, tenChucVu);
@@ -203,6 +203,14 @@ public class NhanVienDAO {
 	    return rows > 0;
 	}
 	
+	public boolean checkCCCD(String cccd) throws SQLException
+	{
+		String  q = "select * \r\n"
+				+ "from NhanVien nv\r\n"
+				+ "where nv.cccd = '"+cccd+"'";
+		ResultSet rs = st.executeQuery(q);
+		return rs.next();
+	}
 	
 	
 }

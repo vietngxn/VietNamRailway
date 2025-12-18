@@ -18,6 +18,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -782,7 +783,10 @@ public class CapNhatThongTinKhachHang extends Application {
                     kh.setCccd(cccd);
                     kh.setDoiTuong(doiTuong);
                     if(khdao.capNhatKhachHang(kh)) {
-                        System.out.println("Cập nhật thành công");
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setHeaderText(null);
+                        alert.setContentText("Cập nhật thông tin thành công!");
+                        alert.showAndWait();
                         ObjectOutputStream oos;
                         try {
                             oos = new ObjectOutputStream(new FileOutputStream("KhachHang.dat"));
@@ -804,12 +808,19 @@ public class CapNhatThongTinKhachHang extends Application {
 		root.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 		
 		window.setScene(sceneThemCTKM);
-		window.setFullScreen(true);
+				window.setFullScreen(true);
 //		window.show();
 	}
     public VBox getLayout(){
+    	loadForm();
         return layoutThemCTKM;
     }
+    
+    public Button getButtonThoat()
+    {
+    	return this.buttonThoat;
+    }
+    
 	public void create_themchuongtrinhkm_layout() throws SQLException {
 		
 		//label đầu
@@ -988,5 +999,76 @@ public class CapNhatThongTinKhachHang extends Application {
 		    }
 		});
 	}
-
+	
+	public void loadForm() {
+	    try {
+	        // Đọc file KhachHang.dat
+	        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("KhachHang.dat"));
+	        kh = (KhachHang) ois.readObject();
+	        ois.close();
+	        
+	        
+	        // 1. Họ Tên
+	        if (txtTenKH != null && kh.getHoten() != null) {
+	            txtTenKH.setText(kh.getHoten());
+	            if (!kh.getHoten().trim().isEmpty()) {
+	                lblAnimation.scaleUp(lblTenKH);
+	            }
+	        }
+	        
+	        // 2. Số Điện Thoại
+	        if (txtSoDienThoai != null && kh.getSdt() != null) {
+	            txtSoDienThoai.setText(kh.getSdt());
+	            if (!kh.getSdt().trim().isEmpty()) {
+	                lblAnimation.scaleUp(lblsoDienThoai);
+	            }
+	        }
+	        
+	        // 3. Email
+	        if (txtemail != null && kh.getEmail() != null) {
+	            txtemail.setText(kh.getEmail());
+	            if (!kh.getEmail().trim().isEmpty()) {
+	                lblAnimation.scaleUp(lblemail);
+	            }
+	        }
+	        
+	        // 4. CCCD/Passport
+	        if (txtCCCD != null) {
+	            // Ưu tiên CCCD, nếu không có thì dùng Passport
+	            if (kh.getCccd() != null && !kh.getCccd().trim().isEmpty()) {
+	                txtCCCD.setText(kh.getCccd());
+	                lblAnimation.scaleUp(lblCCCD);
+	            } else if (kh.getPassport() != null && !kh.getPassport().trim().isEmpty()) {
+	                txtCCCD.setText(kh.getPassport());
+	                lblAnimation.scaleUp(lblCCCD);
+	            }
+	        }
+	        
+	        // 5. Đối Tượng
+	        if (comboDoiTuong != null && txtcomboDoiTuong != null && kh.getDoiTuong() != null) {
+	            if (!kh.getDoiTuong().trim().isEmpty()) {
+	                comboDoiTuong.setValue(kh.getDoiTuong());
+	                txtcomboDoiTuong.setText(kh.getDoiTuong());
+	                lblAnimation.scaleUp(lblcomboDoiTuong);
+	            }
+	        }
+	        
+	        System.out.println("✓ Load form khách hàng thành công!");
+	        
+	    } catch (FileNotFoundException e) {
+	        System.err.println("❌ Không tìm thấy file KhachHang.dat");
+	        e.printStackTrace();
+	    } catch (IOException e) {
+	        System.err.println("❌ Lỗi đọc file: " + e.getMessage());
+	        e.printStackTrace();
+	    } catch (ClassNotFoundException e) {
+	        System.err.println("❌ Không tìm thấy class KhachHang: " + e.getMessage());
+	        e.printStackTrace();
+	    } catch (Exception e) {
+	        System.err.println("❌ Lỗi khi load form: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	}
+	
+	
 }

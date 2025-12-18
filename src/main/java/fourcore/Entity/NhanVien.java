@@ -15,9 +15,9 @@ public class NhanVien implements Serializable  {
 	private String tinhTrangLamViec;
 	private String gioiTinh;
 	private String cccd;
-	private int isRemove;
+	private boolean isRemove;
 	public NhanVien(String maNhanVien, String hoTen, ChucVu chucVu, LocalDate ngaySinh, String diaChi, String email,
-			String sdt, LocalDate ngayVaoLam, String tinhTrangLamViec, String gioiTinh, String cccd, int isRemove) {
+			String sdt, LocalDate ngayVaoLam, String tinhTrangLamViec, String gioiTinh, String cccd, boolean isRemove) {
 		
 		this.maNhanVien = maNhanVien;
 		this.hoTen = hoTen;
@@ -30,6 +30,12 @@ public class NhanVien implements Serializable  {
 		this.tinhTrangLamViec = tinhTrangLamViec;
 		this.gioiTinh = gioiTinh;
 		this.cccd = cccd;
+		this.isRemove = isRemove;
+	}
+	public boolean getisRemove() {
+		return isRemove;
+	}
+	public void setRemove(boolean isRemove) {
 		this.isRemove = isRemove;
 	}
 	public String getMaNhanVien() {

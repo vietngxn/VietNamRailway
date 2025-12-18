@@ -12,9 +12,12 @@ import java.sql.SQLException;
 
 public class KhachHangControl {
     QuanLyKhachHang gdQuanLyKhachHang = new QuanLyKhachHang();
+    public ThemKhachHang themKhachHang = new ThemKhachHang();
+    Stage stage_themkh = new Stage();
+    CapNhatThongTinKhachHang capnhatKH = new CapNhatThongTinKhachHang();	
+    Stage stage_capnhat = new Stage();
+    
 
-    public KhachHangControl() throws SQLException {
-    }
 
     public void handleMenuTrangChuSelect(BorderPane root) {
         Stage quanLyKhachHangStage = new Stage();
@@ -24,25 +27,39 @@ public class KhachHangControl {
     }
 
     public void handleThemKhachHangSelect(BorderPane root) throws Exception {
-        Stage themKhachHangStage = new Stage();
-        ThemKhachHang themKhachHang = new ThemKhachHang();
-        themKhachHang.start(themKhachHangStage);
+        
+        
+        themKhachHang.start(stage_themkh);
+        
         gdQuanLyKhachHang.getThemKH_Button().setOnMouseClicked(e ->{
             root.setCenter(themKhachHang.getThemKHLayout());
         });
     }
+    
+    public void handleThoat(BorderPane root) throws Exception {
+    	themKhachHang.start(stage_capnhat);
+    	
+    	themKhachHang.getButton().setOnMouseClicked(e1-> {
+    		root.setCenter(gdQuanLyKhachHang.getQuanLiKhachHang());
+    	});
+    	
+    }
+    
     public void suaThongTinKhachHangSelect(BorderPane root) throws Exception {
-        Stage suaKhachHangStage = new Stage();
-
+        
+    	capnhatKH.start(stage_capnhat);
+    	
         gdQuanLyKhachHang.getBtn_capnhat().setOnMouseClicked(e ->{
-            CapNhatThongTinKhachHang capNhatThongTinKhachHang = null;
-            capNhatThongTinKhachHang = new CapNhatThongTinKhachHang();
-            try {
-                capNhatThongTinKhachHang.start(suaKhachHangStage);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-            root.setCenter(capNhatThongTinKhachHang.getLayout());
+            root.setCenter(capnhatKH.getLayout());
         });
+    }
+    
+    public void handleThoat2(BorderPane root) throws Exception {
+    	
+    	capnhatKH.start(stage_capnhat);
+    	
+    	capnhatKH.getButtonThoat().setOnMouseClicked(e->{
+    		root.setCenter(gdQuanLyKhachHang.getQuanLiKhachHang());
+    	});
     }
 }
