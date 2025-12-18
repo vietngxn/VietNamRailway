@@ -6,11 +6,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import fourcore.Entity.Tau;
@@ -51,7 +54,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 
-public class QuanLiThongKeChuyenTau extends Application {
+public class QuanLyThongKeDoanhThuTheoChuyenTau extends Application {
 	private BorderPane manHinhChinh;
 	private VBox menuList;
 	private VBox noiDungChinh;
@@ -152,12 +155,23 @@ public class QuanLiThongKeChuyenTau extends Application {
 		private HBox layout_desc;
 		private String loaiThongKe;
 		private ThongKeDAO thongkeDAO;
-		private Map<Tau, Integer> map;
+		private Map<Tau, Double> map;
+		
+		
+		public VBox getLayout()
+		{
+			return this.noiDungChinh;
+		}
+		
+		
+		
+		
+		
 	@Override
 	public void start(Stage primaryStage) {
-try {
+		try {
 			thongkeDAO = new ThongKeDAO();
-			map = thongkeDAO.getTauVaSoLanDi();
+			
             BorderPane root = new BorderPane();
             Scene scene = new Scene(root,1920,1000);
             primaryStage.setScene(scene);
@@ -641,7 +655,7 @@ try {
 		title_layout.setPadding(new Insets(30));
 		title_layout.setSpacing(20);
 		
-		lbl_title = new Label("Quản Lí Thống Kê theo chuyến tàu chạy nhiều nhất"); 
+		lbl_title = new Label("Quản Lí Thống Kê doanh thu theo chuyến tàu"); 
 		lbl_title.setStyle("-fx-font-family: 'Inter';-fx-font-weight:bold;-fx-font-size:30px;");
 		title_layout.getChildren().add(lbl_title);
 		
@@ -869,6 +883,8 @@ try {
 		
 		String style1 = "-fx-font-family:'Inter';-fx-text-fill:#00BACB;-fx-font-size: 15px;";
 		comboBox = createComboBox(items);
+		comboBox.setEditable(false);
+		comboBox.setDisable(true);
 		comboBox.setPromptText("Kiểu Thống Kê");
 		comboBox.setStyle(comboBox.getStyle()+";"+style1);
 		
@@ -878,7 +894,92 @@ try {
 		
 		date.setPrefSize(400, 40);
 		date.getStyleClass().add("date-picker-custom");
-		layout_combobox.getChildren().addAll(comboBox);
+		layout_combobox.getChildren().addAll(date,comboBox);
+		
+		comboBox.setOnAction(event  -> {
+				
+				LocalDate data1 = date.getValue();
+				int nam = data1.getYear(); 
+				try {
+					map = thongkeDAO.getDoanhThutheoChuyenTau(nam);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			for(Map.Entry<Tau, Double> x : map.entrySet())
+			{
+				doanhthu1 += x.getValue();
+			}
+		    if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
+		        table_desc.getChildren().clear();
+		        try {
+					create_barchart_chuyentau();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				// Kiểm tra layout_total đã tồn tại không
+				if (noiDungChinh.getChildren().contains(layout_total)) {
+				    noiDungChinh.getChildren().remove(layout_total);
+				}
+				create_layout_total();
+		    }
+		    else {
+		        table_desc.getChildren().clear();
+                create_piechart_nam();
+                if (noiDungChinh.getChildren().contains(layout_total)) {
+				    noiDungChinh.getChildren().remove(layout_total);
+				}
+				create_layout_total();
+            }
+		});
+		
+		date.setOnAction(e -> {
+			
+			LocalDate data1 = date.getValue();
+			int nam = data1.getYear(); 
+			try {
+				map = thongkeDAO.getDoanhThutheoChuyenTau(nam);
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			for(Map.Entry<Tau, Double> x : map.entrySet())
+			{
+				doanhthu1 += x.getValue();
+			}
+			
+		    if (date.getValue() != null) {
+		        comboBox.setDisable(false);
+		        
+		        table_desc.getChildren().clear();
+				
+				if (comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
+				    try {
+						create_barchart_chuyentau();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				    
+      
+				    if (noiDungChinh.getChildren().contains(layout_total)) {
+				        noiDungChinh.getChildren().remove(layout_total);
+				    }
+				    create_layout_total();
+				} else if (comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("PieChart"))  {
+				    create_piechart_nam();
+				    if (noiDungChinh.getChildren().contains(layout_total)) {
+				        noiDungChinh.getChildren().remove(layout_total);
+				    }
+				    create_layout_total();
+				}
+		    }
+		});
+		
+		
 		
 		title_layout.getChildren().add(layout_combobox);
 		
@@ -900,20 +1001,24 @@ try {
         return combobox;
     }
 	
-	public void create_table_desc()
+	double doanhthu1 = 0;
+	public void create_table_desc() throws SQLException
 	{
 		table_desc = new VBox();
 		table_desc.setPrefHeight(400);
 		
 		
-		
 		comboBox.setOnAction(event  -> { 
         	if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
-        		table_desc.getChildren().clear();
         		try {
+        			table_desc.getChildren().clear();
 					btn_xuatThongKe.setDisable(false);
 					create_barchart_chuyentau();
-					
+					if (noiDungChinh.getChildren().contains(layout_total)) {
+				        noiDungChinh.getChildren().remove(layout_total);
+				    }
+				 
+					create_layout_total();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -923,6 +1028,10 @@ try {
         	else if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("table")) {
         		table_desc.getChildren().clear();
         		create_table();
+        		if (noiDungChinh.getChildren().contains(layout_total)) {
+			        noiDungChinh.getChildren().remove(layout_total);
+			    }
+				create_layout_total();
         		btn_xuatThongKe.setDisable(false);
         		
         	}
@@ -992,6 +1101,10 @@ try {
 		barchart.setLegendVisible(false);
 		barchart.setAnimated(false);
 		
+
+		
+		
+		
 		XYChart.Series<String, Number> data = new XYChart.Series<String, Number>();
 		data.getData().add(new XYChart.Data<String, Number>("2017", 500));
 		data.getData().add(new XYChart.Data<String, Number>("2018", 600));
@@ -1027,17 +1140,20 @@ try {
 	    NumberAxis na = new NumberAxis();
 	    na.setLabel("Số Chuyến Đi");
 
-	    BarChart<String, Number> barchart = new BarChart<String, Number>(ca, na);
+	    BarChart<String, Number> barchart = new BarChart<>(ca, na);
 	    barchart.setTitle("Thống kê top 10 chuyến tàu chạy nhiều nhất");
 	    barchart.setLegendVisible(false);
+	    barchart.setPrefHeight(600);
 	    
-
+	   
+	    
 	    ArrayList<XYChart.Data<String, Number>> listdata = new ArrayList<>();
-
-	    for(Map.Entry<Tau, Integer> x : map.entrySet()) {
+	    doanhthu1 = 0;
+	    for(Map.Entry<Tau, Double> x : map.entrySet()) {
 	        Tau tau = x.getKey();
-	        int soLan = x.getValue();
-	        listdata.add(new XYChart.Data<>(tau.getTenTau(), soLan * 1.1));
+	        double doanhthu = x.getValue();
+	        doanhthu1 += x.getValue();
+	        listdata.add(new XYChart.Data<>(tau.getTenTau(), doanhthu));
 	    }
 
 	    for(int i = 0; i < listdata.size() - 1; i++) {
@@ -1049,12 +1165,12 @@ try {
 	            }
 	        }
 	    }
-
+	    
 	    double max = listdata.get(0).getYValue().doubleValue();
-	    na.setTickUnit(max / 5);
-	    na.setAutoRanging(false);
+	    na.setTickUnit(max/5);
+	    na.setAutoRanging(true);
 	    na.setLowerBound(0);
-	    na.setUpperBound(max * 1.1);
+	    na.setUpperBound(max +1);
 
 	    XYChart.Series<String, Number> list = new XYChart.Series<String, Number>();
 
@@ -1067,11 +1183,11 @@ try {
 	        for (XYChart.Data<String, Number> data : list.getData()) {
 	            Node node = data.getNode();
 	            if (node != null) {
-	                double solan = data.getYValue().doubleValue() / 1.1;  
-	                DecimalFormat df = new DecimalFormat("#,###");
-	                String tf = df.format(solan);
-
-	                Label label = new Label(tf + " lần");
+	            	double tien = (double) data.getYValue();
+	            	DecimalFormat df = new DecimalFormat("#,###");
+	            	String tf = df.format(tien);
+	            	
+	                Label label = new Label(tf + " đ");
 	                label.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 	                StackPane bar = (StackPane) node;
 	                bar.getChildren().add(label);
@@ -1080,10 +1196,12 @@ try {
 	            }
 	        }
 	    });
-	    
+
 	    table_desc.getChildren().clear();
 	    table_desc.getChildren().add(barchart);
 	}
+	
+	
 	
 	public void create_table()
 	{
@@ -1094,7 +1212,7 @@ try {
 		tableCol.setAlignment(Pos.CENTER);
 		tableCol.setMaxWidth(1330);
 		VBox.setMargin(tableCol, new Insets(30, 10, 10, 0));
-
+		
 		String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 24px; -fx-font-weight: bold;";
 
 		colmaChuyenTau = new Label("Mã Chuyến Tàu");
@@ -1135,10 +1253,10 @@ try {
 		table_desc_layout = new VBox();
 		table_desc_layout.setSpacing(20);
 		
-		for(Map.Entry<Tau, Integer> x : map.entrySet())
+		for(Map.Entry<Tau, Double> x : map.entrySet())
 		{
 			Tau tau = x.getKey();
-			int solan = x .getValue();
+			double solan = x .getValue();
 			create_layout_dong(tau.getMaTau(), tau.getTenTau(), solan);
 		}
 		
@@ -1148,7 +1266,7 @@ try {
 		
 	}
 	
-	public void create_layout_dong(String maTau,String tenTau,int soLanSuuDung)
+	public void create_layout_dong(String maTau,String tenTau,double doanhthu)
 	{
 		
 		GridPane data = new GridPane();
@@ -1160,8 +1278,12 @@ try {
 		data.setPrefHeight(70);
 		data.setPadding(new Insets(0, 0, 0, 10));
 		
+		DecimalFormat df = new DecimalFormat("#,###");	
+		String ft = df.format(doanhthu);
+		
+		
 		String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
-		Label[] labels = {lbl_maTau = new Label(maTau),lbl_tenTau =  new Label(tenTau),lbl_soLanSuDung =new Label(Integer.toString(soLanSuuDung))};
+		Label[] labels = {lbl_maTau = new Label(maTau),lbl_tenTau =  new Label(tenTau),lbl_soLanSuDung =new Label(ft)};
 		double[] widths = {200, 200,400};
 		lbl_maTau.setTranslateX(-560);
 		lbl_tenTau.setTranslateX(-250);
@@ -1225,18 +1347,24 @@ try {
 		lbl_doanhThu.setTranslateY(-10);
 		lbl_doanhThu.setStyle(style+"-fx-font-family: 'Work Sans';-fx-font-size : 20px;");
 		
-		lbl_tongTien = new Label("15.000.000đ");
+		
+		DecimalFormat df = new DecimalFormat("#,###");	
+		String ft = df.format(doanhthu1);
+		
+		lbl_tongTien = new Label(ft+" đ");
 		lbl_tongTien.setTranslateX(15);
 		lbl_tongTien.setTranslateY(-5);
 		
 		
-		
+
 		lbl_tongTien.setStyle(style + "-fx-font-family : 'Inter';-fx-font-weight: bold;-fx-font-size : 25px;");
 		
 		
 		
 		layout_total.getChildren().addAll(lbl_doanhThu,lbl_tongTien);
-		noiDungChinh.getChildren().add(layout_total);
+		
+		
+		table_desc.getChildren().add(layout_total);
 	}
 	
 	public void create_btnlayout()
@@ -1282,7 +1410,7 @@ try {
 		        String filePath = folderPath + "/" + fileName;
 		        
 		        // Export trực tiếp
-		        ExcelExporter.exportThongKeTau(map, filePath);
+		        ExcelExporter.exportThongKeDoanhThutheoTau(map, filePath);
 		        
 		        // Mở file với WPS
                 File pdfFile = new File(filePath);

@@ -67,7 +67,7 @@ public class QuanLyCTKM extends Application {
 	private TextField txt_timkiem;
 	private HBox layout_lbl_timkiem;
 	private VBox layout_txt_timkiem;
-	private VBox layout_timkiem;
+	private VBox layout_timkiem; 
 	private VBox table_layout;
 	private HBox table_title;
 	private Label lbl_maKhachHang;
@@ -296,7 +296,12 @@ public class QuanLyCTKM extends Application {
             xemLichSuVeBox.setOnMouseClicked(event -> {
                 GiaoDienLichSuMuaBanDoiVe lichSuMuaBanDoiVe = new GiaoDienLichSuMuaBanDoiVe();
                 Stage lichSuMuaBanDoiVeStage = new Stage();
-                lichSuMuaBanDoiVe.start(lichSuMuaBanDoiVeStage);
+                try {
+					lichSuMuaBanDoiVe.start(lichSuMuaBanDoiVeStage);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                 VBox giaoDienLichSuMuaBanDoiVe = lichSuMuaBanDoiVe.getLichSuMuaVe();
                 root.setCenter(giaoDienLichSuMuaBanDoiVe);
             });
@@ -922,6 +927,7 @@ public class QuanLyCTKM extends Application {
 		}
 	}
     public VBox getQuanLiCTKM() {
+    	hienThi();
      return this.noiDungChinh;
     }
 	
@@ -991,36 +997,44 @@ public class QuanLyCTKM extends Application {
 		
 		btn_timkiem.setOnMouseClicked(e-> {
 			String ma = txt_timkiem.getText();
+			String regex = "^KM\\d+$";
 			if (txt_timkiem.getText().isEmpty()) {
-		        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		        alert.setContentText("Vui lòng nhập CCCD để tìm kiếm");
+		        Alert alert = new Alert(Alert.AlertType.ERROR);
+		        alert.setContentText("Vui lòng nhập mã CTKM để tìm kiếm");
 		        alert.setHeaderText(null);
 		        alert.showAndWait();
-		        
+		        return;
 		    }
-			else {
+			
+			if(!ma.matches(regex))
+			{
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+		        alert.setContentText("Nhập mã sai định dạng!Vui lòng nhập theo định dạng KMXXXX");
+		        alert.setHeaderText(null);
+		        alert.showAndWait();
+		        return;
+			}
+			
 			try {
 				KhuyenMai km = ctkmDAO.getKhuyenMaiBangMa(ma);
-				if(km != null && km.getRs() == 0)
-				{
-					
-					table_desc.getChildren().clear();
-					loadCTKMData(km.getMaKhuyenMai(),km.getTenChuongTrinh(), km.getNgayBatDau().toLocalDate(), km.getNgayKetThuc().toLocalDate(), km.getDieuKienApDung(), km.getTrangThaiKhuyenMai());
-					hangchon = null;
-				}
-				else
+				if(km == null)
 				{
 					Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			        alert.setContentText("Không tìm thấy Chương Trình Khuyến mãi");
 			        alert.setHeaderText(null);
 			        alert.showAndWait();
-			        
+			        return;
+				}
+				else if(km != null && km.getRs() == 0)
+				{
+					table_desc.getChildren().clear();
+					loadCTKMData(km.getMaKhuyenMai(),km.getTenChuongTrinh(), km.getNgayBatDau().toLocalDate(), km.getNgayKetThuc().toLocalDate(), km.getDieuKienApDung(), km.getTrangThaiKhuyenMai());
+					hangchon = null;
 				}
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
-			}			
+			}	
 			
 		});
 		
@@ -1674,17 +1688,32 @@ public class QuanLyCTKM extends Application {
 	    data.setPrefHeight(70);
 	    data.setPadding(new Insets(0, 0, 0, 10));
 	    
+	    
+	    String trangthai1 = "";
+	    LocalDate hientai = LocalDate.now();
+	    if(!hientai.isBefore(ngaybatdau) && !hientai.isAfter(ngayketthuc))
+	    {
+	    	trangthai1 = "Kích Hoạt";
+	    }
+	    else
+	    	trangthai1 = "Kết Thúc";
+	    
+	    
+	    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	    String ngaybd = ngaybatdau.format(dtf);
+	    String ngaykt = ngayketthuc.format(dtf);
+	    
 	    String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
 	    
 	    Label lblMaCT = new Label(maCT);
 	    Label lblTenCT = new Label(tenCT);
-	    Label lblNgayBD = new Label(ngaybatdau.toString());
-	    Label lblNgayKT = new Label(ngayketthuc.toString());
+	    Label lblNgayBD = new Label(ngaybd);
+	    Label lblNgayKT = new Label(ngaykt);
 	    Label lbldieuKienApDung = new Label(doituong);
 	    
-	    Label lblTrangThai = new Label(trangthai);
+	    Label lblTrangThai = new Label(trangthai1);
 	    String colorStyle = "";
-	    if(trangthai.equalsIgnoreCase("kích hoạt"))
+	    if(trangthai1.equalsIgnoreCase("kích hoạt"))
 	    {	    	
 	     colorStyle = "-fx-text-fill: green;";
 	    }
@@ -1838,9 +1867,40 @@ public class QuanLyCTKM extends Application {
 	    });
 	    
 	    table_desc.getChildren().add(data);
-	} 
+	}  
 	
-	
+	public void hienThi() {
+	    if (table_desc != null) {
+	        table_desc.getChildren().clear();
+	    }
+	    hangchon = null;
+	    btn_xoaCTKM.setDisable(true);
+	    btn_capnhat.setDisable(true);
+	    
+	    try {
+	        listKhuyenMai = ctkmDAO.getListKhuyenMai();
+	        
+	        // ✅ Load dữ liệu vào table
+	        for (KhuyenMai khuyenMai : listKhuyenMai) {
+	            if (khuyenMai.getRs() == 0) {
+	                loadCTKMData(
+	                    khuyenMai.getMaKhuyenMai(),
+	                    khuyenMai.getTenChuongTrinh(),
+	                    khuyenMai.getNgayBatDau().toLocalDate(),
+	                    khuyenMai.getNgayKetThuc().toLocalDate(),
+	                    khuyenMai.getDieuKienApDung(),
+	                    khuyenMai.getTrangThaiKhuyenMai()
+	                );
+	            }
+	        }
+	        
+	        System.out.println("✓ Refresh table thành công!");
+	        
+	    } catch (SQLException e) {
+	        System.err.println("❌ Lỗi khi refresh table: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	}
 	
 	public static void main(String[] args) {
 		launch(args);

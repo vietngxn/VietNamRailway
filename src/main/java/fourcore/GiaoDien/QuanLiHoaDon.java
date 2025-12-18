@@ -1,8 +1,10 @@
 package fourcore.GiaoDien;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -280,7 +282,12 @@ public class QuanLiHoaDon extends Application {
             xemLichSuVeBox.setOnMouseClicked(event -> {
                 GiaoDienLichSuMuaBanDoiVe lichSuMuaBanDoiVe = new GiaoDienLichSuMuaBanDoiVe();
                 Stage lichSuMuaBanDoiVeStage = new Stage();
-                lichSuMuaBanDoiVe.start(lichSuMuaBanDoiVeStage);
+                try {
+					lichSuMuaBanDoiVe.start(lichSuMuaBanDoiVeStage);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                 VBox giaoDienLichSuMuaBanDoiVe = lichSuMuaBanDoiVe.getLichSuMuaVe();
                 root.setCenter(giaoDienLichSuMuaBanDoiVe);
             });
@@ -956,15 +963,22 @@ public class QuanLiHoaDon extends Application {
 		btn_timkiem.setStyle("-fx-background-color: #00BACB;-fx-text-fill: white;-fx-font-family: 'Inter';-fx-font-weight:bold;-fx-font-size:14px;-fx-cursor: hand;-fx-border-radius: 30px;-fx-background-radius:30px;");
 		
 		btn_timkiem.setOnAction(e -> {
+			String regex = "^HD\\d+$";
 			String mahd = txt_timkiem.getText();
-			if(mahd.isEmpty()) {
+			
+			if(mahd.equalsIgnoreCase("")) {
 				Alert alert =  new Alert(Alert.AlertType.INFORMATION);
-				alert.setContentText("Vui Lòng nhập cccd của nhân viên");
+				alert.setContentText("Vui Lòng nhập mã hóa đơn");
+				alert.setHeaderText(null);
+				alert.showAndWait();
+			}
+			else if(!mahd.matches(regex)) {
+				Alert alert =  new Alert(Alert.AlertType.INFORMATION);
+				alert.setContentText("Mã hóa đơn sai định dạng!Vui lòng nhập theo định dạng: HDXX");
 				alert.setHeaderText(null);
 				alert.showAndWait();
 			} else {
 				try {
-					
 					HoaDon hd = hddao.getHoaDonTheoMa(mahd);
 					if(hd  != null)
 					{
@@ -1172,7 +1186,10 @@ public class QuanLiHoaDon extends Application {
 	    Label lblNgayLap = new Label(ngaylap1);
 	    
 	    Label lblsoDienThoai = new Label(loaiHD);
-	    Label lblTongTien = new Label("" + tongtien);
+	    
+	    DecimalFormat df = new DecimalFormat("#,###");
+	    String tf = df.format(tongtien);
+	    Label lblTongTien = new Label(tf+" đ");
 	    
 	    lblMaHoaDon.setStyle(baseStyle);
 	    lblNguoiMua.setStyle(baseStyle);

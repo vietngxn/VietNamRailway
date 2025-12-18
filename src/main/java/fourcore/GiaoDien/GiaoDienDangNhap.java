@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 
 import fourcore.Entity.NhanVien;
+import fourcore.Entity.TaiKhoan;
 import fourcore.dao.TaiKhoanDAO;
 import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
@@ -303,8 +304,10 @@ public class GiaoDienDangNhap extends Application {
 			}
 			else {
 			try {
-				String mkdao = tkdao.getMatKhau(ten);
-				if(mkdao.equals(matKhau))
+				
+				TaiKhoan tk = tkdao.getTaiKhoanTheoMaNhanVien(ten);
+				
+				if(tk.getMatKhau().equals(matKhau) && tk.getIsRemove() == false )
 				{
 					
 					NhanVien nv = tkdao.getNhanVien(ten);

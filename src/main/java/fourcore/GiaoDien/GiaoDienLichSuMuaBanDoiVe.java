@@ -1,18 +1,16 @@
 package fourcore.GiaoDien;
 
+import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Locale;
-import java.util.Stack;
+import java.util.Map;
 import java.util.regex.Pattern;
-
-import com.itextpdf.kernel.colors.WebColors;
 
 import fourcore.Entity.ChuyenTau;
 import fourcore.Entity.LichSuTuongTacVe;
@@ -20,45 +18,33 @@ import fourcore.Entity.Tau;
 import fourcore.Entity.Ve;
 import fourcore.dao.ChuyenTauDAO;
 import fourcore.dao.LichSuTuongTacVe_Dao;
+import fourcore.dao.NhanVienDAO;
 import fourcore.dao.Tau_DAO;
 import fourcore.dao.VeDAO;
-import javafx.animation.FadeTransition;
+import fourcore.util.XuatExcelThongKeLichSuTuongTacVe;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 public class GiaoDienLichSuMuaBanDoiVe extends Application {
 
@@ -82,9 +68,11 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 	NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
 	private LichSuTuongTacVe_Dao dao;
 	private ArrayList<LichSuTuongTacVe> list;
+	private Map<LichSuTuongTacVe, Double> listXuatThongKe = new HashMap<LichSuTuongTacVe, Double>();
 	private Tau_DAO tDao;
 	private ChuyenTauDAO ctDAO;
 	private ChuyenTau ct;
+	private NhanVienDAO nvDao;
 	private Tau t;
 	private VeDAO veDao;
 	private Button xemCTBtn;
@@ -93,14 +81,11 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 	private Label lblTimKiem;
 	private VBox layoutTxtTimKiem;
 	private TextField txtTimKiem;
-	private StackPane combolayout3;
-	private DatePicker date;
 	private HBox comboboxPnl;
 	private LocalDate ngaydi;
 	private DatePicker dateTu;
 	private DatePicker dateDen;
 	private LocalDate ngayDen;
-	private StackPane xuatTKBtnPnl;
 	private StackPane pnlXuatTKBtn;
 	private Button btnXuatTK;
 
@@ -337,25 +322,6 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 		return box;
 	}
 
-//	public void create_combobox_layout2()
-//	{
-//		//combo 3
-//		combolayout3 = new VBox();
-//		combolayout3.setPrefSize(400,50);
-//		date = new DatePicker();
-//		date.setPrefSize(500, 45);
-//		date.setId("date");
-//		date.setPromptText("Ngày đi");
-//		date.setOnAction(e -> {
-//			LocalDate ngaydi = date.getValue();
-//			date.setValue(ngaydi);
-//		});
-//		InputStream is = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Bold.ttf");
-//	    Font font_combobox = Font.loadFont(is, 15);
-//	    date.getEditor().setFont(font_combobox);
-//		combolayout3.getChildren().add(date);
-//	}
-//	
 	public GridPane taoSubCTDoiVe(String ma, String loai, LocalDate ngayMua) throws SQLException {
 		veDao = new VeDAO();
 		ctDAO = new ChuyenTauDAO();
@@ -430,6 +396,9 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 	public void loadDuLieuChung(LichSuTuongTacVe x) throws SQLException {
 		ct = ctDAO.getChuyenTauBangMa(x.getVeTau().getChuyenTau().getMaChuyenTau());
 		t = tDao.getTauByMaTau(ct.getTau().getMaTau());
+		nvDao = new NhanVienDAO();
+		String maNV = nvDao.getMaNhanVienBangMaVeVaLoaiTuongTac(x.getVeTau().getMaVeTau(),
+				x.getLoaiTuongTacVe().getMaLoaiTuongTac());
 		pnlDataDoiVe.getChildren().add(taoDataChoTableLichSuMuaBanDoiVe(x.getVeTau().getMaVeTau(),
 				t.getLoaiTau().getTenLoaiTau(), x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
 				x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
@@ -441,7 +410,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 				veDao.layGiaTienGheTheoMaVe(x.getVeTau().getMaVeTau()),
 				nf.format(x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
 				nf.format(x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%", x.getGiaTriChenhLech(),
-				x.tinhTongTien(x.getLoaiTuongTacVe().getMaLoaiTuongTac()), x.getVeTau().getTrangThaiDoiVe(), "NV01"));
+				x.tinhTongTien(x.getLoaiTuongTacVe().getMaLoaiTuongTac()), x.getVeTau().getTrangThaiDoiVe(), maNV));
 	}
 
 	public StackPane thongBaoKhongTimThayVe() {
@@ -461,9 +430,13 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 		tDao = new Tau_DAO();
 		veDao = new VeDAO();
 		VBox box = new VBox(10);
+		nvDao = new NhanVienDAO();
+
 		for (LichSuTuongTacVe x : list) {
 			ct = ctDAO.getChuyenTauBangMa(x.getVeTau().getChuyenTau().getMaChuyenTau());
 			t = tDao.getTauByMaTau(ct.getTau().getMaTau());
+			String maNV = nvDao.getMaNhanVienBangMaVeVaLoaiTuongTac(x.getVeTau().getMaVeTau(),
+					x.getLoaiTuongTacVe().getMaLoaiTuongTac());
 			box.getChildren().add(taoDataChoTableLichSuMuaBanDoiVe(x.getVeTau().getMaVeTau(),
 					t.getLoaiTau().getTenLoaiTau(), x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
 					x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
@@ -475,14 +448,13 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 					veDao.layGiaTienGheTheoMaVe(x.getVeTau().getMaVeTau()),
 					nf.format(x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
 					nf.format(x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%", x.getGiaTriChenhLech(),
-					x.tinhTongTien(x.getLoaiTuongTacVe().getMaLoaiTuongTac()), x.getVeTau().getTrangThaiDoiVe(),
-					"NV01"));
+					x.tinhTongTien(x.getLoaiTuongTacVe().getMaLoaiTuongTac()), x.getVeTau().getTrangThaiDoiVe(), maNV));
 		}
 		return box;
 	}
 
 	@Override
-	public void start(Stage primaryStage) {
+	public void start(Stage primaryStage) throws IOException {
 		try {
 			// Noi dung chinh lam phan chinh o day. T lam sidebar truoc r update sau
 			noiDungChinh = new VBox();
@@ -666,6 +638,27 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 				if (!pnlDataDoiVe.getChildren().isEmpty() && dateTu.getValue() != null && dateTu.getValue() != null
 						&& (cnt1 == 1 || cnt2 == 1 || cnt3 == 1)) {
 
+					String loai = null;
+					if (cnt1 == 1) {
+						loai = "bán vé";
+					} else if (cnt2 == 1) {
+						loai = "đổi vé";
+					} else if (cnt3 == 1) {
+						loai = "hoàn trả vé";
+					}
+
+					for (Map.Entry<LichSuTuongTacVe, Double> entry : listXuatThongKe.entrySet()) {
+						System.out.println(entry.getKey() + " " + entry.getValue());
+					}
+
+					XuatExcelThongKeLichSuTuongTacVe xuatExcel = new XuatExcelThongKeLichSuTuongTacVe();
+					try {
+						xuatExcel.xuatThongKeTuongTacVe(listXuatThongKe, loai, dateTu.getValue(), dateDen.getValue());
+					} catch (SQLException | IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
 				} else {
 					Alert alert = new Alert(Alert.AlertType.ERROR);
 					alert.setTitle("Lỗi xuất thống kê");
@@ -705,6 +698,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 			btnLichSuMuaVe.setOnMouseClicked(event -> {
 				String maVeGetText = txtTimKiem.getText();
 				System.out.println(maVeGetText);
+
 				if (cnt1 == 0) {
 					btnLichSuMuaVe.setStyle(normalStyle);
 					btnLichSuHoanVe.setStyle(blankStyle);
@@ -712,7 +706,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 					cnt1 = 1;
 					cnt2 = 0;
 					cnt3 = 0;
-
+					listXuatThongKe.clear();
 					if (maVeGetText != null && !maVeGetText.trim().isEmpty()) {
 						pnlDataDoiVe.getChildren().clear();
 						try {
@@ -725,7 +719,8 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 											|| x.getNgayTuongTac().toLocalDate().isEqual(dateTu.getValue())
 											|| x.getNgayTuongTac().toLocalDate().isEqual(dateDen.getValue())) {
 										loadDuLieuChung(x);
-
+										listXuatThongKe.put(x,
+												x.tinhTongTien(x.getLoaiTuongTacVe().getMaLoaiTuongTac()));
 									}
 								}
 								if ((dateTu.getValue() == null || dateDen.getValue() == null)
@@ -747,7 +742,6 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 						pnlDataDoiVe.getChildren().clear();
 						try {
 							for (LichSuTuongTacVe x : list) {
-
 								if (dateTu.getValue() != null && dateDen.getValue() != null
 										&& x.getLoaiTuongTacVe().getMaLoaiTuongTac().equalsIgnoreCase("LTT01")) {
 									if ((x.getNgayTuongTac().toLocalDate().isAfter(dateTu.getValue())
@@ -755,6 +749,8 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 											|| x.getNgayTuongTac().toLocalDate().isEqual(dateTu.getValue())
 											|| x.getNgayTuongTac().toLocalDate().isEqual(dateDen.getValue())) {
 										loadDuLieuChung(x);
+										listXuatThongKe.put(x,
+												x.tinhTongTien(x.getLoaiTuongTacVe().getMaLoaiTuongTac()));
 									}
 								}
 
@@ -804,7 +800,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 					cnt1 = 0;
 					cnt2 = 1;
 					cnt3 = 0;
-
+					listXuatThongKe.clear();
 					if (maVeGetText != null && !maVeGetText.trim().isEmpty()) {
 						pnlDataDoiVe.getChildren().clear();
 						try {
@@ -817,6 +813,8 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 											|| x.getNgayTuongTac().toLocalDate().isEqual(dateTu.getValue())
 											|| x.getNgayTuongTac().toLocalDate().isEqual(dateDen.getValue())) {
 										loadDuLieuChung(x);
+										listXuatThongKe.put(x,
+												x.tinhTongTien(x.getLoaiTuongTacVe().getMaLoaiTuongTac()));
 									}
 								}
 								if ((dateTu.getValue() == null || dateDen.getValue() == null)
@@ -836,7 +834,6 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 
 					} else {
 						pnlDataDoiVe.getChildren().clear();
-
 						try {
 							for (LichSuTuongTacVe x : list) {
 								if (dateTu.getValue() != null && dateDen.getValue() != null
@@ -846,6 +843,8 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 											|| x.getNgayTuongTac().toLocalDate().isEqual(dateTu.getValue())
 											|| x.getNgayTuongTac().toLocalDate().isEqual(dateDen.getValue())) {
 										loadDuLieuChung(x);
+										listXuatThongKe.put(x,
+												x.tinhTongTien(x.getLoaiTuongTacVe().getMaLoaiTuongTac()));
 									}
 								}
 
@@ -894,11 +893,11 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 					cnt1 = 0;
 					cnt2 = 0;
 					cnt3 = 1;
-
-					pnlDataDoiVe.getChildren().clear();
-
+					listXuatThongKe.clear();
 					// Nếu người dùng nhập mã vé để tìm kiếm
 					if (maVeGetText != null && !maVeGetText.trim().isEmpty()) {
+						pnlDataDoiVe.getChildren().clear();
+
 						try {
 							for (LichSuTuongTacVe x : list) {
 								if (dateTu.getValue() != null && dateDen.getValue() != null
@@ -909,6 +908,8 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 											|| x.getNgayTuongTac().toLocalDate().isEqual(dateTu.getValue())
 											|| x.getNgayTuongTac().toLocalDate().isEqual(dateDen.getValue())) {
 										loadDuLieuChung(x);
+										listXuatThongKe.put(x,
+												x.tinhTongTien(x.getLoaiTuongTacVe().getMaLoaiTuongTac()));
 									}
 								}
 								if ((dateTu.getValue() == null || dateDen.getValue() == null)
@@ -929,7 +930,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 					// Nếu không nhập mã vé — hiển thị tất cả vé hoàn trả
 					else {
 						try {
-
+							pnlDataDoiVe.getChildren().clear();
 							for (LichSuTuongTacVe x : list) {
 								if (dateTu.getValue() != null && dateDen.getValue() != null
 										&& x.getLoaiTuongTacVe().getMaLoaiTuongTac().equalsIgnoreCase("LTT03")) {
@@ -938,6 +939,8 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 											|| x.getNgayTuongTac().toLocalDate().isEqual(dateTu.getValue())
 											|| x.getNgayTuongTac().toLocalDate().isEqual(dateDen.getValue())) {
 										loadDuLieuChung(x);
+										listXuatThongKe.put(x,
+												x.tinhTongTien(x.getLoaiTuongTacVe().getMaLoaiTuongTac()));
 									}
 								}
 								if ((dateTu.getValue() == null || dateDen.getValue() == null)
