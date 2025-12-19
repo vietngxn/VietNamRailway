@@ -18,6 +18,7 @@ public class VeDAO {
 
 	DatabaseConnector database = new DatabaseConnector();
 	Statement st = database.connect();;
+    ChuyenTauDAO chuyenTauDAO = new ChuyenTauDAO(); ;
 	ArrayList<Ve> listVe = getListVe();
 
 	public void goiDAO() {
@@ -26,7 +27,8 @@ public class VeDAO {
 
 	public VeDAO() throws SQLException {
 		goiDAO();
-		getListVe();
+
+        getListVe();
 	}
 
 	public VeDAO(int x) throws SQLException {
@@ -52,7 +54,19 @@ public class VeDAO {
 		}
 		return null;
 	}
+    public boolean checkVeDoi(String maVe) throws SQLException {
+        String maVeDuocDoi="";
+        String query  = "Select maVeDuocDoi from Ve where maVeTau = '" + maVe + "'";
 
+        ResultSet rs = st.executeQuery(query);
+        if (rs.next()) {
+            maVeDuocDoi =  rs.getString("maVeDuocDoi");
+        }
+        if(maVeDuocDoi!=null){
+            return true;
+        }
+        return false;
+    }
 	private ArrayList<Ve> listVe1;
 
 	public ArrayList<Ve> getListVe() throws SQLException {
@@ -95,7 +109,7 @@ public class VeDAO {
 			String maDoiTuongGiamGia = rs.getString("maDoiTuongGiamGia");
 
 			// Tạo object ChuyenTau
-			ChuyenTau chuyenTau = new ChuyenTau(maChuyenTau);
+			ChuyenTau chuyenTau = chuyenTauDAO.getChuyenTauBangMa(maChuyenTau);
 
 			KhachHang kh = new KhachHang(maKhachHang, rs.getString("hoTen") != null ? rs.getString("hoTen") : "",
 					rs.getString("sdt") != null ? rs.getString("sdt") : "",

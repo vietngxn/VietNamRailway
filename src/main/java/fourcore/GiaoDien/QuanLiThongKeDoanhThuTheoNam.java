@@ -1072,7 +1072,7 @@ try {
 		     {
 		    	 max = doanhThu;
 		     }
-		    data.getData().add(new XYChart.Data<>(String.valueOf(thang),doanhThu*1.1));
+		    data.getData().add(new XYChart.Data<>(String.valueOf(thang),doanhThu*1.5));
 		}
 		
 		    
@@ -1083,7 +1083,7 @@ try {
 		    for (XYChart.Data<String, Number> item : data.getData()) { 
 		        Node node = item.getNode();
 		        if (node != null) {
-		            double tien = (double) item.getYValue() / 1.1;
+		            double tien = (double) item.getYValue() / 1.5;
 		            DecimalFormat df = new DecimalFormat("#,###");
 		            String tf = df.format(tien);
 

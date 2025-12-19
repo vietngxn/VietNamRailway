@@ -102,9 +102,9 @@ public class ChonVe extends Application {
     Button btn_trolai = new Button("Trở lại");
     Button btn_tieptuc = new Button("Tiếp Tục");
     LocalDateTime ngayGioDen = null;
-
-    public ChonVe() throws SQLException {
-
+    String title;
+    public ChonVe(String title) throws SQLException {
+        this.title = title;
     }
     public ChonVe(BanVe banVe) throws SQLException {
         this.banVe = banVe;
@@ -582,7 +582,7 @@ public class ChonVe extends Application {
             //Label tong quan
             HBox titleBox = new HBox();
 
-            Label tongQuanLabel = new Label("Bán vé");
+            Label tongQuanLabel = new Label(title);
             InputStream interFont = getClass().getResourceAsStream("/fonts/Inter/static/Inter_24pt-Bold.ttf");
             Font fontTongQuan = Font.loadFont(interFont, 40);
             tongQuanLabel.setFont(fontTongQuan);
@@ -1090,6 +1090,13 @@ public class ChonVe extends Application {
                     // Gán sự kiện click
                     int index = i;
                     toaImg.setOnMouseClicked(toaEvent -> {
+                        try {
+                            gheDangChonList.clear();
+                            ObjectOutputStream ois2 = new ObjectOutputStream(new FileOutputStream("ds_ghe_dang_chon.dat"));
+                            ois2.writeObject(null);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         // Đặt lại hình cho tất cả toa theo trạng thái thực tế
                         for (int j = 0; j < toaImageViews.size(); j++) {
                             ImageView iv = toaImageViews.get(j);
@@ -1352,7 +1359,7 @@ public class ChonVe extends Application {
 
                     gheTrongImg.setUserData(gtc);
 
-                    if(!gtc.getGheNgoi().isLuuDong()){
+                    if(!gtc.getGheNgoi().isLuuDong() && !gtc.getTrangThaiGhe().equals("Đã bán")){
                         Popup popup = new Popup();
                         Label popupLabel = new Label();
                         popupLabel.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-padding: 5; -fx-font-size: 13;");
@@ -1445,7 +1452,7 @@ public class ChonVe extends Application {
                     gheTrongImg.setUserData(gtc);
 
 
-                    if(gtc.getGheNgoi().isLuuDong()){
+                    if(gtc.getGheNgoi().isLuuDong() && !gtc.getTrangThaiGhe().equals("Đã bán")){
                         Popup popup = new Popup();
                         Label popupLabel = new Label();
                         popupLabel.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-padding: 5; -fx-font-size: 13;");

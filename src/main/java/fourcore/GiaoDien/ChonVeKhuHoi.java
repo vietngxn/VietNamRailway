@@ -1351,7 +1351,7 @@ public class ChonVeKhuHoi extends Application {
 
                     gheTrongImg.setUserData(gtc);
 
-                    if(!gtc.getGheNgoi().isLuuDong()){
+                    if(!gtc.getGheNgoi().isLuuDong() && !gtc.getTrangThaiGhe().equals("Đã bán")){
                         Popup popup = new Popup();
                         Label popupLabel = new Label();
                         popupLabel.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-padding: 5; -fx-font-size: 13;");
@@ -1444,7 +1444,7 @@ public class ChonVeKhuHoi extends Application {
                     gheTrongImg.setUserData(gtc);
 
 
-                    if(gtc.getGheNgoi().isLuuDong()){
+                    if(gtc.getGheNgoi().isLuuDong() && !gtc.getTrangThaiGhe().equals("Đã bán")){
                         Popup popup = new Popup();
                         Label popupLabel = new Label();
                         popupLabel.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-padding: 5; -fx-font-size: 13;");

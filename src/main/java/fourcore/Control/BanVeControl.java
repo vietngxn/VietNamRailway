@@ -54,7 +54,7 @@ public class BanVeControl {
         gdGiove = new GioVe();
         }
         public void initChonVe() throws SQLException {
-            gdChonve = new ChonVe();
+            gdChonve = new ChonVe("Bán vé");
 
         }
     public void timKiemChuyenTauHandle(BorderPane root) throws SQLException {

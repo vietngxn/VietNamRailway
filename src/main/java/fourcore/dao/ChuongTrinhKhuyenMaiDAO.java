@@ -21,7 +21,7 @@ public class ChuongTrinhKhuyenMaiDAO {
 	}
     public ArrayList<KhuyenMai> getListKhuyenMaiCoXoa() throws SQLException {
 
-        String query = "select * from KhuyenMai where isRemove = 0";
+        String query = "select * from KhuyenMai where isRemove = 0 and trangThaiKhuyenMai = N'Kích hoạt'";
         ArrayList<KhuyenMai> listKhuyenMai = new ArrayList<>();
         ResultSet rs = myStmt.executeQuery(query);
         while (rs.next()) {

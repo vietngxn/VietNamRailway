@@ -76,31 +76,6 @@ public class BanVeDAO {
         }
 
     }
-    public void themKhachHang() throws SQLException {
-
-        for (KhachHang khachHang : listKhachHang) {
-            try {
-                // Lấy số lượng khách hàng hiện tại từ database
-                int sl = khachHangDAO.getListKhachHang().size();
-                sl += 1; // Tăng lên 1 cho khách hàng mới
-
-                String makh = "";
-                if(sl >= 1 && sl <= 9) {
-                    makh = "KH00" + sl;
-                }
-                else if(sl >= 10 && sl <= 99) {
-                    makh = "KH0" + sl;
-                }
-                else {
-                    makh = "KH" + sl;
-                }
-
-
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-        }
-    }
     public double getGiaGheTrenChuyenTauNew(GheTrenChuyenTau gheTrenChuyenTau) throws SQLException {
         double giaTienGhe=0;
         String sql= "Select giaTienGhe from GheTrenChuyenTau where maGheTrenChuyenTau='"+gheTrenChuyenTau.getMaGheTrenChuyenTau()+"' and maChuyenTau='"+gheTrenChuyenTau.getChuyenTau().getMaChuyenTau()+"'";
@@ -118,7 +93,7 @@ public class BanVeDAO {
             soLuong = rs.getInt(1);
         }
         rs.close();
-        String maVe = String.format("V%05d", soLuong+1);
+        String maVe = String.format("VE%02d", soLuong+1);
         return maVe;
     }
     public String getMaKH() throws SQLException {
@@ -129,7 +104,7 @@ public class BanVeDAO {
             soLuong = rs.getInt(1);
         }
         rs.close();
-        String maKH = String.format("KH%04d", soLuong+1);
+        String maKH = String.format("KH%02d", soLuong+1);
         return maKH;
     }
     public String getMaHoaDon() throws SQLException {
@@ -140,7 +115,7 @@ public class BanVeDAO {
             soLuong = rs.getInt(1);
         }
         rs.close();
-        String ma = String.format("HD%04d", soLuong+1);
+        String ma = String.format("HD%02d", soLuong+1);
         return ma;
     }
 
@@ -236,7 +211,7 @@ return hoaDon;
             soLuong = rs.getInt(1);
         }
         rs.close();
-        String ma = String.format("CTHD%04d", soLuong+1);
+        String ma = String.format("CTHD%02d", soLuong+1);
         return ma;
     }
 //    HoaDon hoaDon, Ve ve, String moTa, double donGia, double thueVAT, double thanhTien, String LoaiHoaDonChoVe
@@ -276,7 +251,7 @@ return hoaDon;
             soLuong = rs.getInt(1);
         }
         rs.close();
-        String ma = String.format("TT%03d", soLuong+1);
+        String ma = String.format("LSTT%02d", soLuong+1);
         return ma;
     }
     public void themLichSuTuongTacVe(Ve veTau,KhuyenMai khuyenMai, GheTrenChuyenTau gheTrenChuyenTau) throws SQLException {
