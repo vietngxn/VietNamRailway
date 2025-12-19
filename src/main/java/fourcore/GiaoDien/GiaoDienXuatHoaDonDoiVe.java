@@ -980,7 +980,9 @@ public class GiaoDienXuatHoaDonDoiVe extends Application {
             ArrayList<ChiTietHoaDon>  listChiTietHoaDon = new ArrayList<>();
             for(int i =0 ; i< doiVeDAO.listGheTrenChuyenTau.size();i++){
                 listChiTietHoaDon.add(doiVeDAO.themCTHoaDon(hoaDon2,listVe.get(i),doiVeDAO.listGheTrenChuyenTau.get(i),doiVeDAO.ctkmSelected)) ;
-                doiVeDAO.themLichSuTuongTacVe(listVe.get(i),ctkmSelected, tongTienDoiVe);
+                doiVeDAO.themLichSuTuongTacVe(listVe.get(i),ctkmSelected, tongTienDoiVe, "LTT01");
+                doiVeDAO.themLichSuTuongTacVe(vechon,vechon.getKhuyenMai(), tongTienDoiVe, "LTT02");
+
                 System.out.println("them lich su ");
             }
             for(int i =  0; i<listVe.size();i++){

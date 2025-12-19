@@ -603,6 +603,9 @@ public class ChonVeDoi extends Application {
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
+            if(gaDen.equals("Sài Gòn")){
+                gaDen = vechon.getGaDi();
+            }
             Label hanhTrinhLabel = new Label(vechon.getGaDi()+" - "+ vechon.getGaDen());
             InputStream interFontItalic = getClass().getResourceAsStream("/fonts/Inter/static/Inter_18pt-Italic.ttf");
             Font hanhTrinhFont = Font.loadFont(interFontItalic, 30);
@@ -1132,6 +1135,10 @@ public class ChonVeDoi extends Application {
                             }
                         } catch (SQLException e) {
                             throw new RuntimeException(e);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        } catch (ClassNotFoundException e) {
+                            throw new RuntimeException(e);
                         }
                     });
 
@@ -1289,7 +1296,7 @@ public class ChonVeDoi extends Application {
     public Button getTiepTucBtn(){
         return btn_tieptuc;
     }
-    public void hienThiLayoutGhe(GridPane danhSachGheGridPane, String maToaTau, String maChuyen) throws SQLException {
+    public void hienThiLayoutGhe(GridPane danhSachGheGridPane, String maToaTau, String maChuyen) throws SQLException, IOException, ClassNotFoundException {
         danhSachGheGridPane.getChildren().clear();
         int soGhe = 36;
         int soCot = 9;
@@ -1297,6 +1304,7 @@ public class ChonVeDoi extends Application {
         int thuTuGhe = 36;
         for(int col=0; col<soCot; col++){
             for(int row=0; row<soHang; row++){
+
                 if(gaDen.equals("Hà Nội")){
                     System.out.println("Khong luu dong");
                     ImageView gheTrongImg =  new ImageView(getClass().getResource("/img/gheTrong.png").toExternalForm());
@@ -1507,7 +1515,7 @@ public class ChonVeDoi extends Application {
                                 content = String.format(
                                         "Loại: %s\nGiá ghế: %, .0f đ",
                                         gtc.getGheNgoi().getLoaiGhe().getTenLoaiGhe(),
-                                        gtc.getChuyenTau().getGiaCuocTrenChuyenTau() * gaTauDao.getCuLiBangTenGa(vechon.getGaDen()) + gtc.getGiaTienGhe()
+                                        gtc.getChuyenTau().getGiaCuocTrenChuyenTau() * gaTauDao.getCuLiBangTenGa(gaDen) + gtc.getGiaTienGhe()
 
                                 );
                             } catch (SQLException ex) {

@@ -82,8 +82,10 @@ public class DoiVeControl {
                     ex.printStackTrace();
                 }
                 try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("gaDen.dat"))) {
-                    oos.writeObject(vechon.getGaDi());
+                    oos.writeObject(vechon.getGaDen());
                     System.out.println("ghi ga den thanh cong: "+ vechon.getGaDen());
+
+
                     if(vechon.getGaDi().equals("Sài Gòn")){
                         timChuyenMotChieu("motchieu",root,e);
 
@@ -97,6 +99,11 @@ public class DoiVeControl {
 
                     System.out.println(vechon.getGaDi());
                     System.out.println(vechon.getGaDen());
+                    if(vechon.getGaDen().equals("Sài Gòn")){
+                        ObjectOutputStream oos2 = new ObjectOutputStream(new FileOutputStream("gaDen.dat"));
+                        oos2.writeObject(vechon.getGaDi());
+                        System.out.println("ghi ga den thanh cong: "+ vechon.getGaDi());
+                    }
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }

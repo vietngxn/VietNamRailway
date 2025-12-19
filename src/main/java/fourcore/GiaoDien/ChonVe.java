@@ -1090,6 +1090,13 @@ public class ChonVe extends Application {
                     // Gán sự kiện click
                     int index = i;
                     toaImg.setOnMouseClicked(toaEvent -> {
+                        try {
+                            gheDangChonList.clear();
+                            ObjectOutputStream ois2 = new ObjectOutputStream(new FileOutputStream("ds_ghe_dang_chon.dat"));
+                            ois2.writeObject(null);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         // Đặt lại hình cho tất cả toa theo trạng thái thực tế
                         for (int j = 0; j < toaImageViews.size(); j++) {
                             ImageView iv = toaImageViews.get(j);
