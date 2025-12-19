@@ -250,9 +250,9 @@ public class DoiVeDAO {
         String ma = String.format("LSTT%02d", soLuong+1);
         return ma;
     }
-    public void themLichSuTuongTacVe(Ve veTau,KhuyenMai khuyenMai, double giaTriChenhLech) throws SQLException {
+    public void themLichSuTuongTacVe(Ve veTau,KhuyenMai khuyenMai, double giaTriChenhLech, String maTT) throws SQLException {
         String maLichSuTuongTac =  getMaLichSuTuongTac();
-        String maLoaiTuongTac = "LTT02";
+        String maLoaiTuongTac = maTT;
         String maVeTau = veTau.getMaVeTau();
         LocalDateTime ngayTuongTac =  LocalDateTime.now();
         Connection con = (Connection) databaseConnector.getInstance().getConnection();
