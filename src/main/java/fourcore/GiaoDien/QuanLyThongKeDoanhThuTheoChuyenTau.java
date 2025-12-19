@@ -1141,18 +1141,19 @@ public class QuanLyThongKeDoanhThuTheoChuyenTau extends Application {
 	    na.setLabel("Số Chuyến Đi");
 
 	    BarChart<String, Number> barchart = new BarChart<>(ca, na);
-	    barchart.setTitle("Thống kê top 10 chuyến tàu chạy nhiều nhất");
+	    barchart.setTitle("Thống kê top 10 chuyến tàu có doanh thu cao nhất");
 	    barchart.setLegendVisible(false);
 	    barchart.setPrefHeight(600);
 	    
 	   
 	    
+	    
 	    ArrayList<XYChart.Data<String, Number>> listdata = new ArrayList<>();
 	    doanhthu1 = 0;
 	    for(Map.Entry<Tau, Double> x : map.entrySet()) {
 	        Tau tau = x.getKey();
-	        double doanhthu = x.getValue();
 	        doanhthu1 += x.getValue();
+	        double doanhthu = x.getValue();
 	        listdata.add(new XYChart.Data<>(tau.getTenTau(), doanhthu));
 	    }
 
@@ -1170,7 +1171,7 @@ public class QuanLyThongKeDoanhThuTheoChuyenTau extends Application {
 	    na.setTickUnit(max/5);
 	    na.setAutoRanging(true);
 	    na.setLowerBound(0);
-	    na.setUpperBound(max +1);
+	    na.setUpperBound(max*2 );
 
 	    XYChart.Series<String, Number> list = new XYChart.Series<String, Number>();
 
@@ -1178,6 +1179,8 @@ public class QuanLyThongKeDoanhThuTheoChuyenTau extends Application {
 	        list.getData().add(s);
 	    }
 	    barchart.getData().add(list);
+	    
+	    
 	    
 	    Platform.runLater(() -> {
 	        for (XYChart.Data<String, Number> data : list.getData()) {
@@ -1193,6 +1196,7 @@ public class QuanLyThongKeDoanhThuTheoChuyenTau extends Application {
 	                bar.getChildren().add(label);
 	                StackPane.setAlignment(label, Pos.TOP_CENTER);
 	                StackPane.setMargin(label, new Insets(-20, 0, 0, 0));
+	                
 	            }
 	        }
 	    });

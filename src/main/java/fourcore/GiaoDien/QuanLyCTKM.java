@@ -1695,9 +1695,10 @@ public class QuanLyCTKM extends Application {
 	    {
 	    	trangthai1 = "Kích Hoạt";
 	    }
-	    else
+	    else if(hientai.isBefore(ngaybatdau))
+	    	trangthai1 = "Chưa kích hoạt";
+	    else 
 	    	trangthai1 = "Kết Thúc";
-	    
 	    
 	    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	    String ngaybd = ngaybatdau.format(dtf);
@@ -1717,9 +1718,10 @@ public class QuanLyCTKM extends Application {
 	    {	    	
 	     colorStyle = "-fx-text-fill: green;";
 	    }
-	    else 
+	    else if(trangthai1.equalsIgnoreCase("kết thúc"))
 	    	colorStyle = "-fx-text-fill: red;";
-	    
+	    else 
+	    	colorStyle = "-fx-text-fill: black;";
 	    lblMaCT.setStyle(baseStyle);
 	    lblTenCT.setStyle(baseStyle);
 	    lblNgayBD.setStyle(baseStyle);
@@ -1883,6 +1885,23 @@ public class QuanLyCTKM extends Application {
 	        // ✅ Load dữ liệu vào table
 	        for (KhuyenMai khuyenMai : listKhuyenMai) {
 	            if (khuyenMai.getRs() == 0) {
+	            	
+	            	LocalDate hientai = LocalDate.now(); 
+	            	LocalDate ngaybatdau = khuyenMai.getNgayBatDau().toLocalDate();
+	                LocalDate ngayketthuc = khuyenMai.getNgayKetThuc().toLocalDate();
+
+	                String trangthai1;
+	                if (hientai.isBefore(ngaybatdau)) {
+	                    trangthai1 = "Chưa kích hoạt";
+	                }
+	                else if (hientai.isAfter(ngayketthuc)) {
+	                    trangthai1 = "Kết Thúc";
+	                }
+	                else {
+	                    trangthai1 = "Kích Hoạt";
+	                }
+	                khuyenMai.setTrangThaiKhuyenMai(trangthai1);
+	            	ctkmDAO.capNhatKhuyenMai(khuyenMai);
 	                loadCTKMData(
 	                    khuyenMai.getMaKhuyenMai(),
 	                    khuyenMai.getTenChuongTrinh(),
@@ -1892,6 +1911,7 @@ public class QuanLyCTKM extends Application {
 	                    khuyenMai.getTrangThaiKhuyenMai()
 	                );
 	            }
+	            
 	        }
 	        
 	        System.out.println("✓ Refresh table thành công!");
