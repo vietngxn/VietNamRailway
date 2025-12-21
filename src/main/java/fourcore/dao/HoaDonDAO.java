@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import fourcore.DatabaseConnector.DatabaseConnector;
@@ -14,117 +15,111 @@ public class HoaDonDAO {
 	DatabaseConnector database = new DatabaseConnector();
 	ArrayList<HoaDon> listHoaDon = new ArrayList<HoaDon>();
 	Statement st = database.connect();
-    LoaiHoaDonDAO loaiHoaDonDAO = new LoaiHoaDonDAO();
-    NhanVienDAO nhanVienDAO = new NhanVienDAO();
-    ChuongTrinhKhuyenMaiDAO chuongTrinhKhuyenMaiDAO = new ChuongTrinhKhuyenMaiDAO();
+	LoaiHoaDonDAO loaiHoaDonDAO = new LoaiHoaDonDAO();
+	NhanVienDAO nhanVienDAO = new NhanVienDAO();
+	ChuongTrinhKhuyenMaiDAO chuongTrinhKhuyenMaiDAO = new ChuongTrinhKhuyenMaiDAO();
+
 	public HoaDonDAO() throws SQLException {
 	}
 
-    public ArrayList<HoaDon> getListHoaDon() throws SQLException {
-        ArrayList<HoaDon> listHoaDon = new ArrayList<>();
-        String q = """
-	        SELECT maHoaDon, maLoaiHoaDon, maNhanVien, tenKhachHangThanhToan, 
-	               emailKhachHangThanhToan, cccdKhachHangThanhToan, 
-	               sdtKhachHangThanhToan, ngayThanhToan, tongTien, 
-	               diaChiKhachHangThanhToan
-	        FROM HoaDon
-	    """;
+	public ArrayList<HoaDon> getListHoaDon() throws SQLException {
+		ArrayList<HoaDon> listHoaDon = new ArrayList<>();
+		String q = """
+				    SELECT maHoaDon, maLoaiHoaDon, maNhanVien, tenKhachHangThanhToan,
+				           emailKhachHangThanhToan, cccdKhachHangThanhToan,
+				           sdtKhachHangThanhToan, ngayThanhToan, tongTien,
+				           diaChiKhachHangThanhToan
+				    FROM HoaDon
+				""";
 
+		ResultSet rs = st.executeQuery(q);
 
-        ResultSet rs = st.executeQuery(q);
+		while (rs.next()) {
+			String maHoaDon = rs.getString(1);
+			String maLoaiHoaDon = rs.getString(2);
+			String maNhanVien = rs.getString(3);
+			String tenKH = rs.getString(4);
+			String emailKH = rs.getString(5);
+			String cccd = rs.getString(6);
+			String sdt = rs.getString(7);
+			// phòng trường hợp timestamp null
+			Timestamp ts = rs.getTimestamp(8);
+			LocalDateTime ngayThanhToan = ts != null ? ts.toLocalDateTime() : null;
+			double tongTien = rs.getDouble(9);
+			// int isRemove = rs.getInt(10); // nếu không dùng trong model thì bỏ qua
+			String diaChi = rs.getString(10);
 
-        while (rs.next()) {
-            String maHoaDon = rs.getString(1);
-            String maLoaiHoaDon = rs.getString(2);
-            String maNhanVien = rs.getString(3);
-            String tenKH = rs.getString(4);
-            String emailKH = rs.getString(5);
-            String cccd = rs.getString(6);
-            String sdt = rs.getString(7);
-            // phòng trường hợp timestamp null
-            Timestamp ts = rs.getTimestamp(8);
-            LocalDateTime ngayThanhToan = ts != null ? ts.toLocalDateTime() : null;
-            double tongTien = rs.getDouble(9);
-            // int isRemove = rs.getInt(10); // nếu không dùng trong model thì bỏ qua
-            String diaChi = rs.getString(10);
+			// Tạo object hỗ trợ theo id (giả sử có constructor nhận id)
+			LoaiHoaDon loai = new LoaiHoaDon(maLoaiHoaDon); // hoặc null nếu không cần
+			NhanVien nv = new NhanVien(maNhanVien); // hoặc null nếu không cần
 
-            // Tạo object hỗ trợ theo id (giả sử có constructor nhận id)
-            LoaiHoaDon loai = new LoaiHoaDon(maLoaiHoaDon);   // hoặc null nếu không cần
-            NhanVien nv = new NhanVien(maNhanVien);           // hoặc null nếu không cần
+			// Tạo HoaDon theo đúng thứ tự fields của class daddy
+			HoaDon hd = new HoaDon(maHoaDon, loai, nv, tenKH, emailKH, cccd, sdt, ngayThanhToan, tongTien);
 
-            // Tạo HoaDon theo đúng thứ tự fields của class daddy
-            HoaDon hd = new HoaDon(
-                    maHoaDon,loai,nv,tenKH,emailKH,cccd,sdt,ngayThanhToan,tongTien
-            );
+			listHoaDon.add(hd);
+		}
 
-            listHoaDon.add(hd);
-        }
+		return listHoaDon;
+	}
 
-        return listHoaDon;
-    }
-    public HoaDon getHoaDonByMaHoaDon(String maHoaDon) throws SQLException {
-            String query = "  select * from HoaDon \n" +
-                    "  where maHoaDon = '"+maHoaDon+"'";
-            ResultSet rs = st.executeQuery(query);
-            while (rs.next()) {
-                String mahd = rs.getString(1);
-                LoaiHoaDon loaiHoaDon = loaiHoaDonDAO.getLoaiHoaDonTheoMa(rs.getString(2));
-                NhanVien nhanVien = nhanVienDAO.getNhanVienByMa(rs.getString(3));
-                String tenKhachHang = rs.getString(4);
-                String emailKhachHang = rs.getString(5);
-                String cccd =  rs.getString(6);
-                String sdtKhachHang = rs.getString(7);
-                LocalDateTime ngayThanhToan =  LocalDateTime.parse(rs.getString(8));
-                double TongTien = rs.getDouble(9);
-                String diaChi = rs.getString(10);
+	public HoaDon getHoaDonByMaHoaDon(String maHoaDon) throws SQLException {
+		String query = "  select * from HoaDon \n" + "  where maHoaDon = '" + maHoaDon + "'";
+		ResultSet rs = st.executeQuery(query);
+		while (rs.next()) {
+			String mahd = rs.getString(1);
+			LoaiHoaDon loaiHoaDon = loaiHoaDonDAO.getLoaiHoaDonTheoMa(rs.getString(2));
+			NhanVien nhanVien = nhanVienDAO.getNhanVienByMa(rs.getString(3));
+			String tenKhachHang = rs.getString(4);
+			String emailKhachHang = rs.getString(5);
+			String cccd = rs.getString(6);
+			String sdtKhachHang = rs.getString(7);
+			LocalDateTime ngayThanhToan = rs.getTimestamp(8).toLocalDateTime();
+			double TongTien = rs.getDouble(9);
+			String diaChi = rs.getString(10);
 
-                HoaDon hoaDon = new HoaDon(mahd,loaiHoaDon,nhanVien,tenKhachHang,emailKhachHang,cccd,sdtKhachHang,ngayThanhToan,TongTien,diaChi);
-                return  hoaDon;
-            }
-            return null;
-    }
-    public ArrayList<ThongTinCtHoaDon> getThongTinCTHoaDon(String maHoaDon) throws SQLException {
-        ArrayList<ThongTinCtHoaDon> listThongTinCtHoaDon = new ArrayList<>();
-        String query = "SELECT \n" +
-                "    v.maVeTau AS MaVe,\n" +
-                "    lg.tenLoaiGhe AS TenLoaiGhe,\n" +
-                "    dt.tenDoiTuongGiamGia AS DoiTuong,\n" +
-                "    gtc.giaTienGhe AS DonGia,\n" +
-                "    v.giaVe AS ThanhTien\n" +
-                "FROM ChiTietHoaDon cthd\n" +
-                "JOIN Ve v ON cthd.maVeTau = v.maVeTau\n" +
-                "JOIN GheTrenChuyenTau gtc ON v.maGheTrenChuyenTau = gtc.maGheTrenChuyenTau\n" +
-                "JOIN GheNgoi g ON gtc.maGheNgoi = g.maGheNgoi\n" +
-                "JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe\n" +
-                "JOIN DoiTuongGiamGia dt ON v.maDoiTuongGiamGia = dt.maDoiTuongGiamGia\n" +
-                "WHERE cthd.maHoaDon = '"+maHoaDon+"';";
-        ResultSet rs = st.executeQuery(query);
-        while (rs.next()) {
-            String maVeTau = rs.getString(1);
-            String tenLoaiGhe = rs.getString(2);
-            String doiTuong = rs.getString(3);
-            double donGia = rs.getDouble(4);
-            double thanhTien = rs.getDouble(5);
+			HoaDon hoaDon = new HoaDon(mahd, loaiHoaDon, nhanVien, tenKhachHang, emailKhachHang, cccd, sdtKhachHang,
+					ngayThanhToan, TongTien, diaChi);
+			return hoaDon;
+		}
+		return null;
+	}
 
-            ThongTinCtHoaDon thongTinCtHoaDon= new ThongTinCtHoaDon(maVeTau,tenLoaiGhe,doiTuong,donGia,thanhTien);
-            listThongTinCtHoaDon.add(thongTinCtHoaDon);
-        }
-        return listThongTinCtHoaDon;
-    }
+	public ArrayList<ThongTinCtHoaDon> getThongTinCTHoaDon(String maHoaDon) throws SQLException {
+		ArrayList<ThongTinCtHoaDon> listThongTinCtHoaDon = new ArrayList<>();
+		String query = "SELECT \n" + "    v.maVeTau AS MaVe,\n" + "    lg.tenLoaiGhe AS TenLoaiGhe,\n"
+				+ "    dt.tenDoiTuongGiamGia AS DoiTuong,\n" + "    gtc.giaTienGhe AS DonGia,\n"
+				+ "    v.giaVe AS ThanhTien\n" + "FROM ChiTietHoaDon cthd\n" + "JOIN Ve v ON cthd.maVeTau = v.maVeTau\n"
+				+ "JOIN GheTrenChuyenTau gtc ON v.maGheTrenChuyenTau = gtc.maGheTrenChuyenTau\n"
+				+ "JOIN GheNgoi g ON gtc.maGheNgoi = g.maGheNgoi\n" + "JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe\n"
+				+ "JOIN DoiTuongGiamGia dt ON v.maDoiTuongGiamGia = dt.maDoiTuongGiamGia\n" + "WHERE cthd.maHoaDon = '"
+				+ maHoaDon + "';";
+		ResultSet rs = st.executeQuery(query);
+		while (rs.next()) {
+			String maVeTau = rs.getString(1);
+			String tenLoaiGhe = rs.getString(2);
+			String doiTuong = rs.getString(3);
+			double donGia = rs.getDouble(4);
+			double thanhTien = rs.getDouble(5);
 
-    public KhuyenMai getKhuyenMaiByMaHoaDon(String maHoaDon) throws SQLException {
+			ThongTinCtHoaDon thongTinCtHoaDon = new ThongTinCtHoaDon(maVeTau, tenLoaiGhe, doiTuong, donGia, thanhTien);
+			listThongTinCtHoaDon.add(thongTinCtHoaDon);
+		}
+		return listThongTinCtHoaDon;
+	}
 
-        String query = "select v.giaVe, v.maKhuyenMai from ve v, ChiTietHoaDon c\n" +
-                "where c.maHoaDon = '"+maHoaDon+"' and v.maVeTau = c.maVeTau\n";
-        ResultSet rs = st.executeQuery(query);
-        while (rs.next()) {
-            String  maKhuyenMai = rs.getString(2);
-            KhuyenMai ctkm = chuongTrinhKhuyenMaiDAO.getKhuyenMaiBangMa(maKhuyenMai);
+	public KhuyenMai getKhuyenMaiByMaHoaDon(String maHoaDon) throws SQLException {
 
-            return ctkm;
-        }
-        return null;
-    }
+		String query = "select v.giaVe, v.maKhuyenMai from ve v, ChiTietHoaDon c\n" + "where c.maHoaDon = '" + maHoaDon
+				+ "' and v.maVeTau = c.maVeTau\n";
+		ResultSet rs = st.executeQuery(query);
+		while (rs.next()) {
+			String maKhuyenMai = rs.getString(2);
+			KhuyenMai ctkm = chuongTrinhKhuyenMaiDAO.getKhuyenMaiBangMa(maKhuyenMai);
+
+			return ctkm;
+		}
+		return null;
+	}
 
 	public HoaDon getHoaDonBangMaVe(String maVe) throws SQLException {
 		String q = "select hd.*\r\n" + "from HoaDon as hd\r\n"
@@ -195,15 +190,14 @@ public class HoaDonDAO {
 		return kh1;
 	}
 
-	
 	public HoaDon getHoaDonTheoMa(String maHD) throws SQLException {
-	    
-	    String q = "SELECT * FROM HoaDon WHERE maHoaDon = '" + maHD + "'";
-	    ResultSet rs = st.executeQuery(q);
 
-	    if (rs.next()) {
-	    	HoaDon hd = new HoaDon();
-	    	String mahd = rs.getString("maHoaDon");
+		String q = "SELECT * FROM HoaDon WHERE maHoaDon = '" + maHD + "'";
+		ResultSet rs = st.executeQuery(q);
+
+		if (rs.next()) {
+			HoaDon hd = new HoaDon();
+			String mahd = rs.getString("maHoaDon");
 			String maloaihd = rs.getString("maLoaiHoaDon");
 			String manv = rs.getString("maNhanVien");
 			String tenkh = rs.getString("tenKhachHangThanhToan");
@@ -218,10 +212,9 @@ public class HoaDonDAO {
 			LoaiHoaDon loaiHD = loaihdDao.getLoaiHoaDonTheoMa(maloaihd);
 			hd = new HoaDon(mahd, loaiHD, nv, tenkh, email, cccd, sdt, ngaytt, tongtien);
 			System.out.println("lấy thông tin hóa đơn " + mahd);
-	        return hd;
-	    }
-	    return null;
+			return hd;
+		}
+		return null;
 	}
 
-	
 }

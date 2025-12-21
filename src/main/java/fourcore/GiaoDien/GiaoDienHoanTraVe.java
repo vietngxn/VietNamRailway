@@ -86,6 +86,12 @@ public class GiaoDienHoanTraVe extends Application {
 	private StackPane pnlImgRefesh;
 	private static double tongCongPhiHoanTra;
 
+	public void clearData() {
+		listVeThanhToan.clear();
+		lblTongCongValue.setText("0");
+		tongCongPhiHoanTra = 0;
+	}
+
 	public void loadLableTongCongValue(double tongCongThanhTien) {
 		lblTongCongValue.setText(nf.format(tongCongThanhTien));
 	}
@@ -281,6 +287,7 @@ public class GiaoDienHoanTraVe extends Application {
 		return box;
 
 	}
+
 
 	@Override
 	public void start(Stage primaryStage) {
