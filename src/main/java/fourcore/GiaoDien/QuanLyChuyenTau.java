@@ -1,5 +1,6 @@
 package fourcore.GiaoDien;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -13,8 +14,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gson.Gson;
+
 import fourcore.Entity.KhuyenMai;
 import fourcore.Entity.Tau;
+import fourcore.animation.GhiFile;
 import fourcore.dao.ChuongTrinhKhuyenMaiDAO;
 import fourcore.dao.ChuyenTauDAO;
 import fourcore.dao.QuanLiChuyenTauDAO;
@@ -26,6 +30,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Node;
@@ -123,6 +128,7 @@ public class QuanLyChuyenTau extends Application {
     private ImageView moTaDoanhThuIcon;
     private HBox xemLichSuVeBox;
     private Tau_DAO taudao = null; 
+    private GhiFile ghiFile = new GhiFile();
     ArrayList listChuyenTau;
     @Override
     public void start(Stage primaryStage) {
@@ -1041,9 +1047,8 @@ public class QuanLyChuyenTau extends Application {
             int soLuongToa = (int) chuyenTauInfo.get("soLuongToa");
             int soLuongVeTrong = (int) chuyenTauInfo.get("soLuongVeTrong");
             LocalDateTime thoiGianKhoiHanh = (LocalDateTime) chuyenTauInfo.get("thoiGianKhoiHanh");
-            String gaDi = (String) chuyenTauInfo.get("gaDi");
-            String gaDen = (String) chuyenTauInfo.get("gaDen");
-            create_layout_dong(maChuyen, tau.getLoaiTau().getTenLoaiTau(),soLuongToa,soLuongVeTrong, thoiGianKhoiHanh.format(formatter),gaDi,gaDen);
+            String hanhTrinhDi = (String) chuyenTauInfo.get("hanhTrinhDi");
+            create_layout_dong(maChuyen, tau.getLoaiTau().getTenLoaiTau(),soLuongToa,soLuongVeTrong, thoiGianKhoiHanh.format(formatter), hanhTrinhDi);
  
         }
 
@@ -1149,7 +1154,7 @@ public class QuanLyChuyenTau extends Application {
 
     }
 
-    public void create_layout_dong(String maChuyenTau, String dauTau, int soLuongToa, int veTrong, String thoiGianKhoiHanh, String gaDi, String gaDen) {
+    public void create_layout_dong(String maChuyenTau, String dauTau, int soLuongToa, int veTrong, String thoiGianKhoiHanh, String hanhTrinhDi) {
         GridPane data = new GridPane();
         data.setHgap(10);
         data.setAlignment(Pos.CENTER);
@@ -1167,7 +1172,7 @@ public class QuanLyChuyenTau extends Application {
         Label lblSoLuong = new Label(String.valueOf(soLuongToa));
         Label lblVeTrong = new Label(String.valueOf(veTrong));
         Label lblThoiGian = new Label(thoiGianKhoiHanh.toString());
-        Label lblGa = new Label(gaDi + " - " + gaDen);
+        Label lblGa = new Label(hanhTrinhDi);
 
         lblMaCT.setStyle(baseStyle);
         lblDauTau.setStyle(baseStyle);
@@ -1278,6 +1283,35 @@ public class QuanLyChuyenTau extends Application {
     public Button getBtn_ThemChuyenTau(){
         return this.btn_themChuyenTau;
     }
+    public Button getBtn_SuaChuyenTau() {
+    	return this.btn_suaChuyenTau;
+    }
+   public boolean xuLyEventCu() {
+	   File fileTmp = new File("src/main/resources/tmp_CapNhatChuyenTau.txt");
+	   GridPane selectRow = hangchon.isEmpty() ? null : hangchon.get(hangchon.size()-1);
+	   
+	   if(selectRow == null) {
+		   	Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("Lỗi");
+			alert.setHeaderText(null);
+			alert.setContentText("Vui lòng chọn chuyến tàu cần cập nhật");
+			Stage stage = (Stage) btn_suaChuyenTau.getScene().getWindow();
+			alert.initOwner(stage);
+			alert.initModality(Modality.WINDOW_MODAL);
+			alert.showAndWait();
+			return false;
+	   }
+	   
+	   StackPane t0 = (StackPane) selectRow.getChildren().get(0);
+	   String maChuyenTau = ((Label) t0.getChildren().get(0)).getText();
+	   
+	   Map<String, String> maptmp = new HashMap<String, String>();
+	   maptmp.put("maChuyenTau", maChuyenTau);
+	   Gson gson = new Gson();
+       String json = gson.toJson(maptmp);
+       ghiFile.appendData(json, fileTmp);
+       return true;
+   } 
 
 
     public static void main(String[] args) {

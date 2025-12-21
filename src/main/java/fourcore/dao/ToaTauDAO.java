@@ -109,6 +109,28 @@ public class ToaTauDAO {
     }
     return listToaTheoChuyen;
     }
+    public ArrayList<ToaTau> getListToaTauByMaCT1(String maCT) throws SQLException {
+        ArrayList<ToaTau> listToaTheoChuyen =  new ArrayList<>();
+        String query = "SELECT DISTINCT tt.maToaTau,tt.tenToaTau,tt.soLuongGheTrongToa,ltt.maLoaiToaTau\n" +
+                "FROM GheTrenChuyenTau gtc\n" +
+                "JOIN GheNgoi g ON gtc.maGheNgoi = g.maGheNgoi\n" +
+                "JOIN ToaTau tt ON g.maToaTau = tt.maToaTau\n" +
+                "JOIN LoaiToaTau ltt ON tt.maLoaiToaTau = ltt.maLoaiToaTau\n" +
+                "WHERE gtc.maChuyenTau ='" + maCT +"';";
+        ResultSet rs = myStmt.executeQuery(query);
+        while (rs.next()) {
+            String maToaTau = rs.getString(1);
+            String tenToaTau = rs.getString(2);
+            int soToaTau = Integer.parseInt(rs.getString(3));
+            String maLoaiToa = rs.getString(4);
+            LoaiToaTau ltt = loaiToaTauDAO.getLoaiToaTau(maLoaiToa);
+            System.out.println("Loại tàu import: " + ltt.getTenLoaiToaTau());
+            boolean isRemove = false;
+            ToaTau tt = new ToaTau(maToaTau, tenToaTau,soToaTau, ltt, isRemove);
+            listToaTheoChuyen.add(tt);
+        }
+        return listToaTheoChuyen;
+        }
 
     public ToaTau getToaTauByMa(String maToaTau) throws SQLException {
         getListToaTau();
@@ -179,6 +201,35 @@ public class ToaTauDAO {
 		return listToaTheoLoaiTau;
 		
 	}
+public ArrayList<ToaTau> getListToaTauTenToaTau1(String tenLoaiTau) throws SQLException {
+	
+    	
+    	List<String> listTenToa = mapLoaiToaTheoLoaiTau.get(tenLoaiTau);
+		ArrayList<ToaTau> listToaTheoLoaiTau = new ArrayList<>();
+		String sql = "Select * From ToaTau where tenToaTau = ?";
+		try {
+			for(String tt : listTenToa) {
+				PreparedStatement ps = (PreparedStatement) myStmt.getConnection().prepareStatement(sql);
+				ps.setString(1, tt);
+				ResultSet rs = ps.executeQuery();
+				while (rs.next()) {
+					String maToa = rs.getString(1);
+					String maLoaiToaTau = rs.getString(2);
+					LoaiToaTau loaiToaTau = loaiToaTauDAO.getLoaiToaTau(maLoaiToaTau);
+					String tenToa = rs.getString(3);
+					int soGhe = rs.getInt(4);
+					boolean isRemove = false;
+					ToaTau toaTau = new ToaTau(maToa, tenToa, soGhe, loaiToaTau, isRemove);
+					listToaTheoLoaiTau.add(toaTau);
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listToaTheoLoaiTau;
+		
+	}
 	public ToaTau getToaTauTheoMaAndList(String maToaTau, ArrayList<ToaTau> listToaTau) {
 		for(ToaTau tt: listToaTau) {
 			if(tt.getMaToaTau().equalsIgnoreCase(maToaTau)) return tt;
@@ -210,6 +261,35 @@ public class ToaTauDAO {
 	        LoaiToaTau ltt = loaiToaTauDAO.getLoaiToaTau(maLoaiToa);
 	        System.out.println("Loại tàu import: " + ltt.getTenLoaiToaTau());
 	        ToaTau tt = new ToaTau(maToaTau, tenToaTau,soToaTau, ltt);
+	        listToaTheoNgay.add(tt);
+	    }
+	    return listToaTheoNgay;
+	    }
+	public ArrayList<ToaTau> getListToaTauTheoListMaChuyenTau1(ArrayList<String> listMaChuyenTau) throws SQLException {
+	    ArrayList<ToaTau> listToaTheoNgay =  new ArrayList<>();
+	    if(listMaChuyenTau.size() == 0) return listToaTheoNgay;
+	    String sql = "SELECT DISTINCT tt.maToaTau, tt.tenToaTau, tt.soLuongGheTrongToa, ltt.maLoaiToaTau " +
+	    	    "FROM GheTrenChuyenTau gtc " +
+	    	    "JOIN GheNgoi g ON gtc.maGheNgoi = g.maGheNgoi " +
+	    	    "JOIN ToaTau tt ON g.maToaTau = tt.maToaTau " +
+	    	    "JOIN LoaiToaTau ltt ON tt.maLoaiToaTau = ltt.maLoaiToaTau " +
+	    	    "WHERE gtc.maChuyenTau IN (" + 
+	    	        String.join(",", Collections.nCopies(listMaChuyenTau.size(), "?")) +
+	    	    ")";
+	    PreparedStatement ps = (PreparedStatement) databaseConnector.connect().getConnection().prepareStatement(sql);
+	    for(int i = 0; i < listMaChuyenTau.size(); i++) {
+	    	ps.setString(i+1, listMaChuyenTau.get(i));
+	    }
+	    ResultSet rs = ps.executeQuery();
+	    while (rs.next()) {
+	        String maToaTau = rs.getString(1);
+	        String tenToaTau = rs.getString(2);
+	        int soToaTau = Integer.parseInt(rs.getString(3));
+	        String maLoaiToa = rs.getString(4);
+	        LoaiToaTau ltt = loaiToaTauDAO.getLoaiToaTau(maLoaiToa);
+	        System.out.println("Loại tàu import: " + ltt.getTenLoaiToaTau());
+	        boolean isRemove = false;
+	        ToaTau tt = new ToaTau(maToaTau, tenToaTau,soToaTau, ltt, isRemove);
 	        listToaTheoNgay.add(tt);
 	    }
 	    return listToaTheoNgay;

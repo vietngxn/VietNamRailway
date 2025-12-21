@@ -8,14 +8,22 @@ public class HanhTrinh implements Serializable {
     private String maHanhTrinh;
     private String tenHanhTrinh;
     private ArrayList<Ga> listGa;
+    private boolean isRemove;
 
     public HanhTrinh() {
     }
-
+    
     public HanhTrinh(String maHanhTrinh, String tenHanhTrinh, ArrayList<Ga> listGa) {
         setMaHanhTrinh(maHanhTrinh);
         setTenHanhTrinh(tenHanhTrinh);
         setListGa(listGa);
+    }
+    
+    public HanhTrinh(String maHanhTrinh, String tenHanhTrinh, ArrayList<Ga> listGa, boolean isRemove) {
+        setMaHanhTrinh(maHanhTrinh);
+        setTenHanhTrinh(tenHanhTrinh);
+        setListGa(listGa);
+        setRemove(isRemove);
     }
 
     public ArrayList<Ga> getListGa() {
@@ -42,4 +50,12 @@ public class HanhTrinh implements Serializable {
         this.tenHanhTrinh = tenHanhTrinh;
     }
 
+	public boolean isRemove() {
+		return isRemove;
+	}
+
+	public void setRemove(boolean isRemove) {
+		this.isRemove = isRemove;
+	}
+    
 }
