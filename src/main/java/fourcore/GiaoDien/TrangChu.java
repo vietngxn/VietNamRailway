@@ -28,11 +28,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
@@ -947,10 +943,10 @@ public class TrangChu extends Application {
 //			lichSuCont.getChildren().add(listLichSu);
 
 			chartVaLichSuBanContainer.getChildren().addAll(chartContainer);
-			CheckBox hienNoiDungCheckBox = new CheckBox("Hiện thống kê tổng quan");
-			hienNoiDungCheckBox.setFont(moTaTiLeFont4);
-			hienNoiDungCheckBox.setTranslateX(1100);
-			hienNoiDungCheckBox.setTranslateY(10);
+//			CheckBox hienNoiDungCheckBox = new CheckBox("Hiện thống kê tổng quan");
+//			hienNoiDungCheckBox.setFont(moTaTiLeFont4);
+//			hienNoiDungCheckBox.setTranslateX(1100);
+//			hienNoiDungCheckBox.setTranslateY(10);
 
 			// noiDungChinh.getChildren().addAll(tongQuanLabel
 			// ,thongKeCoBanContainer,chartVaLichSuBanContainer);
@@ -959,17 +955,16 @@ public class TrangChu extends Application {
 			background.setTranslateY(120);
 			noiDungChinh.getChildren().add(background);
 
-			hienNoiDungCheckBox.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
-				noiDungChinh.getChildren().clear();
-
-				if (isNowSelected) {
-					noiDungChinh.getChildren().addAll(tongQuanLabel, thongKeCoBanContainer, chartVaLichSuBanContainer);
-				} else {
-					noiDungChinh.getChildren().add(background);
-				}
-			});
-
-			noiDungWrapper.getChildren().addAll(hienNoiDungCheckBox, noiDungChinh);
+//			hienNoiDungCheckBox.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
+//				noiDungChinh.getChildren().clear();
+//
+//				if (isNowSelected) {
+//					noiDungChinh.getChildren().addAll(tongQuanLabel, thongKeCoBanContainer, chartVaLichSuBanContainer);
+//				} else {
+//					noiDungChinh.getChildren().add(background);
+//				}
+//			});
+			noiDungWrapper.getChildren().addAll(noiDungChinh);
 			// =========================
 			// || HUNG SU KIEN ||
 			// =========================
@@ -1077,6 +1072,34 @@ public class TrangChu extends Application {
 					throw new RuntimeException(e);
 				}
 			});
+            userBox.setOnMouseClicked(event -> {
+                GiaoDienNguoiDung giaoDienNguoiDung;
+                Stage  stage = new Stage();
+                try {
+                    giaoDienNguoiDung = new GiaoDienNguoiDung();
+                    giaoDienNguoiDung.start(stage);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                root.setCenter(giaoDienNguoiDung.getNoiDungChinh());
+                giaoDienNguoiDung.getBtnDangXuat().setOnMouseClicked(event2->{
+                    try {
+                        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("NhanVien.dat"));
+                        oos.writeObject(null);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    primaryStage.close();
+                    GiaoDienDangNhap giaoDienDangNhap = new GiaoDienDangNhap();
+                    Stage stage1 = new Stage();
+                    try {
+                        giaoDienDangNhap.start(stage1);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            });
+
 			quanLiChuyenTauBox.setOnMouseClicked(event -> {
 				fileTmp = new File("src/main/resources/tmp_ChuyenTau.txt");
 				fileTmp1 = new File("src/main/resources/tmp_CapNhatChuyenTau.txt");
