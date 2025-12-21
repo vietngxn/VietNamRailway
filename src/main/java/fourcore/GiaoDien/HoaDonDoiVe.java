@@ -2,13 +2,13 @@ package fourcore.GiaoDien;
 
 import com.itextpdf.kernel.colors.Lab;
 import fourcore.Control.ChuyenSoThanhChu;
-import fourcore.Control.HoaDonDoiVeExportPDF;
 import fourcore.Control.HoaDonExportPDF;
 import fourcore.Entity.HoaDon;
 import fourcore.Entity.KhuyenMai;
 import fourcore.Entity.ThongTinCtHoaDon;
 import fourcore.Entity.Ve;
 import fourcore.dao.HoaDonDAO;
+import fourcore.util.HoaDonDoiVeExportPDF;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
