@@ -75,7 +75,7 @@ public class TrangChu extends Application {
 	private ImageView moTaDoanhThuIcon;
 	private HBox xemLichSuVeBox;
 	VBox noiDungWrapper = new VBox(10);
-	BanVeControl banVeControl = new BanVeControl();
+	BanVeControl banVeControl;
 	GhiFile ghiFile = new GhiFile();
 	private File fileTmp;
 
@@ -992,6 +992,7 @@ public class TrangChu extends Application {
 					e.printStackTrace();
 				}
 			});
+            banVeControl = new BanVeControl(root);
 			banVeControl.initChonVe();
 			banVeBox.setOnMouseClicked(event -> {
 				try {

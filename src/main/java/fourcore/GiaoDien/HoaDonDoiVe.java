@@ -34,7 +34,7 @@ public class HoaDonDoiVe extends Application {
     private VBox table_layout;
     private int cnt = 1;
     private Button btn_xuatHoaDon;
-    private Button btn_thoat;
+    private Button btn_thoat = new Button("Thoát");;
     private VBox table_desc;
     HoaDon hoaDon;
     HoaDonDAO hoaDonDAO = new HoaDonDAO();
@@ -324,7 +324,6 @@ public class HoaDonDoiVe extends Application {
         button_layout.setAlignment(Pos.CENTER_RIGHT);
         btn_xuatHoaDon = new Button("Xuất hóa đơn");
         btn_xuatHoaDon.setPrefSize(150, 50);
-        btn_thoat = new Button("Thoát");
         btn_thoat.setPrefSize(150, 50);
 
         btn_xuatHoaDon.setStyle("-fx-background-color : #00BACB;-fx-background-radius:15px;-fx-border-radius:15px;-fx-font-family: 'Inter';-fx-text-fill :white;-fx-font-size : 15px;-fx-font-weight:bold;");
@@ -371,8 +370,9 @@ public class HoaDonDoiVe extends Application {
             e.printStackTrace();
         }
     }
-
-
+    public Button getBtn_thoat() {
+        return btn_thoat;
+    }
 
 
 
