@@ -107,13 +107,13 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 
 		String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 15px;";
 		String ghiChuValue = null;
-		if (trangThai.equalsIgnoreCase("Hoạt động")) {
-			ghiChuValue = "Còn hoạt động";
-		} else if (trangThai.equalsIgnoreCase("Kết thúc") && !mavedoi.isEmpty() && mavedoi != null) {
-			ghiChuValue = "Vé đã được đổi";
-		} else if (trangThai.equalsIgnoreCase("Đã hoàn trả")) {
-			ghiChuValue = "Vé đã hoàn trả";
-		}
+//		if (trangThai.equalsIgnoreCase("Hoạt động")) {
+//			ghiChuValue = "Còn hoạt động";
+//		} else if (trangThai.equalsIgnoreCase("Kết thúc") && !mavedoi.isEmpty() && mavedoi != null) {
+//			ghiChuValue = "Vé đã được đổi";
+//		} else if (trangThai.equalsIgnoreCase("Đã hoàn trả")) {
+//			ghiChuValue = "Vé đã hoàn trả";
+//		}
 		Label[] labels = { new Label(mave), new Label(chuyen), new Label(loai), new Label(gaDiGaDen),
 				new Label(ngayKhoiHanh), new Label(vitrighe), new Label(formatter.format(ngayMua)),
 				new Label(ghiChuValue), new Label(nhanvien) };

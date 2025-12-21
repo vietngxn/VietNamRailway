@@ -97,6 +97,7 @@ public class GheNgoiDAO {
             double giaTienGhe = rs.getDouble(4);
             String trangThaiGhe = rs.getString(5);
 
+            chuyenTauDAO.getListChuyenTau();
             ChuyenTau ct = chuyenTauDAO.getChuyenTauBangMa(maChuyenTau);
             GheNgoi gn = getGheBangMaGhe(maGheNgoi);
 

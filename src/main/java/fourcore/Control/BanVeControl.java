@@ -34,6 +34,9 @@ public class BanVeControl {
     GioVe gdGiove = null;
     BanVe gdBanVe = null;
     ChonVeKhuHoi gdChonVeKhuHoi = null;
+    ChuyenTauDAO chuyenTauDAO = new ChuyenTauDAO();
+    GheNgoiDAO gheNgoiDAO = new GheNgoiDAO();
+
     GiaoDienXuatHoaDon gdXuatHoaDon = new GiaoDienXuatHoaDon();
     public BanVeControl() throws SQLException {
     }
@@ -117,14 +120,11 @@ public class BanVeControl {
                     return;
                 }
             }
-
-                ChuyenTauDAO chuyenTauDAO = null;
                 try {
-                    chuyenTauDAO = new ChuyenTauDAO();
+                    listChuyenTau = chuyenTauDAO.getListChuyenTau();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
-                listChuyenTau = chuyenTauDAO.listChuyenTau;
                 timChuyenMotChieu(loaiVeString,root,e);
                 try {
                     timChuyenKhuHoi(loaiVeString,root,e);

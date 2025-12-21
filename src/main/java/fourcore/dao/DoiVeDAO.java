@@ -323,7 +323,7 @@ public class DoiVeDAO {
                 listVe.add(veTau);
 
 
-            String setGhiChuDaDoiVe = "Update Ve set ghiChu = N'Đã được đổi', trangThaiVe=N'Kết thúc' where maVeTau = '"+vechon.getMaVeTau()+"'";
+            String setGhiChuDaDoiVe = "Update Ve set ghiChu = N'Đã được đổi', trangThaiVe=N'Kết thúc',maVeDuocDoi='"+maVeTau+"' where maVeTau = '"+vechon.getMaVeTau()+"'";
             PreparedStatement pst = null;
             pst = con.prepareStatement(setGhiChuDaDoiVe);
             pst.executeUpdate();
