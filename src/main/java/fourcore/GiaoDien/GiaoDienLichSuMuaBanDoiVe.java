@@ -92,7 +92,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 	public VBox taoDataChoTableLichSuMuaBanDoiVe(String mave, String chuyen, String loai, String gaDiGaDen,
 			String ngayKhoiHanh, String vitrighe, LocalDate ngayMua, String hoten, String doituong, String sogiayto,
 			double giave, String giamdoituong, String khuyenmai, double giatrichenhlech, double thanhtien,
-			String mavedoi, String nhanvien) throws SQLException {
+			String mavedoi, String nhanvien, String ghichu, String trangThai) throws SQLException {
 		VBox pnlTraVe = new VBox();
 		VBox.setMargin(pnlTraVe, new Insets(0, 30, 0, 45));
 		// ======= DÒNG DỮ LIỆU CHÍNH =======
@@ -105,28 +105,33 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 		data.setPrefHeight(70);
 		data.setPadding(new Insets(0, 0, 0, 10));
 
-		String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
-
+		String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 15px;";
+		String ghiChuValue = null;
+		if (trangThai.equalsIgnoreCase("Hoạt động")) {
+			ghiChuValue = "Còn hoạt động";
+		} else if (trangThai.equalsIgnoreCase("Kết thúc") && !mavedoi.isEmpty() && mavedoi != null) {
+			ghiChuValue = "Vé đã được đổi";
+		} else if (trangThai.equalsIgnoreCase("Đã hoàn trả")) {
+			ghiChuValue = "Vé đã hoàn trả";
+		}
 		Label[] labels = { new Label(mave), new Label(chuyen), new Label(loai), new Label(gaDiGaDen),
 				new Label(ngayKhoiHanh), new Label(vitrighe), new Label(formatter.format(ngayMua)),
-				new Label(nhanvien) };
-		double[] widths = { 200, 200, 250, 250, 230, 210, 250, 200 };
+				new Label(ghiChuValue), new Label(nhanvien) };
+		double[] widths = { 200, 200, 250, 250, 230, 210, 250, 230, 200 };
 
 		for (int i = 0; i < labels.length; i++) {
 			Label lbl = labels[i];
 			lbl.setStyle(baseStyle);
-//			if (i == 2) {
-//				if ("bán vé".equalsIgnoreCase(loai)) {
-//					lbl.setStyle(
-//							"-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px; -fx-text-fill: #009D75");
-//				} else if ("hoàn trả vé".equalsIgnoreCase(loai)) {
-//					lbl.setStyle(
-//							"-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px; -fx-text-fill: #CB002C");
-//				} else if ("đổi vé".equalsIgnoreCase(loai)) {
-//					lbl.setStyle(
-//							"-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px; -fx-text-fill: #CB002C");
-//				}
-//			}
+			if (i == 7) {
+				if ("Còn hoạt động".equalsIgnoreCase(lbl.getText())) {
+					lbl.setStyle(
+							"-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #009D75;");
+				} else if ("Vé đã được đổi".equalsIgnoreCase(lbl.getText())
+						|| "Vé đã hoàn trả".equalsIgnoreCase(lbl.getText())) {
+					lbl.setStyle(
+							"-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 15px;  -fx-text-fill: rgba(203, 0, 44, 0.83);");
+				}
+			}
 			StackPane pane = new StackPane(lbl);
 			pane.setPrefSize(widths[i], 70);
 			pane.setAlignment(Pos.CENTER);
@@ -410,7 +415,8 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 				veDao.layGiaTienGheTheoMaVe(x.getVeTau().getMaVeTau()),
 				nf.format(x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
 				nf.format(x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%", x.getGiaTriChenhLech(),
-				x.tinhTongTien(x.getLoaiTuongTacVe().getMaLoaiTuongTac()), x.getVeTau().getTrangThaiDoiVe(), maNV));
+				x.tinhTongTien(x.getLoaiTuongTacVe().getMaLoaiTuongTac()), x.getVeTau().getTrangThaiDoiVe(), maNV,
+				x.getVeTau().getGhiChu(), x.getVeTau().getTrangThaiVe()));
 	}
 
 	public StackPane thongBaoKhongTimThayVe() {
@@ -448,7 +454,8 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 					veDao.layGiaTienGheTheoMaVe(x.getVeTau().getMaVeTau()),
 					nf.format(x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
 					nf.format(x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%", x.getGiaTriChenhLech(),
-					x.tinhTongTien(x.getLoaiTuongTacVe().getMaLoaiTuongTac()), x.getVeTau().getTrangThaiDoiVe(), maNV));
+					x.tinhTongTien(x.getLoaiTuongTacVe().getMaLoaiTuongTac()), x.getVeTau().getTrangThaiDoiVe(), maNV,
+					x.getVeTau().getGhiChu(), x.getVeTau().getTrangThaiVe()));
 		}
 		return box;
 	}
@@ -575,9 +582,9 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 			String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 18px; -fx-font-weight: bold;";
 
 			String[] headers = { "Mã vé", "Mã chuyến", "Loại tương tác", "Ga đi - Ga đến", "Ngày khởi hành",
-					"Vị trí ghế", "Ngày tương tác", "Mã NV thanh toán" };
+					"Vị trí ghế", "Ngày tương tác", "Ghi chú", "Mã NV thanh toán" };
 
-			double[] widths = { 200, 200, 250, 250, 230, 210, 230, 250 };
+			double[] widths = { 200, 200, 250, 250, 230, 210, 230, 230, 250 };
 
 			for (int i = 0; i < headers.length; i++) {
 				Label label = new Label(headers[i]);

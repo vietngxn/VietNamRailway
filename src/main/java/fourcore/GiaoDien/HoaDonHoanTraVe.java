@@ -67,6 +67,11 @@ public class HoaDonHoanTraVe extends Application {
 	private ChiTietHoaDonDAO cthdDao;
 	private GheTrenChuyenTau_dao gtctDao;
 	private String newMa;
+	private Runnable onThanhToanThanhCong;
+
+	public void setOnThanhToanThanhCong(Runnable r) {
+		this.onThanhToanThanhCong = r;
+	}
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -288,7 +293,7 @@ public class HoaDonHoanTraVe extends Application {
 						double value = entry.getValue();
 						System.out.print(value);
 						try {
-							System.out.println(vedao.ThayDoiTrangThaiVe(key.getMaVeTau(), "đã hoàn trả"));
+							System.out.println(vedao.ThayDoiTrangThaiVe(key.getMaVeTau(), "Đã hoàn trả"));
 							int soLuongLichSu = lsttDao.getSoLuongLichSuTuongTacVe() + 1;
 							System.out.println(soLuongLichSu);
 							if (soLuongLichSu < 10) {
@@ -320,6 +325,9 @@ public class HoaDonHoanTraVe extends Application {
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+					}
+					if (onThanhToanThanhCong != null) {
+						onThanhToanThanhCong.run();
 					}
 					showConfirm(currentStage, "Thông báo", "Bạn đã thanh toán hóa đơn thành công");
 

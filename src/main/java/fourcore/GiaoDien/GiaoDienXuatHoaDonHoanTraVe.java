@@ -12,10 +12,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
 import fourcore.Control.HoanTraVeControl;
+import fourcore.Entity.ThongTinCtHoaDon;
 import fourcore.Entity.Ve;
 import fourcore.dao.ChiTietHoaDonDAO;
 import fourcore.dao.GheTrenChuyenTau_dao;
@@ -80,6 +82,7 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 	private Button btnTroLai = new Button("Trở lại");;
 	private VBox pnlThongTinXuatHoaDonCaNhan;
 	private Button btnThanhToan;
+	NumberFormat nft = NumberFormat.getInstance(new Locale("vi", "VN"));
 
 	String hoTen;
 	String cccd;
@@ -95,8 +98,21 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 	private HoanTraVeControl ctrl = new HoanTraVeControl();
 
 	Map<Ve, Double> listVeThanhToan;
+	Map<Ve, Double> listVeThanhToanTabel;
 
 	ArrayList<TextField> txtList = new ArrayList<TextField>();
+	private GiaoDienHoanTraVe gdHoan;
+	private HoaDonHoanTraVe gd;
+
+	private Runnable onThanhToanThanhCong;
+	private VBox tableLayout = new VBox();
+	private GridPane tableCol;
+	private VBox tableDesc;
+	private int cnt;
+
+	public void setOnThanhToanThanhCong(Runnable r) {
+		this.onThanhToanThanhCong = r;
+	}
 
 	public GiaoDienXuatHoaDonHoanTraVe(Map<Ve, Double> list) {
 		listVeThanhToan = list;
@@ -164,6 +180,96 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 		right.setStyle(rightStyle);
 		return new HBox(left, right);
 	}
+//
+//	public void updateListVeThanhToan(Map<Ve, Double> newMap) {
+//		if (this.listVeThanhToan == null) {
+//			this.listVeThanhToan = new HashMap<>();
+//		}
+//
+//		this.listVeThanhToan.clear();
+//		this.listVeThanhToan.putAll(newMap);
+//
+//		refreshTable(); // ✅ OK
+//	}
+
+	public void refreshTable(Map<Ve, Double> data) {
+
+		if (tableDesc == null)
+			return;
+
+		tableDesc.getChildren().clear();
+
+		if (data == null || data.isEmpty())
+			return;
+
+		int cnt = 1;
+		for (Map.Entry<Ve, Double> entry : data.entrySet()) {
+			Ve v = entry.getKey();
+
+			GridPane row = new GridPane();
+			row.setHgap(15);
+			row.setAlignment(Pos.CENTER);
+			row.setPrefHeight(60);
+			row.setStyle("""
+					    -fx-background-color:#00BACB;
+					    -fx-background-radius:15px;
+					""");
+
+			String[] values = { String.valueOf(cnt++), v.getMaVeTau(), v.getGaDi(), v.getGaDen(), v.getLoaiVe(),
+					nft.format(v.getGiaVe()), "-" + nft.format(v.getGiaVe() - entry.getValue()),
+					nft.format(entry.getValue()) };
+
+			for (int i = 0; i < values.length; i++) {
+				Label lbl = new Label(values[i]);
+				lbl.setStyle("-fx-font-weight:bold;");
+				lbl.setPrefWidth(100);
+				lbl.setAlignment(Pos.CENTER);
+				lbl.setWrapText(i == 2 || i == 3);
+				row.add(lbl, i, 0);
+			}
+
+			tableDesc.getChildren().add(row);
+		}
+	}
+
+	private void initTable() {
+		tableLayout = new VBox(10);
+		tableLayout.setPadding(new Insets(0, 50, 20, 0));
+		tableLayout.setMaxWidth(800);
+		tableLayout.setAlignment(Pos.CENTER);
+		tableLayout.setTranslateX(300);
+		tableLayout.setTranslateY(-10);
+
+		tableCol = new GridPane();
+		tableCol.setHgap(15);
+		tableCol.setVgap(10);
+		tableCol.setAlignment(Pos.CENTER);
+
+		String style = "-fx-font-family:'Inter';-fx-font-size:14px;-fx-font-weight:bold;";
+		String[] headers = { "STT", "Mã vé", "Ga đi", "Ga đến", "Loại ghế", "Giá vé", "Phí hoàn trả", "Thành tiền" };
+
+		for (int i = 0; i < headers.length; i++) {
+			Label lbl = new Label(headers[i]);
+			lbl.setPrefWidth(100);
+			lbl.setAlignment(Pos.CENTER);
+			lbl.setStyle(style);
+			tableCol.add(lbl, i, 0);
+		}
+
+		tableDesc = new VBox(10);
+		tableDesc.setPadding(new Insets(6, 0, 6, 0));
+
+		ScrollPane scrPane = new ScrollPane(tableDesc);
+		scrPane.setFitToWidth(true);
+		scrPane.setPannable(true);
+		scrPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		scrPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		scrPane.setStyle("""
+				    -fx-background-color: transparent;
+				    -fx-border-color: transparent;
+				""");
+		tableLayout.getChildren().addAll(tableCol, scrPane);
+	}
 
 	public VBox getNoiDungChinhVe() {
 		if (this.noiDungChinh == null) {
@@ -218,6 +324,9 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 
 			BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
 
+			initTable();
+			noiDungChinh.getChildren().add(tableLayout);
+
 			pnlThanhToanButton = new VBox();
 			pnlThanhToanButtonSub1 = new HBox();
 			pnlThanhToanButtonSub2 = new HBox();
@@ -229,19 +338,19 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 
 			String btnBlueStyle = "-fx-font-family: 'Inter';" + "-fx-font-size: 20px;" + "-fx-font-weight: bold;"
 					+ "-fx-text-fill:white;" + "-fx-background-color: linear-gradient(to top, #00BACB, #B6D0D3);"
-					+ "-fx-background-radius:15px;";
-			String lblStyle = "-fx-font-size: 36px;";
+					+ "-fx-background-radius: 15px;";
+			String lblStyle = "-fx-font-size: 24px;";
 
 			btnRong = new Pane();
 			pnlTongCong = new HBox();
 			pnlSoLuongVe = new HBox(5);
-			lblSoLuongVe = new Label("Số lượng vé:");
+			lblSoLuongVe = new Label("Số lượng vé hoàn trả:");
 
 			lblSoLuongVe.setStyle(lblStyle);
 			lblSoLuongVeValue.setStyle(lblStyle + "-fx-font-weight: bold;");
 			pnlSoLuongVe.getChildren().addAll(lblSoLuongVe, lblSoLuongVeValue);
 
-			lblTongCong = new Label("Tổng cộng:");
+			lblTongCong = new Label("Tổng cộng tiền phải hoàn trả: ");
 			lblTongCong.setWrapText(true);
 			lblTongCong.setStyle(lblStyle);
 
@@ -275,6 +384,7 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 			hieuUngHover(btnTroLai);
 
 			btnThanhToan.setOnMouseClicked(event -> {
+
 				String txtHoTenValue = txtList.get(0).getText().trim();
 				String txtSDTValue = txtList.get(1).getText().trim();
 				String txtEmailValue = txtList.get(2).getText().trim();
@@ -347,8 +457,8 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 					System.out.println(txtHoTenValue);
 					System.out.println(txtSDTValue);
 					// Tạo cửa sổ mới
-					HoaDonHoanTraVe gd = new HoaDonHoanTraVe(txtHoTenValue, txtDiaChiValue, txtSDTValue,
-							txtSoGiayToValue, txtEmailValue, listVeThanhToan);
+					gd = new HoaDonHoanTraVe(txtHoTenValue, txtDiaChiValue, txtSDTValue, txtSoGiayToValue,
+							txtEmailValue, listVeThanhToan);
 					Stage gdStage = new Stage();
 					gdStage.initOwner(currentStage);
 					gdStage.initStyle(StageStyle.UTILITY);
@@ -359,6 +469,10 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 					gd.start(gdStage);
 					gdStage.show();
 
+					gd.setOnThanhToanThanhCong(() -> {
+						onThanhToanThanhCong.run();
+					});
+
 				} else {
 					System.out.println("Người dùng chọn No: hủy thanh toán");
 				}
@@ -366,8 +480,18 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 			});
 
 			ctrl.loadDuLieuThanhToan(listVeThanhToan, lblTongCongValue, lblSoLuongVeValue);
+			refreshTable(listVeThanhToan);
 		}
 		return noiDungChinh;
+	}
+
+	public void updateListVeThanhToan(Map<Ve, Double> newMap) {
+		this.listVeThanhToan = newMap;
+		refreshTable(newMap);
+	}
+
+	public HoaDonHoanTraVe traVeHoaDonHoanTraVe() {
+		return this.gd;
 	}
 
 	public Button traVeNutTroVe() {
@@ -376,6 +500,14 @@ public class GiaoDienXuatHoaDonHoanTraVe extends Application {
 
 	public Button traVeNutThanhToan() {
 		return this.btnTroLai;
+	}
+
+	public Map<Ve, Double> traVeListVeThanhToanCuaTable() {
+		return this.listVeThanhToan;
+	}
+
+	public void ganListVeThanhToanCuaTable(Map<Ve, Double> list) {
+		this.listVeThanhToan = list;
 	}
 
 	public static void main(String[] args) {

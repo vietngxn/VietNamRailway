@@ -78,9 +78,9 @@ public class TrangChu extends Application {
 	BanVeControl banVeControl = new BanVeControl();
 	GhiFile ghiFile = new GhiFile();
 	private File fileTmp;
+
 	public TrangChu() throws SQLException {
 	}
-
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -554,11 +554,11 @@ public class TrangChu extends Application {
 			HBox quanLiChuyenTauBox = new HBox();
 			HBox thongKeLoaiGhe = new HBox();
 			HBox thongkedoanhthutheotau1 = new HBox();
-			
+
 			Label quanLiChuyenTauuLabel = new Label("Quản lí chuyến tàu");
 			Label thongKeLoaiTauBest = new Label("Thống kê chuyến tàu chạy nhiều nhất");
 			Label thongkedoanhthutheotau = new Label("Thống kê Doanh thu theo chuyến tàu");
-			
+
 			quanLiChuyenTauBox.getChildren().add(quanLiChuyenTauuLabel);
 			thongKeLoaiGhe.getChildren().add(thongKeLoaiTauBest);
 			thongkedoanhthutheotau1.getChildren().add(thongkedoanhthutheotau);
@@ -567,7 +567,7 @@ public class TrangChu extends Application {
 			// getClass().getResourceAsStream("/fonts/Inter/static/Inter_18pt-SemiBold.ttf");
 			// Font labelMenuPhu = Font.loadFont(interSemiBold,15);
 
-			for (Label label : new Label[] { quanLiChuyenTauuLabel, thongKeLoaiTauBest,thongkedoanhthutheotau }) {
+			for (Label label : new Label[] { quanLiChuyenTauuLabel, thongKeLoaiTauBest, thongkedoanhthutheotau }) {
 				label.setStyle("-fx-background-color: #D2EEF0;");
 				label.setTranslateY(-10);
 				label.setFont(labelMenuPhu);
@@ -583,7 +583,7 @@ public class TrangChu extends Application {
 				hbox.setOnMouseExited(e -> hbox.setStyle("-fx-background-color: #D2EEF0;"));
 			}
 
-			menuPhuQuanLiChuyenTau.getChildren().addAll(quanLiChuyenTauBox, thongKeLoaiGhe,thongkedoanhthutheotau1);
+			menuPhuQuanLiChuyenTau.getChildren().addAll(quanLiChuyenTauBox, thongKeLoaiGhe, thongkedoanhthutheotau1);
 			danhSachMenuItem.getChildren().add(menuPhuQuanLiChuyenTau);
 
 			// Sự kiện onclick vào menu
@@ -632,9 +632,9 @@ public class TrangChu extends Application {
 			userIcon = new ImageView(getClass().getResource("/img/user-circle.png").toExternalForm());
 			userIcon.setFitWidth(50);
 			userIcon.setFitHeight(50);
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("NhanVien.dat"));
-            NhanVien nv1 = (NhanVien) ois.readObject();
-            userLabel = new Label(""+nv1.getHoTen());
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream("NhanVien.dat"));
+			NhanVien nv1 = (NhanVien) ois.readObject();
+			userLabel = new Label("" + nv1.getHoTen());
 			userLabel.setFont(labelFont);
 			userLabel.setTranslateX(30);
 			settingIcon = new ImageView(getClass().getResource("/img/cog.png").toExternalForm());
@@ -976,13 +976,13 @@ public class TrangChu extends Application {
 				CapVeControl capVeControl = new CapVeControl();
 				capVeControl.handleMenuTrangChuSelect(root);
 			});
-            DoiVeControl doiVeControl = new DoiVeControl();
-            doiVeControl.initChonVe();
-            doiVeBox.setOnMouseClicked(event -> {
+			DoiVeControl doiVeControl = new DoiVeControl();
+			doiVeControl.initChonVe();
+			doiVeBox.setOnMouseClicked(event -> {
 
-                doiVeControl.handleMenuTrangChuSelect(root);
-                doiVeControl.handleSearchChuyenTau(root);
-            });
+				doiVeControl.handleMenuTrangChuSelect(root);
+				doiVeControl.handleSearchChuyenTau(root);
+			});
 			xemLichSuVeBox.setOnMouseClicked(event -> {
 				XemLichSuVeBoxControl lichSuVeControl = new XemLichSuVeBoxControl();
 				try {
@@ -992,19 +992,19 @@ public class TrangChu extends Application {
 					e.printStackTrace();
 				}
 			});
-            banVeControl.initChonVe();
+			banVeControl.initChonVe();
 			banVeBox.setOnMouseClicked(event -> {
-                try {
-                    banVeControl.handleMenuTrangChuSelect(root);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-                try {
-                    banVeControl.timKiemChuyenTauHandle(root);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+				try {
+					banVeControl.handleMenuTrangChuSelect(root);
+				} catch (SQLException e) {
+					throw new RuntimeException(e);
+				}
+				try {
+					banVeControl.timKiemChuyenTauHandle(root);
+				} catch (SQLException e) {
+					throw new RuntimeException(e);
+				}
+			});
 			hoanVeBox.setOnMouseClicked(event -> {
 				HoanTraVeControl hoanVeCtrl = new HoanTraVeControl();
 				hoanVeCtrl.handleMenuTrangChuSelect(root);
@@ -1018,24 +1018,22 @@ public class TrangChu extends Application {
 			});
 
 			quanLiKhachHangBox.setOnMouseClicked(event -> {
-                KhachHangControl khachHangControl = null;
-                khachHangControl = new KhachHangControl();
-                khachHangControl.handleMenuTrangChuSelect(root);
-                try {
-                    khachHangControl.handleThemKhachHangSelect(root);
-                    khachHangControl.handleThoat(root);
-                    khachHangControl.suaThongTinKhachHangSelect(root);
-                    khachHangControl.handleThoat2(root);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
+				KhachHangControl khachHangControl = null;
+				khachHangControl = new KhachHangControl();
+				khachHangControl.handleMenuTrangChuSelect(root);
+				try {
+					khachHangControl.handleThemKhachHangSelect(root);
+					khachHangControl.handleThoat(root);
+					khachHangControl.suaThongTinKhachHangSelect(root);
+					khachHangControl.handleThoat2(root);
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			});
 
 			thongKeKhachHang.setOnMouseClicked(event -> {
 				ThongKeKhachHangControl thongKeKhachHangControl = new ThongKeKhachHangControl();
 				thongKeKhachHangControl.handleMenuTrangChuSelect(root);
-				
-				
 			});
 
 			quanLiHoaDonBox.setOnMouseClicked(event -> {
@@ -1055,64 +1053,65 @@ public class TrangChu extends Application {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-                try {
-                    nhanVienControl.handleThemNhanVien(root);
-                    nhanVienControl.handlethoat(root);
-                    nhanVienControl.handlecapNhatbtn(root);
-                    nhanVienControl.handlethoat2(root);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+				try {
+					nhanVienControl.handleThemNhanVien(root);
+					nhanVienControl.handlethoat(root);
+					nhanVienControl.handlecapNhatbtn(root);
+					nhanVienControl.handlethoat2(root);
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
 
-            });
+			});
 			quanLiCTKMMenu.setOnMouseClicked(event -> {
 				KhuyenMaiControl khuyenMaiControl = new KhuyenMaiControl();
 				khuyenMaiControl.handleMenuTrangChuSelect(root);
-                try {
-                    khuyenMaiControl.handleThemCTKM(root);
-                    khuyenMaiControl.handlethoatCTKM(root);
-                    khuyenMaiControl.suaThongTinCTKMSelect(root);
-                    khuyenMaiControl.handlethoatCTKM2(root);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
+				try {
+					khuyenMaiControl.handleThemCTKM(root);
+					khuyenMaiControl.handlethoatCTKM(root);
+					khuyenMaiControl.suaThongTinCTKMSelect(root);
+					khuyenMaiControl.handlethoatCTKM2(root);
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			});
 			quanLiChuyenTauBox.setOnMouseClicked(event -> {
 				fileTmp = new File("src/main/resources/tmp_ChuyenTau.txt");
 				List<String> allLine;
 				try {
 					allLine = Files.readAllLines(Paths.get("src/main/resources/tmp_ChuyenTau.txt"));
-					for(int i = allLine.size()-1; i >= 0; i--) ghiFile.xoaTrangDong(fileTmp, i);
+					for (int i = allLine.size() - 1; i >= 0; i--)
+						ghiFile.xoaTrangDong(fileTmp, i);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-                ChuyenTauControl chuyenTauControl = null;
-                try {
-                    chuyenTauControl = new ChuyenTauControl();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-                try {
-                    chuyenTauControl.handleMenuTrangChuSelect(root);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            thongKeLoaiTauBest.setOnMouseClicked(event -> {
-                ThongKeChuyenTauControl thongKeChuyenTauControl = null;
-                thongKeChuyenTauControl = new ThongKeChuyenTauControl();
-                thongKeChuyenTauControl.handleMenuTrangChuSelect(root);
-            });
-            
-            thongkedoanhthutheotau.setOnMouseClicked(e-> {
-            	ThongKeChuyenTauControl tk = null;
-            	tk = new ThongKeChuyenTauControl();
-            	tk.handleshowthongke2(root);
-            });
+
+				ChuyenTauControl chuyenTauControl = null;
+				try {
+					chuyenTauControl = new ChuyenTauControl();
+				} catch (SQLException e) {
+					throw new RuntimeException(e);
+				}
+				try {
+					chuyenTauControl.handleMenuTrangChuSelect(root);
+				} catch (SQLException e) {
+					throw new RuntimeException(e);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			});
+			thongKeLoaiTauBest.setOnMouseClicked(event -> {
+				ThongKeChuyenTauControl thongKeChuyenTauControl = null;
+				thongKeChuyenTauControl = new ThongKeChuyenTauControl();
+				thongKeChuyenTauControl.handleMenuTrangChuSelect(root);
+			});
+
+			thongkedoanhthutheotau.setOnMouseClicked(e -> {
+				ThongKeChuyenTauControl tk = null;
+				tk = new ThongKeChuyenTauControl();
+				tk.handleshowthongke2(root);
+			});
 
 			// ------------------------------------------------------------------------------------------------------
 			BorderPane.setMargin(noiDungChinh, new Insets(0, 0, 0, 50));
@@ -1124,16 +1123,14 @@ public class TrangChu extends Application {
 			primaryStage.show();
 			fileTmp = new File("src/main/resources/tmp_ChuyenTau.txt");
 			List<String> allLine = Files.readAllLines(Paths.get("src/main/resources/tmp_ChuyenTau.txt"));
-			for(int i = allLine.size()-1; i >= 0; i--) ghiFile.xoaTrangDong(fileTmp, i);
+			for (int i = allLine.size() - 1; i >= 0; i--)
+				ghiFile.xoaTrangDong(fileTmp, i);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
-	
-	
-	
-	
+
 	public static void main(String[] args) {
 		Application.launch(TrangChu.class, args);
 	}

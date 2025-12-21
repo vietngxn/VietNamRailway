@@ -183,7 +183,7 @@ public class HoaDonDAO {
 		int rows = insertST.executeUpdate(insertQuery);
 		insertST.close();
 
-		System.out.println("Số hàng được thêm thành công: " + rows);
+		System.out.println("Thanh toán hóa đơn hoàn trả vé thành công " + rows);
 	}
 
 	public KhachHang getKH(String mahd) throws SQLException {

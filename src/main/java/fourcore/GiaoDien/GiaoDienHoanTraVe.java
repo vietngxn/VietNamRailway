@@ -428,13 +428,13 @@ public class GiaoDienHoanTraVe extends Application {
 			// label tong cong
 			pnlTongConglbl = new HBox();
 			String lblStyle = "-fx-font-size: 36px;" + "-fx-font-weight: bold;";
-			lblTongCong = new Label("Tổng cộng: ");
+			lblTongCong = new Label("Tổng cộng tiền phải hoàn trả: ");
 			lblTongCongValue = new Label();
 			lblTongCong.setStyle(lblStyle);
 			lblTongCongValue.setStyle(lblStyle);
 
 			pnlTongConglbl.getChildren().addAll(lblTongCong, lblTongCongValue);
-			HBox.setMargin(lblTongCong, new Insets(0, 0, 0, 800));
+			HBox.setMargin(lblTongCong, new Insets(0, 0, 0, 600));
 			noiDungChinh.getChildren().add(pnlTongConglbl);
 
 			pnlCapNhatVe = new HBox(30);

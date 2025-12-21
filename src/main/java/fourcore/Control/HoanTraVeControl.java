@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import fourcore.Entity.Ve;
 import fourcore.GiaoDien.BanVe;
@@ -33,6 +34,7 @@ public class HoanTraVeControl {
 	Node gdHoanBackUp;
 	VeDAO dao;
 	Map<Ve, Double> listVeThanhToan;
+	Map<Ve, Double> listVeThanhToanTableCu;
 	private ChiTietHoaDonDAO cthd;
 
 	public HoanTraVeControl() {
@@ -57,8 +59,15 @@ public class HoanTraVeControl {
 
 		gdHoan.traVeNutHoanVe().setOnMouseClicked(event -> {
 			int kTraHopLe = 1;
-			// ktra size cua map Ve thanh toan
 
+			gdXuatHD = gdXuat.traVeHoaDonHoanTraVe();
+
+			if (gdXuatHD != null) {
+				gdXuatHD.traVeBtnXuatHoaDon().setOnMouseClicked(e -> {
+					root.setCenter(gdHoanBackUp);
+					System.out.println("Thanh toán thành công, trở về trang hoàn vé");
+				});
+			}
 			if (listVeThanhToan.size() == 0) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("Lỗi");
@@ -139,6 +148,7 @@ public class HoanTraVeControl {
 			}
 			if (kTraHopLe == 1) {
 				try {
+					gdXuat.updateListVeThanhToan(listVeThanhToan);
 					VBox gdMain = gdXuat.getNoiDungChinhVe();
 					root.setCenter(gdMain);
 					loadDuLieuThanhToan(listVeThanhToan, gdXuat.getlblTongCongValue(), gdXuat.getlblSoLuongValue());
@@ -150,17 +160,16 @@ public class HoanTraVeControl {
 		});
 		gdXuat.traVeNutTroVe().setOnMouseClicked(event -> {
 			root.setCenter(gdHoanBackUp);
-			for (Map.Entry<Ve, Double> entry : listVeThanhToan.entrySet()) {
-				System.out.println(entry.getKey().getMaVeTau() + entry.getValue());
-			}
-			System.out.println("Thanh toán thành công, trả về trang hoàn vé");
+			System.out.println("Trả về trang hoàn vé");
 		});
-
-		gdXuatHD.traVeBtnXuatHoaDon().setOnMouseClicked(event -> {
-			System.out.println("Thanh toán thành công, trả về trang hoàn vé");
+		gdXuat.setOnThanhToanThanhCong(() -> {
 			root.setCenter(gdHoanBackUp);
+			System.out.println("Thanh toán xong → trở về trang hoàn vé");
 		});
+	}
 
+	public Node traVeTrangHoanVe() {
+		return gdHoanBackUp;
 	}
 
 	public void loadDuLieuThanhToan(Map<Ve, Double> listVe, Label lblTongCong, Label lblSoLuong) {
