@@ -43,6 +43,7 @@ public class HoanTraVeControl {
 
 	public void handleMenuTrangChuSelect(BorderPane root) {
 		gdHoan = new GiaoDienHoanTraVe();
+		gdHoan.clearData();
 		Stage gdStage = new Stage();
 		gdHoan.start(gdStage);
 		VBox noiDungChinhVBox = gdHoan.getNoiDungChinhVe();
@@ -51,6 +52,7 @@ public class HoanTraVeControl {
 	}
 
 	public void traVeGiaoDienXuatHoaDon(BorderPane root) throws Exception {
+		
 		handleMenuTrangChuSelect(root);
 
 		listVeThanhToan = gdHoan.traVeListVeThanhToan();
