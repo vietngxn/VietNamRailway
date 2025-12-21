@@ -7,7 +7,7 @@ public class ToaTau implements Serializable {
     private String tenToaTau;
     private int soGhe;
     private LoaiToaTau loaiToaTau;
-
+    private boolean isRemove;
 
 
     public String getMaToaTau() {
@@ -35,15 +35,41 @@ public class ToaTau implements Serializable {
         this.soGhe = soGhe;
     }
 
-    public ToaTau(String maToaTau, String tenToaTau, int soGhe,LoaiToaTau loaiToaTau) {
+    
+    
+    public boolean isRemove() {
+		return isRemove;
+	}
+	public void setRemove(boolean isRemove) {
+		this.isRemove = isRemove;
+	}
+	public ToaTau(String maToaTau, String tenToaTau, int soGhe,LoaiToaTau loaiToaTau) {
         setMaToaTau(maToaTau);
         setTenToaTau(tenToaTau);
         setSoGhe(soGhe);
         setLoaiToaTau(loaiToaTau);
     }
+	public ToaTau(String maToaTau, String tenToaTau, int soGhe,LoaiToaTau loaiToaTau, boolean isRemove) {
+        setMaToaTau(maToaTau);
+        setTenToaTau(tenToaTau);
+        setSoGhe(soGhe);
+        setLoaiToaTau(loaiToaTau);
+        setRemove(isRemove);
+    }
     public ToaTau() {
     }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ToaTau)) return false;
+        ToaTau other = (ToaTau) o;
+        return maToaTau != null && maToaTau.equalsIgnoreCase(other.getMaToaTau());
+    }
 
+    @Override
+    public int hashCode() {
+        return maToaTau == null ? 0 : maToaTau.toLowerCase().hashCode();
+    }
 
 
 }

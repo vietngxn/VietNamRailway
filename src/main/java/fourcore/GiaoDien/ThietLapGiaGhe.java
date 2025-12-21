@@ -166,6 +166,10 @@ public class ThietLapGiaGhe extends Application {
 	private GheTrenChuyenTau_dao ghetrenchuyentaudao = new GheTrenChuyenTau_dao();
 	private ChuyenTau chuyenTauCuaGheTrenChuyenTau = null;
 	private Button buttonTroLai;
+	private GridPane gridSPAllGheGiaGoc;
+	int coto = 0, dongo = 0, counto = 0;
+	private GridPane gridSPAllGheGiaHienTai;
+	private GridPane gridSPAllGheHienTai;
 
     public ThietLapGiaGhe() throws SQLException {
     }
@@ -343,7 +347,7 @@ public class ThietLapGiaGhe extends Application {
 		String duongdanghethuong = "/img/ghe.png";
 		String duongdangheluudong = "/img/gheluudong.png";
 		
-		int count = 0, cot = 0, dong = 0, cotAll = 0, dongAll = 0;
+		int count = 0, cot = 0, dong = 0, cotAll = 0, dongAll = 0;		
 		GridPane gridCumGhe = new GridPane();
 		
 		GridPane gridAllGhe = new GridPane();
@@ -386,18 +390,82 @@ public class ThietLapGiaGhe extends Application {
 							imgGhe.setImage(new Image(duongdanghechon));
 							listGheChon.add(gn.getMaGheNgoi());
 						}
-						StringBuilder chuoiGiaGoc = new StringBuilder();
-						StringBuilder chuoiGiaHienTai = new StringBuilder();
-						chuoiGiaHienTai.append("Giá vé tăng thêm: ");
-						chuoiGiaGoc.append("Giá gốc: ");
-						for(String maGhe : listGheChon) {
-						    String giaGoc = mapGheTheoToaGiaGoc.get(maGhe);
-						    String giaHienTai = mapGheTheoToaGiaHienTai.get(maGhe);
-						    chuoiGiaGoc.append(giaGoc + "vnd ");
-						    chuoiGiaHienTai.append(giaHienTai + "vnd ");
+						
+//						StackPane spGiaGhe = spGhe;
+						
+//						String giaGoc = mapGheTheoToaGiaGoc.get(spGhe.getChildren().get(1).toString());
+//						String giaHienTai = mapGheTheoToaGiaHienTai.get(spGhe.getChildren().get(1).toString());
+//						
+//						Label txtGiaGoc = new Label(mapGheTheoToaGiaGoc.get(spGhe.getChildren().get(1).toString()));
+//						txtGiaGoc.setId("txt_Money");
+//						
+//						VBox boxSPGiaGheGoc = new VBox();
+//						boxSPGiaGheGoc.getChildren().addAll(spGiaGhe, txtGiaGoc);
+//						
+//						if(counto %4 == 0 && counto != 0) {
+//							dongo++;
+//						}
+//						
+//						gridSPAllGheGiaGoc.add(boxSPGiaGheGoc, coto, dongo);
+//						coto++;
+//						
+						coto = 0; dongo = 0;
+						gridSPAllGheGiaGoc.setPrefWidth(300);
+						gridSPAllGheGiaGoc.setPrefHeight(490);
+						gridSPAllGheGiaGoc.getChildren().clear();
+						gridSPAllGheGiaGoc.setHgap(10);
+						gridSPAllGheGiaGoc.setPadding(new Insets(5));
+						
+						gridSPAllGheGiaHienTai.setPrefWidth(300);
+						gridSPAllGheGiaHienTai.setPrefHeight(490);
+						gridSPAllGheGiaHienTai.getChildren().clear();
+						gridSPAllGheGiaHienTai.setHgap(10);
+						gridSPAllGheGiaHienTai.setPadding(new Insets(5));
+						
+						for(int i = 0; i < listGheChon.size(); i++) {
+							String soGhe = mapGheTheoToaGiaGoc.get(listGheChon.get(i)).split(":")[0].trim();;
+							Label lblSPAllGheGiaGoc = new Label(soGhe);
+							lblSPAllGheGiaGoc.setId("lbl_Ghe");
+							
+							StackPane spGiaGhe = new StackPane(animation.taoImgGhe(duongdanghethuong), lblSPAllGheGiaGoc);
+							Label txtGiaGoc = new Label(mapGheTheoToaGiaGoc.get(listGheChon.get(i)).split(":")[1].trim());
+							txtGiaGoc.setId("txt_Money");
+							Label txtGiaHienTai = new Label(mapGheTheoToaGiaHienTai.get(listGheChon.get(i)).split(":")[1].trim());
+							txtGiaHienTai.setId("txt_Money");
+							
+							VBox boxSPGiaGheGoc = new VBox();
+							boxSPGiaGheGoc.getChildren().addAll(spGiaGhe, txtGiaGoc);
+							boxSPGiaGheGoc.setAlignment(Pos.CENTER);
+							
+							Label lblSPAllGheGiaHienTai = new Label(soGhe);
+							lblSPAllGheGiaHienTai.setId("lbl_Ghe");
+							
+							StackPane spGiaGheHienTai = new StackPane(animation.taoImgGhe(duongdanghethuong), lblSPAllGheGiaHienTai);
+							VBox boxSPGiaGheHienTai = new VBox();
+							boxSPGiaGheHienTai.getChildren().addAll(spGiaGheHienTai, txtGiaHienTai);
+							boxSPGiaGheHienTai.setAlignment(Pos.CENTER);
+							
+							if(i %5 == 0 && i != 0) {
+								dongo++;
+								coto = 0;
+							}
+							gridSPAllGheGiaGoc.add(boxSPGiaGheGoc, coto, dongo);
+							gridSPAllGheGiaHienTai.add(boxSPGiaGheHienTai, coto, dongo);
+							coto++;
 						}
-						lblGiaGocGhe.setText(chuoiGiaGoc.toString());
-						lblGiaVeHienTai.setText(chuoiGiaHienTai.toString());
+						
+//						StringBuilder chuoiGiaGoc = new StringBuilder();
+//						StringBuilder chuoiGiaHienTai = new StringBuilder();
+//						chuoiGiaHienTai.append("Giá vé tăng thêm: ");
+//						chuoiGiaGoc.append("Giá gốc: ");
+//						for(String maGhe : listGheChon) {
+//						    String giaGoc = mapGheTheoToaGiaGoc.get(maGhe);
+//						    String giaHienTai = mapGheTheoToaGiaHienTai.get(maGhe);
+//						    chuoiGiaGoc.append(giaGoc + "vnd ");
+//						    chuoiGiaHienTai.append(giaHienTai + "vnd ");
+//						}
+//						lblGiaGocGhe.setText(chuoiGiaGoc.toString());
+//						lblGiaVeHienTai.setText(chuoiGiaHienTai.toString());
 					});
 					
 					spGhe.setOnMouseEntered(event -> {
@@ -476,18 +544,64 @@ public class ThietLapGiaGhe extends Application {
 							imgGhe.setImage(new Image(duongdanghechon));
 							listGheChon.add(gn.getMaGheNgoi());
 						}
-						StringBuilder chuoiGiaGoc = new StringBuilder();
-						StringBuilder chuoiGiaHienTai = new StringBuilder();
-						chuoiGiaHienTai.append("Giá vé tăng thêm: ");
-						chuoiGiaGoc.append("Giá gốc: ");
-						for(String maGhe : listGheChon) {
-						    String giaGoc = mapGheTheoToaGiaGoc.get(maGhe);
-						    String giaHienTai = mapGheTheoToaGiaHienTai.get(maGhe);
-						    chuoiGiaGoc.append(giaGoc + "vnd ");
-						    chuoiGiaHienTai.append(giaHienTai + "vnd ");
+						
+						coto = 0; dongo = 0;
+						gridSPAllGheGiaGoc.setPrefWidth(300);
+						gridSPAllGheGiaGoc.setPrefHeight(490);
+						gridSPAllGheGiaGoc.getChildren().clear();
+						gridSPAllGheGiaGoc.setHgap(10);
+						gridSPAllGheGiaGoc.setPadding(new Insets(5));
+						
+						gridSPAllGheGiaHienTai.setPrefWidth(300);
+						gridSPAllGheGiaHienTai.setPrefHeight(490);
+						gridSPAllGheGiaHienTai.getChildren().clear();
+						gridSPAllGheGiaHienTai.setHgap(10);
+						gridSPAllGheGiaHienTai.setPadding(new Insets(5));
+						
+						for(int i = 0; i < listGheChon.size(); i++) {
+							String soGhe = mapGheTheoToaGiaGoc.get(listGheChon.get(i)).split(":")[0].trim();;
+							Label lblSPAllGheGiaGoc = new Label(soGhe);
+							lblSPAllGheGiaGoc.setId("lbl_Ghe");
+							
+							StackPane spGiaGhe = new StackPane(animation.taoImgGhe(duongdanghethuong), lblSPAllGheGiaGoc);
+							Label txtGiaGoc = new Label(mapGheTheoToaGiaGoc.get(listGheChon.get(i)).split(":")[1].trim());
+							txtGiaGoc.setId("txt_Money");
+							Label txtGiaHienTai = new Label(mapGheTheoToaGiaHienTai.get(listGheChon.get(i)).split(":")[1].trim());
+							txtGiaHienTai.setId("txt_Money");
+							
+							VBox boxSPGiaGheGoc = new VBox();
+							boxSPGiaGheGoc.getChildren().addAll(spGiaGhe, txtGiaGoc);
+							boxSPGiaGheGoc.setAlignment(Pos.CENTER);
+							
+							Label lblSPAllGheGiaHienTai = new Label(soGhe);
+							lblSPAllGheGiaHienTai.setId("lbl_Ghe");
+							
+							StackPane spGiaGheHienTai = new StackPane(animation.taoImgGhe(duongdanghethuong), lblSPAllGheGiaHienTai);
+							VBox boxSPGiaGheHienTai = new VBox();
+							boxSPGiaGheHienTai.getChildren().addAll(spGiaGheHienTai, txtGiaHienTai);
+							boxSPGiaGheHienTai.setAlignment(Pos.CENTER);
+							
+							if(i %5 == 0 && i != 0) {
+								dongo++;
+								coto = 0;
+							}
+							gridSPAllGheGiaGoc.add(boxSPGiaGheGoc, coto, dongo);
+							gridSPAllGheGiaHienTai.add(boxSPGiaGheHienTai, coto, dongo);
+							coto++;
 						}
-						lblGiaGocGhe.setText(chuoiGiaGoc.toString());
-						lblGiaVeHienTai.setText(chuoiGiaHienTai.toString());
+						
+//						StringBuilder chuoiGiaGoc = new StringBuilder();
+//						StringBuilder chuoiGiaHienTai = new StringBuilder();
+//						chuoiGiaHienTai.append("Giá vé tăng thêm: ");
+//						chuoiGiaGoc.append("Giá gốc: ");
+//						for(String maGhe : listGheChon) {
+//						    String giaGoc = mapGheTheoToaGiaGoc.get(maGhe);
+//						    String giaHienTai = mapGheTheoToaGiaHienTai.get(maGhe);
+//						    chuoiGiaGoc.append(giaGoc + "vnd ");
+//						    chuoiGiaHienTai.append(giaHienTai + "vnd ");
+//						}
+//						lblGiaGocGhe.setText(chuoiGiaGoc.toString());
+//						lblGiaVeHienTai.setText(chuoiGiaHienTai.toString());
 					});
 					
 					spGhe.setOnMouseEntered(event -> {
@@ -619,18 +733,36 @@ public class ThietLapGiaGhe extends Application {
 							imgGhe.setImage(new Image(duongdanghechon));
 							listGheChon.add(gn.getMaGheNgoi());
 						}
-						StringBuilder chuoiGiaGoc = new StringBuilder();
-						StringBuilder chuoiGiaHienTai = new StringBuilder();
-						chuoiGiaHienTai.append("Giá vé tăng thêm: ");
-						chuoiGiaGoc.append("Giá gốc: ");
-						for(String maGhe : listGheChon) {
-						    String giaGoc = mapGheTheoToaGiaGoc.get(maGhe);
-						    String giaHienTai = mapGheTheoToaGiaHienTai.get(maGhe);
-						    chuoiGiaGoc.append(giaGoc + "vnd ");
-						    chuoiGiaHienTai.append(giaHienTai + "vnd ");
+						
+						coto = 0; dongo = 0;
+						gridSPAllGheHienTai.setPrefWidth(300);
+						gridSPAllGheHienTai.setPrefHeight(490);
+						gridSPAllGheHienTai.getChildren().clear();
+						gridSPAllGheHienTai.setHgap(10);
+						gridSPAllGheHienTai.setPadding(new Insets(5));
+						
+						
+						
+						for(int i = 0; i < listGheChon.size(); i++) {
+							String soGhe = mapGheTheoToaGiaGoc.get(listGheChon.get(i)).split(":")[0].trim();;
+							Label lblSPAllGheGiaGoc = new Label(soGhe);
+							lblSPAllGheGiaGoc.setId("lbl_Ghe");
+							
+							StackPane spGiaGhe = new StackPane(animation.taoImgGhe(duongdanghethuong), lblSPAllGheGiaGoc);
+							Label txtGiaGoc = new Label(mapGheTheoToaGiaGoc.get(listGheChon.get(i)).split(":")[1].trim());
+							txtGiaGoc.setId("txt_Money");
+							
+							VBox boxSPGiaGheGoc = new VBox();
+							boxSPGiaGheGoc.getChildren().addAll(spGiaGhe, txtGiaGoc);
+							boxSPGiaGheGoc.setAlignment(Pos.CENTER);
+							
+							if(i %5 == 0 && i != 0) {
+								dongo++;
+								coto = 0;
+							}
+							gridSPAllGheHienTai.add(boxSPGiaGheGoc, coto, dongo);
+							coto++;
 						}
-						lblGiaGocGhe.setText(chuoiGiaGoc.toString());
-						lblGiaVeHienTai.setText(chuoiGiaHienTai.toString());
 					});
 					
 					spGhe.setOnMouseEntered(event -> {
@@ -714,18 +846,37 @@ public class ThietLapGiaGhe extends Application {
 							imgGhe.setImage(new Image(duongdanghechon));
 							listGheChon.add(gn.getMaGheNgoi());
 						}
-						StringBuilder chuoiGiaGoc = new StringBuilder();
-						StringBuilder chuoiGiaHienTai = new StringBuilder();
-						chuoiGiaHienTai.append("Giá vé hiện tại: ");
-						chuoiGiaGoc.append("Giá gốc: ");
-						for(String maGhe : listGheChon) {
-						    String giaGoc = mapGheTheoToaGiaGoc.get(maGhe);
-						    String giaHienTai = mapGheTheoToaGiaHienTai.get(maGhe);
-						    chuoiGiaGoc.append(giaGoc + "vnd ");
-						    chuoiGiaHienTai.append(giaHienTai + "vnd ");
+						
+						coto = 0; dongo = 0;
+						gridSPAllGheHienTai.setPrefWidth(300);
+						gridSPAllGheHienTai.setPrefHeight(490);
+						gridSPAllGheHienTai.getChildren().clear();
+						gridSPAllGheHienTai.setHgap(10);
+						gridSPAllGheHienTai.setPadding(new Insets(5));
+						
+						
+						
+						for(int i = 0; i < listGheChon.size(); i++) {
+							String soGhe = mapGheTheoToaGiaGoc.get(listGheChon.get(i)).split(":")[0].trim();;
+							Label lblSPAllGheGiaGoc = new Label(soGhe);
+							lblSPAllGheGiaGoc.setId("lbl_Ghe");
+							
+							StackPane spGiaGhe = new StackPane(animation.taoImgGhe(duongdanghethuong), lblSPAllGheGiaGoc);
+							Label txtGiaGoc = new Label(mapGheTheoToaGiaGoc.get(listGheChon.get(i)).split(":")[1].trim());
+							txtGiaGoc.setId("txt_Money");
+							
+							VBox boxSPGiaGheGoc = new VBox();
+							boxSPGiaGheGoc.getChildren().addAll(spGiaGhe, txtGiaGoc);
+							boxSPGiaGheGoc.setAlignment(Pos.CENTER);
+							
+							if(i %5 == 0 && i != 0) {
+								dongo++;
+								coto = 0;
+							}
+							gridSPAllGheHienTai.add(boxSPGiaGheGoc, coto, dongo);
+							coto++;
 						}
-						lblGiaGocGhe.setText(chuoiGiaGoc.toString());
-						lblGiaVeHienTai.setText(chuoiGiaHienTai.toString());
+						
 					});
 					
 					spGhe.setOnMouseEntered(event -> {
@@ -822,6 +973,7 @@ public class ThietLapGiaGhe extends Application {
 	
 		
 		spAllGhe = new StackPane();
+		spAllGhe.setPrefWidth(600);
 		spAllGhe.setMaxWidth(600);
 		spAllGhe.setPrefHeight(300);
 		spAllGhe.setId("grid_AllGhe");
@@ -953,10 +1105,16 @@ public class ThietLapGiaGhe extends Application {
 			else {
 				
 				if(flagToaDau == 0) {
-					gridAllGhe = setUpGheNgoi(listMaToa.get(0), mapGheTheoToa.get(listMaToa.get(0)), tau, mapGheTheoToaGiaGoc, mapGheTheoToaGiaHienTai);
-					spAllGhe.getChildren().add(gridAllGhe);
-					flagToaDau++;
-					
+					if(listMaToa.get(0).startsWith("GN")) {
+						gridAllGhe = setUpGheNgoi(listMaToa.get(0), mapGheTheoToa.get(listMaToa.get(0)), tau, mapGheTheoToaGiaGoc, mapGheTheoToaGiaHienTai);
+						spAllGhe.getChildren().add(gridAllGhe);
+						flagToaDau++;
+					}
+					else {
+						VBox boxKhoangAndGhe = setUpGheNam(listMaToa.get(0), mapGheTheoToa.get(listMaToa.get(0)), tau, mapGheTheoToaGiaGoc, mapGheTheoToaGiaHienTai);
+						spAllGhe.getChildren().add(boxKhoangAndGhe);
+						flagToaDau++;	
+					}		
 				}
 				
 				ImageView imgToa = animation.taoImgGhe(duongdantoa);
@@ -1088,24 +1246,25 @@ public class ThietLapGiaGhe extends Application {
 		boxGiaGhe.getChildren().addAll(lblGiaGhe, txtGiaGhe);
 		boxGiaGhe.setId("box_Money");
 		
-		lblGiaGocGhe = new Label("Giá gốc: ");
-		lblGiaGocGhe.setId("txt_Money");
+//		lblGiaGocGhe = new Label("Giá gốc: ");
+//		lblGiaGocGhe.setId("txt_Money");
+		Label lblGiaCuocHienTai = new Label("Giá cước hiện tại: " + df.format(tau.getLoaiTau().getGiaCuoc())+"/km");
+		lblGiaCuocHienTai.setId("txt_Money");
 		
 		GridPane gridGiaGhe = new GridPane();
 		gridGiaGhe.add(boxGiaGhe, 0, 0);
 		gridGiaGhe.setColumnSpan(boxGiaGhe, 2);
-		gridGiaGhe.add(lblGiaGocGhe, 2, 0);
+		gridGiaGhe.add(lblGiaCuocHienTai, 2, 0);
 		gridGiaGhe.setHgap(20);
 		gridGiaGhe.setAlignment(Pos.CENTER);
 		
-		Label lblGiaCuocHienTai = new Label("Giá cước hiện tại: " + df.format(tau.getLoaiTau().getGiaCuoc())+"/km");
-		lblGiaCuocHienTai.setStyle("-fx-font-size: 18px; -fx-font-weight: bold");
-		lblGiaVeHienTai = new Label("Giá vé tăng thêm: ");
-		lblGiaVeHienTai.setStyle("-fx-font-size: 18px; -fx-font-weight: bold");
 		
-		HBox boxGiaHienTai = new HBox(50);
-		boxGiaHienTai.getChildren().addAll(lblGiaCuocHienTai, lblGiaVeHienTai);
-		boxGiaHienTai.setAlignment(Pos.CENTER);
+//		lblGiaVeHienTai = new Label("Giá vé tăng thêm: ");
+//		lblGiaVeHienTai.setStyle("-fx-font-size: 18px; -fx-font-weight: bold");
+		
+//		HBox boxGiaHienTai = new HBox(50);
+//		boxGiaHienTai.getChildren().addAll(lblGiaCuocHienTai);
+//		boxGiaHienTai.setAlignment(Pos.CENTER);
 		
 		Button buttonCapNhat = new Button();
 		buttonCapNhat.setText("Cập nhật");
@@ -1238,7 +1397,8 @@ public class ThietLapGiaGhe extends Application {
 					alert.showAndWait();
 				}
 				listGheChon.clear();
-				
+				gridSPAllGheGiaGoc.getChildren().clear();
+				gridSPAllGheGiaHienTai.getChildren().clear();
 			}
 		});
 		
@@ -1253,24 +1413,15 @@ public class ThietLapGiaGhe extends Application {
 		buttonThemChuyenTau.setId("button_Blue");
 		
 		buttonThemChuyenTau.setOnMouseClicked(event -> {
-			String maChuyenTauLast = chuyentaudao.getMaChuyenTauCuoiCung();
+			int maChuyenTauLast = chuyentaudao.getMaChuyenTauCuoiCung();
+			maChuyenTauLast++;
+
 			
-            if(maChuyenTauLast.equalsIgnoreCase(""))  maChuyenTauLast = "CT00";
-			String chuCT = maChuyenTauLast.replaceAll("\\d", "");
-			String soCT = maChuyenTauLast.replaceAll("\\D", "");
+			String maChuyenTauInsert = "CT" + String.format("%02d", maChuyenTauLast);
 			
-			
-			int soCTNew = Integer.parseInt(soCT);
-			soCTNew++;
-			String maChuyenTauInsert = chuCT + String.format("%02d", soCTNew);
-			
-			String maGTCT = ghetrenchuyentaudao.getMaGheTrenChuyenTauCuoiCung();
-			String chuGTCT = maGTCT.replaceAll("\\d", "");
-			String soGTCT = maGTCT.replaceAll("\\D", "");
-			
-			int soGTCTNew = Integer.parseInt(soGTCT);
-			soGTCTNew++;
-//			String maGTCTInsert = chuGTCT + soGTCTNew;
+			int maGTCT = ghetrenchuyentaudao.getMaGheTrenChuyenTauCuoiCung();
+			maGTCT++;
+		
 			
 			for(String line : allLine) {
 				JsonElement jsonElement = JsonParser.parseString(line);
@@ -1288,7 +1439,7 @@ public class ThietLapGiaGhe extends Application {
 						LocalDateTime dateTimeDi = LocalDateTime.parse(fullTime, formatter);
 						
 						String ngayDenDuKien = obj.get("ngayDenDuKien").getAsString();
-						String gioDiKeHoach = obj.get("gioKhoiHanh").getAsString();
+						String gioDiKeHoach = obj.get("gioDenDuKien").getAsString();
 						String fullTimeDen = ngayDenDuKien + " " + gioDiKeHoach;
 						LocalDateTime dateTimeDen = LocalDateTime.parse(fullTimeDen, formatter);
 						
@@ -1308,7 +1459,7 @@ public class ThietLapGiaGhe extends Application {
 				
 			}
 			
-			if(ghedao.capNhatGiaTriTangThemChoMap(mapUpdateGhe)) {
+			if(ghedao.capNhatGiaTriTangThemChoMap(mapUpdateGhe)) { 
 				ArrayList<GheTrenChuyenTau> listGheTrenChuyenTau = new ArrayList<>();
 				try {
 					ChuyenTau chuyenTau = chuyentaudao.getChuyenTauBangMa(maChuyenTauInsert);
@@ -1321,18 +1472,18 @@ public class ThietLapGiaGhe extends Application {
 					double giaTienGhe = tau.getLoaiTau().getGiaCuoc() * 1726;
 					for(GheNgoi gn : listGheNgoiInsert) {
 						if(!gn.isLuuDong()) {
-							String maGTCTInsert = chuGTCT + String.format("%02d", soGTCTNew);
+							String maGTCTInsert = "GTCT" + String.format("%02d", maGTCT);
 							giaTienGhe += gn.getGiaTriTangThem() + gn.getTang().getGiaTang();
 							GheTrenChuyenTau gtct = new GheTrenChuyenTau(maGTCTInsert, "Còn trống", giaTienGhe, chuyenTauCuaGheTrenChuyenTau, gn);
 							listGheTrenChuyenTau.add(gtct);
-							soGTCTNew++;
+							maGTCT++;
 						}
 						else {
-							String maGTCTInsert = chuGTCT + String.format("%02d", soGTCTNew);
+							String maGTCTInsert = "GTCE" + String.format("%02d", maGTCT);
 							giaTienGhe = gn.getGiaTriTangThem() + gn.getTang().getGiaTang();
 							GheTrenChuyenTau gtct = new GheTrenChuyenTau(maGTCTInsert, "Còn trống", giaTienGhe, chuyenTauCuaGheTrenChuyenTau, gn);
 							listGheTrenChuyenTau.add(gtct);
-							soGTCTNew++;
+							maGTCT++;
 						}
 						
 					}
@@ -1374,9 +1525,62 @@ public class ThietLapGiaGhe extends Application {
 		Region spacer2 = new Region();
 		HBox.setHgrow(spacer2, Priority.ALWAYS);
 		HBox boxButton = new HBox(buttonTroLai, spacer1, buttonCapNhat, spacer2, buttonThemChuyenTau);
-		boxButton.setMaxWidth(1000);
+		boxButton.setMaxWidth(1100);
 		
-		layoutThemCT.getChildren().addAll(boxLblThemCT, lblThietLapGiaCuoc, gridThietLapGiaCuoc, lblThietLapGiaGhe, boxToaTau, spAllGhe, gridGiaGhe, boxGiaHienTai, boxButton);;
+		HBox boxAllGhe = new HBox(50);
+		boxAllGhe.setMaxWidth(1200);
+		
+	
+		StackPane spAllGheGiaGoc = new StackPane();
+		spAllGheGiaGoc.setPrefWidth(300);
+		spAllGheGiaGoc.setMaxWidth(300);
+		spAllGheGiaGoc.setPrefHeight(500);
+		spAllGheGiaGoc.setId("grid_AllGhe");
+		
+		VBox boxSPAllGheGiaGoc = new VBox();
+		boxSPAllGheGiaGoc.setPrefWidth(300);
+		boxSPAllGheGiaGoc.setPrefHeight(500);
+		boxSPAllGheGiaGoc.setAlignment(Pos.CENTER);
+		
+		Label lblSPAllGheGiaGoc = new Label("Giá gốc - vnđ");
+		lblSPAllGheGiaGoc.setStyle("-fx-font-size: 18px; -fx-font-weight: bold");
+		
+		
+		gridSPAllGheGiaGoc = new GridPane();
+		gridSPAllGheGiaGoc.setPrefWidth(300);
+		gridSPAllGheGiaGoc.setPrefHeight(490);
+		
+		boxSPAllGheGiaGoc.getChildren().addAll(lblSPAllGheGiaGoc, gridSPAllGheGiaGoc);
+	
+		spAllGheGiaGoc.getChildren().add(boxSPAllGheGiaGoc);
+		
+		StackPane spAllGheGiaHienTai = new StackPane();
+		spAllGheGiaHienTai.setPrefWidth(300);
+		spAllGheGiaHienTai.setMaxWidth(300);
+		spAllGheGiaHienTai.setPrefHeight(500);
+		spAllGheGiaHienTai.setId("grid_AllGhe"); 
+		
+		VBox boxSPAllGheGiaHienTai = new VBox();
+		boxSPAllGheGiaHienTai.setPrefWidth(300);
+		boxSPAllGheGiaHienTai.setPrefHeight(500);
+		boxSPAllGheGiaHienTai.setAlignment(Pos.CENTER);
+		
+		Label lblSPAllGheGiaHienTai = new Label("Giá hiện tại - vnđ");
+		lblSPAllGheGiaHienTai.setStyle("-fx-font-size: 18px; -fx-font-weight: bold");
+		
+		gridSPAllGheGiaHienTai = new GridPane();
+		gridSPAllGheGiaHienTai.setPrefWidth(300);
+		gridSPAllGheGiaHienTai.setPrefHeight(490);
+		
+		boxSPAllGheGiaHienTai.getChildren().addAll(lblSPAllGheGiaHienTai, gridSPAllGheGiaHienTai);
+		
+		spAllGheGiaHienTai.getChildren().add(boxSPAllGheGiaHienTai); 
+		
+		
+		
+		boxAllGhe.getChildren().addAll(spAllGheGiaGoc,  spAllGhe,  spAllGheGiaHienTai);
+		
+		layoutThemCT.getChildren().addAll(boxLblThemCT, lblThietLapGiaCuoc, gridThietLapGiaCuoc, lblThietLapGiaGhe, boxToaTau, boxAllGhe, gridGiaGhe,  boxButton);;
 		layoutThemCT.setAlignment(Pos.CENTER);
 		layoutThemCT.setStyle("-fx-background-color: #FFFFFF");
 		return layoutThemCT;

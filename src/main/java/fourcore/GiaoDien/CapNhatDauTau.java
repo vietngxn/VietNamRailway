@@ -9,17 +9,17 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -33,11 +33,13 @@ import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Node;
@@ -50,6 +52,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -68,7 +71,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 
-public class ThemToaTau extends Application {
+public class CapNhatDauTau extends Application {
 	 private HBox banVeBox;
 	 private HBox doiVeBox;
 	 private HBox hoanVeBox;
@@ -80,7 +83,6 @@ public class ThemToaTau extends Application {
 	 private HBox xoaKhachHangBox;
 	 private HBox suaKhachHangBox;
 	 private Label quanLiKhachHang;
-	 private Label quanLiKhachHangLabel;
 	 private HBox quanLiHoaDonMenu;
 	 private ImageView quanLiHoaDonIconView;
 	 private Label quanLiHoaDonLabel;
@@ -120,19 +122,24 @@ public class ThemToaTau extends Application {
 	private Label lblThemChuyenTau;
 	private Animation animation = new Animation();
 	private int checkToaGheNgoi = 0;
-	private int checkToaGiuongNam = 9;
-	private Tau_DAO taudao = new Tau_DAO();
+	private int checkToaGiuongNam = 8;
+	
 	private ToaTauDAO toataudao = new ToaTauDAO();
 	private Label lblToa;
 	private ImageView imgToa;
 	private Map<Integer, StackPane> mapSpToa = new HashMap<>();
+	private Tau_DAO taudao = new Tau_DAO(); 
 	private File fileTmp;
 	private GhiFile ghiFile = new GhiFile();
+	private TableView<Tau> table;
+	private Map<String, Object> mapTmp;
 	private Button buttonTiepTuc;
 	private ChuyenTauDAO chuyentaudao = new ChuyenTauDAO();
 	private Button buttonTroLai;
+	private Label quanLiKhachHangLabel;
+	private ArrayList<Tau> tauRemove = new ArrayList<>();
 
-    public ThemToaTau() throws SQLException {
+    public CapNhatDauTau() throws SQLException {
     }
 
     @Override
@@ -600,7 +607,7 @@ public class ThemToaTau extends Application {
 			//Noi dung chinh lam phan chinh o day. T lam sidebar truoc r update sau		
 			
 //			creat_capnhatchuyentau_layout();
-            creat_themtoatau_layout();
+            creat_themDauTau_layout();
 			
 			noiDungChinh = new VBox();
 			noiDungChinh.setStyle("-fx-background-color: #F7F7F7;");
@@ -621,177 +628,141 @@ public class ThemToaTau extends Application {
 	}
 	
 	
-public VBox creat_themtoatau_layout() throws SQLException, IOException {
+public VBox creat_themDauTau_layout() throws SQLException, IOException {
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		String duongdantoa = "/img/thantauchon.png";
-		String duongdandautao = "/img/dautau.png";
-//		toataudao.testListToaTau();
-		ArrayList<ToaTau> listToaTauTheoChuyen = new ArrayList<ToaTau>();
-		fileTmp = new File("src/main/resources/tmp_ChuyenTau.txt");
+		DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+		DecimalFormat moneyFormat = new DecimalFormat("#,###");
 		
-		List<String> allLine = Files.readAllLines(Paths.get("src/main/resources/tmp_ChuyenTau.txt"));
-		String line = allLine.get(1); 
-		JsonObject obj = JsonParser.parseString(line).getAsJsonObject();
-		String maTau = obj.get("maTau").getAsString();
-		Tau tau = taudao.getTauTheoMa(maTau);
-		
+		mapTmp = new HashMap<>();
+		fileTmp = new File("src/main/resources/tmp_CapNhatChuyenTau.txt");
 		
 		//label đầu
 		HBox boxLblThemChuyenTau = new HBox();
-		lblThemChuyenTau = new Label("Thêm chuyến tàu");
+		lblThemChuyenTau = new Label("Cập nhật đầu tàu");
 		lblThemChuyenTau.setId("lbl_TieuDe");
 		boxLblThemChuyenTau.getChildren().add(lblThemChuyenTau);
 		boxLblThemChuyenTau.setAlignment(Pos.TOP_LEFT);
 		boxLblThemChuyenTau.setMaxWidth(1000);
 		
-		lblThemToaTau = new Label("Thêm toa tàu");
+		lblThemToaTau = new Label("Chọn đầu tàu");
 		lblThemToaTau.setId("lbl_TieuDe");
 		
-		HBox boxToaTau = new HBox(5);
-		boxToaTau.setAlignment(Pos.CENTER);
-		for(int i = 1; i <= 12; i++) {
-			if(i == 12) {
-				Label lblDauTau = new Label(tau.getLoaiTau().getTenLoaiTau());
-				lblDauTau.setId("lbl_Toa");
-				ImageView imgDauTau = animation.taoImgGhe(duongdandautao);
-				imgDauTau.setFitWidth(50);
-				StackPane spDauTau = new StackPane();
-				spDauTau.getChildren().addAll(imgDauTau, lblDauTau);
-				spDauTau.setMargin(lblDauTau, new Insets(10, 0, 0, 0));
-				boxToaTau.getChildren().add(spDauTau);
-			} else {
-				lblToa = new Label();
-				lblToa.setId("lbl_Toa");
-				imgToa = animation.taoImgGhe(duongdantoa);
-				imgToa.setFitWidth(50);
-				imgToa.setOpacity(0.5);
-				StackPane spToa = new StackPane();
-				spToa.getChildren().addAll(imgToa, lblToa);
-				spToa.setMargin(lblToa, new Insets(10, 0, 0, 0));
-				mapSpToa.put(i, spToa);
-				boxToaTau.getChildren().add(spToa);	
-				}
-		}
+		table = new TableView<>();
+		table.setId("table_DauTau");
 		
-		TableView<ToaTau> table = new TableView<>();
+		javafx.scene.control.TableColumn<Tau, String>  maTauCol = new javafx.scene.control.TableColumn<>("Mã đầu tàu");
+		maTauCol.setCellValueFactory(new PropertyValueFactory<>("maTau"));
+		maTauCol.setPrefWidth(230);
+		maTauCol.setId("table_ThemToaTau");
 		
-		javafx.scene.control.TableColumn<ToaTau, String>  maToaCol = new javafx.scene.control.TableColumn<>("Mã toa");
-		maToaCol.setCellValueFactory(new PropertyValueFactory<>("maToaTau"));
-		maToaCol.setPrefWidth(100);
-		maToaCol.setId("table_ThemToaTau");
 		
-		javafx.scene.control.TableColumn<ToaTau, String> tenToaCol = new javafx.scene.control.TableColumn<>("Tên toa");
-		tenToaCol.setCellValueFactory(new PropertyValueFactory<>("tenToaTau"));
-		tenToaCol.setPrefWidth(465);
-		tenToaCol.setId("table_ThemToaTau");
+		javafx.scene.control.TableColumn<Tau, String> tenTauCol = new javafx.scene.control.TableColumn<>("Tên đầu tàu");
+		tenTauCol.setCellValueFactory(new PropertyValueFactory<>("tenTau"));
+		tenTauCol.setPrefWidth(230);
 		
-		javafx.scene.control.TableColumn<ToaTau, Integer> soGheCol = new javafx.scene.control.TableColumn<>("Số ghế");
-		soGheCol.setCellValueFactory(new PropertyValueFactory<>("soGhe"));
-		soGheCol.setPrefWidth(100);
-		soGheCol.setId("table_ThemToaTau");
-
-//		javafx.scene.control.TableColumn<ToaTau, String> trangThaiCol = new javafx.scene.control.TableColumn<>("Trạng thái");
+		tenTauCol.setId("table_ThemToaTau");
+		
+		javafx.scene.control.TableColumn<Tau, String> loaiTauCol = new javafx.scene.control.TableColumn<>("Loại đầu tàu");
+		loaiTauCol.setCellValueFactory(cellData -> {
+			Tau tau = cellData.getValue();
+			if(tau != null && tau.getLoaiTau() != null) return new SimpleStringProperty(cellData.getValue().getLoaiTau().getTenLoaiTau());
+			else return new SimpleStringProperty("");
+		});
+		loaiTauCol.setPrefWidth(300);
+		loaiTauCol.setId("table_ThemToaTau");
+		
+		
+		TableColumn<Tau, String> giaCuocCol = new javafx.scene.control.TableColumn<>("Giá cước");
+		giaCuocCol.setCellValueFactory(cellData -> {
+			Tau tau = cellData.getValue();
+			if(tau != null && tau.getLoaiTau() != null) return new SimpleStringProperty(moneyFormat.format(cellData.getValue().getLoaiTau().getGiaCuoc()) + "/km");
+			else return new SimpleStringProperty("0/km");
+		});
+		giaCuocCol.setPrefWidth(200);
+		giaCuocCol.setId("table_ThemToaTau");
+	
+		TableColumn<Tau, String> trangThai = new javafx.scene.control.TableColumn<>("Trạng thái");
+		trangThai.setCellValueFactory(cellData -> {
+			Tau tau = cellData.getValue();
+			if(tau != null && tau.isRemove()) return new SimpleStringProperty("Đang chạy");
+			else return new SimpleStringProperty("Sẵn sàng");
+		});
+		trangThai.setPrefWidth(240);
+		trangThai.setId("table_ThemToaTau");
+		
+		
+//		javafx.scene.control.TableColumn<Tau, String> trangThaiCol = new javafx.scene.control.TableColumn<>("Trạng thái");
 //		trangThaiCol.setCellValueFactory(new PropertyValueFactory<>("trangThai"));
-//		trangThaiCol.setPrefWidth(240);
+//		trangThaiCol.setPrefWidth(238);
 //		trangThaiCol.setId("table_ThemToaTau");
-//		javafx.scene.control.TableColumn<ToaTau, String> trangThaiCol = new javafx.scene.control.TableColumn<>("Trạng thái");
-//		trangThaiCol.setPrefWidth(138);
-//		trangThaiCol.setId("table_ThemToaTau");
-//		trangThaiCol.setCellFactory(column -> new javafx.scene.control.TableCell<ToaTau, String>() {
+//		trangThaiCol.setCellFactory(column -> new javafx.scene.control.TableCell<Tau, String>() {
 //		    @Override
 //		    protected void updateItem(String value, boolean empty) {
 //		        super.updateItem(value, empty);
-//
-//		        ToaTau toaTau = getTableRow() != null ? (ToaTau) getTableRow().getItem() : null;
-//
-//		        if (empty || toaTau == null) {
+//		        
+//		        Tau tau = getTableRow() != null ? getTableRow().getItem() : null;
+//		 
+//		        if (empty || tau == null) {
 //		            setText(null);
 //		            setStyle("");
 //		        } else {
-//		            setText(toaTau.getTrangThai() == null ? "" : toaTau.getTrangThai());
+//		            setText(tau.getTrangThai() == null ? "" : tau.getTrangThai());
 //		            setStyle("-fx-text-fill: #009D75; -fx-font-weight: bold;");
 //		        }
 //		    }
 //		});
 
-
-		javafx.scene.control.TableColumn<ToaTau, String> loaiToaCol = new javafx.scene.control.TableColumn<>("Loại toa");
-		
-		loaiToaCol.setCellValueFactory(cellData -> {
-			ToaTau toaTau = cellData.getValue();
-			if(toaTau != null && toaTau.getLoaiToaTau() != null) return new SimpleStringProperty(cellData.getValue().getLoaiToaTau().getTenLoaiToaTau());
-			else return new SimpleStringProperty("");
-				
-		});
-		loaiToaCol.setPrefWidth(300);
-		loaiToaCol.setId("table_ThemToaTau");
-		
-		TableColumn<ToaTau, String> trangThai = new javafx.scene.control.TableColumn<>("Trạng thái");
-		trangThai.setCellValueFactory(cellData -> {
-			ToaTau toaTau = cellData.getValue();
-			if(toaTau != null && toaTau.isRemove()) return new SimpleStringProperty("Đang chạy");
-			else return new SimpleStringProperty("Sẵn sàng");
-		});
-		trangThai.setPrefWidth(235);
-		trangThai.setId("table_ThemToaTau");
 		
 		table.setPrefHeight(700);
-		table.getColumns().addAll(maToaCol, loaiToaCol, soGheCol, tenToaCol, trangThai);
+		table.getColumns().addAll(maTauCol, tenTauCol, loaiTauCol, giaCuocCol, trangThai);
 		table.setMaxWidth(1200);
 		
-	
+		List<String> allLine = Files.readAllLines(Paths.get("src/main/resources/tmp_CapNhatChuyenTau.txt"));
 		String line0 = allLine.get(0);
-		JsonObject objNgayKhoiHanh = JsonParser.parseString(line0).getAsJsonObject();
+		JsonObject obj1 = JsonParser.parseString(line0).getAsJsonObject();
+		String maChuyenTau = obj1.get("maChuyenTau").getAsString();
+		ChuyenTau chuyenTau = chuyentaudao.getChuyenTauBangMa(maChuyenTau);
 		
-		DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-		String ngayKhoiHanh = objNgayKhoiHanh.get("ngayKhoiHanh").getAsString();
-		String gioKhoiHanh = objNgayKhoiHanh.get("gioKhoiHanh").getAsString();
+		String line1 = allLine.get(1); 
+		JsonObject obj = JsonParser.parseString(line1).getAsJsonObject();
+		String maHanhTrinh = obj.get("maHanhTrinh").getAsString();
+		String ngayKhoiHanh = obj.get("ngayKhoiHanh").getAsString();
+		String gioKhoiHanh = obj.get("gioKhoiHanh").getAsString();
 		String fullTime = ngayKhoiHanh + " " + gioKhoiHanh;
 		LocalDateTime dateTimeDi = LocalDateTime.parse(fullTime, formatterTime);
 		
-		ArrayList<String> listChuyenTauTheoNgay = chuyentaudao.getListMaChuyenTauTheoNgay(dateTimeDi);
-		for(String a : listChuyenTauTheoNgay) System.out.println("a " + a);
-		ArrayList<ToaTau> listToaTauTheoTenToaTau = toataudao.getListToaTauTheoListMaChuyenTau(listChuyenTauTheoNgay);
-		for(ToaTau b : listToaTauTheoTenToaTau) System.out.println("b " + b.getMaToaTau());
-		ArrayList<ToaTau> listToaTauTheoHanhTrinh = toataudao.getListToaTauTenToaTau(tau.getLoaiTau().getTenLoaiTau());
-		for(ToaTau c : listToaTauTheoHanhTrinh) System.out.println("c " + c.getMaToaTau());
 		
-	
-//		listToaTauTheoHanhTrinh.removeAll(listToaTauTheoTenToaTau);
-		for(int i = 0; i < listToaTauTheoHanhTrinh.size(); i++) {
-			for(int j = 0; j < listToaTauTheoTenToaTau.size(); j++) {
-				if(listToaTauTheoHanhTrinh.get(i).getMaToaTau().equalsIgnoreCase(listToaTauTheoTenToaTau.get(j).getMaToaTau())) listToaTauTheoHanhTrinh.get(i).setRemove(true);
+		ArrayList<ChuyenTau> listChuyenTau = chuyentaudao.getListChuyenTau();
+		ArrayList<Tau> listTauTheoHanhTrinh = taudao.getListTauTheoHanhTrinh(maHanhTrinh);
+//		ArrayList<Tau> listTauRemove = new ArrayList<>();
+		
+		for(ChuyenTau ct : listChuyenTau) {
+			for(Tau t : listTauTheoHanhTrinh) {
+				if(ct.getTau().getMaTau().equalsIgnoreCase(t.getMaTau())) {
+//					if(animation.checkNgay(dateTimeDi, ct.getNgayGioDi(), ct.getNgayGioDen())) listTauRemove.add(t);
+					if(animation.checkNgay(dateTimeDi, ct.getNgayGioDi(), ct.getNgayGioDen())) t.setRemove(true);
+				}
 			}
-		} 
-		for(ToaTau d : listToaTauTheoHanhTrinh) System.out.println("d " + d.getMaToaTau());
+		}
 		
-		ObservableList<ToaTau> data = themSpacer(listToaTauTheoHanhTrinh);
-		
-//		table.setRowFactory(tv -> new TableRow<ToaTau>() {
-//		    @Override
-//		    public void updateItem(ToaTau toaTau, boolean empty) {
-//		        super.updateItem(toaTau, empty);
-//
-//		        if (toaTau != null && toaTau.getMaToaTau().isEmpty()) {
-//		            setStyle("-fx-background-color: white; -fx-min-height: 16px; -fx-max-height: 16px;");
-//		            setMouseTransparent(true);    
-//		            setFocusTraversable(false);  
-//		        } else {
-//		        	setStyle("");
-//		            setMouseTransparent(false);   
-//		            setFocusTraversable(true);   
-//		        }
-//		    }
-//		        
-//		});
-
+//		for(int i = 0; i < listChuyenTau.size()-1; i++) {
+//			ChuyenTau ct = listChuyenTau.get(i);
+//			for(Tau t : listTauTheoHanhTrinh) {
+//				if(ct.getTau().getMaTau().equalsIgnoreCase(t.getMaTau())) {
+//					if(animation.checkNgay(dateTimeDi, ct.getNgayGioDi(), ct.getNgayGioDen())) ct.getTau().setRemove(true);
+//				}
+//			}
+//		}
+//		listTauTheoHanhTrinh.removeAll(listTauRemove);
+//		ObservableList<Tau> data = themSpacer(taudao.getListTauTheoHanhTrinh(maHanhTrinh));
+		ObservableList<Tau> data = themSpacer(listTauTheoHanhTrinh);
 
 		table.setRowFactory(tv -> {
-		    TableRow<ToaTau> row = new TableRow<ToaTau>() {
+		    TableRow<Tau> row = new TableRow<Tau>() {
 		        @Override
-		        public void updateItem(ToaTau toaTau, boolean empty) {
-		            super.updateItem(toaTau, empty);
+		        public void updateItem(Tau tau, boolean empty) {
+		            super.updateItem(tau, empty);
 
 		            getStyleClass().remove("selected-row");
 		            setStyle("");
@@ -799,42 +770,42 @@ public VBox creat_themtoatau_layout() throws SQLException, IOException {
 		            setFocusTraversable(true);
 		            table.setId("");
 
-		            if (toaTau != null && toaTau.getMaToaTau().isEmpty()) {
+		            if (tau != null && tau.getMaTau().isEmpty()) {
 		                setStyle("-fx-background-color: white; -fx-min-height: 16px; -fx-max-height: 16px;");
 		                setMouseTransparent(true);    
 		                setFocusTraversable(false);  
-		            } else if (toaTau != null && listToaTauTheoChuyen.contains(toaTau)) {
-		                getStyleClass().add("selected-row");
-		            } else if (toaTau != null && toaTau.isRemove()) {
+		            } else if(tau != null && tau.getMaTau().equalsIgnoreCase(chuyenTau.getTau().getMaTau())) {
+		        		setStyle("-fx-background-color: green");
+		            	setMouseTransparent(true);    
+		                setFocusTraversable(false);
+		        	} else if (tau != null && tau.isRemove()) {
 		            	setStyle("-fx-background-color: red");
 		            	setMouseTransparent(true);    
 		                setFocusTraversable(false); 
-		            }
+		        	}  else if(tau != null && tauRemove.contains(tau)) {
+		        		getStyleClass().add("selected-row");
+		        	}
 		        }
 		    };
 
 		    row.setOnMouseClicked(event -> {
-		        if (!row.isEmpty()) {
-		            ToaTau toaTauClick = row.getItem();
-		            if (!listToaTauTheoChuyen.contains(toaTauClick)) {
-		                addToaTau(toaTauClick, listToaTauTheoChuyen);
-		                
-		            } else {
-		            	removeToaTau(toaTauClick, listToaTauTheoChuyen);
-		            	}
-		            table.refresh();
+		    	if (!row.isEmpty()) {
+		    		Tau tau = row.getItem();
+		            if(tauRemove.contains(tau)) {
+		            	tauRemove.remove(tau);
+		            }
+		            else {
+		            	tauRemove.clear();
+		            	tauRemove.add(tau);
+		            }
+		         table.refresh();
 		        }
 		    });
+		    
 		    return row;
 		});
 
 
-
-//		table.setOnMouseClicked(event -> {
-//			TableView<ToaTau> tv = (TableView<ToaTau>) event.getSource();
-//			
-//			animation.scaleTableUp(table.getRowFactory());
-//		});
 		table.setItems(data);
 		table.getColumns().forEach(col -> col.setSortable(false));
 		
@@ -855,162 +826,50 @@ public VBox creat_themtoatau_layout() throws SQLException, IOException {
 		boxButton.setMaxWidth(1250);
 		
 		//đưa vào layout
-		layoutThemToaTau.getChildren().addAll(boxLblThemChuyenTau, lblThemToaTau, boxToaTau, table, boxButton);
+		layoutThemToaTau.getChildren().addAll(boxLblThemChuyenTau, lblThemToaTau, table, boxButton);
 		layoutThemToaTau.setAlignment(Pos.CENTER);
 		layoutThemToaTau.setStyle("-fx-background-color: #FFFFFF");
 		return layoutThemToaTau;
 	}
 	
 	
-	public ObservableList<ToaTau> themSpacer(ArrayList<ToaTau> listToaTau) {
-	    ObservableList<ToaTau> listToaTauSpace = FXCollections.observableArrayList();
-	    for (int i = 0; i < listToaTau.size(); i++) {
-	    	if(i == 0) listToaTauSpace.add(new ToaTau("", "", 0, null)); 
-	    	listToaTauSpace.add(listToaTau.get(i));                   
-	        if (i < listToaTau.size() - 1) {                 
-	        	listToaTauSpace.add(new ToaTau("", "", 0, null));
+	public ObservableList<Tau> themSpacer(ArrayList<Tau> listTau) {
+	    ObservableList<Tau> listTauSpace = FXCollections.observableArrayList();
+	    for (int i = 0; i < listTau.size(); i++) {
+	    	if(i == 0) listTauSpace.add(new Tau("", "", null)); 
+	    	listTauSpace.add(listTau.get(i));                   
+	        if (i < listTau.size() - 1) {                 
+	        	listTauSpace.add(new Tau("", "", null));
 	        }
 	    }
-	    return listToaTauSpace;
+	    return listTauSpace;
 	}
-//	public void addToaTau(ToaTau toaTau, ArrayList<ToaTau> listToaTauTheoChuyen) {
-//		if(toaTau.getSoGhe()  == 36 && checkToaGheNgoi == 2) System.out.println("loi r");
-//		else if(toaTau.getSoGhe() == 36 && checkToaGheNgoi == 0) {
-//			if(!listToaTauTheoChuyen.contains(toaTau)) {
-//				StackPane spToa = mapSpToa.get(10);
-//				Label lblToa = (Label) spToa.getChildren().get(1);
-//				ImageView imgToa = (ImageView) spToa.getChildren().get(0);
-//				lblToa.setText(toaTau.getMaToaTau());
-//				imgToa.setOpacity(1.0);
-//				checkToaGheNgoi++;
-//				listToaTauTheoChuyen.add(toaTau);
-//			}
-//		} else if(toaTau.getSoGhe() == 36 && checkToaGheNgoi == 1) {
-//			if(!listToaTauTheoChuyen.contains(toaTau)) {
-//				StackPane spToa = mapSpToa.get(9);
-//				Label lblToa = (Label) spToa.getChildren().get(1);
-//				ImageView imgToa = (ImageView) spToa.getChildren().get(0);
-//				lblToa.setText(toaTau.getMaToaTau());
-//				imgToa.setOpacity(1.0);
-//				checkToaGheNgoi++;
-//				listToaTauTheoChuyen.add(toaTau);
-//			}
-//		} else if(toaTau.getSoGhe() == 18 && checkToaGiuongNam == 0){
-//			if(!listToaTauTheoChuyen.contains(toaTau)) {
-//				StackPane spToa = mapSpToa.get(checkToaGiuongNam);
-//				Label lblToa = (Label) spToa.getChildren().get(1);
-//				ImageView imgToa = (ImageView) spToa.getChildren().get(0);
-//				lblToa.setText(toaTau.getMaToaTau());
-//				imgToa.setOpacity(1.0);
-//				checkToaGiuongNam--;
-//				listToaTauTheoChuyen.add(toaTau);
-//			}
-//		} else if(toaTau.getSoGhe() == 18 && checkToaGiuongNam > 0) {
-//			if(!listToaTauTheoChuyen.contains(toaTau)) {
-//				StackPane spToa = mapSpToa.get(checkToaGiuongNam);
-//				Label lblToa = (Label) spToa.getChildren().get(1);
-//				ImageView imgToa = (ImageView) spToa.getChildren().get(0);
-//				lblToa.setText(toaTau.getMaToaTau());
-//				imgToa.setOpacity(1.0);
-//				checkToaGiuongNam--;
-//				listToaTauTheoChuyen.add(toaTau);
-//			}
-//		} else {
-//			System.out.println("loi");
-//		}
-//	} 
-	public boolean xuLyEventCu() {
-	    List<Integer> sortedKey = new ArrayList<>(mapSpToa.keySet());
-	    Collections.sort(sortedKey, Collections.reverseOrder());
-	    StringBuilder sb = new StringBuilder();
-	    int viTriThuc = 1;
-
-	    for(Integer key : sortedKey) {
-	        StackPane spToa = mapSpToa.get(key);
-
-	        Label lblToa = (Label) spToa.getChildren().get(1);
-	        String maToa = lblToa.getText();
-
-	        if(maToa != null && !maToa.isEmpty()) {
-	            sb.append("{\"maToaTau\":").append("\"").append(maToa).append("\"")
-	              .append(",\"viTriToa\":").append("\"").append(viTriThuc).append("\"").append("},");
-	            viTriThuc++;
-	        }
-	    }
-
-	    if (sb.length() == 0) {
-	        System.out.println("Không có toa nào hợp lệ");
-	        return false;
-	    } else {
-	        sb.setLength(sb.length() - 1); 
-	    }
-
-	    String dataLine = "[" + sb.toString() + "]";
-	    ghiFile.appendData(dataLine, fileTmp);
-	    return true;
+	public boolean xuLyEventCu() throws IOException, SQLException {
+		
+		if(tauRemove.size() == 0) {
+			List<String> allLine = Files.readAllLines(Paths.get("src/main/resources/tmp_CapNhatChuyenTau.txt")); 
+			String line = allLine.get(0);
+			JsonObject obj = JsonParser.parseString(line).getAsJsonObject();
+			String maChuyenTau = obj.get("maChuyenTau").getAsString();
+			ChuyenTau chuyenTau = chuyentaudao.getChuyenTauBangMa(maChuyenTau);
+			
+			mapTmp.put("maTau", chuyenTau.getTau().getMaTau());
+		} else if(tauRemove.size() == 1) {
+//			Tau tau = table.getSelectionModel().getSelectedItem();
+			Tau tau = tauRemove.get(0);
+			mapTmp.put("maTau", tau.getMaTau());
+		}
+		 	Gson gson = new Gson();
+	        String json = gson.toJson(mapTmp);
+	        ghiFile.appendData(json, fileTmp);
+	        return true;		
 	}
-
-	public Button getButtonSangThietLapGiaGhe() {
+	public Button getButtonTiepTucQuaChonToa() {
 		return this.buttonTiepTuc;
 	}
-	public void addToaTau(ToaTau toaTau, ArrayList<ToaTau> listToaTauTheoChuyen) {
-	    int index = -1;
-
-	    if (toaTau.getSoGhe() == 36) {
-	        if (checkToaGheNgoi == 2) {
-	        	System.out.println("loi gn");
-	        	return;
-	        } 
-	        index = (checkToaGheNgoi == 0) ? 11 : 10;
-	        checkToaGheNgoi++;
-	    } 
-	    else if (toaTau.getSoGhe() == 18) {
-	        if (checkToaGiuongNam < 0) {
-	        	System.out.println("loi gin");
-	        	return;
-	        }
-	        index = checkToaGiuongNam;
-	        checkToaGiuongNam--;
-	    }
-
-	    if (index != -1 && !listToaTauTheoChuyen.contains(toaTau)) {
-	        StackPane spToa = mapSpToa.get(index);
-	        Label lblToa = (Label) spToa.getChildren().get(1);
-	        ImageView imgToa = (ImageView) spToa.getChildren().get(0);
-
-	        lblToa.setText(toaTau.getMaToaTau());
-	        imgToa.setOpacity(1.0);
-	        listToaTauTheoChuyen.add(toaTau);
-	    }
-	}
-	public void removeToaTau(ToaTau toaTau, ArrayList<ToaTau> listToaTauTheoChuyen) {
-		 int index = -1;
-
-		    if (toaTau.getSoGhe() == 36) {
-		    	index = (checkToaGheNgoi == 1) ? 11 : 10;
-		        checkToaGheNgoi--;
-		        listToaTauTheoChuyen.remove(toaTau);
-		    } 
-		    else if (toaTau.getSoGhe() == 18) {
-		    	index = checkToaGiuongNam + 1;
-		        checkToaGiuongNam++;
-		        listToaTauTheoChuyen.remove(toaTau);
-		    }
-
-		    if (index != -1) {
-		        StackPane spToa = mapSpToa.get(index);
-		        Label lblToa = (Label) spToa.getChildren().get(1);
-		        ImageView imgToa = (ImageView) spToa.getChildren().get(0);
-
-		        lblToa.setText("");
-		        imgToa.setOpacity(0.5);
-		    }
-	}
 	public Button getButtonTroLai() {
-		checkToaGheNgoi = 0;
-		checkToaGiuongNam = 9;
 		return this.buttonTroLai;
-	}	  
+	}
 	public static void main(String[] args) {
 		launch(args);
 //		Application.launch(QuanLyKhachHang.class, args);

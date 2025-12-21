@@ -25,20 +25,18 @@ public class GheTrenChuyenTau_dao {
 		System.out.println("ghe tren chuyen tau dao");
 	}
 
-	public String getMaGheTrenChuyenTauCuoiCung() {
-		String maGTCT = null;
+	public Integer getMaGheTrenChuyenTauCuoiCung() {
+		int maGTCT = 0;
 		try {
 
-			String sql = "Select top 1 maGheTrenChuyenTau From GheTrenChuyenTau Order By maGheTrenChuyenTau DESC";
+			String sql = "select count(*) as TongSoGheTrenChuyenTau from GheTrenChuyenTau";
 			ResultSet rs = myStmt.executeQuery(sql);
 			if (rs.next()) {
-				maGTCT = rs.getString(1);
+				maGTCT = rs.getInt(1);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (maGTCT == null)
-			maGTCT = "GTCT0000";
 		return maGTCT;
 	}
 

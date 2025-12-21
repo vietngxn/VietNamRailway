@@ -143,6 +143,7 @@ public class ThemChuyenTau extends Application {
 	private TableView<HanhTrinh> table;
 	private Map<String, Object> mapTmp;
 	private Button buttonTiepTuc;
+	private Button buttonTroLai;
 
     public ThemChuyenTau() throws SQLException {
     }
@@ -644,7 +645,7 @@ public VBox creat_themchuyentau_layout() throws SQLException {
 		
 		//label đầu
 		HBox boxLblThemChuyenTau = new HBox();
-		lblThemChuyenTau = new Label("Thêm chuyến tàu");
+		lblThemChuyenTau = new Label("Thêm hành trình");
 		lblThemChuyenTau.setId("lbl_TieuDe");
 		boxLblThemChuyenTau.getChildren().add(lblThemChuyenTau);
 		boxLblThemChuyenTau.setAlignment(Pos.TOP_LEFT);
@@ -676,7 +677,6 @@ public VBox creat_themchuyentau_layout() throws SQLException {
 			if(newVal != null) {
 				txtNgayKhoiHanh.setText(newVal.format(formatter));
 				
-				
 			}
 		});
 		
@@ -692,72 +692,6 @@ public VBox creat_themchuyentau_layout() throws SQLException {
 		spNgayKhoiHanh.setAlignment(buttonNgayKhoiHanh, Pos.CENTER_RIGHT);
 		spNgayKhoiHanh.setAlignment(ngayKhoiHanh, Pos.CENTER_RIGHT);
 		
-//		ngayKhoiHanh = new DatePicker();
-//		ngayKhoiHanh.setPrefWidth(30);
-//		ngayKhoiHanh.setPrefHeight(60);
-//		ngayKhoiHanh.setStyle("-fx-font-size: 18px;");
-//		ngayKhoiHanh.setOpacity(0);
-		
-//		txtGioKhoiHanh = new TextField();
-//		txtGioKhoiHanh.setPrefWidth(450);
-//		txtGioKhoiHanh.setPrefHeight(60);
-//		txtGioKhoiHanh.setId("txt_ThemChuyenTau");
-////		txtGioKhoiHanh.setMouseTransparent(true);
-//		txtGioKhoiHanh.setFocusTraversable(false);
-//		txtGioKhoiHanh.setPromptText("Giờ khởi hành");
-//		
-//		
-//		buttonGioKhoiHanh= new Button();
-//		ImageView iconThoiGianKhoiHanh = animation.taoImgGhe("/img/clock.png");
-//		iconThoiGianKhoiHanh.setFitWidth(30);
-//		iconThoiGianKhoiHanh.setFitHeight(30);
-//		buttonGioKhoiHanh.setGraphic(iconThoiGianKhoiHanh);
-//		buttonGioKhoiHanh.setStyle("-fx-background-color: transparent");
-//		
-//		spGioKhoiHanh = new StackPane();
-////		spNgayKhoiHanh.getChildren().addAll(txtNgayKhoiHanh, buttonGioKhoiHanh, ngayKhoiHanh);
-//		spGioKhoiHanh.getChildren().addAll(txtGioKhoiHanh, buttonGioKhoiHanh);
-//		spGioKhoiHanh.setAlignment(buttonGioKhoiHanh, Pos.CENTER_RIGHT);
-////		spNgayKhoiHanh.setAlignment(ngayKhoiHanh, Pos.CENTER_RIGHT);
-		
-//		txtNgayDenDuKien = new TextField();
-//		txtNgayDenDuKien.setPrefWidth(450);
-//		txtNgayDenDuKien.setPrefHeight(60);
-//		txtNgayDenDuKien.setId("txt_ThemChuyenTau");
-//		txtNgayDenDuKien.setMouseTransparent(true);
-//		txtNgayDenDuKien.setFocusTraversable(false);
-//		txtNgayDenDuKien.setPromptText("Ngày đến dự kiến");
-//		
-//		buttonNgayDenDuKien = new Button();
-//		ImageView iconNgayDenDuKien = animation.taoImgGhe("/img/calendar.png");
-//		iconNgayDenDuKien.setFitWidth(30);
-//		iconNgayDenDuKien.setFitHeight(30);
-//		buttonNgayDenDuKien.setGraphic(iconNgayDenDuKien);
-//		buttonNgayDenDuKien.setStyle("-fx-background-color: transparent");
-//		
-//		spNgayDenDuKien = new StackPane();
-//		spNgayDenDuKien.getChildren().addAll(txtNgayDenDuKien, buttonNgayDenDuKien);
-//		spNgayDenDuKien.setAlignment(buttonNgayDenDuKien, Pos.CENTER_RIGHT);
-		
-//		txtGioDenDuKien = new TextField();
-//		txtGioDenDuKien.setPrefWidth(450);
-//		txtGioDenDuKien.setPrefHeight(60);
-//		txtGioDenDuKien.setId("txt_ThemChuyenTau");
-//		txtGioDenDuKien.setMouseTransparent(true);
-//		txtGioDenDuKien.setFocusTraversable(false);
-//		txtGioDenDuKien.setPromptText("Giờ đến dự kiến");
-//		
-//		buttonGioDenDuKien = new Button();
-//		ImageView iconGioDenDuKien = animation.taoImgGhe("/img/clock.png");
-//		iconGioDenDuKien.setFitWidth(30);
-//		iconGioDenDuKien.setFitHeight(30);
-//		buttonGioDenDuKien.setGraphic(iconGioDenDuKien);
-//		buttonGioDenDuKien.setStyle("-fx-background-color: transparent");
-//		
-//		spGioDenDuKien = new StackPane();
-//		spGioDenDuKien.getChildren().addAll(txtGioDenDuKien, buttonGioDenDuKien);
-//		spGioDenDuKien.setAlignment(buttonGioDenDuKien, Pos.CENTER_RIGHT);
-		
 		gridThemChuyenTau.add(spNgayKhoiHanh, 0, 0);
 //		gridThemChuyenTau.add(spGioKhoiHanh, 1, 0);
 //		gridThemChuyenTau.add(spNgayDenDuKien, 0, 1);
@@ -768,16 +702,15 @@ public VBox creat_themchuyentau_layout() throws SQLException {
 		
 		javafx.scene.control.TableColumn<HanhTrinh, String>  maHanhTrinh = new javafx.scene.control.TableColumn<>("Mã hành trình");
 		maHanhTrinh.setCellValueFactory(new PropertyValueFactory<>("maHanhTrinh"));
-		maHanhTrinh.setPrefWidth(400);
+		maHanhTrinh.setPrefWidth(300);
 		maHanhTrinh.setId("table_ThemToaTau");
 		
 		javafx.scene.control.TableColumn<HanhTrinh, String> tenHanhTrinh = new javafx.scene.control.TableColumn<>("Tên hành trình");
 		tenHanhTrinh.setCellValueFactory(new PropertyValueFactory<>("tenHanhTrinh"));
-		tenHanhTrinh.setPrefWidth(400);
+		tenHanhTrinh.setPrefWidth(350);
 		tenHanhTrinh.setId("table_ThemToaTau");
 		
 		javafx.scene.control.TableColumn<HanhTrinh, String> soTramDung = new javafx.scene.control.TableColumn<>("Số trạm dừng");
-		
 		soTramDung.setCellValueFactory(cellData -> {
 			HanhTrinh hanhTrinh = cellData.getValue();
 			ArrayList<Ga> listGa = hanhtrinhdao.getListGaByMaHanhTrinh(hanhTrinh.getMaHanhTrinh());
@@ -785,8 +718,17 @@ public VBox creat_themchuyentau_layout() throws SQLException {
 			else return new SimpleStringProperty("");
 				
 		});
-		soTramDung.setPrefWidth(398);
+		soTramDung.setPrefWidth(250);
 		soTramDung.setId("table_ThemToaTau");
+		
+		javafx.scene.control.TableColumn<HanhTrinh, String> isRemove = new javafx.scene.control.TableColumn<>("Trạng thái");
+		isRemove.setCellValueFactory(cellData -> {
+			HanhTrinh hanhTrinh = cellData.getValue();
+			if(hanhTrinh != null && hanhTrinh.isRemove()) return new SimpleStringProperty("Đã tồn tại");
+			else return new SimpleStringProperty("Sẵn sàng");
+		});
+		isRemove.setPrefWidth(298);
+		isRemove.setId("table_ThemToaTau");
 		
 		ObservableList<HanhTrinh> data = themSpacer(hanhtrinhdao.getList());
 		
@@ -801,6 +743,8 @@ public VBox creat_themchuyentau_layout() throws SQLException {
 					alert.initOwner(stage);
 					alert.initModality(Modality.WINDOW_MODAL);
 					alert.showAndWait();
+					ngayKhoiHanh.setValue(null);
+					txtNgayKhoiHanh.setText("");
 		        }
 		    	
 		        List<String> listMaHanhTrinhTheoNgay = chuyentaudao.getListMaHanhTrinhTheoNgay(newDate);
@@ -811,7 +755,8 @@ public VBox creat_themchuyentau_layout() throws SQLException {
 		        for (int i = listHanhTrinh.size() - 1; i >= 0; i--) {
 		            HanhTrinh ht = listHanhTrinh.get(i);
 		            if (listMaHanhTrinhTheoNgay.contains(ht.getMaHanhTrinh())) {
-		                listHanhTrinh.remove(i);
+		            	ht.setRemove(true);
+//		                listHanhTrinh.remove(i);
 		            }
 		        }
 		        
@@ -826,13 +771,12 @@ public VBox creat_themchuyentau_layout() throws SQLException {
 					alert.showAndWait();
 		        }
 		        ObservableList<HanhTrinh> dataNew = themSpacer(listHanhTrinh);
-		       
 		        table.setItems(dataNew);
 		    }
 		});
 		
 		table.setPrefHeight(700);
-		table.getColumns().addAll(maHanhTrinh, tenHanhTrinh, soTramDung);
+		table.getColumns().addAll(maHanhTrinh, tenHanhTrinh, soTramDung, isRemove); 
 		table.setMaxWidth(1200);
 		
 		table.setItems(data);
@@ -852,15 +796,33 @@ public VBox creat_themchuyentau_layout() throws SQLException {
 		                setStyle("-fx-background-color: white; -fx-min-height: 16px; -fx-max-height: 16px;");
 		                setMouseTransparent(true);    
 		                setFocusTraversable(false);  
-		            } 
+		            } else if (hanhTrinh != null && hanhTrinh.isRemove()) {
+		            	setStyle("-fx-background-color: red");
+		            	setMouseTransparent(true);    
+		                setFocusTraversable(false); 
+		            }
 		        }
 		    };
 		    return row;
 		});
+		
+		
+		
 		buttonTiepTuc = new Button("Thêm chuyến");
 		buttonTiepTuc.setPrefWidth(200);
 		buttonTiepTuc.setPrefHeight(60);
 		buttonTiepTuc.setId("button_Blue");
+		
+		buttonTroLai = new Button("Trở lại");
+		buttonTroLai.setPrefWidth(200);
+		buttonTroLai.setPrefHeight(60);
+		buttonTroLai.setId("button_Red");
+		
+		Region spacer = new Region();
+		HBox.setHgrow(spacer, Priority.ALWAYS);
+		HBox boxButton = new HBox(buttonTroLai, spacer, buttonTiepTuc);
+		boxButton.setMaxWidth(1250);
+		
 //		buttonTiepTuc.setOnMouseClicked(event -> {
 //			if(txtNgayKhoiHanh.getText().isEmpty()) System.out.println("vui lòng chọn ngày cần thêm chuyến");
 //			else {
@@ -889,10 +851,6 @@ public VBox creat_themchuyentau_layout() throws SQLException {
 //			}
 //		});
 		
-		HBox boxButton = new HBox(buttonTiepTuc);
-		boxButton.setAlignment(Pos.CENTER);
-		boxButton.setMaxWidth(1250);
-		
 		
 		//đưa vào layout
 		layoutThemToaTau.getChildren().addAll(boxLblThemChuyenTau, gridThemChuyenTau, table, boxButton);
@@ -904,10 +862,10 @@ public VBox creat_themchuyentau_layout() throws SQLException {
 	public ObservableList<HanhTrinh> themSpacer(ArrayList<HanhTrinh> listHanhTrinh) {
 	    ObservableList<HanhTrinh> listHanhTrinhSpace = FXCollections.observableArrayList();
 	    for (int i = 0; i < listHanhTrinh.size(); i++) {
-	    	if(i == 0) listHanhTrinhSpace.add(new HanhTrinh("", "", null)); 
+	    	if(i == 0) listHanhTrinhSpace.add(new HanhTrinh("", "", null, true)); 
 	    	listHanhTrinhSpace.add(listHanhTrinh.get(i));                   
 	        if (i < listHanhTrinh.size() - 1) {                 
-	        	listHanhTrinhSpace.add(new HanhTrinh("", "", null));
+	        	listHanhTrinhSpace.add(new HanhTrinh("", "", null, true));
 	        }
 	    }
 	    return listHanhTrinhSpace;
@@ -917,6 +875,9 @@ public VBox creat_themchuyentau_layout() throws SQLException {
     }
 	public Button getButtonTiepTuc() {
 		return this.buttonTiepTuc;
+	}
+	public Button getButtonTroLai() {
+		return this.buttonTroLai;
 	}
 	public boolean xuLyEventCu() {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -952,18 +913,18 @@ public VBox creat_themchuyentau_layout() throws SQLException {
         mapTmp.put("ngayDenDuKien", ngayDenDuKienLast.format(formatter));
         mapTmp.put("gioKhoiHanh", listHanhTrinhGa.get(0).getGioDiKeHoach().toString());
         mapTmp.put("gioDenDuKien", listHanhTrinhGa.getLast().getGioDiKeHoach().toString());
-        String maChuyenTauLast = chuyentaudao.getMaChuyenTauCuoiCung();
-		
-       
-		
-        String tenLoaiTau = null;
-        String chuTenLoaiTau = "SE";
-        
-        String soLoaiTau = hanhTrinh.getMaHanhTrinh().replaceAll("\\D", "");
-        int soLoaiTauNew = Integer.parseInt(soLoaiTau);
-        String tenLoaiTauLast = chuTenLoaiTau + String.format("%02d", soLoaiTauNew);
- 
-        mapTmp.put("tenLoaiTau", tenLoaiTau);
+//        String maChuyenTauLast = chuyentaudao.getMaChuyenTauCuoiCung();
+//		
+//       
+//		
+//        String tenLoaiTau = null;
+//        String chuTenLoaiTau = "SE";
+//        
+//        String soLoaiTau = hanhTrinh.getMaHanhTrinh().replaceAll("\\D", "");
+//        int soLoaiTauNew = Integer.parseInt(soLoaiTau);
+//        String tenLoaiTauLast = chuTenLoaiTau + String.format("%02d", soLoaiTauNew);
+// 
+//        mapTmp.put("tenLoaiTau", tenLoaiTau);
         Gson gson = new Gson();
         String json = gson.toJson(mapTmp);
         ghiFile.appendData(json, fileTmp);
