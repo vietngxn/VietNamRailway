@@ -22,18 +22,45 @@ public class ThongKeDAO {
     public void goiDAO(){
         System.out.println("Ve dao");
     }
-    public Map<Tau, Integer> getTauVaSoLanDi() throws SQLException {
+    public Map<Tau, Integer> getTauVaSoLanDiTheoNam(int year) throws SQLException {
         Map<Tau, Integer> list = new LinkedHashMap<>();
         String q = "SELECT \r\n"
-                + "	    			               ct.maChuyenTau,  \r\n"
-                + "	    						   lt.tenLoaiTau, \r\n"
-                + "	    		               COUNT(v.maVeTau) AS SoVeBan \r\n"
-                + "	    			               FROM Ve v, ChuyenTau ct, Tau t , LoaiTau lt\r\n"
-                + "	    			               WHERE v.maChuyenTau = ct.maChuyenTau \r\n"
-                + "	    		              AND ct.maTau = t.maTau \r\n"
-                + "	    					   and t.maLoaiTau = lt.maLoaiTau\r\n"
-                + "	    		               GROUP BY ct.maChuyenTau, lt.tenLoaiTau\r\n"
-                + "	    			               ORDER BY SoVeBan DESC;";
+                + "    ct.maChuyenTau,  \r\n"
+                + "    lt.tenLoaiTau, \r\n"
+                + "    COUNT(v.maVeTau) AS SoVeBan \r\n"
+                + "FROM Ve v, ChuyenTau ct, Tau t, LoaiTau lt\r\n"
+                + "WHERE v.maChuyenTau = ct.maChuyenTau \r\n"
+                + "    AND ct.maTau = t.maTau \r\n"
+                + "    AND t.maLoaiTau = lt.maLoaiTau\r\n"
+                + "    AND YEAR(v.ngayGioDen) = " + year + "\r\n"
+                + "GROUP BY ct.maChuyenTau, lt.tenLoaiTau\r\n"
+                + "ORDER BY SoVeBan DESC;";
+        
+        ResultSet rs = st.executeQuery(q);
+        while (rs.next()) {
+            Tau tau = new Tau(rs.getString(1), rs.getString(2), null);
+            int soLanDi = rs.getInt("SoVeBan");
+            list.put(tau, soLanDi);
+        }
+        return list;
+    }
+    
+    
+    public Map<Tau, Integer> getTauVaSoLanDiTheoThangNam(int month, int year) throws SQLException {
+        Map<Tau, Integer> list = new LinkedHashMap<>();
+        String q = "SELECT \r\n"
+                + "    ct.maChuyenTau,  \r\n"
+                + "    lt.tenLoaiTau, \r\n"
+                + "    COUNT(v.maVeTau) AS SoVeBan \r\n"
+                + "FROM Ve v, ChuyenTau ct, Tau t, LoaiTau lt\r\n"
+                + "WHERE v.maChuyenTau = ct.maChuyenTau \r\n"
+                + "    AND ct.maTau = t.maTau \r\n"
+                + "    AND t.maLoaiTau = lt.maLoaiTau\r\n"
+                + "    AND MONTH(v.ngayGioDen) = " + month + "\r\n"
+                + "    AND YEAR(v.ngayGioDen) = " + year + "\r\n"
+                + "GROUP BY ct.maChuyenTau, lt.tenLoaiTau\r\n"
+                + "ORDER BY SoVeBan DESC;";
+        
         ResultSet rs = st.executeQuery(q);
         while (rs.next()) {
             Tau tau = new Tau(rs.getString(1), rs.getString(2), null);
@@ -88,7 +115,7 @@ public class ThongKeDAO {
 	public Map<Tau,Double> getDoanhThutheoChuyenTau(int nam) throws SQLException
 	{
 		Map<Tau,Double> list = new LinkedHashMap<Tau, Double>();
-		String q = "select ct.maChuyenTau,lt.tenLoaiTau,sum(cthd.thanhTien) as thanhTien\r\n"
+		String q = "select ct.maChuyenTau,lt.tenLoaiTau,sum(hd.tongTien) as thanhTien\r\n"
 				+ "from ChiTietHoaDon cthd, Ve v,ChuyenTau ct,Tau t, LoaiTau lt,HoaDon hd\r\n"
 				+ "where cthd.maVeTau = v.maVeTau\r\n"
 				+ "and\r\n"
@@ -112,4 +139,32 @@ public class ThongKeDAO {
 		}
 			return list;
 	}
+	
+	
+	public Map<Tau,Double> getDoanhThutheoChuyenTautheoThang(int thang, int nam) throws SQLException
+	{
+	    Map<Tau,Double> list = new LinkedHashMap<Tau, Double>();
+	    String q = "select ct.maChuyenTau, lt.tenLoaiTau, sum(hd.tongTien) as thanhTien\r\n"
+	            + "from ChiTietHoaDon cthd, Ve v, ChuyenTau ct, Tau t, LoaiTau lt, HoaDon hd\r\n"
+	            + "where cthd.maVeTau = v.maVeTau\r\n"
+	            + "and ct.maChuyenTau = v.maChuyenTau\r\n"
+	            + "and t.maTau = ct.maTau\r\n"
+	            + "and lt.maLoaiTau = t.maLoaiTau\r\n"
+	            + "and hd.maHoaDon = cthd.maHoaDon\r\n"
+	            + "and YEAR(hd.ngayThanhToan) = " + nam + "\r\n"
+	            + "and MONTH(hd.ngayThanhToan) = " + thang + "\r\n"
+	            + "group by ct.maChuyenTau, lt.tenLoaiTau\r\n"
+	            + "order by thanhTien DESC";
+
+	    ResultSet rs = st.executeQuery(q);
+	    while (rs.next()) {
+	        Tau tau = new Tau(rs.getString(1), rs.getString(2), null);
+	        double doanhthu = rs.getDouble(3);
+	        list.put(tau, doanhthu);
+	    }
+	    return list;
+	}
+
+	
+	
 }

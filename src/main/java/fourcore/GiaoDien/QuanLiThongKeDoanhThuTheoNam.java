@@ -1072,6 +1072,8 @@ try {
 		     {
 		    	 max = doanhThu;
 		     }
+		     
+		    if(doanhThu > 0)
 		    data.getData().add(new XYChart.Data<>(String.valueOf(thang),doanhThu*1.5));
 		}
 		
@@ -1080,7 +1082,7 @@ try {
 		
 		// no se tao 1 con so nam tren moi barchart
 		Platform.runLater(() -> {
-		    for (XYChart.Data<String, Number> item : data.getData()) { 
+		    for (XYChart.Data<String, Number> item : data.getData()) {
 		        Node node = item.getNode();
 		        if (node != null) {
 		            double tien = (double) item.getYValue() / 1.5;
@@ -1091,8 +1093,8 @@ try {
 		            label.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 		            StackPane bar = (StackPane) node;
 		            bar.getChildren().add(label);
-		            StackPane.setAlignment(label, Pos.TOP_CENTER);
-		            StackPane.setMargin(label, new Insets(-20, 0, 0, 0));
+		            StackPane.setAlignment(label, Pos.CENTER);  
+		            StackPane.setMargin(label, new Insets(0, 0, 0, 0));  
 		        }
 		    }
 		});
@@ -1327,7 +1329,11 @@ try {
 		lbl_doanhThu.setTranslateY(-10);
 		lbl_doanhThu.setStyle(style+"-fx-font-family: 'Work Sans';-fx-font-size : 20px;");
 
-        lbl_tongTien = new Label(""+nf.format(tongdoanhthu));		lbl_tongTien.setTranslateX(15);
+		DecimalFormat df = new DecimalFormat("#,###");	
+		String ft = df.format(tongdoanhthu);
+		
+        lbl_tongTien = new Label(ft+" đ");	
+        lbl_tongTien.setTranslateX(15);
 		lbl_tongTien.setTranslateY(-5);
 		
 		
