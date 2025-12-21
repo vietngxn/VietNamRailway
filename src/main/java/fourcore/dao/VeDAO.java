@@ -351,4 +351,78 @@ public class VeDAO {
 		System.out.println(cnt);
 		return rows;
 	}
+	
+	
+	public ArrayList<Ve> getVeTheoCCCD(String cccd) throws SQLException {
+	    ArrayList<Ve> list = new ArrayList<>();
+
+
+	    String query = 
+	        "SELECT " +
+	        " v.maVeTau, v.gaDi, v.gaDen, v.tenTau, v.ngayGioDi, v.ngayGioDen, " +
+	        " v.soToa, v.soKhoang, v.soTang, v.soGhe, v.loaiVe, v.maGiayTo, " +
+	        " v.giaVe, v.ghiChu, v.maVeDuocDoi, v.trangThaiVe, " +
+	        " v.maChuyenTau, v.maKhachHang, v.maKhuyenMai, v.maDoiTuongGiamGia " +
+	        "FROM Ve v " +
+	        "JOIN KhachHang kh ON v.maKhachHang = kh.maKhachHang " +
+	        "WHERE kh.cccd = '" + cccd + "'";
+
+	    ResultSet rs = st.executeQuery(query);
+
+	    while (rs.next()) {
+
+	        // ChuyenTau
+	        ChuyenTau ct = new ChuyenTau();
+	        ct.setMaChuyenTau(rs.getString("maChuyenTau"));
+
+	        // KhachHang
+	        KhachHang kh = new KhachHang();
+	        kh.setMaKhachHang(rs.getString("maKhachHang"));
+	        kh.setCccd(cccd);
+
+	        // KhuyenMai (nullable)
+	        KhuyenMai km = null;
+	        if (rs.getString("maKhuyenMai") != null) {
+	            km = new KhuyenMai();
+	            km.setMaKhuyenMai(rs.getString("maKhuyenMai"));
+	        }
+
+	        // DoiTuongGiamGia (nullable)
+	        DoiTuongGiamGia dt = null;
+	        if (rs.getString("maDoiTuongGiamGia") != null) {
+	            dt = new DoiTuongGiamGia();
+	            dt.setMaDoiTuongGiamGia(rs.getString("maDoiTuongGiamGia"));
+	        }
+
+	        // Ve
+	        Ve ve = new Ve();
+	        ve.setMaVeTau(rs.getString("maVeTau"));
+	        ve.setGaDi(rs.getString("gaDi"));
+	        ve.setGaDen(rs.getString("gaDen"));
+	        ve.setTenTau(rs.getString("tenTau"));
+	        ve.setNgayGioDi(rs.getTimestamp("ngayGioDi").toLocalDateTime());
+	        ve.setNgayGioDen(rs.getTimestamp("ngayGioDen").toLocalDateTime());
+	        ve.setSoToa(rs.getInt("soToa"));
+	        ve.setSoKhoang(rs.getInt("soKhoang"));
+	        ve.setSoTang(rs.getInt("soTang"));
+	        ve.setSoGhe(rs.getInt("soGhe"));
+	        ve.setLoaiVe(rs.getString("loaiVe"));
+	        ve.setMaGiayTo(rs.getString("maGiayTo"));
+	        ve.setGiaVe(rs.getDouble("giaVe"));
+	        ve.setGhiChu(rs.getString("ghiChu"));
+	        ve.setTrangThaiDoiVe(rs.getString("maVeDuocDoi"));
+	        ve.setTrangThaiVe(rs.getString("trangThaiVe"));
+
+	        ve.setChuyenTau(ct);
+	        ve.setKhachHang(kh);
+	        ve.setKhuyenMai(km);
+	        ve.setDoiTuongGiamGia(dt);
+
+	        list.add(ve);
+	    }
+
+	    return list;
+	}
+
+	
 }

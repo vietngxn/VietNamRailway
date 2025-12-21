@@ -103,7 +103,7 @@ public class QuanLyThongKeDoanhThuTheoChuyenTau extends Application {
 	private Button button_thongKe3;
 	private HBox layout_combobox;
 	private ComboBox<String> comboBox = new ComboBox<String>();
-	private DatePicker date;
+	
 	private VBox btn_layout;
 	private Button btn_xuatThongKe;
 	private GridPane tableCol;
@@ -157,6 +157,9 @@ public class QuanLyThongKeDoanhThuTheoChuyenTau extends Application {
 		private ThongKeDAO thongkeDAO;
 		private Map<Tau, Double> map;
 		
+		private ComboBox<String> date1;  // Tháng
+		private ComboBox<String> kieuthongke2;  // Theo Tháng/Theo Năm
+		private ComboBox<String> date;
 		
 		public VBox getLayout()
 		{
@@ -879,7 +882,14 @@ public class QuanLyThongKeDoanhThuTheoChuyenTau extends Application {
 		layout_combobox = new HBox();
 		layout_combobox.setTranslateY(20);
 		layout_combobox.setSpacing(30);
+		
+		
+		
+		
+		
+		
 		ObservableList<String> items = FXCollections.observableArrayList("BarChart","Table");
+		
 		
 		String style1 = "-fx-font-family:'Inter';-fx-text-fill:#00BACB;-fx-font-size: 15px;";
 		comboBox = createComboBox(items);
@@ -888,100 +898,89 @@ public class QuanLyThongKeDoanhThuTheoChuyenTau extends Application {
 		comboBox.setPromptText("Kiểu Thống Kê");
 		comboBox.setStyle(comboBox.getStyle()+";"+style1);
 		
-		date = new DatePicker();
-		date.setPromptText("Thời Gian");
+		ObservableList<String> thang = FXCollections.observableArrayList(
+			    "1", "2", "3", "4", "5", "6",
+			    "7", "8", "9", "10", "11", "12"
+			);
+		
+		
+		date1 = new ComboBox<>(thang);
+		date1.setPromptText("Chọn Tháng");
+		date1.setStyle(style1+";-fx-border-color:#00BACB;-fx-border-width:2px;");
+		date1.setPrefSize(200, 40);
+		date1.setDisable(true);
+		
+		ObservableList<String> nam = FXCollections.observableArrayList(
+			    "2020", "2021", "2022", "2023", "2024", "2025"
+			);
+		
+		
+		
+		date = new ComboBox<>(nam);
+		date.setPromptText("Chọn Năm");
 		date.setStyle(style1+";-fx-border-color:#00BACB;-fx-border-width:2px;");
 		
-		date.setPrefSize(400, 40);
+		date.setPrefSize(200, 40);
 		date.getStyleClass().add("date-picker-custom");
-		layout_combobox.getChildren().addAll(date,comboBox);
+		date.setDisable(true);
 		
-		comboBox.setOnAction(event  -> {
-				
-				LocalDate data1 = date.getValue();
-				int nam = data1.getYear(); 
-				try {
-					map = thongkeDAO.getDoanhThutheoChuyenTau(nam);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+		ObservableList<String> kieuthongke = FXCollections.observableArrayList(
+			    "Theo Tháng","Theo Năm"
+			);
+		
+		kieuthongke2 = new ComboBox<>(kieuthongke);
+		kieuthongke2.setPromptText("Chọn Kiểu thống kê ");
+		kieuthongke2.setStyle(style1+";-fx-border-color:#00BACB;-fx-border-width:2px;");
+		kieuthongke2.setPrefSize(200, 40);
+		
+		
+		
+		kieuthongke2.setOnAction(e -> {
+			String selected = (String) kieuthongke2.getValue();
+			
+			if (selected != null) {
+				if (selected.equalsIgnoreCase("Theo Tháng")) {
+					date1.setDisable(false);
+					date.setDisable(true);
+					date.setValue(null);
+				} 
+				else if (selected.equalsIgnoreCase("Theo Năm")) {
+					date1.setDisable(true);
+					date.setDisable(false);
+					date1.setValue(null); 
 				}
-				
-			for(Map.Entry<Tau, Double> x : map.entrySet())
-			{
-				doanhthu1 += x.getValue();
 			}
-		    if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
-		        table_desc.getChildren().clear();
-		        try {
-					create_barchart_chuyentau();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				// Kiểm tra layout_total đã tồn tại không
-				if (noiDungChinh.getChildren().contains(layout_total)) {
-				    noiDungChinh.getChildren().remove(layout_total);
-				}
-				create_layout_total();
-		    }
-		    else {
-		        table_desc.getChildren().clear();
-                create_piechart_nam();
-                if (noiDungChinh.getChildren().contains(layout_total)) {
-				    noiDungChinh.getChildren().remove(layout_total);
-				}
-				create_layout_total();
-            }
 		});
 		
-		date.setOnAction(e -> {
-			
-			LocalDate data1 = date.getValue();
-			int nam = data1.getYear(); 
-			try {
-				map = thongkeDAO.getDoanhThutheoChuyenTau(nam);
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			for(Map.Entry<Tau, Double> x : map.entrySet())
+		date1.valueProperty().addListener((obs, oldVal, newVal) -> {
+			String selected = (String) kieuthongke2.getSelectionModel().getSelectedItem();
+			if(selected.equalsIgnoreCase("theo tháng"))
 			{
-				doanhthu1 += x.getValue();
+				if (newVal != null && !newVal.isEmpty()) {
+					date.setDisable(false);
+		    	} else {
+		    		date.setDisable(true);
+		    	}
 			}
+		});
+		
 			
-		    if (date.getValue() != null) {
-		        comboBox.setDisable(false);
+			
+		date.valueProperty().addListener((obs, oldVal, newVal) -> {
+				if (newVal != null) {
+		        	comboBox.setDisable(false);
 		        
-		        table_desc.getChildren().clear();
-				
-				if (comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
-				    try {
-						create_barchart_chuyentau();
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				    
-      
-				    if (noiDungChinh.getChildren().contains(layout_total)) {
-				        noiDungChinh.getChildren().remove(layout_total);
-				    }
-				    create_layout_total();
-				} else if (comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("PieChart"))  {
-				    create_piechart_nam();
-				    if (noiDungChinh.getChildren().contains(layout_total)) {
-				        noiDungChinh.getChildren().remove(layout_total);
-				    }
-				    create_layout_total();
-				}
-		    }
+		    	} else {
+		    		comboBox.setDisable(true);
+		    	}
+
 		});
 		
 		
-		
-		title_layout.getChildren().add(layout_combobox);
+		    
+		    layout_combobox.getChildren().addAll(kieuthongke2, date1, date, comboBox);
+		    title_layout.getChildren().add(layout_combobox);
+			
 		
 		
 		
@@ -1006,36 +1005,112 @@ public class QuanLyThongKeDoanhThuTheoChuyenTau extends Application {
 	{
 		table_desc = new VBox();
 		table_desc.setPrefHeight(400);
+	    comboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+	        if (newVal == null) {
+	            return;
+	        }
+	        
+	        String kieuthongke = (String) kieuthongke2.getSelectionModel().getSelectedItem();
+	        
+	        if (kieuthongke == null) {
+	            return;
+	        }
+	        
+	        if(kieuthongke.equalsIgnoreCase("theo năm")) {
+	            if(newVal.equalsIgnoreCase("barchart")) {
+	                table_desc.getChildren().clear();
+	                try {
+	                    btn_xuatThongKe.setDisable(false);
+	                    create_barchart_chuyentau();
+	                } catch (SQLException e) {
+	                    e.printStackTrace();
+	                }
+	                noiDungChinh.getChildren().remove(layout_total);
+	            }
+	            else if(newVal.equalsIgnoreCase("table")) {
+	                table_desc.getChildren().clear();
+	                try {
+	                    try {
+							create_table();
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+	                } catch (NumberFormatException e) {
+	                    e.printStackTrace();
+	                }
+	                btn_xuatThongKe.setDisable(false);
+	            }
+	        } 
+	        else if(kieuthongke.equalsIgnoreCase("theo tháng")) {
+	            if(newVal.equalsIgnoreCase("barchart")) {
+	                table_desc.getChildren().clear();
+	                try {
+	                    btn_xuatThongKe.setDisable(false);
+	                    create_barchart_chuyentautheothang();
+	                } catch (SQLException e) {
+	                    e.printStackTrace();
+	                }
+	                noiDungChinh.getChildren().remove(layout_total);
+	            }
+	            else if(newVal.equalsIgnoreCase("table")) {
+	                table_desc.getChildren().clear();
+	                try {
+	                    try {
+							create_table();
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+	                } catch (NumberFormatException e) {
+	                    e.printStackTrace();
+	                }
+	                btn_xuatThongKe.setDisable(false);
+	            }
+	        }
+	    });
+	    
+
+		kieuthongke2.valueProperty().addListener((obs, oldVal, newVal) -> {
+	        if (newVal == null) {
+	            return;
+	        }
+	        
+	        table_desc.getChildren().clear();
+	        noiDungChinh.getChildren().remove(layout_total);
+	        comboBox.setValue(null);
+	        
+	        if (((String) newVal).equalsIgnoreCase("Theo Tháng")) {
+	            date1.setDisable(false);
+	            date.setDisable(true);
+	            date.setValue(null);
+	        } 
+	        else if (((String) newVal).equalsIgnoreCase("Theo Năm")) {
+	            date1.setDisable(true);
+	            date.setDisable(false);
+	            date1.setValue(null);
+	        }
+	    });
+
+	    date.valueProperty().addListener((obs, oldVal, newVal) -> {
+	        if (newVal != null && comboBox.getValue() != null && !comboBox.getValue().isEmpty()) {
+	            String currentValue = comboBox.getValue();
+	            comboBox.setValue(null);
+	            comboBox.setValue(currentValue);
+	        }
+	    });
+
+	    date1.valueProperty().addListener((obs, oldVal, newVal) -> {
+	        if (newVal != null && date.getValue() != null && comboBox.getValue() != null && !comboBox.getValue().isEmpty()) {
+	            String currentValue = comboBox.getValue();
+	            comboBox.setValue(null);
+	            comboBox.setValue(currentValue);
+	        }
+	    });
 		
 		
-		comboBox.setOnAction(event  -> { 
-        	if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("barchart")) {
-        		try {
-        			table_desc.getChildren().clear();
-					btn_xuatThongKe.setDisable(false);
-					create_barchart_chuyentau();
-					if (noiDungChinh.getChildren().contains(layout_total)) {
-				        noiDungChinh.getChildren().remove(layout_total);
-				    }
-				 
-					create_layout_total();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-        		noiDungChinh.getChildren().remove(layout_total);
-        	}
-        	else if(comboBox.getValue() != null && comboBox.getValue().equalsIgnoreCase("table")) {
-        		table_desc.getChildren().clear();
-        		create_table();
-        		if (noiDungChinh.getChildren().contains(layout_total)) {
-			        noiDungChinh.getChildren().remove(layout_total);
-			    }
-				create_layout_total();
-        		btn_xuatThongKe.setDisable(false);
-        		
-        	}
-        });
+		
+		
 		noiDungChinh.getChildren().add(table_desc);
 	}
 	
@@ -1139,20 +1214,31 @@ public class QuanLyThongKeDoanhThuTheoChuyenTau extends Application {
 	    ca.setLabel("Chuyến Tàu");
 	    NumberAxis na = new NumberAxis();
 	    na.setLabel("Số Chuyến Đi");
-
+	    
+	    map = thongkeDAO.getDoanhThutheoChuyenTau(Integer.valueOf(date.getValue()));
 	    BarChart<String, Number> barchart = new BarChart<>(ca, na);
-	    barchart.setTitle("Thống kê top 10 chuyến tàu chạy nhiều nhất");
+	    barchart.setTitle("Thống kê top 10 chuyến tàu có doanh thu cao nhất");
 	    barchart.setLegendVisible(false);
 	    barchart.setPrefHeight(600);
 	    
 	   
+	    if(map == null || map.isEmpty()) {
+	        Alert alert = new Alert(Alert.AlertType.WARNING);
+	        alert.setTitle("Thông báo");
+	        alert.setHeaderText(null);
+	        alert.setContentText("Không có dữ liệu cho năm được chọn!");
+	        alert.showAndWait();
+	        table_desc.getChildren().clear();
+	        return;
+	    }
+	    
 	    
 	    ArrayList<XYChart.Data<String, Number>> listdata = new ArrayList<>();
 	    doanhthu1 = 0;
 	    for(Map.Entry<Tau, Double> x : map.entrySet()) {
 	        Tau tau = x.getKey();
-	        double doanhthu = x.getValue();
 	        doanhthu1 += x.getValue();
+	        double doanhthu = x.getValue();
 	        listdata.add(new XYChart.Data<>(tau.getTenTau(), doanhthu));
 	    }
 
@@ -1170,7 +1256,7 @@ public class QuanLyThongKeDoanhThuTheoChuyenTau extends Application {
 	    na.setTickUnit(max/5);
 	    na.setAutoRanging(true);
 	    na.setLowerBound(0);
-	    na.setUpperBound(max +1);
+	    na.setUpperBound(max*2 );
 
 	    XYChart.Series<String, Number> list = new XYChart.Series<String, Number>();
 
@@ -1178,6 +1264,8 @@ public class QuanLyThongKeDoanhThuTheoChuyenTau extends Application {
 	        list.getData().add(s);
 	    }
 	    barchart.getData().add(list);
+	    
+	    
 	    
 	    Platform.runLater(() -> {
 	        for (XYChart.Data<String, Number> data : list.getData()) {
@@ -1191,8 +1279,9 @@ public class QuanLyThongKeDoanhThuTheoChuyenTau extends Application {
 	                label.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 	                StackPane bar = (StackPane) node;
 	                bar.getChildren().add(label);
-	                StackPane.setAlignment(label, Pos.TOP_CENTER);
+	                StackPane.setAlignment(label, Pos.CENTER);
 	                StackPane.setMargin(label, new Insets(-20, 0, 0, 0));
+	                
 	            }
 	        }
 	    });
@@ -1202,8 +1291,89 @@ public class QuanLyThongKeDoanhThuTheoChuyenTau extends Application {
 	}
 	
 	
+	public void create_barchart_chuyentautheothang() throws SQLException {
+	    CategoryAxis ca = new CategoryAxis();
+	    ca.setLabel("Chuyến Tàu");
+	    NumberAxis na = new NumberAxis();
+	    na.setLabel("Số Chuyến Đi");
+	    
+	    map = thongkeDAO.getDoanhThutheoChuyenTautheoThang(Integer.valueOf(date1.getValue()),Integer.valueOf(date.getValue()));
+	    
+	    BarChart<String, Number> barchart = new BarChart<>(ca, na);
+	    barchart.setTitle("Thống kê top 10 chuyến tàu có doanh thu cao nhất");
+	    barchart.setLegendVisible(false);
+	    barchart.setPrefHeight(600);
+	    
+	    if(map == null || map.isEmpty()) {
+	        Alert alert = new Alert(Alert.AlertType.WARNING);
+	        alert.setTitle("Thông báo");
+	        alert.setHeaderText(null);
+	        alert.setContentText("Không có dữ liệu cho tháng và năm được chọn!");
+	        alert.showAndWait();
+	        table_desc.getChildren().clear();
+	        return;
+	    }
+	    
+	    
+	    ArrayList<XYChart.Data<String, Number>> listdata = new ArrayList<>();
+	    doanhthu1 = 0;
+	    for(Map.Entry<Tau, Double> x : map.entrySet()) {
+	        Tau tau = x.getKey();
+	        doanhthu1 += x.getValue();
+	        double doanhthu = x.getValue();
+	        listdata.add(new XYChart.Data<>(tau.getTenTau(), doanhthu));
+	    }
+
+	    for(int i = 0; i < listdata.size() - 1; i++) {
+	        for(int j = i+1; j < listdata.size(); j++) {
+	            if(listdata.get(i).getYValue().doubleValue() < listdata.get(j).getYValue().doubleValue()) {
+	                XYChart.Data<String, Number> temp = listdata.get(i);
+	                listdata.set(i, listdata.get(j));
+	                listdata.set(j, temp);
+	            }
+	        }
+	    }
+	    
+	    double max = listdata.get(0).getYValue().doubleValue();
+	    na.setTickUnit(max/5);
+	    na.setAutoRanging(true);
+	    na.setLowerBound(0);
+	    na.setUpperBound(max*2 );
+
+	    XYChart.Series<String, Number> list = new XYChart.Series<String, Number>();
+
+	    for(XYChart.Data<String, Number> s : listdata) {
+	        list.getData().add(s);
+	    }
+	    barchart.getData().add(list);
+	    
+	    
+	    
+	    Platform.runLater(() -> {
+	        for (XYChart.Data<String, Number> data : list.getData()) {
+	            Node node = data.getNode();
+	            if (node != null) {
+	            	double tien = (double) data.getYValue();
+	            	DecimalFormat df = new DecimalFormat("#,###");
+	            	String tf = df.format(tien);
+	            	
+	                Label label = new Label(tf + " đ");
+	                label.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+	                StackPane bar = (StackPane) node;
+	                bar.getChildren().add(label);
+	                StackPane.setAlignment(label, Pos.CENTER);
+	                StackPane.setMargin(label, new Insets(-20, 0, 0, 0));
+	                
+	            }
+	        }
+	    });
+
+	    table_desc.getChildren().clear();
+	    table_desc.getChildren().add(barchart);
+	}
 	
-	public void create_table()
+	
+	public void create_table() throws NumberFormatException, SQLException
 	{
 		table_layout = new VBox(); 
 		tableCol = new GridPane();
@@ -1253,11 +1423,47 @@ public class QuanLyThongKeDoanhThuTheoChuyenTau extends Application {
 		table_desc_layout = new VBox();
 		table_desc_layout.setSpacing(20);
 		
-		for(Map.Entry<Tau, Double> x : map.entrySet())
+		String kieuthongke = (String) kieuthongke2.getSelectionModel().getSelectedItem();
+		
+		if(kieuthongke.equalsIgnoreCase("theo năm"))
 		{
-			Tau tau = x.getKey();
-			double solan = x .getValue();
-			create_layout_dong(tau.getMaTau(), tau.getTenTau(), solan);
+			
+			map = thongkeDAO.getDoanhThutheoChuyenTau(Integer.valueOf(date.getValue()));
+			if(map == null || map.isEmpty()) {
+		        Alert alert = new Alert(Alert.AlertType.WARNING);
+		        alert.setTitle("Thông báo");
+		        alert.setHeaderText(null);
+		        alert.setContentText("Không có dữ liệu cho tháng và năm được chọn!");
+		        alert.showAndWait();
+		        table_desc.getChildren().clear();
+		        return;
+		    }
+			for(Map.Entry<Tau, Double> x : map.entrySet())
+			{
+				Tau tau = x.getKey();
+				double solan = x .getValue();
+				create_layout_dong(tau.getMaTau(), tau.getTenTau(), solan);
+			}
+		}
+		else if(kieuthongke.equalsIgnoreCase("theo tháng"))
+		{
+
+			map = thongkeDAO.getDoanhThutheoChuyenTautheoThang(Integer.valueOf(date1.getValue()),Integer.valueOf(date.getValue()));
+			if(map == null || map.isEmpty()) {
+		        Alert alert = new Alert(Alert.AlertType.WARNING);
+		        alert.setTitle("Thông báo");
+		        alert.setHeaderText(null);
+		        alert.setContentText("Không có dữ liệu cho tháng và năm được chọn!");
+		        alert.showAndWait();
+		        table_desc.getChildren().clear();
+		        return;
+		    }	
+			for(Map.Entry<Tau, Double> x : map.entrySet())
+			{
+				Tau tau = x.getKey();
+				double solan = x .getValue();
+				create_layout_dong(tau.getMaTau(), tau.getTenTau(), solan);
+			}
 		}
 		
 		
@@ -1283,7 +1489,7 @@ public class QuanLyThongKeDoanhThuTheoChuyenTau extends Application {
 		
 		
 		String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
-		Label[] labels = {lbl_maTau = new Label(maTau),lbl_tenTau =  new Label(tenTau),lbl_soLanSuDung =new Label(ft)};
+		Label[] labels = {lbl_maTau = new Label(maTau),lbl_tenTau =  new Label(tenTau),lbl_soLanSuDung =new Label(ft+" đ")};
 		double[] widths = {200, 200,400};
 		lbl_maTau.setTranslateX(-560);
 		lbl_tenTau.setTranslateX(-250);

@@ -161,10 +161,22 @@ public class GiaoDienCapLaiVe extends Application {
 
         String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-
+        
+        String trangthai3 = "";
+        if(trangThaiVe.equalsIgnoreCase("Hoạt Động"))
+        {
+        	trangthai3 = "Hoạt Động";
+        }
+        else if(trangThaiVe.equalsIgnoreCase("Kết thúc")) {
+        	trangthai3 = "Kết thúc";
+        }
+        else if(trangThaiVe.equalsIgnoreCase("đã hoàn trả")) {
+        	trangthai3 = "Đã hoàn trả";
+        }
+        
         Label[] labels = { lbl_maVeTau = new Label(maVeTau), lbl_tenTau = new Label(tenTau),
                 lbl_gadigaden = new Label(gaDigaDen), lbl_ngaygiodi = new Label(ngayGioDi.format(formatter)),
-                lbl_vitrighe = new Label("Toa số" + Integer.valueOf(soToa)+ " chỗ "+Integer.valueOf(soGhe).toString()), lbl_trangthai = new Label(trangThaiVe) };
+                lbl_vitrighe = new Label("Toa số " + Integer.valueOf(soToa)+ " chỗ "+Integer.valueOf(soGhe).toString()), lbl_trangthai = new Label(trangthai3) };
 
         lbl_maVeTau.setTranslateX(-35);
         lbl_tenTau.setTranslateX(-35);
@@ -183,7 +195,13 @@ public class GiaoDienCapLaiVe extends Application {
                 if (text.equalsIgnoreCase("hoạt động"))
                     lbl.setStyle(baseStyle + "-fx-font-size: 18px; -fx-text-fill: #009D75;");
                 else if (text.equalsIgnoreCase("Đã Hoàn Trả"))
+                {
+                    lbl.setStyle(baseStyle + "-fx-font-size: 18px; -fx-text-fill: black;");
+                }
+                else if (text.equalsIgnoreCase("Kết thúc"))
+                {
                     lbl.setStyle(baseStyle + "-fx-font-size: 18px; -fx-text-fill: red;");
+                }
             }
 
             StackPane pane = new StackPane(lbl);
@@ -226,11 +244,11 @@ public class GiaoDienCapLaiVe extends Application {
             scaleDown.setToY(1.0);
             scaleDown.play();
         });
-
-
-
-
-
+        
+        
+       
+        
+        
 
         // ======= THÔNG TIN CHI TIẾT =======
         HBox pnlThongTinChiTiet = new HBox(50);
@@ -264,7 +282,7 @@ public class GiaoDienCapLaiVe extends Application {
                     -fx-font-family: "Kanit";
                     -fx-padding: 8 12 8 12;
                 """;
-
+        
         String selectedStyle = """
                 -fx-background-color: rgba(0, 186, 203);
                 -fx-background-radius: 15px;
@@ -312,59 +330,69 @@ public class GiaoDienCapLaiVe extends Application {
         pnlThongTinChiTiet.setVisible(false);
 
         pnlReturn.setOnMouseClicked(event -> {
-
-            if (dangCapNhatTrangThai && selectedPanel != null && selectedPanel != pnlReturn) {
-                // Xóa toàn bộ children trừ GridPane data (index 0)
-                while (selectedPanel.getChildren().size() > 1) {
-                    selectedPanel.getChildren().remove(1);
-                }
-
-                layout_trangthai = null;
-
-                // Reset trạng thái
-                dangCapNhatTrangThai = false;
-
-                // Deselect dòng cũ
-                GridPane oldData = (GridPane) selectedPanel.getChildren().get(0);
-                oldData.setStyle(normalStyle);
-                ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), oldData);
-                scaleDown.setToX(1.0);
-                scaleDown.setToY(1.0);
-                scaleDown.play();
-
-                selectedPanel = null;
-                vechon = null;
-                maveTauchon = null;
-            }
-
-
-
+        	
+        	if(trangThaiVe.equalsIgnoreCase("kết thúc"))
+        	{
+        		
+        		btnCapVe.setDisable(true);
+        	}
+        	else {
+        		btnCapVe.setDisable(false);
+        	}
+        	
+        	
+        	if (dangCapNhatTrangThai && selectedPanel != null && selectedPanel != pnlReturn) {
+    	        // Xóa toàn bộ children trừ GridPane data (index 0)
+    	        while (selectedPanel.getChildren().size() > 1) {
+    	            selectedPanel.getChildren().remove(1);
+    	        }
+    	        
+    	        layout_trangthai = null;
+    	        
+    	        // Reset trạng thái
+    	        dangCapNhatTrangThai = false;
+    	        
+    	        // Deselect dòng cũ
+    	        GridPane oldData = (GridPane) selectedPanel.getChildren().get(0);
+    	        oldData.setStyle(normalStyle);
+    	        ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), oldData);
+    	        scaleDown.setToX(1.0);
+    	        scaleDown.setToY(1.0);
+    	        scaleDown.play();
+    	        
+    	        selectedPanel = null;
+    	        vechon = null;
+    	        maveTauchon = null;
+    	   }
+        	
+        	
+        	
             boolean check = pnlThongTinChiTiet.isVisible();
             pnlThongTinChiTiet.setManaged(!check);
             pnlThongTinChiTiet.setVisible(!check);
             pnlReturn.getChildren().remove(layout_trangthai);
-
-
+            
+            
             // LƯU THÔNG TIN PANEL ĐÃ CHỌN
             if (!check) {
-
-                data.setStyle(selectedStyle);
-                ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), data);
-                scaleUp.setToX(1.02);
-                scaleUp.setToY(1.02);
-                scaleUp.play();
-
-                if (pnlReturn.getChildren().size() > 1) {
-                    while (pnlReturn.getChildren().size() > 1) {
-                        pnlReturn.getChildren().remove(1);
-                    }
-                }
-                pnlReturn.getChildren().add(pnlThongTinChiTiet);
-
-                pnlThongTinChiTiet.setManaged(true);
-                pnlThongTinChiTiet.setVisible(true);
-                pnlReturn.getChildren().remove(layout_trangthai);
-
+            	
+            	 data.setStyle(selectedStyle);
+                 ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), data);
+                 scaleUp.setToX(1.02);
+                 scaleUp.setToY(1.02);
+                 scaleUp.play();
+                 
+                 if (pnlReturn.getChildren().size() > 1) {
+                     while (pnlReturn.getChildren().size() > 1) {
+                         pnlReturn.getChildren().remove(1);
+                     }
+                 }
+                 pnlReturn.getChildren().add(pnlThongTinChiTiet);
+                 
+                 pnlThongTinChiTiet.setManaged(true);
+                 pnlThongTinChiTiet.setVisible(true);
+                 pnlReturn.getChildren().remove(layout_trangthai);
+                 
                 selectedPanel = pnlReturn;
                 vechon = new Ve(maVeTau, gaDigaDen, gaDigaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soToa, soTang,
                         soGhe, loaiVe, maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, new ChuyenTau(maChuyenTau),
@@ -377,7 +405,7 @@ public class GiaoDienCapLaiVe extends Application {
                     if (lbl_trangthai2 != null) {
                         lbl_trangthai2.setAlignment(Pos.CENTER);
                     }
-
+                    
 
                     dangCapNhatTrangThai = true;
                     selectedPanel = pnlReturn;
@@ -426,7 +454,7 @@ public class GiaoDienCapLaiVe extends Application {
                     pnlReturn.getChildren().add(layout_trangthai);
                 });
             } else { // Nếu đang đóng chi tiết
-                data.setStyle(normalStyle);
+            	data.setStyle(normalStyle);
                 ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), data);
                 scaleDown.setToX(1.0);
                 scaleDown.setToY(1.0);
@@ -993,7 +1021,7 @@ public class GiaoDienCapLaiVe extends Application {
 
             layout_lbl_timkiem = new HBox();
             layout_lbl_timkiem.setPrefSize(1200, 40);
-            lbl_timkiem = new Label("Nhập mã vé");
+            lbl_timkiem = new Label("Nhập cccd của khách hàng");
             lbl_timkiem.setTranslateX(10);
             lbl_timkiem.setTranslateY(0);
             lbl_timkiem.setStyle(
@@ -1140,6 +1168,8 @@ public class GiaoDienCapLaiVe extends Application {
             btnCapVe = new Button("Cấp vé");
             btnCapVe.setPrefSize(250, 60);
 
+            
+            
             btnCapVe.setStyle(btnStyle);
             btnCapVe.setOnAction(e -> {
                 if (selectedPanel == null) {
@@ -1152,7 +1182,8 @@ public class GiaoDienCapLaiVe extends Application {
                 } else {
                     // Đã chọn panel - lấy thông tin từ labels
                     String mave = vechon.getMaVeTau();
-
+                    
+                    
                     try {
 
 
@@ -1166,11 +1197,11 @@ public class GiaoDienCapLaiVe extends Application {
                         } else {
                             System.out.println("File PDF không tồn tại: " + "VeTauExport/"+mave+".pdf");
                         }
-
-
-
+                    	
+                    		
+                    	
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-
+                        
                         alert.setHeaderText(null);
                         alert.setContentText("Cấp Vé Thành Công!");
                         alert.showAndWait();
@@ -1188,66 +1219,109 @@ public class GiaoDienCapLaiVe extends Application {
 
             // add su kien disable btn
             btnTimKiem.setOnMouseClicked(event -> {
-                String regex = "^V\\d+";
                 String input = txt_timkiem.getText().trim();
-                String maVe = txt_timkiem.getText();
+                String cccd = txt_timkiem.getText().trim(); // FIX: thêm trim()
 
-
-
-                if (input.isEmpty() || !Pattern.matches(regex, input)) {
+                if (input.isEmpty()) {
                     btnCapVe.setDisable(true);
                     btnCapNhatTrangThaiVe.setDisable(true);
                     String eStyle = """
-                                -fx-font-size: 18px;
-                                -fx-background-color: rgba(203, 0, 44, 0.83);
-                                -fx-text-fill: white;
-                                -fx-background-radius: 10;
-                                -fx-cursor: hand;
-                                -fx-padding: 10 20 10 20;
-                            """;
+                        -fx-font-size: 18px;
+                        -fx-background-color: rgba(203, 0, 44, 0.83);
+                        -fx-text-fill: white;
+                        -fx-background-radius: 10;
+                        -fx-cursor: hand;
+                        -fx-padding: 10 20 10 20;
+                    """;
                     btnCapNhatTrangThaiVe.setStyle(eStyle);
                     btnCapVe.setStyle(eStyle);
 
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Lỗi định dạng");
                     alert.setHeaderText(null);
-                    alert.setContentText("Mã vé không hợp lệ! (Định dạng hợp lệ: VXXXXX)");
+                    alert.setContentText("Vui lòng nhập CCCD!");
                     alert.showAndWait();
-
+                    return;
                 } else {
                     btnCapVe.setDisable(false);
                     btnCapNhatTrangThaiVe.setDisable(false);
+                    
                     try {
-                        Ve x = vedao.getVeBangMaVe(maVe);
+                        System.out.println("🔍 Tìm kiếm CCCD: " + cccd);
+                        
+                        ArrayList<Ve> listVe = vedao.getVeTheoCCCD(cccd);
+                        
+                        // FIX: Kiểm tra null
+                        if (listVe == null) {
+                            System.out.println("❌ listVe là NULL - khởi tạo ArrayList mới");
+                            listVe = new ArrayList<>();
+                        }
+                        
+                        System.out.println("📊 Số vé tìm được: " + listVe.size());
+                        
                         pnlDataDoiVe.getChildren().clear();
-                        pnlDataDoiVe.getChildren().add(
-                                taoDataChoTableCapLaiVe(
-                                        x.getMaVeTau(),
-                                        x.getChuyenTau().getMaChuyenTau(),
-                                        x.getGaDi() + " - " + x.getGaDen(),
-                                        x.getNgayGioDi(), // ngayGioDi (LocalDateTime)
-                                        x.getNgayGioDen(), // ngayGioDen (LocalDateTime)
-                                        x.getSoToa(), // soToa
-                                        x.getSoTang(), // soTang
-                                        x.getSoGhe(), // soGhe
-                                        x.getLoaiVe(), // loaiVe
-                                        x.getKhachHang().getCccd(), // maGiayTo
-                                        x.getGiaVe(), // giaVe
-                                        x.getGhiChu(), // ghiChu
-                                        x.getTrangThaiDoiVe(), // trangThaiDoiVe
-                                        x.getTrangThaiVe(), // trangThaiVe
-                                        x.getChuyenTau().getMaChuyenTau(), // maChuyenTau
-                                        x.getKhachHang().getMaKhachHang(), // maKhachHang
-                                        x.getKhuyenMai().getMaKhuyenMai(), // maKhuyenMai
-                                        x.getDoiTuongGiamGia().getMaDoiTuongGiamGia()));
-                    } catch (SQLException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    }
-                    btnCapNhatTrangThaiVe.setStyle(btnStyle);
-                    btnCapVe.setStyle(btnStyle);
-                }
 
+                        if (listVe.isEmpty()) {
+                            System.out.println("⚠️ Không tìm thấy vé nào");
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Thông báo");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Không tìm thấy vé nào cho CCCD: " + cccd);
+                            alert.showAndWait();
+                            btnCapVe.setDisable(true);
+                            btnCapNhatTrangThaiVe.setDisable(true);
+                        } else {
+                            // FIX: Thêm try-catch trong vòng for để bắt exception
+                            for (Ve x : listVe) {
+                                try {
+                                    System.out.println("✅ Thêm vé: " + x.getMaVeTau());
+                                    
+                                    pnlDataDoiVe.getChildren().add(
+                                        taoDataChoTableCapLaiVe(
+                                            x.getMaVeTau(),
+                                            x.getChuyenTau().getMaChuyenTau(),
+                                            x.getGaDi() + " - " + x.getGaDen(),
+                                            x.getNgayGioDi(),
+                                            x.getNgayGioDen(),
+                                            x.getSoToa(),
+                                            x.getSoTang(),
+                                            x.getSoGhe(),
+                                            x.getLoaiVe(),
+                                            x.getKhachHang().getCccd(),
+                                            x.getGiaVe(),
+                                            x.getGhiChu(),
+                                            x.getTrangThaiDoiVe(),
+                                            x.getTrangThaiVe(),
+                                            x.getChuyenTau().getMaChuyenTau(),
+                                            x.getKhachHang().getMaKhachHang(),
+                                            x.getKhuyenMai().getMaKhuyenMai(),
+                                            x.getDoiTuongGiamGia().getMaDoiTuongGiamGia()
+                                        )
+                                    );
+                                } catch (Exception ex) {
+                                    System.out.println("❌ Lỗi khi thêm vé: " + x.getMaVeTau());
+                                    ex.printStackTrace();
+                                }
+                            }
+                            
+                            btnCapNhatTrangThaiVe.setStyle(btnStyle);
+                            btnCapVe.setStyle(btnStyle);
+                        }
+                        
+                    } catch (SQLException e1) {
+                        System.out.println("❌ SQL Error: " + e1.getMessage());
+                        e1.printStackTrace();
+                        
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Lỗi cơ sở dữ liệu");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Lỗi: " + e1.getMessage());
+                        alert.showAndWait();
+                        
+                        btnCapVe.setDisable(true);
+                        btnCapNhatTrangThaiVe.setDisable(true);
+                    }
+                }
             });
 
         } catch (Exception e) {
@@ -1256,7 +1330,7 @@ public class GiaoDienCapLaiVe extends Application {
     }
 
 
-
+    
     public void hienThi() throws SQLException
     {
         pnlDataDoiVe.getChildren().clear();
