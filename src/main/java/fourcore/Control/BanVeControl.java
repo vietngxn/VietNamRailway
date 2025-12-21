@@ -35,7 +35,6 @@ public class BanVeControl {
     BanVe gdBanVe = null;
     ChonVeKhuHoi gdChonVeKhuHoi = null;
     ChuyenTauDAO chuyenTauDAO = new ChuyenTauDAO();
-    GheNgoiDAO gheNgoiDAO = new GheNgoiDAO();
 
     GiaoDienXuatHoaDon gdXuatHoaDon = new GiaoDienXuatHoaDon();
     public BanVeControl() throws SQLException {
