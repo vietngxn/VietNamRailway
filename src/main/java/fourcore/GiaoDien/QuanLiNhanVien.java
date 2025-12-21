@@ -1346,8 +1346,7 @@ public class QuanLiNhanVien extends Application {
 			}
 		    for (NhanVien nv : listnhanvien2) {
 		        if(nv.getTinhTrangLamViec().equalsIgnoreCase("đã nghỉ")) {
-		            loadDuLieuKhoiPhuc(table_desc_recovery, nv.getMaNhanVien(), nv.getHoTen(), nv.getSdt(), nv.getGioiTinh(),nv.getEmail(),nv.getCccd(),nv.getTinhTrangLamViec());
-		            
+		            loadDuLieuKhoiPhuc(table_desc_recovery, nv.getMaNhanVien(), nv.getHoTen(), nv.getSdt(), nv.getGioiTinh(),nv.getEmail(),nv.getCccd(),"Đã nghỉ");
 		        }
 		    }
 		    
@@ -1680,7 +1679,17 @@ public class QuanLiNhanVien extends Application {
 	    Label lblgioiTinh = new Label(gioiTinh);
 	    Label lblemail = new Label(email);
 	    Label lblCCCD = new Label(cccd);
-	    Label lbltinhTrangLamViec = new Label(tinhtranglamviec);
+	    
+	    String tinhtrang = "";
+	    if(tinhtranglamviec.equalsIgnoreCase("còn làm"))
+	    {
+	    	tinhtrang = "Còn làm";
+	    }
+	    else if(tinhtranglamviec.equalsIgnoreCase("đã nghỉ")) {
+	    	tinhtrang = "Đã nghỉ";
+	    }
+	    
+	    Label lbltinhTrangLamViec = new Label(tinhtrang);
 	    
 	    String colorStyle;
 	    if(lbltinhTrangLamViec.getText().equalsIgnoreCase("còn làm"))

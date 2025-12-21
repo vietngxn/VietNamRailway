@@ -1233,6 +1233,7 @@ public class QuanLyThongKeDoanhThuTheoChuyenTau extends Application {
 	    }
 	    
 	    
+	    
 	    ArrayList<XYChart.Data<String, Number>> listdata = new ArrayList<>();
 	    doanhthu1 = 0;
 	    for(Map.Entry<Tau, Double> x : map.entrySet()) {
