@@ -1,9 +1,6 @@
 package fourcore.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -20,9 +17,9 @@ public class TaiKhoanDAO {
     public TaiKhoanDAO() throws SQLException {
     }
 
-    public String getMatKhau(String tenDangNhap) throws SQLException
+    public boolean checkPass(String tenDangNhap, String pwd) throws SQLException
     {
-        String sql = "SELECT tenDangNhap, matKhau FROM TaiKhoan WHERE tenDangNhap = '" + tenDangNhap + "'";
+        String sql = "SELECT tenDangNhap, matKhau FROM TaiKhoan WHERE maNhanVien = '" + tenDangNhap + "'";
 
 
         ResultSet rs= st.executeQuery(sql);
@@ -31,7 +28,17 @@ public class TaiKhoanDAO {
         {
             matKhau = rs.getString(2);
         }
-        return matKhau;
+        if(matKhau.equals(pwd)){
+            return true;
+        }
+        return false;
+
+    }
+    public void updatePass(String tenDangNhap, String pwd) throws SQLException
+    {
+        String sql  = "Update TaiKhoan set matKhau = '"+pwd+"' where maNhanVien = '" + tenDangNhap + "'";
+        PreparedStatement ps = databaseConnector.getConnection().prepareStatement(sql);
+        ps.executeUpdate();
 
     }
 
