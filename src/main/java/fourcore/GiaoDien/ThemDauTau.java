@@ -9,6 +9,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -82,7 +83,6 @@ public class ThemDauTau extends Application {
 	 private HBox xoaKhachHangBox;
 	 private HBox suaKhachHangBox;
 	 private Label quanLiKhachHang;
-	 private Label quanLiKhachHangLabel;
 	 private HBox quanLiHoaDonMenu;
 	 private ImageView quanLiHoaDonIconView;
 	 private Label quanLiHoaDonLabel;
@@ -128,7 +128,7 @@ public class ThemDauTau extends Application {
 	private Label lblToa;
 	private ImageView imgToa;
 	private Map<Integer, StackPane> mapSpToa = new HashMap<>();
-	private Tau_DAO taudao = new Tau_DAO();
+	private Tau_DAO taudao = new Tau_DAO(); 
 	private File fileTmp;
 	private GhiFile ghiFile = new GhiFile();
 	private TableView<Tau> table;
@@ -136,6 +136,7 @@ public class ThemDauTau extends Application {
 	private Button buttonTiepTuc;
 	private ChuyenTauDAO chuyentaudao = new ChuyenTauDAO();
 	private Button buttonTroLai;
+	private Label quanLiKhachHangLabel;
 	
 
     public ThemDauTau() throws SQLException {
@@ -631,6 +632,8 @@ public VBox creat_themDauTau_layout() throws SQLException, IOException {
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+		DecimalFormat moneyFormat = new DecimalFormat("#,###");
+		
 		mapTmp = new HashMap<>();
 		fileTmp = new File("src/main/resources/tmp_ChuyenTau.txt");
 		
@@ -650,12 +653,14 @@ public VBox creat_themDauTau_layout() throws SQLException, IOException {
 		
 		javafx.scene.control.TableColumn<Tau, String>  maTauCol = new javafx.scene.control.TableColumn<>("Mã đầu tàu");
 		maTauCol.setCellValueFactory(new PropertyValueFactory<>("maTau"));
-		maTauCol.setPrefWidth(260);
+		maTauCol.setPrefWidth(230);
 		maTauCol.setId("table_ThemToaTau");
+		
 		
 		javafx.scene.control.TableColumn<Tau, String> tenTauCol = new javafx.scene.control.TableColumn<>("Tên đầu tàu");
 		tenTauCol.setCellValueFactory(new PropertyValueFactory<>("tenTau"));
-		tenTauCol.setPrefWidth(260);
+		tenTauCol.setPrefWidth(230);
+		
 		tenTauCol.setId("table_ThemToaTau");
 		
 		javafx.scene.control.TableColumn<Tau, String> loaiTauCol = new javafx.scene.control.TableColumn<>("Loại đầu tàu");
@@ -664,17 +669,28 @@ public VBox creat_themDauTau_layout() throws SQLException, IOException {
 			if(tau != null && tau.getLoaiTau() != null) return new SimpleStringProperty(cellData.getValue().getLoaiTau().getTenLoaiTau());
 			else return new SimpleStringProperty("");
 		});
-		loaiTauCol.setPrefWidth(440);
+		loaiTauCol.setPrefWidth(300);
 		loaiTauCol.setId("table_ThemToaTau");
 		
-		TableColumn<Tau, Double> giaCuocCol = new javafx.scene.control.TableColumn<>("Giá cước");
+		
+		TableColumn<Tau, String> giaCuocCol = new javafx.scene.control.TableColumn<>("Giá cước");
 		giaCuocCol.setCellValueFactory(cellData -> {
 			Tau tau = cellData.getValue();
-			if(tau != null && tau.getLoaiTau() != null) return new SimpleDoubleProperty(cellData.getValue().getLoaiTau().getGiaCuoc()).asObject();
-			else return new SimpleDoubleProperty(0.0).asObject();
+			if(tau != null && tau.getLoaiTau() != null) return new SimpleStringProperty(moneyFormat.format(cellData.getValue().getLoaiTau().getGiaCuoc()) + "/km");
+			else return new SimpleStringProperty("0/km");
 		});
-		giaCuocCol.setPrefWidth(240);
+		giaCuocCol.setPrefWidth(200);
 		giaCuocCol.setId("table_ThemToaTau");
+	
+		TableColumn<Tau, String> trangThai = new javafx.scene.control.TableColumn<>("Trạng thái");
+		trangThai.setCellValueFactory(cellData -> {
+			Tau tau = cellData.getValue();
+			if(tau != null && tau.isRemove()) return new SimpleStringProperty("Đang chạy");
+			else return new SimpleStringProperty("Sẵn sàng");
+		});
+		trangThai.setPrefWidth(240);
+		trangThai.setId("table_ThemToaTau");
+		
 		
 //		javafx.scene.control.TableColumn<Tau, String> trangThaiCol = new javafx.scene.control.TableColumn<>("Trạng thái");
 //		trangThaiCol.setCellValueFactory(new PropertyValueFactory<>("trangThai"));
@@ -699,7 +715,7 @@ public VBox creat_themDauTau_layout() throws SQLException, IOException {
 
 		
 		table.setPrefHeight(700);
-		table.getColumns().addAll(maTauCol, tenTauCol, loaiTauCol, giaCuocCol);
+		table.getColumns().addAll(maTauCol, tenTauCol, loaiTauCol, giaCuocCol, trangThai);
 		table.setMaxWidth(1200);
 		
 		List<String> allLine = Files.readAllLines(Paths.get("src/main/resources/tmp_ChuyenTau.txt")); 
@@ -714,16 +730,26 @@ public VBox creat_themDauTau_layout() throws SQLException, IOException {
 		
 		ArrayList<ChuyenTau> listChuyenTau = chuyentaudao.getListChuyenTau();
 		ArrayList<Tau> listTauTheoHanhTrinh = taudao.getListTauTheoHanhTrinh(maHanhTrinh);
-		ArrayList<Tau> listTauRemove = new ArrayList<>();
+//		ArrayList<Tau> listTauRemove = new ArrayList<>();
 		
 		for(ChuyenTau ct : listChuyenTau) {
 			for(Tau t : listTauTheoHanhTrinh) {
 				if(ct.getTau().getMaTau().equalsIgnoreCase(t.getMaTau())) {
-					if(animation.checkNgay(dateTimeDi, ct.getNgayGioDi(), ct.getNgayGioDen())) listTauRemove.add(t);
+//					if(animation.checkNgay(dateTimeDi, ct.getNgayGioDi(), ct.getNgayGioDen())) listTauRemove.add(t);
+					if(animation.checkNgay(dateTimeDi, ct.getNgayGioDi(), ct.getNgayGioDen())) t.setRemove(true);
 				}
 			}
 		}
-		listTauTheoHanhTrinh.removeAll(listTauRemove);
+		
+//		for(int i = 0; i < listChuyenTau.size()-1; i++) {
+//			ChuyenTau ct = listChuyenTau.get(i);
+//			for(Tau t : listTauTheoHanhTrinh) {
+//				if(ct.getTau().getMaTau().equalsIgnoreCase(t.getMaTau())) {
+//					if(animation.checkNgay(dateTimeDi, ct.getNgayGioDi(), ct.getNgayGioDen())) ct.getTau().setRemove(true);
+//				}
+//			}
+//		}
+//		listTauTheoHanhTrinh.removeAll(listTauRemove);
 //		ObservableList<Tau> data = themSpacer(taudao.getListTauTheoHanhTrinh(maHanhTrinh));
 		ObservableList<Tau> data = themSpacer(listTauTheoHanhTrinh);
 
@@ -741,7 +767,11 @@ public VBox creat_themDauTau_layout() throws SQLException, IOException {
 		                setStyle("-fx-background-color: white; -fx-min-height: 16px; -fx-max-height: 16px;");
 		                setMouseTransparent(true);    
 		                setFocusTraversable(false);  
-		            } 
+		            } else if (tau != null && tau.isRemove()) {
+		            	setStyle("-fx-background-color: red");
+		            	setMouseTransparent(true);    
+		                setFocusTraversable(false); 
+		        	}
 		        }
 		    };
 

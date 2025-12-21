@@ -78,6 +78,7 @@ public class TrangChu extends Application {
 	BanVeControl banVeControl;
 	GhiFile ghiFile = new GhiFile();
 	private File fileTmp;
+	private File fileTmp1;
 
 	public TrangChu() throws SQLException {
 	}
@@ -1078,11 +1079,14 @@ public class TrangChu extends Application {
 			});
 			quanLiChuyenTauBox.setOnMouseClicked(event -> {
 				fileTmp = new File("src/main/resources/tmp_ChuyenTau.txt");
+				fileTmp1 = new File("src/main/resources/tmp_CapNhatChuyenTau.txt");
 				List<String> allLine;
+				List<String> allLine1;
 				try {
 					allLine = Files.readAllLines(Paths.get("src/main/resources/tmp_ChuyenTau.txt"));
-					for (int i = allLine.size() - 1; i >= 0; i--)
-						ghiFile.xoaTrangDong(fileTmp, i);
+					allLine1 = Files.readAllLines(Paths.get("src/main/resources/tmp_CapNhatChuyenTau.txt"));
+					for(int i = allLine.size()-1; i >= 0; i--) ghiFile.xoaTrangDong(fileTmp, i);
+					for(int i = allLine1.size()-1; i >= 0; i--) ghiFile.xoaTrangDong(fileTmp1, i);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -1123,9 +1127,11 @@ public class TrangChu extends Application {
 			primaryStage.setFullScreen(true);
 			primaryStage.show();
 			fileTmp = new File("src/main/resources/tmp_ChuyenTau.txt");
+			fileTmp1 = new File("src/main/resources/tmp_CapNhatChuyenTau.txt");
 			List<String> allLine = Files.readAllLines(Paths.get("src/main/resources/tmp_ChuyenTau.txt"));
-			for (int i = allLine.size() - 1; i >= 0; i--)
-				ghiFile.xoaTrangDong(fileTmp, i);
+			for(int i = allLine.size()-1; i >= 0; i--) ghiFile.xoaTrangDong(fileTmp, i);
+			List<String> allLine1 = Files.readAllLines(Paths.get("src/main/resources/tmp_CapNhatChuyenTau.txt"));
+			for(int i = allLine1.size()-1; i >= 0; i--) ghiFile.xoaTrangDong(fileTmp1, i);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

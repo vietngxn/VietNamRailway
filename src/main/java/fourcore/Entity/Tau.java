@@ -10,6 +10,7 @@ public class Tau implements Serializable {
 	private String maTau;
 	private String tenTau;
 	private LoaiTau loaiTau;
+	private boolean isRemove;
 
 //  =======================
 //  ||   CONSTRUCTORS    ||
@@ -18,6 +19,13 @@ public class Tau implements Serializable {
 		setMaTau(maTau);
 		setTenTau(tenTau);
 		setLoaiTau(loaiTau);
+	}
+	
+	public Tau(String maTau, String tenTau, LoaiTau loaiTau, boolean isRemove) {
+		setMaTau(maTau);
+		setTenTau(tenTau);
+		setLoaiTau(loaiTau);
+		setRemove(isRemove);
 	}
 
 	public Tau() {
@@ -48,6 +56,14 @@ public class Tau implements Serializable {
 
 	public void setLoaiTau(LoaiTau loaiTau) {
 		this.loaiTau = loaiTau;
+	}
+
+	public boolean isRemove() {
+		return isRemove;
+	}
+
+	public void setRemove(boolean isRemove) {
+		this.isRemove = isRemove;
 	}
 
 	@Override
