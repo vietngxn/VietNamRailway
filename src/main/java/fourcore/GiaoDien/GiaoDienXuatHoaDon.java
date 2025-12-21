@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import com.google.zxing.WriterException;
+import fourcore.Control.BanVeControl;
 import fourcore.Control.MailSender;
 import fourcore.Control.QRGenerator;
 import fourcore.Control.VeTauPdfExporter;
@@ -129,7 +130,12 @@ public class GiaoDienXuatHoaDon extends Application {
     public ArrayList<KhachHang> listKhachHang =  new ArrayList<>();
     String gaDi;
     String loaiVe;
+    Button thoatPopupBtn;
+    public BorderPane rootChinh;
     public GiaoDienXuatHoaDon() throws SQLException {
+    }
+    public GiaoDienXuatHoaDon(BorderPane root) throws SQLException {
+        rootChinh = root;
     }
     public Button getBtnTroLai(){
         return btnTroLai;
@@ -964,12 +970,18 @@ public class GiaoDienXuatHoaDon extends Application {
             }
             HoaDonBanVe hoaDonBanVe = new HoaDonBanVe(hoaDon2);
             hoaDonBanVe.showAsPopup(null);
+            thoatPopupBtn = hoaDonBanVe.getBtn_thoat();
+            BanVeControl banVeControl = new BanVeControl();
+            banVeControl.handleThoat(thoatPopupBtn,rootChinh);
             //Reset all file
             resetFile();
         }
 
 		return result.isPresent() && result.get() == yes;
 	}
+    public Button getThoatPopupBtn (){
+        return thoatPopupBtn;
+    }
     public void resetFile(){
         File file1 = new File("KMSelected.dat");
         File file2 = new File("ds_ghe_dang_chon.dat");

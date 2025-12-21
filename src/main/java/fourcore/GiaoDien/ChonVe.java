@@ -719,7 +719,6 @@ public class ChonVe extends Application {
             ArrayList<ChuyenTau> docLai = new ArrayList<>();
             danhSachGheBox.getChildren().add(khoangLbl);
             danhSachGheBox.getChildren().add(danhSachGheGridPane);
-            BanVeControl banVeControl = new BanVeControl();
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("listChuyenTauFiltered.dat"))) {
                 docLai = (ArrayList<ChuyenTau>) ois.readObject();
                 System.out.println("Dữ liệu đọc được: " + docLai);

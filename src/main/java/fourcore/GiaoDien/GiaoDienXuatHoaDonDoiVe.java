@@ -11,9 +11,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import com.google.zxing.WriterException;
-import fourcore.Control.MailSender;
-import fourcore.Control.QRGenerator;
-import fourcore.Control.VeTauPdfExporter;
+import fourcore.Control.*;
 import fourcore.Entity.*;
 import fourcore.dao.*;
 import javafx.animation.ScaleTransition;
@@ -131,7 +129,10 @@ public class GiaoDienXuatHoaDonDoiVe extends Application {
     String loaiVe;
     Ve vechon;
     double tongTienDoiVe;
-
+    BorderPane rootChinh;
+    public GiaoDienXuatHoaDonDoiVe(BorderPane root) throws SQLException {
+        rootChinh = root;
+    }
     public GiaoDienXuatHoaDonDoiVe() throws SQLException {
     }
     public Button getBtnTroLai(){
@@ -997,6 +998,9 @@ public class GiaoDienXuatHoaDonDoiVe extends Application {
             }
             HoaDonDoiVe hoaDonDoiVe = new HoaDonDoiVe(hoaDon2);
             hoaDonDoiVe.showAsPopup(null);
+            DoiVeControl bvv = new DoiVeControl();
+            bvv.handleThoat(hoaDonDoiVe.getBtn_thoat(),rootChinh);
+
             //Reset all file
         }
 

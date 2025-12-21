@@ -8,6 +8,7 @@ import fourcore.dao.GheNgoiDAO;
 import fourcore.dao.HanhTrinh_DAO;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -34,13 +35,18 @@ public class BanVeControl {
     GioVe gdGiove = null;
     BanVe gdBanVe = null;
     ChonVeKhuHoi gdChonVeKhuHoi = null;
-    ChuyenTauDAO chuyenTauDAO = new ChuyenTauDAO();
-
-    GiaoDienXuatHoaDon gdXuatHoaDon = new GiaoDienXuatHoaDon();
-    public BanVeControl() throws SQLException {
+    ChuyenTauDAO chuyenTauDAO;
+    BorderPane rootChinh;
+    GiaoDienXuatHoaDon gdXuatHoaDon;
+    BanVe gdBanVePhu;
+    public BanVeControl(BorderPane rooot) throws SQLException {
+        rootChinh = rooot;
     }
+    public BanVeControl() throws SQLException {
 
+    }
     public void handleMenuTrangChuSelect(BorderPane root) throws SQLException {
+         chuyenTauDAO = new ChuyenTauDAO();
             try {
                 gdBanVe = new BanVe();
             } catch (SQLException e) {
@@ -52,11 +58,15 @@ public class BanVeControl {
             root.setCenter(gdBanVeShow);
 
         }
+        public void initBanVe() throws SQLException {
+        gdBanVePhu = new BanVe();
+        }
         public void initGioVe() throws SQLException {
         gdGiove = new GioVe();
         }
         public void initChonVe() throws SQLException {
             gdChonve = new ChonVe("Bán vé");
+            System.out.println("init chon ve");
 
         }
     public void timKiemChuyenTauHandle(BorderPane root) throws SQLException {
@@ -249,7 +259,6 @@ public class BanVeControl {
     public void troLaiGDBanVe(BorderPane root){
         gdChonve.getTrolaiBtn().setOnMouseClicked(e -> {
             root.setCenter(gdBanVe.getGDBanVe());
-
         });
     }
     public void troLaiGDGioVe(BorderPane root) throws SQLException {
@@ -258,6 +267,7 @@ public class BanVeControl {
         Stage gdGioVeStage = new Stage();
         gdGioVe.start(gdGioVeStage);
         VBox gdChinhGioVe = gdGioVe.getGDGioVe();
+        gdXuatHoaDon = new GiaoDienXuatHoaDon();
             gdXuatHoaDon.getBtnTroLai().setOnMouseClicked(e -> {
                 root.setCenter(gdChinhGioVe);
             });
@@ -324,12 +334,22 @@ public class BanVeControl {
         troLaiGDChonVe2(root);
     }
     public void tiepDenGDXuatHoaDon(BorderPane root) throws SQLException {
-        gdXuatHoaDon = new GiaoDienXuatHoaDon();
+        gdXuatHoaDon = new GiaoDienXuatHoaDon(root);
         Stage stage = new Stage();
         gdXuatHoaDon.start(stage);
         root.setCenter(gdXuatHoaDon.getNoiDungChinhVe());
         troLaiGDGioVe(root);
     }
+    public void handleThoat(Button btn, BorderPane root) throws SQLException {
+        BanVe gdBanVe2 = new BanVe();
+        root.setCenter(gdBanVe2.getGDBanVe());
+        btn.setOnAction(e -> {
+            Stage stage = (Stage) btn.getScene().getWindow();
+            stage.close();
+        });
+
+    }
+
 
 
 
