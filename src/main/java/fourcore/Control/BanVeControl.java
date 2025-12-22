@@ -267,7 +267,6 @@ public class BanVeControl {
         Stage gdGioVeStage = new Stage();
         gdGioVe.start(gdGioVeStage);
         VBox gdChinhGioVe = gdGioVe.getGDGioVe();
-        gdXuatHoaDon = new GiaoDienXuatHoaDon();
             gdXuatHoaDon.getBtnTroLai().setOnMouseClicked(e -> {
                 root.setCenter(gdChinhGioVe);
             });

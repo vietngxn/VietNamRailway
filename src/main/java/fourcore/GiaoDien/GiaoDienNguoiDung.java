@@ -23,6 +23,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.text.FontWeight;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -311,13 +313,41 @@ public class GiaoDienNguoiDung extends Application {
                 -fx-background-radius: 12;
                 -fx-border-radius: 12;
                 """);
+        Button hdsd = new Button("FAQ");
+        hdsd.setPrefSize(200, 45);
+        hdsd.setStyle("""
+                -fx-background-color: white;
+                -fx-border-color: #00BACB;
+                -fx-text-fill: #00BACB;
+                -fx-font-weight: bold;
+                -fx-background-radius: 12;
+                -fx-border-radius: 12;
+                """);
+        hdsd.setTranslateX(100);
+
+        hdsd.setOnMouseClicked(event -> {
+            WebView webView = new WebView();
+            WebEngine engine = webView.getEngine();
+
+            engine.load(
+                    getClass().getResource("/usermanual.html").toExternalForm()
+            );
+
+            Stage stage = new Stage();
+            stage.setTitle("Hướng dẫn sử dụng phần mềm");
+            stage.setScene(new Scene(webView, 1800, 1000));
+            stage.show();
+        });
+        HBox hdsdBox = new HBox();
+        hdsdBox.getChildren().addAll(btnDangXuat, hdsd);
+
 
         // ===== ADD TẤT CẢ =====
         noiDungChinh.getChildren().addAll(
                 lblTitle,
                 cardInfo,
                 doiMatKhauBox,
-                btnDangXuat
+                hdsdBox
         );
     }
 

@@ -78,6 +78,12 @@
             <version>7.2.5</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
 
 
     </dependencies>
