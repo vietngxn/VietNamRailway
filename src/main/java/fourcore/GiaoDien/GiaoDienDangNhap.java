@@ -148,7 +148,7 @@ public class GiaoDienDangNhap extends Application {
 		box_username = new VBox();
 		
 		box_lblmanhanvien = new HBox();
-		lbl_manhanvien = new Label("Mã Nhân Viên");
+		lbl_manhanvien = new Label("Tên đăng nhập");
 		lbl_manhanvien.setId("lbl_manhanvien");
 		ImageView img_manhanvien = new ImageView(getClass().getResource("/img/user.png").toExternalForm());
 		img_manhanvien.setFitHeight(20);
@@ -306,6 +306,13 @@ public class GiaoDienDangNhap extends Application {
 			try {
 				
 				TaiKhoan tk = tkdao.getTaiKhoanTheoMaNhanVien(ten);
+                if(tk==null){
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Thông Báo");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Tài Khoản hoặc mặt khẩu trống");
+                    alert.showAndWait();
+                }
 				
 				if(tk.getMatKhau().equals(matKhau) && tk.getIsRemove() == false )
 				{
@@ -330,10 +337,7 @@ public class GiaoDienDangNhap extends Application {
 					stage.close();
 		    
 					try {
-						TrangChu trangchu = new TrangChu();
-		        
 						Stage newStage = new Stage();
-						
 						TrangChu tc = new TrangChu();
 						tc.start(newStage);
 					} catch (Exception e) {

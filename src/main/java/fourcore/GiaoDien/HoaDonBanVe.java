@@ -31,7 +31,7 @@ public class HoaDonBanVe extends Application {
     private VBox table_layout;
     private int cnt = 1;
 	private Button btn_xuatHoaDon;
-	private Button btn_thoat;
+	private Button btn_thoat = new Button("Thoát");
 	private VBox table_desc;
     HoaDon hoaDon;
     HoaDonDAO hoaDonDAO = new HoaDonDAO();
@@ -211,7 +211,7 @@ public class HoaDonBanVe extends Application {
         Label lbl_chietKhau = new Label("Chiết khấu ("+km.getGiaTriPhanTramKhuyenMai()+"%) :");
         lbl_chietKhau.setStyle(style);
 
-        Label lbl_tongChietKhau = new Label("-"+tongCong*(km.getGiaTriPhanTramKhuyenMai()/100));
+        Label lbl_tongChietKhau = new Label(String.format("%, .0f đ",tongCong*(km.getGiaTriPhanTramKhuyenMai()/100)));
         lbl_tongChietKhau.setStyle(style);
 
         chietKhauLayout.getChildren().addAll(lbl_chietKhau, lbl_tongChietKhau);
@@ -224,7 +224,7 @@ public class HoaDonBanVe extends Application {
         Label lbl_vat = new Label("Tổng cộng thuế (Thuế suất 8%) :");
         lbl_vat.setStyle(style);
 
-        Label lbl_tongVAT = new Label(((tongCong-(tongCong*(km.getGiaTriPhanTramKhuyenMai()/100)))*8/100) +"");
+        Label lbl_tongVAT = new Label(String.format("%, .0f đ",tongCong-(tongCong*(km.getGiaTriPhanTramKhuyenMai()/100))*8/100));
         lbl_tongVAT.setStyle(style);
 
         VATLayout.getChildren().addAll(lbl_vat, lbl_tongVAT);
@@ -237,7 +237,7 @@ public class HoaDonBanVe extends Application {
         Label lbl_tongcongthanhtoan = new Label("Tổng cộng tiền thanh toán: ");
         lbl_tongcongthanhtoan.setStyle(style);
 
-        Label lbl_valuetongcongthanhtoan = new Label(hoaDon.getTongTien()+"");
+        Label lbl_valuetongcongthanhtoan = new Label(String.format("%, .0f đ",hoaDon.getTongTien()));
         lbl_valuetongcongthanhtoan.setStyle(style);
 
         tongCongThanhToanLayout.getChildren().addAll(lbl_tongcongthanhtoan, lbl_valuetongcongthanhtoan);
@@ -253,7 +253,6 @@ public class HoaDonBanVe extends Application {
         button_layout.setAlignment(Pos.CENTER_RIGHT);
         btn_xuatHoaDon = new Button("Xuất hóa đơn");
         btn_xuatHoaDon.setPrefSize(150, 50);
-        btn_thoat = new Button("Thoát");
         btn_thoat.setPrefSize(150, 50);
         
         btn_xuatHoaDon.setStyle("-fx-background-color : #00BACB;-fx-background-radius:15px;-fx-border-radius:15px;-fx-font-family: 'Inter';-fx-text-fill :white;-fx-font-size : 15px;-fx-font-weight:bold;");
@@ -299,6 +298,9 @@ public class HoaDonBanVe extends Application {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    Button getBtn_thoat() {
+        return btn_thoat;
     }
 
 

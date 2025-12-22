@@ -8,6 +8,7 @@ import fourcore.dao.ChuyenTauDAO;
 import fourcore.dao.HanhTrinh_DAO;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -34,12 +35,22 @@ public class DoiVeControl {
         VBox giaoDienDoiVe = doiVe.getNoiDungChinhVe();
         root.setCenter(giaoDienDoiVe);
     }
+    public void handleThoat(Button btn, BorderPane root) throws SQLException {
+        GiaoDienDoiVe gDoiVe = new GiaoDienDoiVe();
+        root.setCenter(gDoiVe.getNoiDungChinhVe());
+        btn.setOnAction(e -> {
+            Stage stage = (Stage) btn.getScene().getWindow();
+            stage.close();
+        });
+
+    }
+
     public void initChonVe() throws SQLException {
         gdChonve = new ChonVeDoi("Đổi vé");
 
     }
     public void tiepDenGDXuatHoaDon(BorderPane root,VBox noidungchinh) throws SQLException {
-        gdXuatHoaDonDoiVe = new GiaoDienXuatHoaDonDoiVe();
+        gdXuatHoaDonDoiVe = new GiaoDienXuatHoaDonDoiVe(root);
         Stage stage = new Stage();
         gdXuatHoaDonDoiVe.start(stage);
         root.setCenter(gdXuatHoaDonDoiVe.getNoiDungChinhVe());
