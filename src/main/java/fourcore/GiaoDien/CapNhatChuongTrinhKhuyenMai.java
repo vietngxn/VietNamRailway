@@ -1113,6 +1113,7 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 		txtcomboTrangThai.setId("txt_CapNhatChuyenTau");
 		txtcomboTrangThai.setMouseTransparent(true);
 		txtcomboTrangThai.setFocusTraversable(false);
+		txtcomboTrangThai.setDisable(true);
 		
 		spcomboTrangThai = new StackPane();
 		spcomboTrangThai.getChildren().addAll(lblcomboTrangThai, txtcomboTrangThai, buttoncomboTrangThai, comboTrangThai);
@@ -1143,8 +1144,8 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 		gridCapNhatCTKM.add(spPhanTram, 1, 0);
 		gridCapNhatCTKM.add(spNgayBatDau, 0, 1);
 		gridCapNhatCTKM.add(spNgayKetThuc, 1, 1);
-		gridCapNhatCTKM.add(spcomboDoiTuong, 0, 2);
-		gridCapNhatCTKM.add(spcomboTrangThai, 1, 2);
+//		gridCapNhatCTKM.add(spcomboDoiTuong, 0, 2);
+		gridCapNhatCTKM.add(spcomboTrangThai, 0, 2);
 		
 		
 		layoutCapNhatCTKM.getChildren().addAll(lblCapNhatCTKM, gridCapNhatCTKM, buttonCapNhatCTKMBox);
@@ -1190,8 +1191,55 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 				comboDoiTuong.setValue(doiTuong);
 				txtcomboDoiTuong.setText(doiTuong);
 				if (!txtcomboDoiTuong.getText().trim().isEmpty()) lblAnimation.scaleUp(lblcomboDoiTuong);
+				
+				
+				
 
+				
+				ngayKetThuc.valueProperty().addListener((obs, oldVal, newVal) -> {
+				    if (newVal != null) {
+				        // Check if start date exists and end date is before start date
+				        if (ngayBatDau.getValue() != null && newVal.isBefore(ngayBatDau.getValue())) {
+				            Alert alert = new Alert(AlertType.WARNING);
+				            alert.setTitle("Cảnh báo");
+				            alert.setHeaderText(null);
+				            alert.setContentText("Ngày kết thúc phải sau ngày bắt đầu!");
+				            alert.showAndWait();
+				            ngayKetThuc.setValue(oldVal); 
+				            return;
+				        }
+				        
+				        // Scale up label if text field is empty
+				        if (txtNgayKetThuc.getText().trim().isEmpty()) {
+				            lblAnimation.scaleUp(lblNgayKetThuc);
+				        }
+				        
+				        // Update text field with selected date
+				        txtNgayKetThuc.setText(newVal.format(formatter));
+				        
+				        // Auto-update status based on dates
+				        updateTrangThaiAuto();
+				    }
+				});
 
+				// Also add these listeners for ComboBox value changes (if not already present)
+				comboDoiTuong.valueProperty().addListener((obs, oldVal, newVal) -> {
+				    if (newVal != null) {
+				        if (txtcomboDoiTuong.getText().trim().isEmpty()) {
+				            lblAnimation.scaleUp(lblcomboDoiTuong);
+				        }
+				        txtcomboDoiTuong.setText(newVal.toString());
+				    }
+				});
+
+				comboTrangThai.valueProperty().addListener((obs, oldVal, newVal) -> {
+				    if (newVal != null) {
+				        if (txtcomboTrangThai.getText().trim().isEmpty()) {
+				            lblAnimation.scaleUp(lblcomboTrangThai);
+				        }
+				        txtcomboTrangThai.setText(newVal.toString());
+				    }
+				});
 			} catch (Exception e) {
 				System.out.println("⚠️ File không tồn tại");
 			}
@@ -1202,9 +1250,70 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 		    		 String dieuKien = txtcomboDoiTuong.getText();
 		    		 double giaTri =   Double.valueOf(txtphanTram.getText());
 		    		 
+		    		 String regexten = "^[\\p{L}\\p{N} ]+$";
+		    		 
 		    		 LocalDate ngaybatdau1 = ngayBatDau.getValue();
 		    		 LocalDate ngayketthuc1 = ngayKetThuc.getValue();
+		    		 String doiTuong = txtcomboDoiTuong.getText();
 		    		 
+		    		 
+		    		 
+		    		 if(ten.isEmpty())
+		 			{
+		 				Alert alert = new Alert(Alert.AlertType.ERROR);
+		 	        	alert.setHeaderText(null);
+		 	        	alert.setContentText("Không được để trống tên CTKM!");
+		 	        	alert.showAndWait();
+		 	        	return;
+		 			}
+		 			else if(ngayBatDau == null)
+		 			{
+		 				Alert alert = new Alert(Alert.AlertType.ERROR);
+		 	        	alert.setHeaderText(null);
+		 	        	alert.setContentText("Không được để trống Ngày bắt đầu CTKM!");
+		 	        	alert.showAndWait();
+		 	        	return;
+		 			}
+		 			else if(ngayKetThuc == null)
+		 			{
+		 				Alert alert = new Alert(Alert.AlertType.ERROR);
+		 	        	alert.setHeaderText(null);
+		 	        	alert.setContentText("Không được để trống Ngày kết thúc CTKM!");
+		 	        	alert.showAndWait();
+		 	        	return;
+		 			}
+		 			else if(String.valueOf(giaTri).isEmpty())
+		 			{
+		 				Alert alert = new Alert(Alert.AlertType.ERROR);
+		 	        	alert.setHeaderText(null);
+		 	        	alert.setContentText("Không được để trống giá trị % của CTKM!");
+		 	        	alert.showAndWait();
+		 	        	return;
+		 			}
+		 		
+		    		if(!ten.matches(regexten)) {
+		    			Alert alert = new Alert(Alert.AlertType.WARNING);
+	                    alert.setTitle("Thông báo");
+	                    alert.setHeaderText(null);
+	                    alert.setContentText("Tên sai định dạng!");
+	                    Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+	                    alert.initOwner(stage);
+	                    alert.initModality(Modality.WINDOW_MODAL);
+	                    alert.showAndWait();
+	                    return;
+		    		}
+		    		else if(giaTri < 0 || giaTri > 100)
+		    		{
+		    			Alert alert = new Alert(Alert.AlertType.WARNING);
+	                    alert.setTitle("Thông báo");
+	                    alert.setHeaderText(null);
+	                    alert.setContentText("Gía trị khuyến mãi phải nằm trong khoảng 0->100!");
+	                    Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+	                    alert.initOwner(stage);
+	                    alert.initModality(Modality.WINDOW_MODAL);
+	                    alert.showAndWait();
+	                    return;
+		    		}
 		    		 
 		    		 LocalDateTime nbd1 = ngaybatdau1.atStartOfDay();
 		    		 LocalDateTime nbkt1 = ngayketthuc1.atStartOfDay();
@@ -1220,7 +1329,7 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 	                    alert.initOwner(stage);
 	                    alert.initModality(Modality.WINDOW_MODAL);
 	                    alert.showAndWait();
-	                   
+	                    return;
 					 }
 				 } catch (SQLException e1) {
 					// TODO Auto-generated catch block
@@ -1255,7 +1364,7 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 		            lblAnimation.scaleUp(lblcomboTrangThai);
 		        }
 		        
-		        System.out.println("✅ Trạng thái tự động cập nhật: " + trangThai);
+		        
 		    }
 		}
 		

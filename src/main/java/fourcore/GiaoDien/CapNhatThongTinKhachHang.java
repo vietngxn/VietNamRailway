@@ -855,7 +855,7 @@ public class CapNhatThongTinKhachHang extends Application {
 		txtSoDienThoai.setPrefWidth(600);
 		txtSoDienThoai.setPrefHeight(40);
 		txtSoDienThoai.setId("txt_CapNhatChuyenTau");
-		
+		txtSoDienThoai.setDisable(true);
 		spsoDienThoai = new StackPane();
 		spsoDienThoai.getChildren().addAll(lblsoDienThoai, txtSoDienThoai);
 		spsoDienThoai.setAlignment(lblsoDienThoai, Pos.CENTER_LEFT);
@@ -881,6 +881,7 @@ public class CapNhatThongTinKhachHang extends Application {
 		txtCCCD.setPrefWidth(600);
 		txtCCCD.setPrefHeight(40);
 		txtCCCD.setId("txt_CapNhatChuyenTau");
+		txtCCCD.setDisable(true);
 		
 		spCCCD = new StackPane();
 		spCCCD.getChildren().addAll(lblCCCD, txtCCCD);
