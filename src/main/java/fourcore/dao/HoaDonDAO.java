@@ -142,7 +142,7 @@ public class HoaDonDAO {
 			LoaiHoaDonDAO loaihdDao = new LoaiHoaDonDAO();
 			LoaiHoaDon loaiHD = loaihdDao.getLoaiHoaDonTheoMa(maloaihd);
 			hd = new HoaDon(mahd, loaiHD, nv, tenkh, email, cccd, sdt, ngaytt, tongtien);
-			System.out.println("lấy thông tin hóa đơn " + mahd);
+//			System.out.println("lấy thông tin hóa đơn " + mahd);
 		}
 		return hd;
 	}

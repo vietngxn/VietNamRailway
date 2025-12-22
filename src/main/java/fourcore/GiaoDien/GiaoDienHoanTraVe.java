@@ -12,14 +12,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 import fourcore.Control.HoanTraVeControl;
 import fourcore.Entity.ChuyenTau;
+import fourcore.Entity.HoaDon;
 import fourcore.Entity.Tau;
 import fourcore.Entity.Ve;
 import fourcore.dao.ChiTietHoaDonDAO;
 import fourcore.dao.ChuyenTauDAO;
+import fourcore.dao.HoaDonDAO;
 import fourcore.dao.Tau_DAO;
 import fourcore.dao.VeDAO;
 import javafx.animation.ScaleTransition;
@@ -84,6 +87,8 @@ public class GiaoDienHoanTraVe extends Application {
 	private VBox layoutTxtTimKiem;
 	private TextField txtTimKiem;
 	private StackPane pnlImgRefesh;
+	private HoaDonDAO hdDao;
+	private HoaDon hd;
 	private static double tongCongPhiHoanTra;
 
 	public void clearData() {
@@ -98,7 +103,7 @@ public class GiaoDienHoanTraVe extends Application {
 
 	public VBox taoDataChoTableHoanVe(String mave, String chuyen, String gaDiGaDen, String trangThai, String vitrighe,
 			String LoaiHoaDon, String ngayMua, String hoten, String doituong, String sogiayto, double giave,
-			String giamdoituong, String khuyenmai, double phiHoanTra, double thanhtien) {
+			String giamdoituong, String khuyenmai, double phiHoanTra, double thanhtien, String mahd) {
 
 		VBox pnlReturn = new VBox();
 		VBox.setMargin(pnlReturn, new Insets(0, 30, 0, 30));
@@ -113,15 +118,15 @@ public class GiaoDienHoanTraVe extends Application {
 		data.setPadding(new Insets(0, 0, 0, 10));
 
 		String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
-		Label[] labels = { new Label(mave), new Label(LoaiHoaDon), new Label(chuyen), new Label(gaDiGaDen),
-				new Label(trangThai), new Label(vitrighe), new Label(ngayMua) };
-		double[] widths = { 100, 270, 120, 250, 250, 220, 200 };
+		Label[] labels = { new Label(mave), new Label(mahd), new Label(LoaiHoaDon), new Label(chuyen),
+				new Label(gaDiGaDen), new Label(trangThai), new Label(vitrighe), new Label(ngayMua) };
+		double[] widths = { 150, 200, 270, 120, 250, 250, 220, 200 };
 
 		for (int i = 0; i < labels.length; i++) {
 			Label lbl = labels[i];
 			lbl.setStyle(baseStyle);
 
-			if (i == 6) { // trạng thái
+			if (i == 7) { // trạng thái
 				String text = lbl.getText().toLowerCase();
 				if (text.equals("hoạt động"))
 					lbl.setStyle(baseStyle + "-fx-font-size: 18px; -fx-text-fill: #009D75;");
@@ -213,47 +218,56 @@ public class GiaoDienHoanTraVe extends Application {
 		AtomicBoolean isSelected = new AtomicBoolean(false);
 
 		pnlReturn.setOnMouseClicked(event -> {
+
+			Ve v;
+			try {
+				v = dao.getVeBangMaVe(mave);
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return;
+			}
+
 			boolean check = pnlThongTinChiTiet.isVisible();
 			pnlThongTinChiTiet.setManaged(!check);
 			pnlThongTinChiTiet.setVisible(!check);
 
 			if (!isSelected.get()) {
+
+				if (listVeThanhToan.containsKey(v)) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Lỗi");
+					alert.setHeaderText(null);
+					alert.setContentText("Vé " + v.getMaVeTau() + " đã có trong danh sách thanh toán!");
+					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+					alert.initOwner(stage);
+					alert.initModality(Modality.WINDOW_MODAL);
+					alert.showAndWait();
+					return;
+				}
+
 				data.setStyle(hoverStyle);
 				ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), data);
 				scaleUp.setToX(1.02);
 				scaleUp.setToY(1.02);
 				scaleUp.play();
+
 				isSelected.set(true);
 				tongCongPhiHoanTra += thanhtien;
 				loadLableTongCongValue(tongCongPhiHoanTra);
-				System.out.println(mave + " " + isSelected);
-				Ve v;
-				try {
-					v = dao.getVeBangMaVe(mave);
-					listVeThanhToan.put(v, thanhtien);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				listVeThanhToan.put(v, thanhtien);
 
 			} else {
+
 				data.setStyle(normalStyle);
 				ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), data);
 				scaleDown.setToX(1);
 				scaleDown.setToY(1);
 				scaleDown.play();
+
 				isSelected.set(false);
 				tongCongPhiHoanTra -= thanhtien;
 				loadLableTongCongValue(tongCongPhiHoanTra);
-				System.out.println(mave + " " + isSelected);
-				Ve v;
-				try {
-					v = dao.getVeBangMaVe(mave);
-					listVeThanhToan.remove(v);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				listVeThanhToan.remove(v);
 			}
 		});
 
@@ -287,7 +301,6 @@ public class GiaoDienHoanTraVe extends Application {
 		return box;
 
 	}
-
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -394,10 +407,10 @@ public class GiaoDienHoanTraVe extends Application {
 			tableCol.setMaxWidth(1330);
 			VBox.setMargin(tableCol, new Insets(30, 10, 10, 0));
 
-			String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 22px; -fx-font-weight: bold;";
-			String[] tenCot = { "Mã vé", "Loại vé", "Chuyến", "Ga đi - Ga đến", "Ngày khởi hành", "Vị trí ghế",
-					"Trạng thái" };
-			double[] sizeCot = { 200, 200, 180, 250, 270, 220, 220 };
+			String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 20px; -fx-font-weight: bold;";
+			String[] tenCot = { "Mã vé", "Mã hóa đơn", "Loại vé", "Chuyến", "Ga đi - Ga đến", "Ngày khởi hành",
+					"Vị trí ghế", "Trạng thái" };
+			double[] sizeCot = { 200, 220, 200, 180, 250, 270, 220, 220 };
 
 			for (int i = 0; i < tenCot.length; i++) {
 				Label lbl = new Label(tenCot[i]);
@@ -493,7 +506,8 @@ public class GiaoDienHoanTraVe extends Application {
 						String tenloai = ctDao.getLoaiHoaDonChoVeTau(x.getMaVeTau());
 						ct = ctDAO.getChuyenTauBangMa(x.getChuyenTau().getMaChuyenTau());
 						t = tDao.getTauByMaTau(ct.getTau().getMaTau());
-						setDuLieu(pnlDataHoanTraVe, x, tenloai);
+						hd = hdDao.getHoaDonBangMaVe(x.getMaVeTau());
+						setDuLieu(pnlDataHoanTraVe, x, tenloai, hd.getMaHoaDon());
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
@@ -533,12 +547,14 @@ public class GiaoDienHoanTraVe extends Application {
 						}
 						ctDAO = new ChuyenTauDAO();
 						tDao = new Tau_DAO();
+						hdDao = new HoaDonDAO();
 						for (Ve x : list) {
 							ChiTietHoaDonDAO ctDao = new ChiTietHoaDonDAO();
 							String tenloai = ctDao.getLoaiHoaDonChoVeTau(x.getMaVeTau());
 							ct = ctDAO.getChuyenTauBangMa(x.getChuyenTau().getMaChuyenTau());
 							t = tDao.getTauByMaTau(ct.getTau().getMaTau());
-							setDuLieu(pnlDataHoanTraVe, x, tenloai);
+							hd = hdDao.getHoaDonBangMaVe(x.getMaVeTau());
+							setDuLieu(pnlDataHoanTraVe, x, tenloai, hd.getMaHoaDon());
 						}
 					} catch (SQLException e) {
 						e.printStackTrace();
@@ -622,7 +638,7 @@ public class GiaoDienHoanTraVe extends Application {
 		});
 	}
 
-	public void setDuLieu(VBox pnlDataHoanTraVe, Ve x, String tenloai) {
+	public void setDuLieu(VBox pnlDataHoanTraVe, Ve x, String tenloai, String maHD) {
 		pnlDataHoanTraVe.getChildren().add(taoDataChoTableHoanVe(x.getMaVeTau(), t.getLoaiTau().getTenLoaiTau(),
 				x.getGaDi() + " - " + x.getGaDen(),
 				format.format(x.getNgayGioDi().toLocalDate()) + " - " + x.getNgayGioDi().toLocalTime(),
@@ -631,7 +647,7 @@ public class GiaoDienHoanTraVe extends Application {
 				x.getGiaVe(), nf.format(x.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
 				nf.format(x.getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%",
 				x.tinhPhiHoanTra(x.getNgayGioDi(), x.getGiaVe(), tenloai),
-				x.tinhThanhTienThanhToanHoanTra(x.tinhPhiHoanTra(x.getNgayGioDi(), x.getGiaVe(), tenloai))));
+				x.tinhThanhTienThanhToanHoanTra(x.tinhPhiHoanTra(x.getNgayGioDi(), x.getGiaVe(), tenloai)), maHD));
 	}
 
 	public VBox loadDuLieuLenTable() throws SQLException {
@@ -642,21 +658,25 @@ public class GiaoDienHoanTraVe extends Application {
 		ChiTietHoaDonDAO ctDao = new ChiTietHoaDonDAO();
 		ctDAO = new ChuyenTauDAO();
 		tDao = new Tau_DAO();
+		hdDao = new HoaDonDAO();
 		for (Ve x : list) {
 			String tenloai = ctDao.getLoaiHoaDonChoVeTau(x.getMaVeTau());
 			System.out.println(tenloai);
 			ct = ctDAO.getChuyenTauBangMa(x.getChuyenTau().getMaChuyenTau());
 			t = tDao.getTauByMaTau(ct.getTau().getMaTau());
-			box.getChildren().add(taoDataChoTableHoanVe(x.getMaVeTau(), t.getLoaiTau().getTenLoaiTau(),
-					x.getGaDi() + " - " + x.getGaDen(),
-					format.format(x.getNgayGioDi().toLocalDate()) + " - " + x.getNgayGioDi().toLocalTime(),
-					"Toa số " + x.getSoToa() + " chỗ " + x.getSoGhe(), tenloai, x.getTrangThaiVe(),
-					x.getKhachHang().getHoten(), x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
-					x.getKhachHang().getCccd(), x.getGiaVe(),
-					nf.format(x.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
-					nf.format(x.getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%",
-					x.tinhPhiHoanTra(x.getNgayGioDi(), x.getGiaVe(), tenloai),
-					x.tinhThanhTienThanhToanHoanTra(x.tinhPhiHoanTra(x.getNgayGioDi(), x.getGiaVe(), tenloai))));
+			hd = hdDao.getHoaDonBangMaVe(x.getMaVeTau());
+			box.getChildren()
+					.add(taoDataChoTableHoanVe(x.getMaVeTau(), t.getLoaiTau().getTenLoaiTau(),
+							x.getGaDi() + " - " + x.getGaDen(),
+							format.format(x.getNgayGioDi().toLocalDate()) + " - " + x.getNgayGioDi().toLocalTime(),
+							"Toa số " + x.getSoToa() + " chỗ " + x.getSoGhe(), tenloai, x.getTrangThaiVe(),
+							x.getKhachHang().getHoten(), x.getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
+							x.getKhachHang().getCccd(), x.getGiaVe(),
+							nf.format(x.getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
+							nf.format(x.getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%",
+							x.tinhPhiHoanTra(x.getNgayGioDi(), x.getGiaVe(), tenloai),
+							x.tinhThanhTienThanhToanHoanTra(x.tinhPhiHoanTra(x.getNgayGioDi(), x.getGiaVe(), tenloai)),
+							hd.getMaHoaDon()));
 		}
 		return box;
 	}
