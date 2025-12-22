@@ -216,5 +216,89 @@ public class HoaDonDAO {
 		}
 		return null;
 	}
+	
+	
+	public ArrayList<HoaDon> getHoaDonTheoThangNam(int thang, int nam) throws SQLException {
+	    ArrayList<HoaDon> list = new ArrayList<>();
 
+	    String sql = 
+	        "SELECT maHoaDon, maLoaiHoaDon, maNhanVien, tenKhachHangThanhToan, emailKhachHangThanhToan, " +
+	        "cccdKhachHangThanhToan, sdtKhachHangThanhToan, ngayThanhToan, tongTien " +
+	        "FROM HoaDon " +
+	        "WHERE MONTH(ngayThanhToan) = " + thang +
+	        " AND YEAR(ngayThanhToan) = " + nam;
+	    
+	    Statement st1 = database.connect();
+	    ResultSet rs = st1.executeQuery(sql);
+
+	    while (rs.next()) {
+	        String maHD = rs.getString("maHoaDon");
+	        String maLoaiHD = rs.getString("maLoaiHoaDon");
+	        String maNV = rs.getString("maNhanVien");
+	        String tenKH = rs.getString("tenKhachHangThanhToan");
+	        String emailKH = rs.getString("emailKhachHangThanhToan");
+	        String cccd = rs.getString("cccdKhachHangThanhToan");
+	        String sdt = rs.getString("sdtKhachHangThanhToan");
+
+	        Timestamp ts = rs.getTimestamp("ngayThanhToan");
+	        LocalDateTime ngayTT = ts != null ? ts.toLocalDateTime() : null;
+
+	        double tongTien = rs.getDouble("tongTien");
+
+	        // Lấy thực thể phụ
+	        LoaiHoaDon loaiHD = loaiHoaDonDAO.getLoaiHoaDonTheoMa(maLoaiHD);
+	        NhanVien nv = nhanVienDAO.getNhanVienByMa(maNV);
+
+	        HoaDon hd = new HoaDon(maHD, loaiHD, nv, tenKH, emailKH, cccd, sdt, ngayTT, tongTien);
+
+	        list.add(hd);
+	    }
+
+	    return list;
+	}
+	
+	
+	
+	 public ArrayList<HoaDon> getListHoaDon2() throws SQLException {
+	        ArrayList<HoaDon> listHoaDon = new ArrayList<>();
+	        String q = "SELECT maHoaDon, lhd.maLoaiHoaDon,lhd.tenLoaiHoaDon,lhd.ghiChu, maNhanVien, tenKhachHangThanhToan, \r\n"
+	        		+ "	               emailKhachHangThanhToan, cccdKhachHangThanhToan, \r\n"
+	        		+ "	               sdtKhachHangThanhToan, ngayThanhToan, tongTien, \r\n"
+	        		+ "	               diaChiKhachHangThanhToan\r\n"
+	        		+ "	        FROM HoaDon hd,LoaiHoaDon lhd\r\n"
+	        		+ "			where  hd.maLoaiHoaDon = lhd.maLoaiHoaDon";
+
+
+	        ResultSet rs = st.executeQuery(q);
+
+	        while (rs.next()) {
+	            String maHoaDon = rs.getString(1);
+	            String maLoaiHoaDon = rs.getString(2);
+	            String tenloai = rs.getString(3);
+	            String ghichu = rs.getString(4);
+	            String maNhanVien = rs.getString(5);
+	            String tenKH = rs.getString(6);
+	            String emailKH = rs.getString(7);
+	            String cccd = rs.getString(8);
+	            String sdt = rs.getString(9);
+	            // phòng trường hợp timestamp null
+	            Timestamp ts = rs.getTimestamp(10);
+	            LocalDateTime ngayThanhToan = ts != null ? ts.toLocalDateTime() : null;
+	            double tongTien = rs.getDouble(11);
+	            // int isRemove = rs.getInt(10); // nếu không dùng trong model thì bỏ qua
+	            String diaChi = rs.getString(12);
+
+	            LoaiHoaDon loai = new LoaiHoaDon(maLoaiHoaDon,tenloai,ghichu);   // hoặc null nếu không cần
+	            NhanVien nv = new NhanVien(maNhanVien);           // hoặc null nếu không cần
+
+	            // Tạo HoaDon theo đúng thứ tự fields của class daddy
+	            HoaDon hd = new HoaDon(
+	                    maHoaDon,loai,nv,tenKH,emailKH,cccd,sdt,ngayThanhToan,tongTien
+	            );
+
+	            listHoaDon.add(hd);
+	        }
+
+	        return listHoaDon;
+	    }
 }

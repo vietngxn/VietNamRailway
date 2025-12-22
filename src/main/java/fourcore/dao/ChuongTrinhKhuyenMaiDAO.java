@@ -143,5 +143,63 @@ public class ChuongTrinhKhuyenMaiDAO {
     	return phanTram;
     	
     }
+    
+    public String checkTrangThai(LocalDateTime ngayBatDau, LocalDateTime ngayKetThuc) {
+        LocalDateTime hienTai = LocalDateTime.now();
+        
+        if (hienTai.isBefore(ngayBatDau)) {
+            return "Chưa kích hoạt";
+        } else if (hienTai.isAfter(ngayKetThuc)) {
+            return "Kết thúc";
+        } else {
+            return "Kích hoạt";
+        }
+    }
+    
+    public boolean capNhatTrangThaiKM(String maKhuyenMai, String trangThaiMoi) throws SQLException {
+	    String sql = "UPDATE KhuyenMai SET trangThaiKhuyenMai = '" 
+	            + trangThaiMoi 
+	            + "' WHERE maKhuyenMai = '" 
+	            + maKhuyenMai + "'";
+
+	    int rows = myStmt.executeUpdate(sql);
+	    if (rows > 0) {
+	        return true;
+	    }
+	    return false;
+	}
+    
+    
+    public void capNhatTrangThaiTatCa() throws SQLException {
+        
+        Statement selectStmt = databaseConnector.connect();
+        String sql = "SELECT maKhuyenMai, ngayBatDau, ngayKetThuc FROM KhuyenMai";
+        
+        ResultSet rs = selectStmt.executeQuery(sql);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        while (rs.next()) {
+            String ma = rs.getString("maKhuyenMai");
+            LocalDateTime ngayBD = rs.getTimestamp("ngayBatDau").toLocalDateTime();
+            LocalDateTime ngayKT = rs.getTimestamp("ngayKetThuc").toLocalDateTime();
+
+            String trangThai;
+
+            if (now.isBefore(ngayBD)) {
+                trangThai = "Chưa kích hoạt";
+            } else if (now.isAfter(ngayKT)) {
+                trangThai = "Kết thúc";
+            } else {
+                trangThai = "Kích hoạt";
+            }
+
+            String update = "UPDATE KhuyenMai SET trangThaiKhuyenMai = N'" + trangThai + 
+                            "' WHERE maKhuyenMai = '" + ma + "'";
+            myStmt.executeUpdate(update);
+        }
+
+        System.out.println("🔥 Đã cập nhật trạng thái cho toàn bộ chương trình khuyến mãi!");
+    }
 
 }

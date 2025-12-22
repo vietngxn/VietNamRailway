@@ -47,6 +47,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -793,62 +794,107 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 		   txtTenCT.setText(km.getTenChuongTrinh());
            if (!txtTenCT.getText().trim().isEmpty()) lblAnimation.scaleUp(lblTenCT);
 
-           // Giá trị KM
+  
            txtphanTram.setText(String.valueOf(phanTram));
            if (!txtphanTram.getText().trim().isEmpty()) lblAnimation.scaleUp(lblphanTram);
 
-           // Ngày bắt đầu
+ 
            LocalDate nbd = km.getNgayBatDau().toLocalDate();
            ngayBatDau.setValue(nbd);
            txtNgayBatDau.setText(nbd.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
            if (!txtNgayBatDau.getText().trim().isEmpty()) lblAnimation.scaleUp(lblNgayBatDau);
 
-           // Ngày kết thúc
+           
            LocalDate nkt = km.getNgayKetThuc().toLocalDate();
            ngayKetThuc.setValue(nkt);
            txtNgayKetThuc.setText(nkt.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
            if (!txtNgayKetThuc.getText().trim().isEmpty()) lblAnimation.scaleUp(lblNgayKetThuc);
 
-           // Trạng thái
+        
            String trangThai = km.getTrangThaiKhuyenMai();
            comboTrangThai.setValue(trangThai);
            txtcomboTrangThai.setText(trangThai);
            if (!txtcomboTrangThai.getText().trim().isEmpty()) lblAnimation.scaleUp(lblcomboTrangThai);
 
-           // Đối tượng
            String doiTuong = km.getDieuKienApDung();
            comboDoiTuong.setValue(doiTuong);
            txtcomboDoiTuong.setText(comboDoiTuong.getValue().toString());
            if (!txtcomboDoiTuong.getText().trim().isEmpty()) lblAnimation.scaleUp(lblcomboDoiTuong);
            
+           
+           ngayBatDau.valueProperty().addListener((obs, oldVal, newVal) -> {
+        	    if(newVal != null) {
+
+        	        if (ngayKetThuc.getValue() != null && newVal.isAfter(ngayKetThuc.getValue())) {
+        	            Alert alert = new Alert(AlertType.WARNING);
+        	            alert.setTitle("Cảnh báo");
+        	            alert.setHeaderText(null);
+        	            alert.setContentText("Ngày bắt đầu phải trước ngày kết thúc!");
+        	            alert.showAndWait();
+        	            ngayBatDau.setValue(oldVal); 
+        	            return;
+        	        }
+        	        
+        	        if(txtNgayBatDau.getText().trim().isEmpty()) lblAnimation.scaleUp(lblNgayBatDau);
+        	        txtNgayBatDau.setText(newVal.format(formatter));
+        	        updateTrangThaiAuto(); 
+        	    }
+        	});
+
+        	ngayKetThuc.valueProperty().addListener((obs, oldVal, newVal) -> {
+        	    if(newVal != null) {
+
+        	        if (ngayBatDau.getValue() != null && newVal.isBefore(ngayBatDau.getValue())) {
+        	            Alert alert = new Alert(AlertType.WARNING);
+        	            alert.setTitle("Cảnh báo");
+        	            alert.setHeaderText(null);
+        	            alert.setContentText("Ngày kết thúc phải sau ngày bắt đầu!");
+        	            alert.showAndWait();
+        	            ngayKetThuc.setValue(oldVal); 
+        	            return;
+        	        }
+        	        
+        	        if(txtNgayKetThuc.getText().trim().isEmpty()) lblAnimation.scaleUp(lblNgayKetThuc);
+        	        txtNgayKetThuc.setText(newVal.format(formatter));
+        	        updateTrangThaiAuto(); 
+        	    }
+        	});
+        	
 		    
 		     buttonCapNhat.setOnAction(e-> {
-		    	 try {
-		    		 String ten = txtTenCT.getText();
-		    		 String trangthai = txtcomboTrangThai.getText();
-		    		 String dieuKien = txtcomboDoiTuong.getText();
-		    		 double giaTri =   Double.valueOf(txtphanTram.getText());
-		    		 
-		    		 LocalDate ngaybatdau1 = ngayBatDau.getValue();
-		    		 LocalDate ngayketthuc1 = ngayKetThuc.getValue();
-		    		 
-		    		 
-		    		 LocalDateTime nbd1 = ngaybatdau1.atStartOfDay();
-		    		 LocalDateTime nbkt1 = ngayketthuc1.atStartOfDay();
-		    		 
-		    		 
-		    		 KhuyenMai km1 = new KhuyenMai(makm, ten, trangthai, dieuKien, giaTri, nbd1, nbkt1);
+		    	 String ten = txtTenCT.getText();
+				  String trangthai = txtcomboTrangThai.getText();
+				  String dieuKien = txtcomboDoiTuong.getText();
+				  double giaTri =   Double.valueOf(txtphanTram.getText());
+				  
+				  LocalDate ngaybatdau1 = ngayBatDau.getValue();
+				  LocalDate ngayketthuc1 = ngayKetThuc.getValue();
+				  
+				  LocalDate hientai = LocalDate.now();
+				  
+				  
+				  
+				  
+				  LocalDateTime nbd1 = ngaybatdau1.atStartOfDay();
+				  LocalDateTime nbkt1 = ngayketthuc1.atStartOfDay();
+				  
+				  
+				  KhuyenMai km1 = new KhuyenMai(makm, ten, trangthai, dieuKien, giaTri, nbd1, nbkt1);
+				 try {
 					if(ctkmDAO.capNhatKhuyenMai(km1)) {
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setTitle("Thông Báo");
-						alert.setHeaderText(null);
-						alert.setContentText("Cập Nhật CTKM Thành Công");
-						alert.showAndWait();
-					 }
-				 } catch (SQLException e1) {
+						Alert alert = new Alert(Alert.AlertType.WARNING);
+	                    alert.setTitle("Thông báo");
+	                    alert.setHeaderText(null);
+	                    alert.setContentText("Cập nhật CTKM thành công!");
+	                    Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+	                    alert.initOwner(stage);
+	                    alert.initModality(Modality.WINDOW_MODAL);
+	                    alert.showAndWait();
+					  }
+				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				 }
+				}
 		     });
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -1109,52 +1155,42 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 		public void loadFromFile() {
 			File file = new File("KhuyenMai.dat");
 			
-			// ✅ Kiểm tra file trước khi đọc
-			if (!file.exists()) {
-				System.out.println("⚠️ File không tồn tại");
-				return;
-			}
 			
 			try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("KhuyenMai.dat"))) {
 				KhuyenMai km = (KhuyenMai) ois.readObject();
 
-				// ✅ Lấy mã KM và phần trăm khuyến mãi
+
 				makm = km.getMaKhuyenMai();
 				double phanTram = ctkmDAO.getPhanTramKhuyenMai(makm);
 
-				// ✅ Tên chương trình
 				txtTenCT.setText(km.getTenChuongTrinh());
 				if (!txtTenCT.getText().trim().isEmpty()) lblAnimation.scaleUp(lblTenCT);
 
-				// ✅ Giá trị KM (% Giảm Giá)
 				txtphanTram.setText(String.valueOf(phanTram));
 				if (!txtphanTram.getText().trim().isEmpty()) lblAnimation.scaleUp(lblphanTram);
 
-				// ✅ Ngày bắt đầu
 				LocalDate nbd = km.getNgayBatDau().toLocalDate();
 				ngayBatDau.setValue(nbd);
 				txtNgayBatDau.setText(nbd.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 				if (!txtNgayBatDau.getText().trim().isEmpty()) lblAnimation.scaleUp(lblNgayBatDau);
 
-				// ✅ Ngày kết thúc
 				LocalDate nkt = km.getNgayKetThuc().toLocalDate();
 				ngayKetThuc.setValue(nkt);
 				txtNgayKetThuc.setText(nkt.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 				if (!txtNgayKetThuc.getText().trim().isEmpty()) lblAnimation.scaleUp(lblNgayKetThuc);
 
-				// ✅ Trạng thái
+
 				String trangThai = km.getTrangThaiKhuyenMai();
 				comboTrangThai.setValue(trangThai);
 				txtcomboTrangThai.setText(trangThai);
 				if (!txtcomboTrangThai.getText().trim().isEmpty()) lblAnimation.scaleUp(lblcomboTrangThai);
 
-				// ✅ Đối tượng áp dụng
+
 				String doiTuong = km.getDieuKienApDung();
 				comboDoiTuong.setValue(doiTuong);
 				txtcomboDoiTuong.setText(doiTuong);
 				if (!txtcomboDoiTuong.getText().trim().isEmpty()) lblAnimation.scaleUp(lblcomboDoiTuong);
 
-				System.out.println("✅ Load dữ liệu từ file thành công!");
 
 			} catch (Exception e) {
 				System.out.println("⚠️ File không tồn tại");
@@ -1176,17 +1212,51 @@ public class CapNhatChuongTrinhKhuyenMai extends Application {
 		    		 
 		    		 KhuyenMai km1 = new KhuyenMai(makm, ten, trangthai, dieuKien, giaTri, nbd1, nbkt1);
 					if(ctkmDAO.capNhatKhuyenMai(km1)) {
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setTitle("Thông Báo");
-						alert.setHeaderText(null);
-						alert.setContentText("Cập Nhật CTKM Thành Công");
-						alert.showAndWait();
+						Alert alert = new Alert(Alert.AlertType.WARNING);
+	                    alert.setTitle("Thông báo");
+	                    alert.setHeaderText(null);
+	                    alert.setContentText("Cập nhật CTKM thành công!");
+	                    Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+	                    alert.initOwner(stage);
+	                    alert.initModality(Modality.WINDOW_MODAL);
+	                    alert.showAndWait();
+	                   
 					 }
 				 } catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				 }
 		     });
+		}
+		
+		
+		private void updateTrangThaiAuto() {
+		    LocalDate ngayBD = ngayBatDau.getValue();
+		    LocalDate ngayKT = ngayKetThuc.getValue();
+		    LocalDate now = LocalDate.now();
+		    
+
+		    if (ngayBD != null && ngayKT != null) {
+		        String trangThai;
+		        
+		        if (now.isBefore(ngayBD)) {
+		            trangThai = "Chưa kích hoạt";
+		        } else if (now.isAfter(ngayKT)) {
+		            trangThai = "Kết thúc";
+		        } else {
+		            trangThai = "Kích hoạt";
+		        }
+		        
+		        comboTrangThai.setValue(trangThai);
+		        txtcomboTrangThai.setText(trangThai);
+		        
+
+		        if (!txtcomboTrangThai.getText().trim().isEmpty()) {
+		            lblAnimation.scaleUp(lblcomboTrangThai);
+		        }
+		        
+		        System.out.println("✅ Trạng thái tự động cập nhật: " + trangThai);
+		    }
 		}
 		
 }
