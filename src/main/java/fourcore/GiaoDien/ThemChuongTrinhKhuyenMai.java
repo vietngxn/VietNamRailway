@@ -39,6 +39,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -950,8 +951,8 @@ public class ThemChuongTrinhKhuyenMai extends Application {
 		gridThemCTKM.add(spTenCT, 0, 0);
 		gridThemCTKM.add(spNgayBatDau, 1, 0);
 		gridThemCTKM.add(spNgayKetThuc, 0, 1);
-		gridThemCTKM.add(spcomboDoiTuong, 1, 1);
-		gridThemCTKM.add(spGiaTriKhuyenMai, 0, 2);
+//		gridThemCTKM.add(spcomboDoiTuong, 1, 1);
+		gridThemCTKM.add(spGiaTriKhuyenMai, 1, 1);
 		
 		buttonThem.setOnAction(e-> {
 			String ma = "";
@@ -1001,14 +1002,6 @@ public class ThemChuongTrinhKhuyenMai extends Application {
 	        	alert.showAndWait();
 	        	return;
 			}
-			else if(doiTuong.isEmpty())
-			{
-				Alert alert = new Alert(Alert.AlertType.ERROR);
-	        	alert.setHeaderText(null);
-	        	alert.setContentText("Không được để trống đối tượng của CTKM!");
-	        	alert.showAndWait();
-	        	return;
-			}
 			else if(giaTriKM.isEmpty())
 			{
 				Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -1050,7 +1043,19 @@ public class ThemChuongTrinhKhuyenMai extends Application {
 			    alert.showAndWait();
 			    return;
 			}
-
+				
+			if(Double.valueOf(giaTriKM) < 0 || Double.valueOf(giaTriKM) > 100  )
+			{
+				Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Thông báo");
+                alert.setHeaderText(null);
+                alert.setContentText("Giá trị khuyến mãi từ 0->100!");
+                Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+                alert.initOwner(stage);
+                alert.initModality(Modality.WINDOW_MODAL);
+                alert.showAndWait();
+                return;
+			}
 			
 			LocalDateTime nbd1 = nbd.atStartOfDay();
 		    LocalDateTime nkt1 = nkt.atStartOfDay();

@@ -1,0 +1,4 @@
+{"maChuyenTau":"CT01"}
+{"ngayDenDuKien":"25/12/2025","maHanhTrinh":"HT02","ngayKhoiHanh":"23/12/2025","gioKhoiHanh":"20:50","gioDenDuKien":"05:45"}
+{"maTau":"T06"}
+[{"maToaTau":"GN09","viTriToa":"1"},{"maToaTau":"GN10","viTriToa":"2"},{"maToaTau":"GIN11","viTriToa":"3"},{"maToaTau":"GIN12","viTriToa":"4"}]

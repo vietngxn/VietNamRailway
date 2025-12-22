@@ -10,8 +10,27 @@ public class ChuyenTau implements Serializable {
     private LocalDateTime ngayGioDi;
     private LocalDateTime ngayGioDen;
     private double giaCuocTrenChuyenTau;
+    private boolean isRemove;
+    public ChuyenTau(String maChuyenTau, Tau tau, HanhTrinh hanhTrinh, LocalDateTime ngayGioDi,
+			LocalDateTime ngayGioDen, double giaCuocTrenChuyenTau, boolean isRemove) {
+		this.maChuyenTau = maChuyenTau;
+		this.tau = tau;
+		this.hanhTrinh = hanhTrinh;
+		this.ngayGioDi = ngayGioDi;
+		this.ngayGioDen = ngayGioDen;
+		this.giaCuocTrenChuyenTau = giaCuocTrenChuyenTau;
+		this.isRemove = isRemove;
+	}
 
-    public ChuyenTau() {
+	public boolean isRemove() {
+		return isRemove;
+	}
+
+	public void setRemove(boolean isRemove) {
+		this.isRemove = isRemove;
+	}
+
+	public ChuyenTau() {
     }
 
     public ChuyenTau(double giaCuocTrenChuyenTau, LocalDateTime ngayGioDen, LocalDateTime ngayGioDi, Tau tau, String maChuyenTau) {

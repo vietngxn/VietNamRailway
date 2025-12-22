@@ -107,7 +107,37 @@ public class ChuyenTauDAO {
         }
         return n > 0;
     }
-    
+    public boolean updateChuyenTauDB(ChuyenTau chuyenTau) {
+    	String sql =
+    		    "UPDATE ChuyenTau \n" +
+    		    	    "SET \n" +
+    		    	    "    maTau = ?, \n" +
+    		    	    "    maHanhTrinh = ?, \n" +
+    		    	    "    ngayGioDi = ?, \n" +
+    		    	    "    ngayGioDen = ?, \n" +
+    		    	    "    giaCuocTrenChuyenTau = ?, \n" +
+    		    	    "WHERE maChuyenTau = ?;";
+    	 int n = 0;
+    	    try {
+    	        PreparedStatement ps = databaseConnector
+    	                .connect()
+    	                .getConnection()
+    	                .prepareStatement(sql);
+
+    	        ps.setString(1, chuyenTau.getTau().getMaTau());
+    	        ps.setString(2, chuyenTau.getHanhTrinh().getMaHanhTrinh());
+    	        ps.setTimestamp(3, Timestamp.valueOf(chuyenTau.getNgayGioDi()));
+    	        ps.setTimestamp(4, Timestamp.valueOf(chuyenTau.getNgayGioDen()));
+    	        ps.setDouble(5, chuyenTau.getGiaCuocTrenChuyenTau());
+    	        ps.setString(6, chuyenTau.getMaChuyenTau());
+
+    	        n = ps.executeUpdate();
+
+    	    } catch (Exception e) {
+    	        e.printStackTrace();
+    	    }
+    	    return n > 0;
+    }
    
     public ArrayList<String> getListMaChuyenTauTheoNgay(LocalDateTime ngayKhoiHanh) {
     	ArrayList<String> listChuyenTauTheoMaHanhTrinh = new ArrayList<>();
