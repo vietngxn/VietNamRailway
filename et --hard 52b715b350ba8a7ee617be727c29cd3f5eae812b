@@ -1,0 +1,1564 @@
+[33mcommit ceaa4e73463b53705f5b06d7945d83eaba2d13b2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mQNL1-12[m[33m, [m[1;31morigin/QNL1-12[m[33m)[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Tue Dec 23 04:41:10 2025 +0700
+
+    push
+
+[33mcommit 52b715b350ba8a7ee617be727c29cd3f5eae812b[m
+Merge: 5499d1b b136136
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Tue Dec 23 04:38:38 2025 +0700
+
+    Merge branch 'main' of https://github.com/vietngxn/VietNamRailway into QNL1-12
+
+[33mcommit b136136a19ab61973565ec4063aa8b3268369642[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 596c6d7 d16d149
+Author: tiendat <tiendat20051812@gmail.com>
+Date:   Tue Dec 23 03:32:03 2025 +0700
+
+    Merge pull request #71 from vietngxn/update_xemFinal
+    
+    mong moi chuyen se on voi chung ta
+
+[33mcommit d16d149c94f8710257dbd3649e795b961510f7f7[m
+Author: tiendat <tiendat20051812@gmail.com>
+Date:   Tue Dec 23 03:30:03 2025 +0700
+
+    mong moi chuyen se on voi chung ta
+
+[33mcommit 5499d1b3b13fec12f90bb90c82c88a4dbd03675a[m
+Merge: 8146d85 596c6d7
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Mon Dec 22 23:14:40 2025 +0700
+
+    auto resolve conflict (keep theirs)
+
+[33mcommit 8146d857c19b5b3eadd6c3ab2fa21847822243af[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Mon Dec 22 23:09:34 2025 +0700
+
+    commit conflict
+
+[33mcommit 596c6d7dc7e28ac93d3b27c14c018f2254b0f56a[m
+Merge: 556d478 0a88681
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Dec 22 07:27:46 2025 +0700
+
+    Merge pull request #70 from vietngxn/sukienhoadon
+    
+    cap nhat file hdsd
+
+[33mcommit 0a8868135b095d3fea32bfe63467cb278e08cec1[m
+Author: vietn <viet.nguyenba4605@gmail.com>
+Date:   Mon Dec 22 07:21:10 2025 +0700
+
+    cap nhat file hdsd
+
+[33mcommit 556d4786c904adabcde112df61a4e11224ef204d[m
+Merge: e3b9d46 954ba4b
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Dec 22 05:57:51 2025 +0700
+
+    Merge pull request #69 from vietngxn/sukienhoadon
+    
+    update chuc nang cap nhat password va logout
+
+[33mcommit 954ba4bacf74c45d577131b558fd06d453d72ce0[m
+Author: vietn <viet.nguyenba4605@gmail.com>
+Date:   Mon Dec 22 05:53:33 2025 +0700
+
+    update chuc nang cap nhat password va logout
+
+[33mcommit e3b9d463b0f95ab7d8a26202b3999c1a50fb469f[m
+Merge: a561358 1399dac
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Dec 22 04:51:57 2025 +0700
+
+    Merge pull request #67 from vietngxn/QNL1-12
+    
+    update chitiethoadon,(con hoadondoive vs xuat lai hoa don mai day som…
+
+[33mcommit a561358bd778fe107246a9dd3eb58beff6719353[m
+Merge: 197bd3d aed0887
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Dec 22 04:50:38 2025 +0700
+
+    Merge pull request #68 from vietngxn/sukienhoadon
+    
+    Sukienhoadon
+
+[33mcommit aed08875e76cd747792d27c48c996221c1c79020[m
+Merge: 534bfd6 197bd3d
+Author: vietn <viet.nguyenba4605@gmail.com>
+Date:   Mon Dec 22 04:44:07 2025 +0700
+
+    Merge branch 'main' of https://github.com/vietngxn/VietNamRailway into sukienhoadon
+    
+    # Conflicts:
+    #       src/main/resources/database.properties
+
+[33mcommit 534bfd6057282d378c390a3d9e43b5f2d6140876[m
+Author: vietn <viet.nguyenba4605@gmail.com>
+Date:   Mon Dec 22 04:42:32 2025 +0700
+
+    cap nhat su kien btn
+
+[33mcommit 1399dac4cd671a1568ed7d819503ada0e80d75e4[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Mon Dec 22 03:23:11 2025 +0700
+
+    update chitiethoadon,(con hoadondoive vs xuat lai hoa don mai day som t sua)
+
+[33mcommit 197bd3d5218c2bfad74a9ff994616150c9009c1a[m
+Merge: 341483e e8a1049
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Dec 22 03:12:25 2025 +0700
+
+    Merge pull request #66 from vietngxn/tienTest
+    
+    tienTest
+
+[33mcommit e8a10499e9c1bdb52caa356d01956825c94acdd2[m
+Author: Duyên Hải <nghtien0409@gmail.com>
+Date:   Mon Dec 22 03:08:40 2025 +0700
+
+    tienTest
+
+[33mcommit 341483e501a8888aa779e3f24c0638fb04143f76[m
+Merge: 9d7a629 dedaee4
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Dec 22 00:24:26 2025 +0700
+
+    Merge pull request #65 from vietngxn/updatethongke
+    
+    update thongke va fix caplaive
+
+[33mcommit dedaee47de4891f9cf5daaeb9e96497139cfd7f7[m
+Author: tiendat <tiendat20051812@gmail.com>
+Date:   Sun Dec 21 20:51:15 2025 +0700
+
+    update thongke va fix caplaive
+
+[33mcommit 9d7a629cf5909bcfa77bbdbc9bbce45eebabdee7[m
+Merge: 3ec8b28 0941b8a
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Sun Dec 21 17:48:27 2025 +0700
+
+    Merge pull request #63 from vietngxn/almostLast
+    
+    cap nhat ban ve control
+
+[33mcommit 0941b8ad40f920eff93e5a08bfc66e5321aa2d1d[m
+Author: vietn <viet.nguyenba4605@gmail.com>
+Date:   Sun Dec 21 17:47:39 2025 +0700
+
+    cap nhat ban ve control
+
+[33mcommit 3ec8b28197abf9a7d30d167cf08ab67e7f106b65[m
+Author: vietn <viet.nguyenba4605@gmail.com>
+Date:   Sun Dec 21 17:39:45 2025 +0700
+
+    fix reload gtct khi tao ct
+
+[33mcommit 932635f8ea91589201aa5101d764ade8d3bb8c73[m
+Merge: 88e6433 1090209
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Sun Dec 21 16:55:52 2025 +0700
+
+    Merge pull request #62 from vietngxn/QNL1-12
+    
+    Qnl1 12
+
+[33mcommit 10902092bbb222300183b0a4c9c83e7c75b99dd3[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Sun Dec 21 16:45:37 2025 +0700
+
+    finish HoanTraVe
+
+[33mcommit 4c141f7aa3c1869adf4d15e2e5d436bf8e61949f[m
+Merge: ab2383c 88e6433
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Fri Dec 19 15:08:46 2025 +0700
+
+    Merge branch 'main' of https://github.com/vietngxn/VietNamRailway into QNL1-12
+
+[33mcommit ab2383c9a0d132e912481339020803ec6daec74d[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Fri Dec 19 15:08:38 2025 +0700
+
+    merge
+
+[33mcommit 88e6433f1670fa82ff510be878567e98fc7247bc[m
+Merge: 651c252 cc9bfea
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Fri Dec 19 15:07:42 2025 +0700
+
+    Merge pull request #60 from vietngxn/doive
+    
+    update doi ve ban ve
+
+[33mcommit cc9bfea175de1ff4d0b517f11e5bbb8baa6c36dd[m
+Author: vietn <viet.nguyenba4605@gmail.com>
+Date:   Fri Dec 19 15:04:20 2025 +0700
+
+    update doi ve ban ve
+
+[33mcommit 651c2520e158b5f9a17d60e70f0e63631ba7826a[m
+Merge: 4e404d4 e47f610
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Fri Dec 19 04:19:09 2025 +0700
+
+    Merge pull request #59 from vietngxn/doive
+    
+    ctkm update
+
+[33mcommit e47f610b9c74257f75ae91ee72f9b862f0014112[m
+Author: vietn <viet.nguyenba4605@gmail.com>
+Date:   Fri Dec 19 04:16:55 2025 +0700
+
+    ctkm update
+
+[33mcommit 4e404d4c58cf5a96b1d8171a8bd253563ce4dd1c[m
+Merge: 1b0c54c f7b585f
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Fri Dec 19 03:55:52 2025 +0700
+
+    Merge pull request #58 from vietngxn/doive
+    
+    Doive
+
+[33mcommit f7b585fd9716efed65dc003dbd1c0985ac768c31[m
+Merge: 62ce033 1b0c54c
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Fri Dec 19 03:53:38 2025 +0700
+
+    merge code
+
+[33mcommit 62ce033787d2635fb48f39a640015e741976bee2[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Fri Dec 19 03:49:18 2025 +0700
+
+    update doive
+
+[33mcommit 1b0c54cbc95e6a18d391737c95a5079a954e3608[m
+Merge: 1fe2387 d45b3c9
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Fri Dec 19 00:11:08 2025 +0700
+
+    Merge pull request #57 from vietngxn/QNL1-12
+    
+    fix conflict
+
+[33mcommit d45b3c9ed5949560b9171cda2be823583c64691f[m
+Merge: c0595b0 1fe2387
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Fri Dec 19 00:08:40 2025 +0700
+
+    Merge branch 'main' of https://github.com/vietngxn/VietNamRailway into QNL1-12
+
+[33mcommit c0595b00c2a7e587c681d1cea54e6bfced19d392[m
+Merge: 9fb509b a80afb8
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Fri Dec 19 00:08:11 2025 +0700
+
+    fix conflict, update thongkelichsutuongtacve
+
+[33mcommit 1fe2387e1032a4c9b929611ba4a1cbc6f819c9d7[m
+Merge: a80afb8 5286213
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Fri Dec 19 00:03:34 2025 +0700
+
+    Merge pull request #56 from vietngxn/update_quanli
+    
+    update quanliThongkedoanhthutheochuyentau
+
+[33mcommit 528621377fbea38a1b0a1936770f69a57f4c760e[m
+Author: tiendat <tiendat20051812@gmail.com>
+Date:   Fri Dec 19 00:01:40 2025 +0700
+
+    update quanliThongkedoanhthutheochuyentau
+
+[33mcommit 9fb509bf200622329a93af329ab20fda7534743a[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Thu Dec 18 23:33:59 2025 +0700
+
+    ThongKeLichSuTuongTacVeXuatExcel
+
+[33mcommit a80afb877a68c0af2909dcdaac191c41821d083d[m
+Merge: ff59a03 1684d08
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Thu Dec 18 20:41:19 2025 +0700
+
+    Merge pull request #55 from vietngxn/update_vaithu
+    
+    Update vaithu
+
+[33mcommit 1684d08767ccc9e0b5c9b5b8a513d2911261d16f[m
+Author: tiendat <tiendat20051812@gmail.com>
+Date:   Thu Dec 18 20:38:39 2025 +0700
+
+    update quanli + control
+
+[33mcommit 57b2f32d73cf8fe88a8493338d252759a9e2a820[m
+Author: tiendat <tiendat20051812@gmail.com>
+Date:   Thu Dec 18 20:35:54 2025 +0700
+
+    update quanli + control
+
+[33mcommit ff59a03024c1c7eef307e1f3fa9b357be21adfe0[m
+Merge: dfa5be8 c2f0c19
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Thu Dec 18 14:31:08 2025 +0700
+
+    Merge pull request #54 from vietngxn/QNL1-12
+    
+    fix bug HoanTraVe 18-12
+
+[33mcommit c2f0c19abe17a552e8a0960bf04b03028a7cd520[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Thu Dec 18 00:52:32 2025 +0700
+
+    fix bug HoanTraVe 18-12
+
+[33mcommit dfa5be8f72f6ead44decfcc3db48390675a2e4a9[m
+Merge: 147971a 52a5901
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Wed Dec 17 21:48:45 2025 +0700
+
+    update lung tung
+
+[33mcommit 147971aa5781b991e3264f6fe515e8d6ccfb1d37[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Wed Dec 17 21:47:33 2025 +0700
+
+    update format tien
+
+[33mcommit 52a59019653a3b66ffe899db3ae8eccafd1d40e8[m
+Merge: 7d7b809 1b178e4
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Wed Dec 17 21:33:26 2025 +0700
+
+    Merge pull request #52 from vietngxn/QNL1-12
+    
+    fix15/12
+
+[33mcommit 1b178e4e5bfc0cd3ad75450e62aee8b216e83932[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Wed Dec 17 18:06:27 2025 +0700
+
+    update them Thong Ke Ve theo loai Tuong Tac Theo Thoi Gian
+
+[33mcommit 1c9a57771059fa25383d967c8837f636279ee6c7[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Tue Dec 16 23:40:14 2025 +0700
+
+    them xemChiTietVeMoiBtn
+
+[33mcommit 3ecde846c61dd1e668e1be946c6f4e2723b77da8[m
+Merge: e5cb985 7d7b809
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Tue Dec 16 12:09:33 2025 +0700
+
+    Merge branch 'main' of https://github.com/vietngxn/VietNamRailway into QNL1-12
+
+[33mcommit 7d7b80970130cd22ed0768e1725244d94379abae[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Tue Dec 16 02:36:20 2025 +0700
+
+    update nghiep vu ve khu hoi
+
+[33mcommit e5cb985ee28440542a0b5ddf28a933763a9412ee[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Tue Dec 16 00:27:12 2025 +0700
+
+    fix15/12
+
+[33mcommit f61e6f137b9a1ef21bcb536bc4948c0f40b83e71[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Thu Dec 11 03:31:12 2025 +0700
+
+    sap xong ban ve
+
+[33mcommit d0017d2df7645b22b3751012a32268f6d4c5fc0c[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Mon Dec 8 01:38:03 2025 +0700
+
+    sua so qua giao dien
+
+[33mcommit 2f61e0cc4e9e3a555be9018ebc7a86768b88dcc2[m
+Merge: 375d622 d1ec44d
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Sat Dec 6 00:58:09 2025 +0700
+
+    Merge pull request #51 from vietngxn/QNL1-12
+    
+    them btnRefesh HoanTraVe
+
+[33mcommit d1ec44df122d598c0b0894a7915e970c1d89bbfe[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Thu Dec 4 07:59:13 2025 +0700
+
+    them btnRefesh HoanTraVe
+
+[33mcommit 375d6224a53cbcd34e0c4d586c98df095cba945c[m[33m ([m[1;32mmain[m[33m)[m
+Merge: 3ddb5aa 6700921
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Tue Nov 4 03:19:39 2025 +0700
+
+    Merge pull request #50 from vietngxn/tienSieuNhanChuoiFinal
+    
+    'lastttttttttttttttt'
+
+[33mcommit 67009211497b14c9d64e813d8a43a6d5c6bfe4c8[m[33m ([m[1;31morigin/tienSieuNhanChuoiFinal[m[33m)[m
+Author: Duyên Hải <nghtien0409@gmail.com>
+Date:   Tue Nov 4 02:50:56 2025 +0700
+
+    'lastttttttttttttttt'
+
+[33mcommit 3ddb5aa849b9b100c575529306d639a3fddf29b5[m
+Merge: f20455e 857cce4
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Nov 3 23:12:57 2025 +0700
+
+    Merge pull request #48 from vietngxn/VietNguyen311
+    
+    Viet nguyen311
+
+[33mcommit 857cce4c361a362f45296f374385c0af8cc4122f[m[33m ([m[1;31morigin/VietNguyen311[m[33m)[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Mon Nov 3 23:11:02 2025 +0700
+
+    last commit
+
+[33mcommit b9548d67fa05252a988a39b180b5bf0ae0eee5df[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Mon Nov 3 20:24:56 2025 +0700
+
+    update send email
+
+[33mcommit f20455ebf0b3ab1e2b0f0b38053c04cc0a256204[m
+Merge: c6455f9 7990a4d
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Nov 3 19:13:45 2025 +0700
+
+    Merge pull request #45 from vietngxn/Martus
+    
+    rename file HoaDonHoanTraVe
+
+[33mcommit 7990a4dc58461f9b60b34dff0e8cd4a7ac5abfee[m[33m ([m[1;31morigin/Martus[m[33m)[m
+Merge: 09759d4 c6455f9
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Nov 3 19:13:38 2025 +0700
+
+    Merge branch 'main' into Martus
+
+[33mcommit c6455f9795f6ea3655de503e59e8cd6c55101a8a[m
+Merge: ce8d6f0 db99c86
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Nov 3 19:12:32 2025 +0700
+
+    Merge pull request #46 from vietngxn/update_quanLi
+    
+    update quanLi
+
+[33mcommit db99c86462945d613d578fb2da0708e20f8f0520[m[33m ([m[1;31morigin/update_quanLi[m[33m)[m
+Merge: ee5021e ce8d6f0
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Nov 3 19:12:24 2025 +0700
+
+    Merge branch 'main' into update_quanLi
+
+[33mcommit ce8d6f0f62e83a6636a45bc45313b726afb5ccd8[m
+Merge: d80341d 5976589
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Nov 3 19:10:52 2025 +0700
+
+    Merge pull request #43 from vietngxn/themchuyentau
+    
+    update nghiep vu them chuyen tau
+
+[33mcommit d80341d5bb572f8b0fb6b2d554418b23bb53ed64[m
+Merge: a63b710 c7b3dd8
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Nov 3 19:10:13 2025 +0700
+
+    Merge pull request #47 from vietngxn/updateBanVe
+    
+    nghiep vu ban ve
+
+[33mcommit c7b3dd8bbbeef309cb0bf686ce02f817fe7975f6[m[33m ([m[1;31morigin/updateBanVe[m[33m)[m
+Merge: 4648904 a63b710
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Nov 3 19:10:06 2025 +0700
+
+    Merge branch 'main' into updateBanVe
+
+[33mcommit 4648904740f3ed4e99d77794f346ce70217e4840[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Mon Nov 3 19:08:29 2025 +0700
+
+    nghiep vu ban ve
+
+[33mcommit 59765892cd8ae49c2e84de5ad3db2d220e8ced3e[m[33m ([m[1;31morigin/themchuyentau[m[33m)[m
+Merge: 0fd34ca a63b710
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Nov 3 19:07:32 2025 +0700
+
+    Merge branch 'main' into themchuyentau
+
+[33mcommit 09759d46226c23caf2e14596f85c133c17fd7873[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Mon Nov 3 12:49:47 2025 +0700
+
+    update getGiaGheTrenChuyenTau
+
+[33mcommit ee5021e097f86652f7df4aeac444c20ea39210b8[m
+Author: tiendat <tiendat20051812@gmail.com>
+Date:   Mon Nov 3 04:09:29 2025 +0700
+
+    update quanLi
+
+[33mcommit c9ef32be798bdcd18c4d1545e1bb8f1b3fc34233[m
+Merge: 02ed1ce a63b710
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Mon Nov 3 01:31:50 2025 +0700
+
+    Merge branch 'main' of https://github.com/vietngxn/VietNamRailway into Martus
+
+[33mcommit 02ed1ce431ebbb2eba104580dd4be0c19d027818[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Mon Nov 3 01:30:44 2025 +0700
+
+    fix ten file HoaDonHoanTraVe
+
+[33mcommit a63b71039d188f1a25905b6345858bbcf9d52895[m
+Merge: 2327281 0b92aec
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Nov 3 01:04:13 2025 +0700
+
+    Merge pull request #44 from vietngxn/Martus
+    
+    update nghiep vu HoanVe 90%
+
+[33mcommit 0b92aecbf787d46fd90a58459cf9b7e6cc2a8b45[m
+Merge: 681a7eb 2327281
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Mon Nov 3 00:34:27 2025 +0700
+
+    Merge branch 'main' of https://github.com/vietngxn/VietNamRailway into Martus
+
+[33mcommit 681a7eb5b0b5fa9c7ab20e6a06f8ec403e762fb0[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Mon Nov 3 00:26:48 2025 +0700
+
+    update nghiep vu HoanVe 90%
+
+[33mcommit 2327281092b120c5da9ebba2ba9d299cbfc742b9[m
+Merge: 1b7200a ddc284f
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Sun Nov 2 23:59:12 2025 +0700
+
+    Merge pull request #42 from vietngxn/Martus
+    
+    HoanVe validate
+
+[33mcommit 1b7200a9188a47c7bc279519f79da80bb9228c2a[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Sun Nov 2 23:57:40 2025 +0700
+
+    update nghiep vu ban ve
+
+[33mcommit 0fd34ca99fa3f62f65202ff147fea2c515ac154d[m
+Author: Duyên Hải <nghtien0409@gmail.com>
+Date:   Sun Nov 2 12:39:31 2025 +0700
+
+    update nghiep vu them chuyen tau
+
+[33mcommit ddc284fcf023c722d92223c9610df57fab405504[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Sun Nov 2 10:57:05 2025 +0700
+
+    fix k/cach col
+
+[33mcommit 68ef1f6e9700d6ba5c67b73d9d3901bf8e407087[m
+Merge: 4136fca 25ec5ab
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Sun Nov 2 09:11:27 2025 +0700
+
+    fix cf2
+
+[33mcommit 4136fca1cef2650285915541103d43f4b3c8c77e[m
+Merge: afc5750 87fcdf9
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Sun Nov 2 09:08:23 2025 +0700
+
+    fix cf
+
+[33mcommit 25ec5abb68b11c2a2e844e2408c0f754519416a8[m
+Merge: afc5750 87fcdf9
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Sun Nov 2 08:56:26 2025 +0700
+
+    Merge branch 'main' into Martus
+
+[33mcommit afc575017eeb005fa7c80a30af154d1ca5adbb75[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Sun Nov 2 08:53:57 2025 +0700
+
+    fix conflict(2-11)
+
+[33mcommit 87fcdf9820641df7f0204a71ed64c94d3360062b[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Sun Nov 2 01:51:40 2025 +0700
+
+    update nghiep vu ban ve
+
+[33mcommit 0cf8bf2bb4cf4a04c7eaf4a0ca514e857c0b9241[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Sun Nov 2 01:44:59 2025 +0700
+
+    HoanVe validate
+
+[33mcommit e1d29bdc3d1ae2d78b0820653df2381fcfb8615d[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Sat Nov 1 02:04:59 2025 +0700
+
+    fix nghiep vu ban ve + fix ve DAO
+
+[33mcommit 366bb202123db294c72de8599585c65d2123de6b[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Sat Nov 1 00:08:24 2025 +0700
+
+    tien fix bug quan li chuyen tau
+
+[33mcommit 55302d6e5e262037ebd0ff5d88a60d83d22d43f9[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Fri Oct 31 17:26:29 2025 +0700
+
+    fix giao dien tien
+
+[33mcommit 7c30830d65eac8731c44e971987f70c3d46b7ed3[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Fri Oct 31 17:23:31 2025 +0700
+
+    toi uu chuong trinh - them chuc nang send email + gen qr
+
+[33mcommit 99e44b28d14a5eaaf29fc1136387b66edb14f6b0[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Fri Oct 31 06:08:54 2025 +0700
+
+    update giao dien lap hoa don
+
+[33mcommit c97ea8eb3780a304e84e1bb3cceac250140780d8[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Fri Oct 31 04:32:33 2025 +0700
+
+    merge tien
+
+[33mcommit 545030b8bc70c576eda025b5c2df82d2513ed401[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Fri Oct 31 01:47:52 2025 +0700
+
+    merge code dat
+
+[33mcommit aaee5b59bec5acc37336dacf21a00aafe5706eea[m
+Merge: d9651d3 695c262
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Wed Oct 29 14:38:24 2025 +0700
+
+    merge long
+
+[33mcommit d9651d390c93257af9066365252837dbafe5063e[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Wed Oct 29 14:18:46 2025 +0700
+
+    viet update
+
+[33mcommit 695c262351c8b61616773e1aca76a30f4b46d673[m
+Merge: df8e6a5 f2e1f6e
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Wed Oct 29 14:18:25 2025 +0700
+
+    Merge pull request #39 from vietngxn/QuachNgocLong
+    
+    fix GDLichSuMuaBanVe,HoanTraVe
+
+[33mcommit f2e1f6ebf757929a31535cd4f5163f3f7123d071[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Wed Oct 29 14:09:51 2025 +0700
+
+    fix GDLichSuMuaBanVe,HoanTraVe
+
+[33mcommit 71ff0b188ad63b9b90b589b3019d05574443c623[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Wed Oct 29 04:20:58 2025 +0700
+
+    update nghiep vu ban ve
+
+[33mcommit df8e6a58ac7f9fa50ec78e2cac75603cab37c031[m
+Merge: acd3249 986bf7f
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 28 22:19:47 2025 +0700
+
+    Merge pull request #38 from vietngxn/QuachNgocLong
+    
+    update field, entity HoaDon
+
+[33mcommit 986bf7fcb550f942e80891bdd9f6c11b2b1bf300[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Tue Oct 28 21:02:36 2025 +0700
+
+    xog HoanVe none testing
+
+[33mcommit 58ae506b5a0216c466486b37f43315b91fbbcfd5[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Tue Oct 28 19:38:02 2025 +0700
+
+    update field, entity HoaDon
+
+[33mcommit acd32495e5cc21d22d071efcab106ed824beeb26[m
+Merge: 635e6c2 873b1a1
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 28 18:00:18 2025 +0700
+
+    merge code 6pm 28/10
+
+[33mcommit 635e6c21cd6795f831b281a84c6e145dd58327a0[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 28 17:58:31 2025 +0700
+
+    update giao dien xuat hoa don
+
+[33mcommit 873b1a12ea4b0bb2d097ccc0dafa30c4f9193072[m
+Merge: f2d24cd 9be2501
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 28 17:57:32 2025 +0700
+
+    Merge pull request #36 from vietngxn/QuachNgocLong
+    
+    Quach ngoc long
+
+[33mcommit f2d24cd6f1b95ec1f0863744458920516041274e[m
+Merge: c6320af 7c73e46
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 28 17:54:12 2025 +0700
+
+    Merge pull request #35 from vietngxn/update_CTKM
+    
+    update CTKM
+
+[33mcommit 9be2501196d28ccea4ff0ac14296747ed11ccd8d[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Tue Oct 28 17:51:44 2025 +0700
+
+    bo cmt Quanlihoadon
+
+[33mcommit 7c73e46a2e4653b9540a8b7bcc06f2c6614b323e[m[33m ([m[1;31morigin/update_CTKM[m[33m)[m
+Author: tiendat <tiendat20051812@gmail.com>
+Date:   Tue Oct 28 17:48:40 2025 +0700
+
+    update CTKM
+
+[33mcommit e112cbf3c022344184c81f65ed334e2405e65684[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Tue Oct 28 17:45:00 2025 +0700
+
+    80% hoanve
+
+[33mcommit 00f955a473f1af89c74e2f1f073dd5960b69f31a[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Tue Oct 28 16:01:13 2025 +0700
+
+    update fieldChiTietHoaDon
+
+[33mcommit c6320afbacec8da2f0414468d0891edc60c750af[m
+Merge: e5e5cfe 666cbfd
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 28 11:44:06 2025 +0700
+
+    update giao dien xuat hoa don + fix update info khach hang
+
+[33mcommit e5e5cfe86bd9debec8ef82ab5c3a22e179113e85[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 28 11:39:24 2025 +0700
+
+    update tien dat
+
+[33mcommit 666cbfdc7653582d0019a1458be8e730530e48a7[m
+Merge: a181444 341f9fa
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 28 11:39:02 2025 +0700
+
+    Merge pull request #33 from vietngxn/QuachNgocLong
+    
+    Quach ngoc long
+
+[33mcommit 341f9fa3cf18c62e05b9fa13fddcf23d4bc9bda9[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Tue Oct 28 11:36:45 2025 +0700
+
+    fix GDxuatHD
+
+[33mcommit e04d73bd529de5272d1db7d366f6d299b0f113cc[m
+Merge: 87bd246 a181444
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Tue Oct 28 11:01:16 2025 +0700
+
+    Merge branch 'main' of https://github.com/vietngxn/VietNamRailway into QuachNgocLong
+
+[33mcommit 87bd246031e998a7ffcad82962b087c474850380[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Tue Oct 28 11:01:07 2025 +0700
+
+    cm28-10
+
+[33mcommit a1814446608cef401d9ee3be885c5eddb47f79aa[m
+Merge: fcf894b 92ee72c
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 28 00:44:10 2025 +0700
+
+    update su kien tiep tuc gio ve
+
+[33mcommit fcf894b6f86236d74037d300805d6dde560163de[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 28 00:20:39 2025 +0700
+
+    update su kien tro ve tiep tuc
+
+[33mcommit 92ee72cbbdba7605fb6b06849dd5fb745f6603d6[m
+Merge: d4dbd0c 23a59a1
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 28 00:20:02 2025 +0700
+
+    Merge pull request #32 from vietngxn/update_capve_khachhang
+    
+    update CapVe+ update KhachHang dao
+
+[33mcommit d4dbd0c3fdb7447d58c047ccc2506eb883220d6a[m
+Merge: de1bc89 b7d8f40
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 28 00:19:34 2025 +0700
+
+    Merge pull request #31 from vietngxn/QuachNgocLong
+    
+    fix GDxuatHoaDon
+
+[33mcommit 23a59a132cd700a18e5fb17702a6ed6de6be675e[m[33m ([m[1;31morigin/update_capve_khachhang[m[33m)[m
+Author: tiendat <tiendat20051812@gmail.com>
+Date:   Tue Oct 28 00:01:25 2025 +0700
+
+    update CapVe+ update KhachHang dao
+
+[33mcommit b7d8f404de9f7b661c90887b6c4365890a81f5c2[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Mon Oct 27 23:11:56 2025 +0700
+
+    fix GDxuatHoaDon
+
+[33mcommit de1bc89f70cef3e4620bc76a0fdb95244a0be644[m
+Merge: c417349 f160f08
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Mon Oct 27 23:01:16 2025 +0700
+
+    update hoan ve + gio ve newest
+
+[33mcommit c417349b6900d24190ba8306632347f1514ee5f3[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Mon Oct 27 22:52:57 2025 +0700
+
+    update gio ve
+
+[33mcommit f160f08f7b9e95bda788476d31c7457fb45efffa[m
+Merge: e8965e0 692e158
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Oct 27 22:51:33 2025 +0700
+
+    Merge pull request #30 from vietngxn/QuachNgocLong
+    
+    Quach ngoc long
+
+[33mcommit 692e1583d73da33a8a1ca20b090cd290504b42e9[m
+Merge: e9acaa9 e8965e0
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Oct 27 22:51:06 2025 +0700
+
+    Merge branch 'main' into QuachNgocLong
+
+[33mcommit e9acaa9cfe0affcec417ba7e22f9f42ce5ac0474[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Mon Oct 27 22:48:45 2025 +0700
+
+    fixfiledat
+
+[33mcommit e8965e09a81d5cae9dfc216333309d972b34709c[m
+Merge: 78846a6 3d248b8
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Oct 27 20:45:54 2025 +0700
+
+    Merge pull request #28 from vietngxn/fixGioVe
+    
+    tao map(ghe,khachhang)
+
+[33mcommit 3d248b8e464dd01d3691dfbca0be9b1359947fc0[m[33m ([m[1;31morigin/fixGioVe[m[33m)[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Mon Oct 27 20:40:27 2025 +0700
+
+    tao map(ghe,khachhang)
+
+[33mcommit 78846a6800386798e9d3660c68aa5046a532c980[m
+Merge: d5319d3 4e042da
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Mon Oct 27 18:56:44 2025 +0700
+
+    update giao gio ve
+
+[33mcommit 33543f85e2078782a90146aec74f3f7f373f45bf[m
+Merge: e2a2c53 4e042da
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Mon Oct 27 18:56:38 2025 +0700
+
+    a
+
+[33mcommit d5319d30de2cd89cce943621c6db1b4b4e5cf92b[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Mon Oct 27 18:55:27 2025 +0700
+
+    update gio ve
+
+[33mcommit 4e042da46dd4c2771a61187f0549151e340a1bee[m
+Merge: e08f316 40510b0
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Oct 27 18:48:10 2025 +0700
+
+    Merge pull request #27 from vietngxn/update_QLTK
+    
+    update_QuanLiThongKe
+
+[33mcommit e2a2c533782be9b88f2a0b07850fc74285b46591[m
+Merge: 260954c e08f316
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Mon Oct 27 16:43:01 2025 +0700
+
+    fix conflict 27-10
+
+[33mcommit 260954c75125baa92047228d28f9c4e83e997407[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Mon Oct 27 16:36:59 2025 +0700
+
+    connect gdHoanTra va gdXuatHoaDon
+
+[33mcommit 40510b0f01ffae96d71f8dd8ed6937b4b1125d63[m[33m ([m[1;31morigin/update_QLTK[m[33m)[m
+Author: tiendat <tiendat20051812@gmail.com>
+Date:   Mon Oct 27 15:07:26 2025 +0700
+
+    update_QuanLiThongKe
+
+[33mcommit e08f316260785f978f93dd9d13dd81422e4a010e[m
+Merge: 512744c 0c7d81d
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Mon Oct 27 15:06:42 2025 +0700
+
+    Merge pull request #26 from vietngxn/update_capVe
+    
+    update_capVe
+
+[33mcommit ec0ece7437b9a34162f14142217bb5557ef1ef7b[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Mon Oct 27 07:10:30 2025 +0700
+
+    backup27-10
+
+[33mcommit 0c7d81d5fde8dafaf2715791113c169473f0a44d[m[33m ([m[1;31morigin/update_capVe[m[33m)[m
+Author: tiendat <tiendat20051812@gmail.com>
+Date:   Sun Oct 26 23:45:48 2025 +0700
+
+    update_capVe
+
+[33mcommit 512744c604feb6d0a44dcdb3c0f28bd503f248aa[m
+Merge: 9445944 c3e14be
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Sun Oct 26 22:44:14 2025 +0700
+
+    update 26-10 merge code
+
+[33mcommit 94459447851385bf0408176c163a3d98e6a87499[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Sun Oct 26 22:36:33 2025 +0700
+
+    update ban ve
+
+[33mcommit c3e14bee620ea17e8cb38adec6c09760a378bfbd[m
+Merge: 3a53884 6c68f07
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Sun Oct 26 19:44:16 2025 +0700
+
+    Merge pull request #25 from vietngxn/QuachNgocLong
+
+[33mcommit 6c68f07112dff39f15d48c32f541e92ef4ef053d[m
+Merge: f768dc6 3a53884
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Sun Oct 26 19:24:51 2025 +0700
+
+    fix conflict lan 1
+
+[33mcommit f768dc6073bae90a859f292ef5508480d27f1334[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Sun Oct 26 18:57:22 2025 +0700
+
+    xem conflict
+
+[33mcommit 3a538841e75def611b4399d5de5927c52a0f40e1[m[33m ([m[1;31morigin/back-up(26-10)[m[33m)[m
+Merge: 36669c5 6209d78
+Author: VietNguyxn <viet.nguyenba4605@gmail.com>
+Date:   Sun Oct 26 13:59:43 2025 +0700
+
+    Merge pull request #24 from vietngxn/update_banVe
+    
+    update nghiep vu ban ve + khachHang
+
+[33mcommit 6209d786b7d9024ed263707f92e3291292e21dcb[m[33m ([m[1;31morigin/update_banVe[m[33m)[m
+Author: tiendat <tiendat20051812@gmail.com>
+Date:   Sun Oct 26 13:55:12 2025 +0700
+
+    update nghiep vu ban ve + khachHang
+
+[33mcommit 0cb96b3a9f43ad74d1b9746dbd3144dc4eea95c2[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Fri Oct 24 17:22:44 2025 +0700
+
+    Lưu thay đổi trước khi pull main
+
+[33mcommit 36669c574ac005f42922640cb53583f1f64cb2e5[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Fri Oct 24 17:15:29 2025 +0700
+
+    update khuyenmaidao cho long
+
+[33mcommit 765b92ab1fa6c175ebfd0166d0618a416e4dc23a[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Fri Oct 24 17:11:37 2025 +0700
+
+    update vai lop DAO + 36% nghiep vu ban ve
+
+[33mcommit 9b2b3a1bc874a2c64e2df082df0b1f6cbbb285b3[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Fri Oct 24 13:52:21 2025 +0700
+
+    fix LoaiToaTauDao
+
+[33mcommit 494dd50991725bc9145b1503b70acfbed6062521[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Wed Oct 22 23:05:27 2025 +0700
+
+    update control package
+
+[33mcommit cbdc72b329dab52f2112a7ea8854aeca63a79c38[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Wed Oct 22 20:13:20 2025 +0700
+
+    update gdclv
+
+[33mcommit 9ee53c1cd17f2aa9b6143061f4f515eea3444c40[m
+Merge: 3615abe fd48bbb
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Wed Oct 22 20:11:57 2025 +0700
+
+    new update
+
+[33mcommit 3615abe950f090c98d26b3f0ea52ebcb7e713867[m
+Merge: b538082 93d32aa
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Wed Oct 22 20:11:17 2025 +0700
+
+    new update
+
+[33mcommit fd48bbbc943892752a937a20c9eb8db01cfe6e5d[m
+Merge: 93d32aa f1eefff
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Wed Oct 22 20:06:56 2025 +0700
+
+    Merge pull request #22 from vietngxn/QuachNgocLong
+    
+    fix CapLaiVe
+
+[33mcommit f1eefff12cfb4c4e54637436795b71f569223c55[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Wed Oct 22 20:03:12 2025 +0700
+
+    fix CapLaiVe
+
+[33mcommit b53808224d03238890a241098920765ace4db087[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Wed Oct 22 19:59:22 2025 +0700
+
+    .
+
+[33mcommit 93d32aaa212b6189896f5ff3c1b86e900b84eabc[m
+Merge: c4bc193 cf31473
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Wed Oct 22 19:59:02 2025 +0700
+
+    Merge pull request #21 from vietngxn/QuachNgocLong
+    
+    xog LichSuMuaBanVe
+
+[33mcommit cf314734d8d74cd2fcf3a8f050225697ae98f742[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Wed Oct 22 19:53:57 2025 +0700
+
+    xog LichSuMuaBanVe
+
+[33mcommit c4bc193326a6eebedbc7718c334b27f630e2f1f9[m
+Merge: dfed752 d03a75a
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Wed Oct 22 17:03:49 2025 +0700
+
+    update quanlihoadon
+
+[33mcommit dfed752042e3d4f9443f49f75f38a853667f2530[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Wed Oct 22 17:01:24 2025 +0700
+
+    update link trang chu to qlnv
+
+[33mcommit d03a75a5680a620bb83769ab8bbe7f335a4c0191[m
+Merge: ca4f440 25672a2
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Wed Oct 22 16:54:56 2025 +0700
+
+    Merge pull request #20 from vietngxn/update_dao
+    
+    update quanlihoadonDAO
+
+[33mcommit 25672a2a343c088953b55fc2820c225749a2fb81[m[33m ([m[1;31morigin/update_dao[m[33m)[m
+Author: tiendat <tiendat20051812@gmail.com>
+Date:   Wed Oct 22 03:11:17 2025 +0700
+
+    update quanlihoadonDAO
+
+[33mcommit ca4f4408bd5e1513fc26dd24a6ac217be4e01d26[m
+Merge: 15901db 446865a
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 21 22:32:10 2025 +0700
+
+    Merge pull request #19 from vietngxn/QuachNgocLong
+    
+    fix GDLichSuCapVe
+
+[33mcommit 446865a8db834308ab511d535cb2c3433d045e15[m
+Merge: 13a1c64 15901db
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Tue Oct 21 10:58:37 2025 +0700
+
+    up fix GDlichsu"
+
+[33mcommit 15901db80c914d950e8b6b35e9ab69c9b779c12a[m
+Merge: 8b53c64 6990695
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 21 01:05:30 2025 +0700
+
+    Merge pull request #18 from vietngxn/create_quanLiNhanVien
+
+[33mcommit 69906951d590ce41131bf9e918fe5db513466038[m[33m ([m[1;31morigin/create_quanLiNhanVien[m[33m)[m
+Author: tiendat <tiendat20051812@gmail.com>
+Date:   Tue Oct 21 00:04:33 2025 +0700
+
+    add QuanLiNhanVien
+
+[33mcommit 8b53c64a7634fdcbfc2ca33ba773f7669bb62815[m
+Merge: c05d644 b8df6f8
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Mon Oct 20 15:20:44 2025 +0700
+
+    Merge pull request #17 from vietngxn/update_quanlihoadon
+
+[33mcommit 13a1c644f586aed12fbb0bc6613804cdfbf28b60[m
+Merge: 7fd3af3 c05d644
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Mon Oct 20 15:05:04 2025 +0700
+
+    m
+
+[33mcommit b8df6f869f8f1f4ad55308592a1c96b8f5b16c37[m[33m ([m[1;31morigin/update_quanlihoadon[m[33m)[m
+Author: tiendat <tiendat20051812@gmail.com>
+Date:   Mon Oct 20 14:12:30 2025 +0700
+
+    update quanlihoadon
+
+[33mcommit c05d644fd8878f5847d9fa6ddab5d992775c405d[m
+Merge: 92ac1d0 5235f03
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Mon Oct 20 13:53:15 2025 +0700
+
+    Merge pull request #16 from vietngxn/update_quanliKhachHang
+    
+    update quanLiKhachHang
+
+[33mcommit 5235f030312beb55c7e28f2cb74f2eb7f0d2b421[m[33m ([m[1;31morigin/update_quanliKhachHang[m[33m)[m
+Author: tiendat <tiendat20051812@gmail.com>
+Date:   Mon Oct 20 13:44:16 2025 +0700
+
+    update quanLiKhachHang
+
+[33mcommit 92ac1d03efa98ffcae55daae4a91b775b7212017[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Mon Oct 20 12:40:05 2025 +0700
+
+    Load data quan li chuyen tau
+
+[33mcommit 7fd3af34302dd133852d45e06fecd329ca516495[m
+Merge: 4c2124a e4a40d5
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Mon Oct 20 10:37:22 2025 +0700
+
+    Merge branch 'main' of https://github.com/vietngxn/VietNamRailway into QuachNgocLong
+
+[33mcommit 4c2124a9e63ac462777c1789ffc2d54fe79e6eed[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Mon Oct 20 10:37:16 2025 +0700
+
+    a
+
+[33mcommit e4a40d586d959fa3bf94745d9594d8450defc8ce[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Mon Oct 20 00:20:10 2025 +0700
+
+    update dm tien dat
+
+[33mcommit c401d04fdda139176d33d5a3af4bb75eda5acdb1[m
+Merge: f35b87d a5e63a8
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Mon Oct 20 00:04:34 2025 +0700
+
+    Merge pull request #15 from vietngxn/update_quanliThongKe
+    
+    update quanLiThongKe
+
+[33mcommit a5e63a8e5702161352d819cf52af78865aa30797[m[33m ([m[1;31morigin/update_quanliThongKe[m[33m)[m
+Author: tiendat <tiendat20051812@gmail.com>
+Date:   Sun Oct 19 23:46:31 2025 +0700
+
+    update quanLiThongKe
+
+[33mcommit f35b87d3b2a21bbdf42c2e234f2f5c8a0de0b809[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Sun Oct 19 06:50:00 2025 +0700
+
+    update flow tro ve trang chu
+
+[33mcommit b23e273cbb944090479023da47100fa74ccc29ba[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Sun Oct 19 06:40:29 2025 +0700
+
+    edit dieu kien ap dung cua ctkm UI
+
+[33mcommit 81d97adc88083029f30d98e2340b04820fe8c6d7[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Sun Oct 19 06:27:33 2025 +0700
+
+    update querry + loaddata CTKM + create CTKM_DAO
+
+[33mcommit 8fff7046fbe97fc336432dfce07faa4b450f6bc1[m
+Merge: e21a1aa aaf619c
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Sun Oct 19 05:08:47 2025 +0700
+
+    update
+
+[33mcommit e21a1aa2891048af467c994ec21cfbe442d20b4f[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Sun Oct 19 05:07:40 2025 +0700
+
+    update db-loader db.properties
+
+[33mcommit aaf619c358dc2eb53fa9213578cf36210e7ed799[m
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Sun Oct 19 04:39:43 2025 +0700
+
+    Update README.md
+
+[33mcommit a5f4f6d2d7de023e9dce1205d44f999c9f0cc79b[m
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Sun Oct 19 04:38:45 2025 +0700
+
+    Update README.md
+
+[33mcommit 5824205ec962dd52d29f1a05a9457cad748ed11c[m
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Sun Oct 19 04:38:00 2025 +0700
+
+    Add initial README.md for train ticket application
+
+[33mcommit 35dc5fd699030e3eabcb32792ea50d5ab6407f0e[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Sun Oct 19 04:29:16 2025 +0700
+
+    update dbConnector - module info - file script database
+
+[33mcommit a1aca1dd82924beb60603215e507d8468f436322[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Sun Oct 19 04:12:09 2025 +0700
+
+    update chon ve
+
+[33mcommit 29c1ea5e2916d9166181066135f1fbe738b2e6c2[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Sat Oct 18 14:55:06 2025 +0700
+
+    cap nhat trang chon ve + datatest
+
+[33mcommit cbe8fa3f82af4df0cda467979d5dd629bef4e1dc[m
+Merge: 1da6e31 7d81a87
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Sat Oct 18 14:53:17 2025 +0700
+
+    Merge pull request #14 from vietngxn/QuachNgocLong
+    
+    update GDThanhToan, sua loi nho
+
+[33mcommit 7d81a87b5cde3c52abe44f3741a38ad6c666cce1[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Fri Oct 17 14:45:58 2025 +0700
+
+    update GDThanhToan, sua loi nho
+
+[33mcommit 1da6e3174753f4efcf2f66e0879f7a04b72cce9c[m
+Merge: 0a9b2a2 2eeb99f
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Fri Oct 17 01:56:40 2025 +0700
+
+    update chon ve va cac thu khac blablabla
+
+[33mcommit 0a9b2a27dff2fbc0158ac6c69c0dd8b0a6d9b891[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Fri Oct 17 01:48:36 2025 +0700
+
+    update chon ve giao dien va DAO
+
+[33mcommit 2eeb99fe9f97e1da85ffb989a74e7cfd4c1a99c6[m
+Merge: 73b20cb d2c8a62
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Fri Oct 17 01:47:49 2025 +0700
+
+    Merge pull request #13 from vietngxn/update_banVe
+    
+    update banVe
+
+[33mcommit 73b20cb5a764d706f18a330d529c37ec24886f01[m
+Merge: 9a9d579 d738ac9
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Fri Oct 17 01:46:15 2025 +0700
+
+    Merge pull request #12 from vietngxn/QuachNgocLong
+    
+    update pnlGioVeBtn
+
+[33mcommit d2c8a62b7e08fa34c0ca316776b5c40e8f9b5e44[m
+Author: tiendat <tiendat20051812@gmail.com>
+Date:   Fri Oct 17 01:43:14 2025 +0700
+
+    update banVe
+
+[33mcommit d738ac9579771ffc3ba412489fc24705f1c2b3e0[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Fri Oct 17 00:27:58 2025 +0700
+
+    up DoiVe, GDXuatHoaDon
+
+[33mcommit 45154892e67b39358efd52ca56a7409fe66eb397[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Thu Oct 16 15:43:04 2025 +0700
+
+    update pnlGioVeBtn
+
+[33mcommit 9a9d57990c0be4c0c09595e54e91521e20dae26d[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Thu Oct 16 14:58:15 2025 +0700
+
+    link screen flow
+
+[33mcommit c6edb093f28cd776a9f5943ca383cf8f0a52d908[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Thu Oct 16 13:20:35 2025 +0700
+
+    update trang chu
+
+[33mcommit 56de4148144e29fa387e2f710753c9d0fd01f60f[m
+Merge: fe75071 4290542
+Author: LeoninekuBin <nghtien0409@gmail.com>
+Date:   Wed Oct 15 16:25:20 2025 +0700
+
+    Merge pull request #10 from vietngxn/QuachNgocLong
+    
+    fix textfield GDCapLaiVe, GDLichSuMuaBanDoiVe, update GioVe
+
+[33mcommit fe750713243108864e8430608aa9187cfb50f141[m
+Merge: 24ba46b ae72085
+Author: LeoninekuBin <nghtien0409@gmail.com>
+Date:   Wed Oct 15 16:23:26 2025 +0700
+
+    Merge pull request #11 from vietngxn/TienMatKhi
+    
+    long lon cu chi
+
+[33mcommit ae720857b2f9fa7b496803b8aa140bf5d37a8165[m
+Author: Duyên Hải <nghtien0409@gmail.com>
+Date:   Wed Oct 15 16:16:09 2025 +0700
+
+    long lon cu chi
+
+[33mcommit 42905425e142cb97b1624961b7bf1b225800a3db[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Wed Oct 15 15:07:21 2025 +0700
+
+    fix textfield GDCapLaiVe, GDLichSuMuaBanDoiVe, update GioVe
+
+[33mcommit 24ba46b39904654e5a7633e4c10cf9c600a38ba7[m
+Merge: e2daf8f 8f91d9d
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Wed Oct 15 00:22:42 2025 +0700
+
+    Merge pull request #9 from vietngxn/QuachNgocLong
+    
+    sua lai GioVe
+
+[33mcommit 8f91d9db34b7d186fcac9c759beb7f5f198ede43[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Wed Oct 15 00:20:45 2025 +0700
+
+    sua lai GioVe
+
+[33mcommit e2daf8f3e565f35f50f9ab9ccaf6d5895118e3b9[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Wed Oct 15 00:11:37 2025 +0700
+
+    update module-info
+
+[33mcommit fd9f2f5d687d89872ca1d4610fd319ed2af3a824[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 14 23:26:30 2025 +0700
+
+    update module-info
+
+[33mcommit bcac64443aaf4d0414942d30133524bb2e810397[m
+Merge: 6659c52 ef2268d
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 14 22:26:15 2025 +0700
+
+    Merge pull request #8 from vietngxn/QuachNgocLong
+    
+    update btn,txtTimKiem cho GDLichSuMuaBanVe, GDCapLaiVe
+
+[33mcommit ef2268d77a99c510bdd0c8ac34cebcefa6bf4fa6[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Tue Oct 14 22:22:45 2025 +0700
+
+    update btn,txtTimKiem cho GDLichSuMuaBanVe, GDCapLaiVe
+
+[33mcommit 6659c52d215f03be7206cbee0a33a28b369127d4[m
+Merge: cd68a52 1aa09a9
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 14 22:02:52 2025 +0700
+
+    Merge pull request #7 from vietngxn/ChonGheTau
+    
+    update css
+
+[33mcommit 1aa09a95bf77747c43dc2e13f8d9e06b847ab633[m[33m ([m[1;31morigin/ChonGheTau[m[33m)[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 14 21:58:56 2025 +0700
+
+    update css
+
+[33mcommit cd68a5267026563e69aa7738fe42f926df7606e1[m
+Merge: d123bba 061fc6b
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 14 21:49:27 2025 +0700
+
+    Merge pull request #6 from vietngxn/ChonGheTau
+    
+    update 36% thao tac chon toa
+
+[33mcommit 061fc6b82b303c7d57b747d724bd1ea78aa47678[m[33m ([m[1;31morigin/VietNguyen[m[33m)[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 14 21:47:02 2025 +0700
+
+    update 36% thao tac chon toa
+
+[33mcommit d123bba9dffece2461ec1045e05d36437e98e59b[m
+Merge: 1b41a25 20d0699
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 14 20:29:09 2025 +0700
+
+    Merge pull request #5 from vietngxn/create_thongke
+    
+    add QuanLyThongKe
+
+[33mcommit 20d0699eac829f2012e5df208bbe565f4ce2b2c3[m[33m ([m[1;31morigin/create_thongke[m[33m)[m
+Author: tiendat <tiendat20051812@gmail.com>
+Date:   Tue Oct 14 20:26:37 2025 +0700
+
+    add QuanLyThongKe
+
+[33mcommit 1b41a250ddfb2cfcc92fa19c4f909ec9cfc6f5cb[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 14 15:40:51 2025 +0700
+
+    cap nhat entity + ket noi entity
+
+[33mcommit 2fb290ba1b879cc5350ec20d236e048e186ed843[m
+Merge: 50b3cf4 3a6408e
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Tue Oct 14 00:54:01 2025 +0700
+
+    Merge pull request #4 from vietngxn/QuachNgocLong
+    
+    up GiaoDienLichSuMuaBanDoiVe
+
+[33mcommit 3a6408eaadb13888a98e30924102d15d8247f77a[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Tue Oct 14 00:05:11 2025 +0700
+
+    up GiaoDienLichSuMuaBanDoiVe
+
+[33mcommit 50b3cf4e84dd3103454b89986f3afc61290a2cbb[m
+Merge: 0bed364 00de7fc
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Mon Oct 13 22:04:23 2025 +0700
+
+    Merge pull request #3 from vietngxn/QuachNgocLong
+    
+    Thêm các entity
+
+[33mcommit 00de7fcdc64305fcf0fe1f9ce2c728a58d3d73ec[m
+Author: Martus <dechebacninh2@gmail.com>
+Date:   Mon Oct 13 21:20:36 2025 +0700
+
+    Thêm các entity
+
+[33mcommit 0bed364584d83685af4bd540ef0c9acc56a4877d[m
+Merge: 6239da3 46113b3
+Author: VietNguyen-FE Dev <viet.nguyenba4605@gmail.com>
+Date:   Mon Oct 13 20:17:01 2025 +0700
+
+    Merge pull request #2 from vietngxn/update-entity2
+    
+    update entity cua tien
+
+[33mcommit 46113b31b4cb40501b41c2fee7f45812b1e45811[m[33m ([m[1;31morigin/update-entity2[m[33m)[m
+Author: tiendat <tiendat20051812@gmail.com>
+Date:   Mon Oct 13 20:14:15 2025 +0700
+
+    update entity cua tien
+
+[33mcommit 6239da3fb3a1458bdcf352c642af8d48c207c357[m[33m ([m[1;31morigin/update-project[m[33m)[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Mon Oct 13 17:12:05 2025 +0700
+
+    fix giao dien dang nhap
+
+[33mcommit 83982961b851046b0d4ac874143c783118eec5e5[m
+Author: Việt Nguyễn <viet.nguyenba4605@gmail.com>
+Date:   Mon Oct 13 16:57:41 2025 +0700
+
+    first commit
