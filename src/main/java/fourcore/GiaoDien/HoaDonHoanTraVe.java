@@ -312,10 +312,12 @@ public class HoaDonHoanTraVe extends Application {
 					for (Map.Entry<Ve, Double> entry : listVe.entrySet()) {
 						Ve key = entry.getKey();
 						double value = entry.getValue();
+						System.out.println(key.getGiaVe());
+						System.out.println(value);
 						cthdDao = new ChiTietHoaDonDAO();
 						String loai = cthdDao.getLoaiHoaDonChoVeTau(key.getMaVeTau());
 						ChiTietHoaDon cthd = new ChiTietHoaDon(hd, key, "Chi Tiết hóa đơn hoàn trả vé",
-								key.getGiaVe() - value, 0, value, loai);
+								key.getGiaVe(), 0, value, loai);
 						cthdDao.themChiTietHoaDon(cthd);
 					}
 					HoaDonHoanTraExportPDF hdHoanTra = new HoaDonHoanTraExportPDF();

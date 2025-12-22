@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import fourcore.GiaoDien.CapNhatChuyenTau;
 import fourcore.GiaoDien.CapNhatDauTau;
+import fourcore.GiaoDien.CapNhatThietLap;
 import fourcore.GiaoDien.CapNhatToaTau;
 import fourcore.GiaoDien.QuanLyChuyenTau;
 import fourcore.GiaoDien.ThemChuyenTau;
@@ -30,6 +31,7 @@ public class ChuyenTauControl {
 	public ThemToaTau gdThemToaTau = new ThemToaTau();
 	public CapNhatToaTau gdCapNhatToaTau = new CapNhatToaTau();
 	public ThietLapGiaGhe gdThietLap = new ThietLapGiaGhe();
+	public CapNhatThietLap gdCapNhatThietLap = new CapNhatThietLap();
 	public GhiFile ghiFile = new GhiFile();
 	public File fileTmp = new File("src/main/resources/tmp_ChuyenTau.txt");
 	public File fileTmp1 = new File("src/main/resources/tmp_CapNhatChuyenTau.txt");
@@ -41,6 +43,7 @@ public class ChuyenTauControl {
 	private VBox gdChinhCapNhatChuyenTau = null;
 	private VBox gdChinhCapNhatDauTau = null;
 	private VBox gdChinhCapNhatToaTau = null;
+	private VBox gdChinhCapNhatThietLap = null;
 	
 	
 	 public ChuyenTauControl() throws SQLException {
@@ -141,7 +144,7 @@ public class ChuyenTauControl {
 		    try {
 		        if (gdChinhCapNhatToaTau == null) {
 		        	gdChinhCapNhatToaTau = gdCapNhatToaTau.creat_themtoatau_layout();
-
+		        	
 		            Button btnTroLai = gdCapNhatToaTau.getButtonTroLai();
 		            btnTroLai.setOnMouseClicked(ev -> {
 		            	if(ghiFile.xoaTrangDong(fileTmp1, 2))
@@ -155,7 +158,7 @@ public class ChuyenTauControl {
 		            btnThietLapGiaGhe.setOnMouseClicked(ev -> {
 						try {
 							if(gdCapNhatToaTau.xuLyEventCu())
-							showThietLap(root);
+							showCapNhatThietLap(root);
 						} catch (java.io.IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -163,6 +166,26 @@ public class ChuyenTauControl {
 					});
 		        }
 		        root.setCenter(gdChinhCapNhatToaTau);
+		    } catch (SQLException | IOException e) {
+		        e.printStackTrace();
+		    }
+		}
+	 private void showCapNhatThietLap(BorderPane root) throws java.io.IOException {
+		    try {
+		        if (gdChinhCapNhatThietLap == null) {
+		        	gdChinhCapNhatThietLap = gdCapNhatThietLap.create_themThietLap_layout();
+
+		            Button btnTroLai = gdCapNhatThietLap.getButtonTroLai();
+		            btnTroLai.setOnMouseClicked(ev -> {
+		            	if(ghiFile.xoaTrangDong(fileTmp, 3))
+		            	root.setCenter(gdChinhCapNhatToaTau);
+		            	gdChinhCapNhatThietLap.getChildren().clear();
+		            	gdChinhCapNhatThietLap = null;
+		            	}
+		            );	
+		            
+		        }
+		        root.setCenter(gdChinhCapNhatThietLap);
 		    } catch (SQLException | IOException e) {
 		        e.printStackTrace();
 		    }
@@ -190,6 +213,7 @@ public class ChuyenTauControl {
 		    }
 		    root.setCenter(gdChinhThemChuyenTau);
 		}
+	 
 	 private void showThemDauTau(BorderPane root) throws java.io.IOException {
 		    try {
 		        if (gdChinhThemDauTau == null) {
