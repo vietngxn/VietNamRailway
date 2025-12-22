@@ -13,8 +13,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 
+import fourcore.Entity.HoaDon;
+import fourcore.Entity.NhanVien;
+import fourcore.dao.HoaDonDAO;
 import fourcore.dao.ThongKeDAO;
 import fourcore.util.ExcelExporter;
+import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -23,7 +27,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -44,6 +50,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -99,7 +106,7 @@ public class QuanLiThongKeDoanhThuTheoNam extends Application {
 	private Button button_thongKe3;
 	private HBox layout_combobox;
 	private ComboBox<String> comboBox = new ComboBox<String>();
-	private DatePicker date;
+	
 	private VBox btn_layout;
 	private Button btn_xuatThongKe;
 	private GridPane tableCol;
@@ -151,14 +158,30 @@ public class QuanLiThongKeDoanhThuTheoNam extends Application {
 		private HBox layout_desc;
 		private String loaiThongKe;
 		private ThongKeDAO thongkedao;
+		private HoaDonDAO hddao;
 		private Map<Integer, Double> map;
+		private Map<Integer, Double> map_doanhthu;
 		private boolean namchon = false;
     NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
 		private double tongdoanhthu = 0;
+		private ComboBox<String> date;
+		private ArrayList<HoaDon> listhoadon;
+		private double tongVAT;
+		private Button button_dulieu;
+		private Stage window;
+		private GridPane[] hangchonPopup;
+		private ComboBox date1;
+		private Label lbl_tongTien3;
+		
+		
 	@Override
 	public void start(Stage primaryStage) {
-try {
+		
+		try {
 			thongkedao = new ThongKeDAO();
+			hddao = new HoaDonDAO();
+			listhoadon = null;
+			window = primaryStage;
 			
             BorderPane root = new BorderPane();
             Scene scene = new Scene(root,1920,1000);
@@ -869,9 +892,20 @@ try {
 		comboBox.getSelectionModel().selectFirst();
 		comboBox.setDisable(true);
 		
-		date = new DatePicker();
-		date.setPromptText("Thời Gian");
+		
+		ObservableList<String> nam = FXCollections.observableArrayList(
+			    "2020", "2021", "2022", "2023", "2024", "2025"
+			);
+		
+		
+		
+		date = new ComboBox<>(nam);
+		date.setPromptText("Chọn Năm");
 		date.setStyle(style1+";-fx-border-color:#00BACB;-fx-border-width:2px;");
+		
+		date.setPrefSize(200, 40);
+		date.getStyleClass().add("date-picker-custom");
+		
 		
 		date.setPrefSize(400, 40);
 		date.getStyleClass().add("date-picker-custom");
@@ -935,7 +969,210 @@ try {
 		});
 		
 		
-		layout_combobox.getChildren().addAll(date,comboBox);
+		button_dulieu = new Button("Dữ Liệu");
+		button_dulieu.setStyle(style);
+		button_dulieu.setPrefSize(275, 50);
+		
+		button_dulieu.setOnAction(e -> {
+		    // === TẠO POPUP STAGE ===
+		    Stage popupStage = new Stage();
+		    popupStage.initOwner(window);
+		    popupStage.initModality(Modality.NONE);
+		    popupStage.initStyle(StageStyle.DECORATED);
+		    popupStage.setTitle("Dữ Liệu Thống Kê");
+		    popupStage.setWidth(1050);
+		    popupStage.setHeight(950);
+		    
+		    // Create a wrapper to track selected row in this popup
+		    GridPane[] hangchonPopup = new GridPane[]{null};
+		    
+		    // === TẠO ROOT LAYOUT CHO POPUP ===
+		    VBox popupRoot = new VBox();
+		    popupRoot.setStyle("-fx-background-color: #F7F7F7;");
+		    popupRoot.setPrefWidth(1450);
+		    popupRoot.setPrefHeight(950);
+		    
+		    // === TẠO TITLE LAYOUT ===
+		    VBox title_layout_recovery = new VBox();
+		    title_layout_recovery.setPadding(new Insets(30));
+		    title_layout_recovery.setSpacing(20);
+		    
+		    Label lbl_title_recovery = new Label("Dữ liệu thống kê theo năm"); 
+		    lbl_title_recovery.setStyle("-fx-font-family: 'Inter';-fx-font-weight:bold;-fx-font-size:30px;");
+		    
+		    ObservableList<String> thang = FXCollections.observableArrayList(
+		        "1", "2", "3", "4", "5", "6","7", "8", "9", "10", "11", "12"
+		    );
+		    
+		    ComboBox<String> date1Popup = new ComboBox<>(thang);
+		    date1Popup.setPromptText("Chọn Tháng");
+		    date1Popup.setStyle(style1+";-fx-border-color:#00BACB;-fx-border-width:2px;");
+		    date1Popup.setPrefSize(200, 40);
+		    
+		    title_layout_recovery.getChildren().addAll(lbl_title_recovery, date1Popup);
+		    
+		    // === TẠO TABLE LAYOUT (HEADER) ===
+		    VBox table_layout_recovery = new VBox();
+		    table_layout_recovery.setPadding(new Insets(10));
+		    
+		    GridPane tableCol_recovery = new GridPane();
+		    tableCol_recovery.setHgap(10);
+		    tableCol_recovery.setVgap(20);
+		    tableCol_recovery.setAlignment(Pos.CENTER);
+		    tableCol_recovery.setMaxWidth(1330);
+		    
+		    table_layout_recovery.setPrefSize(1350, 730);
+		    table_layout_recovery.setTranslateX(10);
+		    table_layout_recovery.setMaxSize(1350, 730);
+		    
+		    String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 18px; -fx-font-weight: bold;";
+		    
+		    Label lbl_title_maHoaDon_recovery = new Label("Mã Hóa Đơn");
+		    lbl_title_maHoaDon_recovery.setStyle(styleHeader);
+		    
+		    Label lbl_title_ngayThanhToan_recovery = new Label("Ngày Thanh Toán");
+		    lbl_title_ngayThanhToan_recovery.setStyle(styleHeader);
+		    
+		    Label lbl_title_TongCong_recovery = new Label("Tổng Cộng");
+		    lbl_title_TongCong_recovery.setStyle(styleHeader);
+		    
+		    lbl_title_maHoaDon_recovery.setTranslateX(-50);
+		    lbl_title_ngayThanhToan_recovery.setTranslateX(-60);
+		    lbl_title_TongCong_recovery.setTranslateX(-20);
+		    
+		    StackPane paneCol1 = new StackPane(lbl_title_maHoaDon_recovery);
+		    StackPane paneCol2 = new StackPane(lbl_title_ngayThanhToan_recovery);
+		    StackPane paneCol3 = new StackPane(lbl_title_TongCong_recovery);
+		    
+		    paneCol1.setPrefWidth(150);
+		    paneCol2.setPrefWidth(180);
+		    paneCol3.setPrefWidth(150);
+		    
+		    paneCol1.setAlignment(Pos.CENTER);
+		    paneCol2.setAlignment(Pos.CENTER);
+		    paneCol3.setAlignment(Pos.CENTER);
+		    
+		    tableCol_recovery.add(paneCol1, 0, 0);
+		    tableCol_recovery.add(paneCol2, 1, 0);
+		    tableCol_recovery.add(paneCol3, 2, 0);
+		    
+		    table_layout_recovery.getChildren().add(tableCol_recovery);
+		    
+		    // === TẠO TABLE DESC (DANH SÁCH DỮ LIỆU) ===
+		    VBox table_desc_recovery = new VBox();
+		    table_desc_recovery.setSpacing(20);
+		    
+		    // === LABEL TỔNG TIỀN - CREATE AS LOCAL VARIABLE ===
+		    Label lbl_tongTien_popup = new Label("Tổng Tiền: 0đ");
+		    lbl_tongTien_popup.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #00BACB;");
+		    
+		    ScrollPane scrollPane_recovery = new ScrollPane();
+		    scrollPane_recovery.setContent(table_desc_recovery);
+		    scrollPane_recovery.setFitToWidth(true);
+		    scrollPane_recovery.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		    scrollPane_recovery.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		    scrollPane_recovery.setStyle("-fx-background-color: transparent");
+		    scrollPane_recovery.setPannable(true);
+		    
+		    VBox.setVgrow(scrollPane_recovery, Priority.ALWAYS);
+		    scrollPane_recovery.setMaxHeight(660);
+		    
+		    table_layout_recovery.getChildren().addAll(scrollPane_recovery, lbl_tongTien_popup);
+		    
+		    // === TẠO BUTTON LAYOUT ===
+		    HBox layout_button_recovery = new HBox();
+		    layout_button_recovery.setPrefSize(1350, 60);
+		    layout_button_recovery.setAlignment(Pos.CENTER_RIGHT);
+		    layout_button_recovery.setTranslateX(30);    
+		    String style_recovery = "-fx-font-family: 'Inter';-fx-font-weight: bold;-fx-font-size:13.5px;-fx-text-fill:white;-fx-background-radius: 20px;";
+		    
+		    Button btn_quayLai = new Button("Đóng");
+		    btn_quayLai.setStyle(style_recovery+"-fx-background-color: linear-gradient(to bottom, #D498A5, #D32B4F);");
+		    btn_quayLai.setPrefSize(225, 60);
+		    
+		    layout_button_recovery.setSpacing(40);
+		    layout_button_recovery.setTranslateX(-100);
+		    layout_button_recovery.getChildren().add(btn_quayLai);
+		    
+		    // === HANDLE DATE1 SELECTION ===
+		    date1Popup.setOnAction(ev -> {
+		        // Check if both dates are selected before loading data
+		        if (date1Popup.getValue() != null && date.getValue() != null) {
+		            try {
+		                table_desc_recovery.getChildren().clear();
+		                
+		                ArrayList<HoaDon> listHoaDon = new ArrayList<>();
+		                double tongtien = 0;
+		                
+		                // Parse values safely
+		                int thangChon = Integer.parseInt(date1Popup.getValue());
+		                int namChon = Integer.parseInt(date.getValue());
+		                
+		                listHoaDon = hddao.getHoaDonTheoThangNam(thangChon, namChon);
+		                
+		                System.out.println("Tháng: " + thangChon);
+		                System.out.println("Năm: " + namChon);
+		                System.out.println("Số hóa đơn: " + listHoaDon.size());
+		                
+		                for (HoaDon hd : listHoaDon) {
+		                    loadDuLieu(table_desc_recovery, hd.getMaHoaDon(), hd.getNgayThanhToan(), hd.getTongTien(), hangchonPopup);
+		                    tongtien += hd.getTongTien();
+		                }
+		                
+		                // Scroll back to top
+		                scrollPane_recovery.setVvalue(0);
+		                
+		                // Update total label with local variable
+		                DecimalFormat df = new DecimalFormat("#,###");
+		                lbl_tongTien_popup.setText("Tổng Tiền: " + df.format(tongtien) + " đ");
+		                
+		            } catch (SQLException ex) {
+		                ex.printStackTrace();
+		                Alert alert = new Alert(Alert.AlertType.ERROR);
+		                alert.setTitle("Lỗi");
+		                alert.setHeaderText(null);
+		                alert.setContentText("Lỗi khi tải dữ liệu: " + ex.getMessage());
+		                alert.initOwner(popupStage);
+		                alert.showAndWait();
+		            } catch (NumberFormatException ex) {
+		                Alert alert = new Alert(Alert.AlertType.ERROR);
+		                alert.setTitle("Lỗi");
+		                alert.setHeaderText(null);
+		                alert.setContentText("Vui lòng chọn giá trị hợp lệ!");
+		                alert.initOwner(popupStage);
+		                alert.showAndWait();
+		            }
+		        } else {
+		            Alert alert = new Alert(Alert.AlertType.WARNING);
+		            alert.setTitle("Cảnh báo");
+		            alert.setHeaderText(null);
+		            alert.setContentText("Vui lòng chọn cả năm và tháng!");
+		            alert.initOwner(popupStage);
+		            alert.showAndWait();
+		        }
+		    });
+		    
+		    
+		    // === HANDLE MAIN DATE SELECTION ===
+		    date.setOnAction(ev -> {
+		        if (date.getValue() != null) {
+		            date1Popup.setDisable(false);
+		        }
+		    });
+		    
+		    btn_quayLai.setOnAction(ev -> {
+		        popupStage.close();
+		    });
+		    
+		    // === ADD TO POPUP ROOT ===
+		    popupRoot.getChildren().addAll(title_layout_recovery, table_layout_recovery, layout_button_recovery);
+		    
+		    Scene popupScene = new Scene(popupRoot);
+		    popupStage.setScene(popupScene);
+		    popupStage.show();
+		});
+		
+		layout_combobox.getChildren().addAll(date,comboBox,button_dulieu);
 		
 		title_layout.getChildren().add(layout_combobox);
 			
@@ -956,6 +1193,106 @@ try {
         
         return combobox;
     }
+	
+	
+	
+	public void loadDuLieu(VBox targetPanel, String maHoaDon, LocalDateTime ngaythanhtoan, double doanhthu, GridPane[] hangchonPopupRef) {
+	    
+	    GridPane data = new GridPane();
+	    
+	    data.setHgap(10);
+	    data.setAlignment(Pos.CENTER);
+	    data.setMaxWidth(900);
+	    data.setTranslateX(20);
+	    data.setPrefHeight(70);
+	    data.setPadding(new Insets(0, 0, 0, 10));
+	    
+	    String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
+	    
+	    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+	    String str = ngaythanhtoan.format(fmt);
+	    
+	    DecimalFormat df = new DecimalFormat("#,###");
+	    String ft = df.format(doanhthu);
+	    
+	    Label lblMaHoaDon = new Label(maHoaDon);
+	    Label lblngayThanhToan = new Label(str);
+	    Label lbldoanhThu = new Label(ft+" đ");
+	    
+	    lblMaHoaDon.setStyle(baseStyle);
+	    lblngayThanhToan.setStyle(baseStyle);
+	    lbldoanhThu.setStyle(baseStyle);
+	    
+	    lblMaHoaDon.setTranslateX(-20);
+	    lblngayThanhToan.setTranslateX(-30);
+	    lbldoanhThu.setTranslateX(10);
+	    
+	    lblngayThanhToan.setWrapText(true);
+	    
+	    StackPane paneData1 = new StackPane(lblMaHoaDon);
+	    StackPane paneData2 = new StackPane(lblngayThanhToan);
+	    StackPane paneData3 = new StackPane(lbldoanhThu);
+	    
+	    paneData1.setPrefWidth(150);
+	    paneData2.setPrefWidth(180);
+	    paneData3.setPrefWidth(150);
+	    
+	    paneData1.setAlignment(Pos.CENTER);
+	    paneData2.setAlignment(Pos.CENTER);
+	    paneData3.setAlignment(Pos.CENTER);
+	    
+	    data.add(paneData1, 0, 0);
+	    data.add(paneData2, 1, 0);
+	    data.add(paneData3, 2, 0);
+	    
+	    String normalStyle = """
+	        -fx-background-color: rgba(0, 186, 203, 0.3);
+	        -fx-background-radius: 15px;
+	        -fx-border-radius: 15px;
+	        -fx-border-color: #B6D0D3;
+	        -fx-border-width: 1px;
+	    """;
+
+	    String selectedStyle = """
+	        -fx-background-color: rgba(0, 186, 203, 0.9);
+	        -fx-background-radius: 15px;
+	        -fx-border-radius: 15px;
+	        -fx-border-color: #00BACB;
+	        -fx-border-width: 2px;
+	    """;
+	    
+	    data.setStyle(normalStyle);
+	    
+	    final GridPane dongHienTai = data;
+	    
+	    // === HOVER EFFECT ===
+	    data.setOnMouseEntered(e -> {
+	        ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), data);
+	        scaleUp.setToX(1.02);
+	        scaleUp.setToY(1.02);
+	        scaleUp.play();
+	    });
+
+	    data.setOnMouseExited(e -> {
+	        ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), data);
+	        scaleDown.setToX(1.0);
+	        scaleDown.setToY(1.0);
+	        scaleDown.play();
+	    });
+	    
+	    data.setOnMouseClicked(e -> {
+	    
+	        if (hangchonPopupRef[0] != null && hangchonPopupRef[0] != dongHienTai) {
+	            hangchonPopupRef[0].setStyle(normalStyle);
+	        }
+	        
+	    
+	        hangchonPopupRef[0] = dongHienTai;
+	        dongHienTai.setStyle(selectedStyle);
+	    });
+	    
+	    targetPanel.getChildren().add(data);
+	}	
 	
 	public void create_table_desc() throws SQLException
 	{
@@ -1036,7 +1373,7 @@ try {
 	{
 		PieChart pieChart = new PieChart();
 	    pieChart.setTitle("Tỷ lệ sản phẩm bán ra");
-
+	    
 	    pieChart.getData().add(new PieChart.Data("Doanh Thu", 92));
 	    pieChart.getData().add(new PieChart.Data("Thuế VAT", 8));
 	    
@@ -1058,9 +1395,8 @@ try {
 		barchart.setAnimated(false);
 		
 		
-		LocalDate data1 = date.getValue();
-		int nam = data1.getYear(); 
-		map = thongkedao.getDoanhThuTheoThang(nam);
+		
+		map = thongkedao.getDoanhThuTheoThang(Integer.valueOf(date.getValue()));
 		
 		XYChart.Series<String, Number> data = new XYChart.Series<>();
 		tongdoanhthu =0 ;
@@ -1074,7 +1410,7 @@ try {
 		     }
 		     
 		    if(doanhThu > 0)
-		    data.getData().add(new XYChart.Data<>(String.valueOf(thang),doanhThu*1.5));
+		    data.getData().add(new XYChart.Data<>(String.valueOf(thang),doanhThu));
 		}
 		
 		    
@@ -1085,7 +1421,7 @@ try {
 		    for (XYChart.Data<String, Number> item : data.getData()) {
 		        Node node = item.getNode();
 		        if (node != null) {
-		            double tien = (double) item.getYValue() / 1.5;
+		            double tien = (double) item.getYValue();
 		            DecimalFormat df = new DecimalFormat("#,###");
 		            String tf = df.format(tien);
 
@@ -1106,12 +1442,13 @@ try {
     public void create_piechart_nam() throws SQLException {
         NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
 
-
+        tinhVAT(Integer.valueOf(date.getValue()));
+        
         tongdoanhthu = 0;
 
-        LocalDate data1 = date.getValue();
-        int nam = data1.getYear();
-        map = thongkedao.getDoanhThuTheoThang(nam);
+        
+        
+        map = thongkedao.getDoanhThuTheoThang(Integer.valueOf(date.getValue()));
         for (Double value : map.values()) {
             tongdoanhthu += value;
         }
@@ -1122,8 +1459,8 @@ try {
         pieChart.setLegendVisible(true);
 
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
-                new PieChart.Data("Doanh Thu: " + nf.format(tongdoanhthu * 0.92), 92),
-                new PieChart.Data("Thuế VAT: " + nf.format(tongdoanhthu * 0.08), 8)
+                new PieChart.Data("Doanh Thu: " + nf.format(tongdoanhthu - tongVAT), 92),
+                new PieChart.Data("Thuế VAT: " + nf.format(tongVAT), 8)
         );
         pieChart.setData(pieChartData);
 
@@ -1390,12 +1727,12 @@ try {
 		        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss");
 		        
 		        if(date.getValue() != null) {
-		            int nam = date.getValue().getYear();
-		            String fileName = "ThongKeDoanhThu_" + nam + "_" + now.format(formatter) + ".xlsx";
+		            
+		            String fileName = "ThongKeDoanhThu_" + Integer.valueOf(date.getValue()) + "_" + now.format(formatter) + ".xlsx";
 		            String filePath = folderPath + "/" + fileName;
 		            
 		            // Export trực tiếp
-		            ExcelExporter.exportThongKeDoanhThuTheoNam(map, nam, tongdoanhthu, filePath);
+		            ExcelExporter.exportThongKeDoanhThuTheoNam(map, Integer.valueOf(date.getValue()), tongdoanhthu, filePath);
 		            
 		            // Mở file với WPS
                     File pdfFile = new File(filePath);
@@ -1434,6 +1771,50 @@ try {
 		noiDungChinh.getChildren().add(btn_layout);
 	}
 	
+		public double tinhVAT(int nam) throws SQLException {
+			
+			listhoadon = hddao.getListHoaDon2();
+			
+			
+			tongVAT = 0 ;
+			
+			
+			for(HoaDon hd : listhoadon)
+			{
+				System.out.println(hd.getTongTien());
+			}
+			
+			for(HoaDon hd : listhoadon)
+			{	
+				System.out.println(hd.toString());
+				if(hd.getNgayThanhToan().getYear() == nam)
+				{
+					
+					if (hd.getMaLoaiHoaDon() == null || hd.getMaLoaiHoaDon().getMaLoaiHoaDon() == null) {
+		                System.out.println("khong co hoa don");	
+		                continue;
+		            }
+					if(hd.getMaLoaiHoaDon().getMaLoaiHoaDon().equalsIgnoreCase("LHD01"))
+					{
+						tongVAT += hd.getTongTien() * 0.08;
+					}
+					else if(hd.getMaLoaiHoaDon().getMaLoaiHoaDon().equalsIgnoreCase("LHD03") && hd.getTongTien() <= 20000)
+					{
+						
+					}
+					else if(hd.getMaLoaiHoaDon().getMaLoaiHoaDon().equalsIgnoreCase("LHD03") && hd.getTongTien() > 20000) {
+						tongVAT += (hd.getTongTien()-20000)/(1.08)*0.08;
+					}
+					
+					
+					
+				}
+			}
+			return tongVAT;
+		}
+		
+		
+
 	private void openPDFWithWPS(String filePath) throws IOException {
 	    String wpsPath = "C:\\Users\\Admin\\AppData\\Local\\Kingsoft\\WPS Office\\12.2.0.23131\\office6\\wps.exe";
 	    

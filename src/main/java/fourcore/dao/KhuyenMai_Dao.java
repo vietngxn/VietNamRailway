@@ -46,4 +46,32 @@ public class KhuyenMai_Dao {
         }
 		return null;
 	}
+	
+	public void capNhatTrangThaiTatCa() throws SQLException {
+	    String sql = "SELECT maKhuyenMai, ngayBatDau, ngayKetThuc FROM KhuyenMai";
+	    ResultSet rs = myStmt.executeQuery(sql);
+
+	    LocalDateTime now = LocalDateTime.now();
+
+	    while (rs.next()) {
+	        String ma = rs.getString("maKhuyenMai");
+	        LocalDateTime ngayBD = rs.getTimestamp("ngayBatDau").toLocalDateTime();
+	        LocalDateTime ngayKT = rs.getTimestamp("ngayKetThuc").toLocalDateTime();
+
+	        String trangThai;
+
+	        if (now.isBefore(ngayBD)) {
+	            trangThai = "Chưa kích hoạt";
+	        } else if (now.isAfter(ngayKT)) {
+	            trangThai = "Kết thúc";
+	        } else {
+	            trangThai = "Kích hoạt";
+	        }
+
+	        String update = "UPDATE KhuyenMai SET trangThaiKhuyenMai = N'" + trangThai + 
+	                        "' WHERE maKhuyenMai = '" + ma + "'";
+	        myStmt.executeUpdate(update);
+	    }
+
+	}
 }

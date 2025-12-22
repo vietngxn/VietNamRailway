@@ -151,5 +151,12 @@ public class KhachHangDAO {
 		return rs.next();
 	}
 	
+	public boolean checksdt(String sdt) throws SQLException {
+		String q = "select * \r\n"
+				+ "from KhachHang kh\r\n"
+				+ "where kh.sdt = '" + sdt + "'";
+		ResultSet rs = st.executeQuery(q);
+		return rs.next();
+	}
 	
 }

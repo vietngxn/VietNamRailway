@@ -3,6 +3,8 @@ package fourcore.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -10,6 +12,7 @@ import java.util.Map;
 import fourcore.DatabaseConnector.DatabaseConnector;
 import fourcore.Entity.ChuyenTau;
 import fourcore.Entity.KhachHang;
+import fourcore.Entity.LoaiTau;
 import fourcore.Entity.Tau;
 
 public class ThongKeDAO {
@@ -24,22 +27,19 @@ public class ThongKeDAO {
     }
     public Map<Tau, Integer> getTauVaSoLanDiTheoNam(int year) throws SQLException {
         Map<Tau, Integer> list = new LinkedHashMap<>();
-        String q = "SELECT \r\n"
-                + "    ct.maChuyenTau,  \r\n"
-                + "    lt.tenLoaiTau, \r\n"
-                + "    COUNT(v.maVeTau) AS SoVeBan \r\n"
-                + "FROM Ve v, ChuyenTau ct, Tau t, LoaiTau lt\r\n"
-                + "WHERE v.maChuyenTau = ct.maChuyenTau \r\n"
-                + "    AND ct.maTau = t.maTau \r\n"
-                + "    AND t.maLoaiTau = lt.maLoaiTau\r\n"
-                + "    AND YEAR(v.ngayGioDen) = " + year + "\r\n"
-                + "GROUP BY ct.maChuyenTau, lt.tenLoaiTau\r\n"
-                + "ORDER BY SoVeBan DESC;";
         
-        ResultSet rs = st.executeQuery(q);
+        String sql =
+                "SELECT ct.maTau, COUNT(ct.maChuyenTau) AS SoLanDi " +
+                "FROM ChuyenTau ct " +
+                "WHERE YEAR(ct.ngayGioDen) = " + year + " " +
+                "AND ct.isRemove = 0 " +
+                "GROUP BY ct.maTau " +
+                "ORDER BY SoLanDi DESC";
+        
+        ResultSet rs = st.executeQuery(sql);
         while (rs.next()) {
             Tau tau = new Tau(rs.getString(1), rs.getString(2), null);
-            int soLanDi = rs.getInt("SoVeBan");
+            int soLanDi = rs.getInt("soLanDi");
             list.put(tau, soLanDi);
         }
         return list;
@@ -48,23 +48,20 @@ public class ThongKeDAO {
     
     public Map<Tau, Integer> getTauVaSoLanDiTheoThangNam(int month, int year) throws SQLException {
         Map<Tau, Integer> list = new LinkedHashMap<>();
-        String q = "SELECT \r\n"
-                + "    ct.maChuyenTau,  \r\n"
-                + "    lt.tenLoaiTau, \r\n"
-                + "    COUNT(v.maVeTau) AS SoVeBan \r\n"
-                + "FROM Ve v, ChuyenTau ct, Tau t, LoaiTau lt\r\n"
-                + "WHERE v.maChuyenTau = ct.maChuyenTau \r\n"
-                + "    AND ct.maTau = t.maTau \r\n"
-                + "    AND t.maLoaiTau = lt.maLoaiTau\r\n"
-                + "    AND MONTH(v.ngayGioDen) = " + month + "\r\n"
-                + "    AND YEAR(v.ngayGioDen) = " + year + "\r\n"
-                + "GROUP BY ct.maChuyenTau, lt.tenLoaiTau\r\n"
-                + "ORDER BY SoVeBan DESC;";
         
-        ResultSet rs = st.executeQuery(q);
+        String sql =
+                "SELECT ct.maTau, COUNT(ct.maChuyenTau) AS SoLanDi " +
+                "FROM ChuyenTau ct " +
+                "WHERE MONTH(ct.ngayGioDen) = " + month + " " +
+                "AND YEAR(ct.ngayGioDen) = " + year + " " +
+                "AND ct.isRemove = 0 " +
+                "GROUP BY ct.maTau " +
+                "ORDER BY SoLanDi DESC";
+        
+        ResultSet rs = st.executeQuery(sql);
         while (rs.next()) {
             Tau tau = new Tau(rs.getString(1), rs.getString(2), null);
-            int soLanDi = rs.getInt("SoVeBan");
+            int soLanDi = rs.getInt("soLanDi");
             list.put(tau, soLanDi);
         }
         return list;
@@ -163,6 +160,63 @@ public class ThongKeDAO {
 	        list.put(tau, doanhthu);
 	    }
 	    return list;
+	}
+	
+	
+	
+	public Tau getTauTheoMa(String maTau) throws SQLException {
+
+	    String sql =
+	        "SELECT * " +
+	        "FROM Tau t, LoaiTau lt " +
+	        "WHERE t.maLoaiTau = lt.maLoaiTau " +
+	        "AND t.maTau = '" + maTau + "'";
+
+	    ResultSet rs = st.executeQuery(sql);
+
+	    if (rs.next()) {
+	        // Loại tàu
+	        LoaiTau loaiTau = new LoaiTau(
+	            rs.getString("maLoaiTau"),
+	            rs.getString("tenLoaiTau"),
+	            rs.getInt("giaCuoc")  
+	        );
+
+	        // Tàu
+	        Tau tau = new Tau(
+	            rs.getString("maTau"),
+	            rs.getString("bienSoTau"),
+	            loaiTau
+	        );
+
+	        return tau;
+	    }
+
+	    return null;
+	}
+
+
+
+	public String getMaChuyenTauTheoMaTau(String maTau) throws SQLException {
+
+	    StringBuilder result = new StringBuilder();
+
+	    String sql =
+	        "SELECT ct.maChuyenTau " +
+	        "FROM Tau t, ChuyenTau ct " +
+	        "WHERE t.maTau = ct.maTau " +
+	        "AND t.maTau = '" + maTau + "'";
+
+	    ResultSet rs = st.executeQuery(sql);
+
+	    while (rs.next()) {
+	        if (result.length() > 0) {
+	            result.append(","); 
+	        }
+	        result.append(rs.getString("maChuyenTau"));
+	    }
+
+	    return result.toString(); 
 	}
 
 	

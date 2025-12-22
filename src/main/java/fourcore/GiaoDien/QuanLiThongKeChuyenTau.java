@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import fourcore.Entity.ChuyenTau;
+import fourcore.Entity.HoaDon;
 import fourcore.Entity.Tau;
 import fourcore.dao.ThongKeDAO;
 import fourcore.util.ExcelExporter;
@@ -24,7 +26,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -45,6 +49,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -155,9 +160,13 @@ public class QuanLiThongKeChuyenTau extends Application {
 		private Map<Tau, Integer> map;
 		private ComboBox<String> date1;
 		private ComboBox kieuthongke2;
+		private Button button_dulieu;
+		private Stage window;
 	@Override
 	public void start(Stage primaryStage) {
 try {
+	
+			window = primaryStage;
 			thongkeDAO = new ThongKeDAO();
 			
             BorderPane root = new BorderPane();
@@ -957,6 +966,312 @@ try {
 
 		});
 		
+		
+		
+		button_dulieu = new Button("Dữ Liệu");
+		button_dulieu.setStyle(style);
+		button_dulieu.setPrefSize(275, 50);
+//		
+//		button_dulieu.setOnAction(e -> {
+//		    // === TẠO POPUP STAGE ===
+//		    Stage popupStage = new Stage();
+//		    popupStage.initOwner(window);
+//		    popupStage.initModality(Modality.NONE);
+//		    popupStage.initStyle(StageStyle.DECORATED);
+//		    popupStage.setTitle("Dữ Liệu Thống Kê");
+//		    popupStage.setWidth(1050);
+//		    popupStage.setHeight(950);
+//		    
+//		    // Create a wrapper to track selected row in this popup
+//		    GridPane[] hangchonPopup = new GridPane[]{null};
+//		    
+//		    // === TẠO ROOT LAYOUT CHO POPUP ===
+//		    VBox popupRoot = new VBox();
+//		    popupRoot.setStyle("-fx-background-color: #F7F7F7;");
+//		    popupRoot.setPrefWidth(1450);
+//		    popupRoot.setPrefHeight(950);
+//		    
+//		    // === TẠO TITLE LAYOUT ===
+//		    VBox title_layout_recovery = new VBox();
+//		    title_layout_recovery.setPadding(new Insets(30));
+//		    title_layout_recovery.setSpacing(20);
+//		    
+//		    Label lbl_title_recovery = new Label("Dữ liệu thống kê Chuyến tàu chạy nhiều nhất"); 
+//		    lbl_title_recovery.setStyle("-fx-font-family: 'Inter';-fx-font-weight:bold;-fx-font-size:30px;");
+//		    
+//		    // === TẠO LAYOUT CHỌN KIỂU THỐNG KÊ ===
+//		    HBox layout_filter = new HBox();
+//		    layout_filter.setSpacing(30);
+//		    layout_filter.setTranslateY(10);
+//		    
+//		    String style2 = "-fx-font-family:'Inter';-fx-text-fill:#00BACB;-fx-font-size: 15px;";
+//		    
+//		    // ComboBox chọn Kiểu thống kê (Theo Tháng / Theo Năm)
+//		    ObservableList<String> kieuthongke2 = FXCollections.observableArrayList(
+//		        "Theo Tháng","Theo Năm"
+//		    );
+//		    
+//		    ComboBox<String> kieuthongke2Popup = new ComboBox<>(kieuthongke2);
+//		    kieuthongke2Popup.setPromptText("Chọn Kiểu thống kê ");
+//		    kieuthongke2Popup.setStyle(style2+";-fx-border-color:#00BACB;-fx-border-width:2px;");
+//		    kieuthongke2Popup.setPrefSize(200, 40);
+//		    
+//		    // ComboBox chọn Tháng
+//		    ObservableList<String> thang1 = FXCollections.observableArrayList(
+//		        "1", "2", "3", "4", "5", "6",
+//		        "7", "8", "9", "10", "11", "12"
+//		    );
+//		    
+//		    ComboBox<String> date1Popup = new ComboBox<>(thang1);
+//		    date1Popup.setPromptText("Chọn Tháng");
+//		    date1Popup.setStyle(style2+";-fx-border-color:#00BACB;-fx-border-width:2px;");
+//		    date1Popup.setPrefSize(200, 40);
+//		    date1Popup.setDisable(true);
+//		    
+//		    // ComboBox chọn Năm
+//		    ObservableList<String> nam2 = FXCollections.observableArrayList(
+//		        "2020", "2021", "2022", "2023", "2024", "2025"
+//		    );
+//		    
+//		    ComboBox<String> datePopup = new ComboBox<>(nam2);
+//		    datePopup.setPromptText("Chọn Năm");
+//		    datePopup.setStyle(style1+";-fx-border-color:#00BACB;-fx-border-width:2px;");
+//		    datePopup.setPrefSize(200, 40);
+//		    datePopup.setDisable(true);
+//		    
+//		    // === XỬ LÝ SỰ KIỆN CHỌN KIỂU THỐNG KÊ ===
+//		    kieuthongke2Popup.setOnAction(ev -> {
+//		        String selected = (String) kieuthongke2Popup.getValue();
+//		        
+//		        if (selected != null) {
+//		            if (selected.equalsIgnoreCase("Theo Tháng")) {
+//		                date1Popup.setDisable(false);
+//		                datePopup.setDisable(true);
+//		                datePopup.setValue(null);
+//		            } 
+//		            else if (selected.equalsIgnoreCase("Theo Năm")) {
+//		                date1Popup.setDisable(true);
+//		                datePopup.setDisable(false);
+//		                date1Popup.setValue(null); 
+//		            }
+//		        }
+//		    });
+//		    
+//		    // === XỬ LÝ SỰ KIỆN CHỌN THÁNG ===
+//		    date1Popup.valueProperty().addListener((obs, oldVal, newVal) -> {
+//		        String selected = (String) kieuthongke2Popup.getSelectionModel().getSelectedItem();
+//		        if(selected != null && selected.equalsIgnoreCase("theo tháng")) {
+//		            if (newVal != null && !newVal.isEmpty()) {
+//		                datePopup.setDisable(false);
+//		            } else {
+//		                datePopup.setDisable(true);
+//		            }
+//		        }
+//		    });
+//		    
+//		    layout_filter.getChildren().addAll(kieuthongke2Popup, date1Popup, datePopup);
+//		    
+//		    title_layout_recovery.getChildren().addAll(lbl_title_recovery, layout_filter);
+//		    
+//		    // === TẠO TABLE LAYOUT (HEADER) ===
+//		    VBox table_layout_recovery = new VBox();
+//		    table_layout_recovery.setPadding(new Insets(10));
+//		    
+//		    GridPane tableCol_recovery = new GridPane();
+//		    tableCol_recovery.setHgap(10);
+//		    tableCol_recovery.setVgap(20);
+//		    tableCol_recovery.setAlignment(Pos.CENTER);
+//		    tableCol_recovery.setMaxWidth(1330);
+//		    
+//		    table_layout_recovery.setPrefSize(1350, 730);
+//		    table_layout_recovery.setTranslateX(10);
+//		    table_layout_recovery.setMaxSize(1350, 730);
+//		    
+//		    String styleHeader = "-fx-font-family: 'Kanit'; -fx-font-size: 18px; -fx-font-weight: bold;";
+//		    
+//		    Label lbl_title_maHoaDon_recovery = new Label("Mã Hóa Đơn");
+//		    lbl_title_maHoaDon_recovery.setStyle(styleHeader);
+//		    
+//		    Label lbl_title_ngayThanhToan_recovery = new Label("Ngày Thanh Toán");
+//		    lbl_title_ngayThanhToan_recovery.setStyle(styleHeader);
+//		    
+//		    Label lbl_title_TongCong_recovery = new Label("Tổng Cộng");
+//		    lbl_title_TongCong_recovery.setStyle(styleHeader);
+//		    
+//		    lbl_title_maHoaDon_recovery.setTranslateX(-50);
+//		    lbl_title_ngayThanhToan_recovery.setTranslateX(-60);
+//		    lbl_title_TongCong_recovery.setTranslateX(-20);
+//		    
+//		    StackPane paneCol1 = new StackPane(lbl_title_maHoaDon_recovery);
+//		    StackPane paneCol2 = new StackPane(lbl_title_ngayThanhToan_recovery);
+//		    StackPane paneCol3 = new StackPane(lbl_title_TongCong_recovery);
+//		    
+//		    paneCol1.setPrefWidth(150);
+//		    paneCol2.setPrefWidth(180);
+//		    paneCol3.setPrefWidth(150);
+//		    
+//		    paneCol1.setAlignment(Pos.CENTER);
+//		    paneCol2.setAlignment(Pos.CENTER);
+//		    paneCol3.setAlignment(Pos.CENTER);
+//		    
+//		    tableCol_recovery.add(paneCol1, 0, 0);
+//		    tableCol_recovery.add(paneCol2, 1, 0);
+//		    tableCol_recovery.add(paneCol3, 2, 0);
+//		    
+//		    table_layout_recovery.getChildren().add(tableCol_recovery);
+//		    
+//		    // === TẠO TABLE DESC (DANH SÁCH DỮ LIỆU) ===
+//		    VBox table_desc_recovery = new VBox();
+//		    table_desc_recovery.setSpacing(20);
+//		    
+//		    // === LABEL TỔNG TIỀN ===
+//		    Label lbl_tongTien_popup = new Label("Tổng Tiền: 0đ");
+//		    lbl_tongTien_popup.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #00BACB;");
+//		    
+//		    ScrollPane scrollPane_recovery = new ScrollPane();
+//		    scrollPane_recovery.setContent(table_desc_recovery);
+//		    scrollPane_recovery.setFitToWidth(true);
+//		    scrollPane_recovery.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+//		    scrollPane_recovery.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+//		    scrollPane_recovery.setStyle("-fx-background-color: transparent");
+//		    scrollPane_recovery.setPannable(true);
+//		    
+//		    VBox.setVgrow(scrollPane_recovery, Priority.ALWAYS);
+//		    scrollPane_recovery.setMaxHeight(660);
+//		    
+//		    table_layout_recovery.getChildren().addAll(scrollPane_recovery, lbl_tongTien_popup);
+//		    
+//		    // === TẠO BUTTON LAYOUT ===
+//		    HBox layout_button_recovery = new HBox();
+//		    layout_button_recovery.setPrefSize(1350, 60);
+//		    layout_button_recovery.setAlignment(Pos.CENTER_RIGHT);
+//		    layout_button_recovery.setTranslateX(30);    
+//		    String style_recovery = "-fx-font-family: 'Inter';-fx-font-weight: bold;-fx-font-size:13.5px;-fx-text-fill:white;-fx-background-radius: 20px;";
+//		    
+//		    Button btn_quayLai = new Button("Đóng");
+//		    btn_quayLai.setStyle(style_recovery+"-fx-background-color: linear-gradient(to bottom, #D498A5, #D32B4F);");
+//		    btn_quayLai.setPrefSize(225, 60);
+//		    
+//		    layout_button_recovery.setSpacing(40);
+//		    layout_button_recovery.setTranslateX(-100);
+//		    layout_button_recovery.getChildren().add(btn_quayLai);
+//		    
+//		    // === HANDLE DATE SELECTION ===
+//		    datePopup.setOnAction(ev -> {
+//		        String selectedKieu = (String) kieuthongke2Popup.getValue();
+//		        
+//		        if (selectedKieu == null) {
+//		            Alert alert = new Alert(Alert.AlertType.WARNING);
+//		            alert.setTitle("Cảnh báo");
+//		            alert.setHeaderText(null);
+//		            alert.setContentText("Vui lòng chọn kiểu thống kê!");
+//		            alert.initOwner(popupStage);
+//		            alert.showAndWait();
+//		            return;
+//		        }
+//		        
+//		        if (selectedKieu.equalsIgnoreCase("Theo Tháng")) {
+//		            if (date1Popup.getValue() != null && datePopup.getValue() != null) {
+//		                try {
+//		                    table_desc_recovery.getChildren().clear();
+//		                    
+//		                    ArrayList<ChuyenTau> listct = new ArrayList<>();
+//		                    listct = thongkeDAO.getChuyenTauTheoNam(Integer.valueOf(date.getValue()));
+//		                    double soLan = 0;
+//		                    
+//		                    int thangChon = Integer.parseInt(date1Popup.getValue());
+//		                    int namChon = Integer.parseInt(datePopup.getValue());
+//		                    
+//		                    // TODO: Gọi DAO để lấy dữ liệu
+//		                    // listHoaDon = hddao.getHoaDonTheoThangNam(thangChon, namChon);
+//		                    
+//		                    System.out.println("Tháng: " + thangChon);
+//		                    System.out.println("Năm: " + namChon);
+//		                    
+//		                    
+//		                    
+//		                    
+//		                    for (ChuyenTau ct : listct) {
+//		                        		// TODO: Gọi method loadDuLieu để hiển thị dữ liệu
+////		                         loadDuLieu(table_desc_recovery,String.valueOf(ct.getTau().getLoaiTau()), ct.getNgayGioDen(),1, hangchonPopup);
+//		                        soLan++;
+//		                    }
+//		                    
+//		                    scrollPane_recovery.setVvalue(0);
+//		                    
+//		                    DecimalFormat df = new DecimalFormat("#,###");
+//		                    lbl_tongTien_popup.setText("Tổng Tiền: " + df.format(soLan) + " đ");
+//		                    
+//		                } catch (NumberFormatException ex) {
+//		                    Alert alert = new Alert(Alert.AlertType.ERROR);
+//		                    alert.setTitle("Lỗi");
+//		                    alert.setHeaderText(null);
+//		                    alert.setContentText("Vui lòng chọn giá trị hợp lệ!");
+//		                    alert.initOwner(popupStage);
+//		                    alert.showAndWait();
+//		                } catch (SQLException e1) {
+//							// TODO Auto-generated catch block
+//							e1.printStackTrace();
+//						}
+//		            }
+//		        } 
+//		        else if (selectedKieu.equalsIgnoreCase("Theo Năm")) {
+//		            if (datePopup.getValue() != null) {
+//		                try {
+//		                    table_desc_recovery.getChildren().clear();
+//		                    
+//		                    ArrayList<ChuyenTau> listct = new ArrayList<>();
+//		                    listct = thongkeDAO.getDoanhThutheoChuyenTau(Integer.valueOf(date.getValue()));
+//		                    double soLan = 0;
+//		                    
+//		                    int namChon = Integer.parseInt(datePopup.getValue());
+//		                    
+//		                    // TODO: Gọi DAO để lấy dữ liệu theo năm
+//		                    // listHoaDon = hddao.getHoaDonTheoNam(namChon);
+//		                    
+//		                    System.out.println("Năm: " + namChon);
+//		                    System.out.println("Số hóa đơn: " + listct.size());
+//		                    
+//		                    for (ChuyenTau ct : listct) {
+//		                        // TODO: Gọi method loadDuLieu để hiển thị dữ liệu
+//		                    	loadDuLieu(table_desc_recovery,String.valueOf(ct.getTau().getLoaiTau()), ct.getNgayGioDen(),1, hangchonPopup);
+//		                        soLan++;
+//		                    }
+//		                    
+//		                    scrollPane_recovery.setVvalue(0);
+//		                    
+//		                    DecimalFormat df = new DecimalFormat("#,###");
+//		                    lbl_tongTien_popup.setText("Tổng Tiền: " + df.format(soLan) + " Số Lần");
+//		                    
+//		                } catch (NumberFormatException ex) {
+//		                    Alert alert = new Alert(Alert.AlertType.ERROR);
+//		                    alert.setTitle("Lỗi");
+//		                    alert.setHeaderText(null);
+//		                    alert.setContentText("Vui lòng chọn giá trị hợp lệ!");
+//		                    alert.initOwner(popupStage);
+//		                    alert.showAndWait();
+//		                } catch (SQLException e1) {
+//							// TODO Auto-generated catch block
+//							e1.printStackTrace();
+//						}
+//		            }
+//		        }
+//		    });
+//		    
+//		    btn_quayLai.setOnAction(ev -> {
+//		        popupStage.close();
+//		    });
+//		    
+//		    // === ADD TO POPUP ROOT ===
+//		    popupRoot.getChildren().addAll(title_layout_recovery, table_layout_recovery, layout_button_recovery);
+//		    
+//		    Scene popupScene = new Scene(popupRoot);
+//		    popupStage.setScene(popupScene);
+//		    popupStage.show();
+//		});
+		
+		
+		
 		layout_combobox.getChildren().addAll(kieuthongke2,date1,date,comboBox);
 		
 		
@@ -1113,6 +1428,108 @@ try {
 		noiDungChinh.getChildren().add(table_desc);
 	}
 	
+	
+	
+	public void loadDuLieu(VBox targetPanel, String maLoaiChuyenTau, LocalDateTime ngaygio, int solan, GridPane[] hangchonPopupRef) {
+	    
+	    GridPane data = new GridPane();
+	    System.out.println(maLoaiChuyenTau);
+	    data.setHgap(10);
+	    data.setAlignment(Pos.CENTER);
+	    data.setMaxWidth(900);
+	    data.setTranslateX(20);
+	    data.setPrefHeight(70);
+	    data.setPadding(new Insets(0, 0, 0, 10));
+	    
+	    String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 16.5px;";
+	    
+	    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+	    String str = ngaygio.format(fmt);
+	    
+	    DecimalFormat df = new DecimalFormat("#,###");
+	    String ft = df.format(solan);
+	    
+	    Label lblMaLoaiChuyenTau = new Label(maLoaiChuyenTau);
+	    Label lblngaygio = new Label(str);
+	    Label lblsolan = new Label(ft+" lần");
+	    
+	    lblMaLoaiChuyenTau.setStyle(baseStyle);
+	    lblngaygio.setStyle(baseStyle);
+	    lblsolan.setStyle(baseStyle);
+	    
+	    lblMaLoaiChuyenTau.setTranslateX(-20);
+	    lblngaygio.setTranslateX(-30);
+	    lblsolan.setTranslateX(10);
+	    
+	    lblngaygio.setWrapText(true);
+	    
+	    StackPane paneData1 = new StackPane(lblMaLoaiChuyenTau);
+	    StackPane paneData2 = new StackPane(lblngaygio);
+	    StackPane paneData3 = new StackPane(lblsolan);
+	    
+	    paneData1.setPrefWidth(150);
+	    paneData2.setPrefWidth(180);
+	    paneData3.setPrefWidth(150);
+	    
+	    paneData1.setAlignment(Pos.CENTER);
+	    paneData2.setAlignment(Pos.CENTER);
+	    paneData3.setAlignment(Pos.CENTER);
+	    
+	    data.add(paneData1, 0, 0);
+	    data.add(paneData2, 1, 0);
+	    data.add(paneData3, 2, 0);
+	    
+	    String normalStyle = """
+	        -fx-background-color: rgba(0, 186, 203, 0.3);
+	        -fx-background-radius: 15px;
+	        -fx-border-radius: 15px;
+	        -fx-border-color: #B6D0D3;
+	        -fx-border-width: 1px;
+	    """;
+
+	    String selectedStyle = """
+	        -fx-background-color: rgba(0, 186, 203, 0.9);
+	        -fx-background-radius: 15px;
+	        -fx-border-radius: 15px;
+	        -fx-border-color: #00BACB;
+	        -fx-border-width: 2px;
+	    """;
+	    
+	    data.setStyle(normalStyle);
+	    
+	    final GridPane dongHienTai = data;
+	    
+	    // === HOVER EFFECT ===
+	    data.setOnMouseEntered(e -> {
+	        ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), data);
+	        scaleUp.setToX(1.02);
+	        scaleUp.setToY(1.02);
+	        scaleUp.play();
+	    });
+
+	    data.setOnMouseExited(e -> {
+	        ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), data);
+	        scaleDown.setToX(1.0);
+	        scaleDown.setToY(1.0);
+	        scaleDown.play();
+	    });
+	    
+	    data.setOnMouseClicked(e -> {
+	    
+	        if (hangchonPopupRef[0] != null && hangchonPopupRef[0] != dongHienTai) {
+	            hangchonPopupRef[0].setStyle(normalStyle);
+	        }
+	        
+	    
+	        hangchonPopupRef[0] = dongHienTai;
+	        dongHienTai.setStyle(selectedStyle);
+	    });
+	    
+	    targetPanel.getChildren().add(data);
+	}	
+	
+	
+	
 	public void create_barchart_thang() {
 	    // Trục tọa độ cho BarChart
 	    CategoryAxis xAxis = new CategoryAxis();
@@ -1229,7 +1646,8 @@ try {
 	    for(Map.Entry<Tau, Integer> x : map.entrySet()) {
 	        Tau tau = x.getKey();
 	        int soLan = x.getValue();
-	        listdata.add(new XYChart.Data<>(tau.getTenTau(), soLan * 1.1));
+	        String s = thongkeDAO.getMaChuyenTauTheoMaTau(tau.getMaTau());
+	        listdata.add(new XYChart.Data<>(s, soLan * 1.1));
 	    }
 
 	    for(int i = 0; i < listdata.size() - 1; i++) {
@@ -1246,7 +1664,7 @@ try {
 	    na.setTickUnit(max / 5);
 	    na.setAutoRanging(false);
 	    na.setLowerBound(0);
-	    na.setUpperBound(max * 1.1);
+	    na.setUpperBound(max);
 
 	    XYChart.Series<String, Number> list = new XYChart.Series<String, Number>();
 
@@ -1259,7 +1677,7 @@ try {
 	        for (XYChart.Data<String, Number> data : list.getData()) {
 	            Node node = data.getNode();
 	            if (node != null) {
-	                double solan = data.getYValue().doubleValue() / 1.1;  
+	                double solan = data.getYValue().doubleValue();  
 	                DecimalFormat df = new DecimalFormat("#,###");
 	                String tf = df.format(solan);
 
@@ -1283,7 +1701,21 @@ try {
 	    ca.setLabel("Chuyến Tàu");
 	    NumberAxis na = new NumberAxis();
 	    na.setLabel("Số Chuyến Đi");
+	    if(map != null)
+	    {
+	    	map.clear();
+	    }
 	    map = thongkeDAO.getTauVaSoLanDiTheoThangNam(Integer.valueOf(date1.getValue()),Integer.valueOf(date.getValue()));
+	    for (Map.Entry<Tau, Integer> entry : map.entrySet()) {
+	        Tau tau = entry.getKey();
+	        int soLanDi = entry.getValue();
+
+	        System.out.println("Mã tàu: " + tau.getMaTau());
+	        System.out.println("Số lần đi: " + soLanDi);
+
+	       
+	    }
+	    
 	    BarChart<String, Number> barchart = new BarChart<String, Number>(ca, na);
 	    barchart.setTitle("Thống kê top 10 chuyến tàu chạy nhiều nhất tháng "+ date1.getValue()+" năm "+ date.getValue());
 	    barchart.setLegendVisible(false);
@@ -1303,7 +1735,8 @@ try {
 	    for(Map.Entry<Tau, Integer> x : map.entrySet()) {
 	        Tau tau = x.getKey();
 	        int soLan = x.getValue();
-	        listdata.add(new XYChart.Data<>(tau.getTenTau(), soLan * 1.1));
+	        String s = thongkeDAO.getMaChuyenTauTheoMaTau(tau.getMaTau());
+	        listdata.add(new XYChart.Data<>(s, soLan * 1.1));
 	    }
 
 	    for(int i = 0; i < listdata.size() - 1; i++) {
@@ -1408,7 +1841,7 @@ try {
 		
 		if(kieuthongke.equalsIgnoreCase("theo năm"))
 		{
-			map.clear();
+//			map.clear();
 			map = thongkeDAO.getTauVaSoLanDiTheoNam(Integer.valueOf(date.getValue()));
 			if(map == null || map.isEmpty()) {
 		        Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -1423,12 +1856,19 @@ try {
 			{
 				Tau tau = x.getKey();
 				int solan = x .getValue();
-				create_layout_dong(tau.getMaTau(), tau.getTenTau(), solan);
+				String loaiTau = "";
+	            if (tau.getLoaiTau() != null) {
+	                loaiTau = tau.getLoaiTau().getMaLoaiTau();
+	            }
+	            String s = thongkeDAO.getMaChuyenTauTheoMaTau(tau.getMaTau());
+	            Tau t = thongkeDAO.getTauTheoMa(tau.getMaTau()); 
+				 create_layout_dong(s,t.getLoaiTau().getTenLoaiTau(), solan);
+	            
 			}
 		}
 		else if(kieuthongke.equalsIgnoreCase("theo tháng"))
 		{
-			map.clear();
+//			map.clear();
 			map = thongkeDAO.getTauVaSoLanDiTheoThangNam(Integer.valueOf(date1.getValue()),Integer.valueOf(date.getValue()));
 			if(map == null || map.isEmpty()) {
 		        Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -1441,9 +1881,11 @@ try {
 		    }
 			for(Map.Entry<Tau, Integer> x : map.entrySet())
 			{
-				Tau tau = x.getKey();
-				int solan = x .getValue();
-				create_layout_dong(tau.getMaTau(), tau.getTenTau(), solan);
+				 Tau tau = x.getKey();
+				 int solan = x.getValue();
+				 String s = thongkeDAO.getMaChuyenTauTheoMaTau(tau.getMaTau());
+				 Tau t = thongkeDAO.getTauTheoMa(tau.getMaTau()); 
+				 create_layout_dong(s,t.getLoaiTau().getTenLoaiTau(), solan);
 			}
 		}
 		
