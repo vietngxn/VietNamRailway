@@ -966,6 +966,9 @@ public class ThemChuongTrinhKhuyenMai extends Application {
 				ma = "KM"+n;
 			}
 			
+			String regexten = "^[\\p{L}\\p{N} ]+$";
+			
+			
 			String tenCTKM = txtTenCT.getText();
 			LocalDate nbd = ngayBatDau.getValue();
 			LocalDate nkt = ngayKetThuc.getValue();
@@ -1022,14 +1025,14 @@ public class ThemChuongTrinhKhuyenMai extends Application {
 			
 			LocalDate hienTai = LocalDate.now();
 			String trangThai = "";			
-			if(hienTai.isAfter(nkt) && hienTai.isBefore(nbd))
-			{
-				trangThai = "Kích Hoạt";
-			}
-			else {
-				trangThai ="Kết Thúc";
-			}
-			
+
+			if (hienTai.isBefore(nbd)) {
+		        trangThai = "Chưa kích hoạt"; 
+		    } else if (!hienTai.isAfter(nkt)) {
+		        trangThai = "Kích hoạt";       
+		    } else {
+		        trangThai = "Kết thúc";       
+		    }
 			
 			
 			if(nbd.isBefore(hienTai)) {

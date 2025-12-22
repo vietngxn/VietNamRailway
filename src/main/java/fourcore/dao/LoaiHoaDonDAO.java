@@ -33,7 +33,7 @@ public class LoaiHoaDonDAO {
 		}
 
 		rs.close();
-		st.close();
+		
 		return list;
 	}
 
@@ -52,7 +52,7 @@ public class LoaiHoaDonDAO {
 		}
 
 		rs.close();
-		st.close();
+		
 		return loai;
 	}
 	

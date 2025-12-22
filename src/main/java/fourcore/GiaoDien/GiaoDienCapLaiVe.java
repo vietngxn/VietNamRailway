@@ -31,6 +31,7 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Node;
@@ -330,100 +331,95 @@ public class GiaoDienCapLaiVe extends Application {
         pnlThongTinChiTiet.setVisible(false);
 
         pnlReturn.setOnMouseClicked(event -> {
-        	
-        	if(trangThaiVe.equalsIgnoreCase("kết thúc"))
-        	{
-        		
-        		btnCapVe.setDisable(true);
-        	}
-        	else {
-        		btnCapVe.setDisable(false);
-        	}
-        	
-        	
-        	if (dangCapNhatTrangThai && selectedPanel != null && selectedPanel != pnlReturn) {
-    	        // Xóa toàn bộ children trừ GridPane data (index 0)
-    	        while (selectedPanel.getChildren().size() > 1) {
-    	            selectedPanel.getChildren().remove(1);
-    	        }
-    	        
-    	        layout_trangthai = null;
-    	        
-    	        // Reset trạng thái
-    	        dangCapNhatTrangThai = false;
-    	        
-    	        // Deselect dòng cũ
-    	        GridPane oldData = (GridPane) selectedPanel.getChildren().get(0);
-    	        oldData.setStyle(normalStyle);
-    	        ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), oldData);
-    	        scaleDown.setToX(1.0);
-    	        scaleDown.setToY(1.0);
-    	        scaleDown.play();
-    	        
-    	        selectedPanel = null;
-    	        vechon = null;
-    	        maveTauchon = null;
-    	   }
-        	
-        	
-        	
-            boolean check = pnlThongTinChiTiet.isVisible();
-            pnlThongTinChiTiet.setManaged(!check);
-            pnlThongTinChiTiet.setVisible(!check);
-            pnlReturn.getChildren().remove(layout_trangthai);
             
-            
-            // LƯU THÔNG TIN PANEL ĐÃ CHỌN
-            if (!check) {
-            	
-            	 data.setStyle(selectedStyle);
-                 ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), data);
-                 scaleUp.setToX(1.02);
-                 scaleUp.setToY(1.02);
-                 scaleUp.play();
-                 
-                 if (pnlReturn.getChildren().size() > 1) {
-                     while (pnlReturn.getChildren().size() > 1) {
-                         pnlReturn.getChildren().remove(1);
-                     }
-                 }
-                 pnlReturn.getChildren().add(pnlThongTinChiTiet);
-                 
-                 pnlThongTinChiTiet.setManaged(true);
-                 pnlThongTinChiTiet.setVisible(true);
-                 pnlReturn.getChildren().remove(layout_trangthai);
-                 
+            // ===== BƯỚC 1: Nếu đang mở 1 panel khác → đóng nó =====
+            if (selectedPanel != null && selectedPanel != pnlReturn) {
+                HBox oldDetail = (HBox) selectedPanel.getProperties().get("detail");
+                GridPane oldData = (GridPane) selectedPanel.getProperties().get("data");
+
+                if (oldDetail != null) {
+                    oldDetail.setVisible(false);
+                    oldDetail.setManaged(false);
+                }
+
+                if (oldData != null) {
+                    oldData.setStyle(normalStyle);
+                    ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), oldData);
+                    scaleDown.setToX(1.0);
+                    scaleDown.setToY(1.0);
+                    scaleDown.play();
+                }
+                
+                // Xóa layout_trangthai nếu có
+                if (layout_trangthai != null && selectedPanel.getChildren().contains(layout_trangthai)) {
+                    selectedPanel.getChildren().remove(layout_trangthai);
+                    layout_trangthai = null;
+                }
+                dangCapNhatTrangThai = false;
+            }
+
+            // ===== BƯỚC 2: Kiểm tra trạng thái vé =====
+            if(trangThaiVe.equalsIgnoreCase("kết thúc")) {
+                btnCapVe.setDisable(true);
+            } else {
+                btnCapVe.setDisable(false);
+            }
+
+            // ===== BƯỚC 3: Toggle chi tiết panel hiện tại =====
+            boolean isOpening = !pnlThongTinChiTiet.isVisible();
+
+            pnlThongTinChiTiet.setVisible(isOpening);
+            pnlThongTinChiTiet.setManaged(isOpening);
+
+            // ===== BƯỚC 4: Xử lý dữ liệu vé =====
+            if (isOpening) {
+                // Mở chi tiết
+                data.setStyle(selectedStyle);
+                ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), data);
+                scaleUp.setToX(1.02);
+                scaleUp.setToY(1.02);
+                scaleUp.play();
+                
+                // Thêm chi tiết vào panel nếu chưa có
+                if (!pnlReturn.getChildren().contains(pnlThongTinChiTiet)) {
+                    pnlReturn.getChildren().add(pnlThongTinChiTiet);
+                }
+                
+                // Lưu reference vào Properties
                 selectedPanel = pnlReturn;
-                vechon = new Ve(maVeTau, gaDigaDen, gaDigaDen, tenTau, ngayGioDi, ngayGioDen, soToa, soToa, soTang,
-                        soGhe, loaiVe, maGiayTo, giaVe, ghiChu, trangThaiDoiVe, trangThaiVe, new ChuyenTau(maChuyenTau),
-                        new KhachHang(maKhachHang), new KhuyenMai(maKhuyenMai), new DoiTuongGiamGia(maDoiTuongGiamGia));
+                pnlReturn.getProperties().put("detail", pnlThongTinChiTiet);
+                pnlReturn.getProperties().put("data", data);
+                
+                // Tạo object vé
+                String[] parts = gaDigaDen.split("\\s*-\\s*");
+                String gaDi = parts[0];
+                String gaDen = parts[1];
+                
+                vechon = new Ve(maVeTau,gaDi,gaDen,tenTau,ngayGioDi,ngayGioDen,soToa,soToa,soTang,soGhe,loaiVe,maGiayTo,giaVe,ghiChu,trangThaiDoiVe,trangThaiVe,new ChuyenTau(maChuyenTau),new KhachHang(maKhachHang),new KhuyenMai(maKhuyenMai),new DoiTuongGiamGia(maDoiTuongGiamGia));
+
                 maveTauchon = maVeTau;
+                System.out.println("Đang chọn vé: " + vechon.getMaVeTau());
+
+                // ===== BƯỚC 5: Button cập nhật trạng thái =====
                 btnCapNhatTrangThaiVe.setOnAction(e -> {
-
                     pnlThongTinChiTiet.setVisible(false);
-                    Label lbl_trangthai2 = getTrangThaiLabel(selectedPanel);
-                    if (lbl_trangthai2 != null) {
-                        lbl_trangthai2.setAlignment(Pos.CENTER);
-                    }
                     
-
                     dangCapNhatTrangThai = true;
                     selectedPanel = pnlReturn;
 
-                    // lbl_trangthai2.setStyle(baseStyle + "-fx-font-size: 18px; -fx-text-fill:
-                    // #009D75;");
                     pnlReturn.getChildren().remove(layout_trangthai);
                     layout_trangthai = taolayout_trangthai();
                     layout_trangthai.setTranslateY(-100);
                     layout_trangthai.setTranslateX(1113);
 
-                    lbl_trangthai2.setPrefSize(170, 40);
-
                     btn_trangthai2.setOnAction(e1 -> {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Cảnh báo");
+                    	Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Thông báo");
                         alert.setHeaderText(null);
-                        alert.setContentText("Xác Nhận đổi trạng thái cho vé?");
+                        alert.setContentText("Xác nhận đổi trạng thái cho vé!");
+                        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                        alert.initOwner(stage);
+                        alert.initModality(Modality.WINDOW_MODAL);
                         alert.showAndWait();
 
                         try {
@@ -434,13 +430,12 @@ public class GiaoDienCapLaiVe extends Application {
                             if (vedao.ThayDoiTrangThaiVe(vechon.getMaVeTau(), s)) {
                                 System.out.println("Cập nhật thành công");
 
-                                // Refresh danh sách
+
                                 pnlDataDoiVe.getChildren().clear();
                                 hienThi();
 
-                                // Đóng layout_trangthai sau khi cập nhật
-                                if (layout_trangthai != null && layout_trangthai.getParent() != null) {
-                                    selectedPanel.getChildren().remove(layout_trangthai);
+                                if (layout_trangthai != null && pnlReturn.getChildren().contains(layout_trangthai)) {
+                                    pnlReturn.getChildren().remove(layout_trangthai);
                                     layout_trangthai = null;
                                 }
                             } else {
@@ -453,8 +448,10 @@ public class GiaoDienCapLaiVe extends Application {
 
                     pnlReturn.getChildren().add(layout_trangthai);
                 });
-            } else { // Nếu đang đóng chi tiết
-            	data.setStyle(normalStyle);
+            } 
+            else {
+                
+                data.setStyle(normalStyle);
                 ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), data);
                 scaleDown.setToX(1.0);
                 scaleDown.setToY(1.0);
@@ -462,22 +459,16 @@ public class GiaoDienCapLaiVe extends Application {
 
                 pnlThongTinChiTiet.setManaged(false);
                 pnlThongTinChiTiet.setVisible(false);
-                pnlReturn.getChildren().remove(layout_trangthai);
-                if (dangCapNhatTrangThai && selectedPanel != pnlReturn) {
-                    if (layout_trangthai != null && layout_trangthai.getParent() != null) {
-                        selectedPanel.getChildren().remove(layout_trangthai);
-                    }
-                    dangCapNhatTrangThai = false;
+                
+                // Xóa layout_trangthai nếu có
+                if (layout_trangthai != null && pnlReturn.getChildren().contains(layout_trangthai)) {
+                    pnlReturn.getChildren().remove(layout_trangthai);
+                    layout_trangthai = null;
                 }
-
-                Label lbl_trangthai2 = getTrangThaiLabel(selectedPanel);
-                if (lbl_trangthai2 != null) {
-                    lbl_trangthai2.setAlignment(Pos.CENTER);
-                }
-                pnlReturn.getChildren().remove(layout_trangthai);
-
-                vechon = null;
+                
+                dangCapNhatTrangThai = false;
                 selectedPanel = null;
+                vechon = null;
                 maveTauchon = null;
             }
         });
@@ -1174,13 +1165,16 @@ public class GiaoDienCapLaiVe extends Application {
             btnCapVe.setOnAction(e -> {
                 if (selectedPanel == null) {
                     // Chưa chọn panel nào
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Cảnh báo");
+                	Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Thông báo");
                     alert.setHeaderText(null);
-                    alert.setContentText("Vui lòng chọn một vé trước!");
+                    alert.setContentText("Vui lòng chọn 1 vé trước!");
+                    Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+                    alert.initOwner(stage);
+                    alert.initModality(Modality.WINDOW_MODAL);
                     alert.showAndWait();
                 } else {
-                    // Đã chọn panel - lấy thông tin từ labels
+
                     String mave = vechon.getMaVeTau();
                     
                     
@@ -1201,9 +1195,12 @@ public class GiaoDienCapLaiVe extends Application {
                     		
                     	
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        
+                        alert.setTitle("Thông báo");
                         alert.setHeaderText(null);
-                        alert.setContentText("Cấp Vé Thành Công!");
+                        alert.setContentText("Cấp vé thành công!");
+                        Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+                        alert.initOwner(stage);
+                        alert.initModality(Modality.WINDOW_MODAL);
                         alert.showAndWait();
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
@@ -1221,7 +1218,7 @@ public class GiaoDienCapLaiVe extends Application {
             btnTimKiem.setOnMouseClicked(event -> {
             	String regex = "\\d{12}";
                 String input = txt_timkiem.getText().trim();
-                String cccd = txt_timkiem.getText().trim(); // FIX: thêm trim()
+                String cccd = txt_timkiem.getText().trim();
 
                 if (input.isEmpty()) {
                     btnCapVe.setDisable(true);
@@ -1252,22 +1249,21 @@ public class GiaoDienCapLaiVe extends Application {
                     btnCapNhatTrangThaiVe.setDisable(false);
                     
                     try {
-                        System.out.println("🔍 Tìm kiếm CCCD: " + cccd);
+                       
                         
                         ArrayList<Ve> listVe = vedao.getVeTheoCCCD(cccd);
                         
                         // FIX: Kiểm tra null
                         if (listVe == null) {
-                            System.out.println("❌ listVe là NULL - khởi tạo ArrayList mới");
                             listVe = new ArrayList<>();
                         }
                         
-                        System.out.println("📊 Số vé tìm được: " + listVe.size());
+                        
                         
                         pnlDataDoiVe.getChildren().clear();
 
                         if (listVe.isEmpty()) {
-                            System.out.println("⚠️ Không tìm thấy vé nào");
+                            
                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                             alert.setTitle("Thông báo");
                             alert.setHeaderText(null);
@@ -1276,7 +1272,7 @@ public class GiaoDienCapLaiVe extends Application {
                             btnCapVe.setDisable(true);
                             btnCapNhatTrangThaiVe.setDisable(true);
                         } else {
-                            // FIX: Thêm try-catch trong vòng for để bắt exception
+
                             for (Ve x : listVe) {
                                 try {
                                     System.out.println("✅ Thêm vé: " + x.getMaVeTau());
@@ -1314,14 +1310,10 @@ public class GiaoDienCapLaiVe extends Application {
                         }
                         
                     } catch (SQLException e1) {
-                        System.out.println("❌ SQL Error: " + e1.getMessage());
+                        
                         e1.printStackTrace();
                         
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Lỗi cơ sở dữ liệu");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Lỗi: " + e1.getMessage());
-                        alert.showAndWait();
+
                         
                         btnCapVe.setDisable(true);
                         btnCapNhatTrangThaiVe.setDisable(true);

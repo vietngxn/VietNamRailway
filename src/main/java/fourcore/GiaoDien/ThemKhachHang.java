@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.EventObject;
 
 import fourcore.Entity.KhachHang;
 import fourcore.animation.Animation;
@@ -35,6 +36,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -108,6 +110,7 @@ public class ThemKhachHang extends Application {
 	private KhachHangDAO khdao;
 	private TextField txtCCCD;
 	private TextField txtPassport;
+	private EventObject event;
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
@@ -737,15 +740,20 @@ public class ThemKhachHang extends Application {
 		    
 		    
 		    try {
-		        // Lấy số lượng khách hàng hiện tại từ database
-		    	
 		        String makh = khdao.getMaKH();
-
-		        KhachHang kh = new KhachHang(makh, ten, sdt, email, cccd, passport, doiTuong);
+		        int soluong = Integer.valueOf(makh);
+		        if(soluong <= 9 )
+		        {
+		        	makh = "KH0"+soluong;
+		        }
+		        else
+		        	makh = "KH"+soluong;
 		        
+		        KhachHang kh = new KhachHang(makh, ten, sdt, email, cccd, passport, doiTuong);
+		        String regexten = "^[\\p{L} ]+$";
 		        String regexsdt = "^0\\d{9}";
 		        String regexcccd = "^0\\d{11}";
-		        String regexemail = "^[a-zA-Z0-9]+@(.+)$";
+		        String regexemail = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
 //		        String regexpp = "PP\\d{6}";
 		        
 		        if(ten.isEmpty())
@@ -792,39 +800,57 @@ public class ThemKhachHang extends Application {
 		        
 		        
 		        
-		        if(khdao.checkCCCD(cccd) && cccd.matches(regexcccd))
-			    {
-			    		Alert alert = new Alert(Alert.AlertType.ERROR);
-			        	alert.setHeaderText(null);
-			        	alert.setContentText("Số CCCD đã tồn tại");
-			        	txtCCCD.setText("");
-			        	alert.showAndWait();
-			        	return;
-			    }
+		        
 
 		        
-		        if(!sdt.matches(regexsdt)) {
+		        
+		        
+		        if(!ten.matches(regexten))
+		        {
 		        	Alert alert = new Alert(Alert.AlertType.ERROR);
-		        	alert.setHeaderText(null);
-		        	alert.setContentText("Số điện thoại không đúng định dạng.SDT phải bao gồm 10 chữ số, bắt đầu bằng số 0 ");
-		        	alert.showAndWait();
-		        	return;
+                    alert.setTitle("Thông báo");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Tên sai định dạng!VD:ABC");
+                    Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+                    alert.initOwner(stage);
+                    alert.initModality(Modality.WINDOW_MODAL);
+                    alert.showAndWait();
+                    return;
+		        }
+		        else if(!sdt.matches(regexsdt)) {
+		        	Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Thông báo");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Số điện thoại không đúng định dạng.SDT phải bao gồm 10 chữ số, bắt đầu bằng số 0 ");
+                    Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+                    alert.initOwner(stage);
+                    alert.initModality(Modality.WINDOW_MODAL);
+                    alert.showAndWait();
+                    return;
 		        }
 		        else if(!email.matches(regexemail))
 		        {
 		        	Alert alert = new Alert(Alert.AlertType.ERROR);
-		        	alert.setHeaderText(null);
-		        	alert.setContentText("Email phải đúng định dạng : abc@gmail.com");
-		        	alert.showAndWait();
-		        	return;
+                    alert.setTitle("Thông báo");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Email phải đúng định dạng : abc@gmail.com");
+                    Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+                    alert.initOwner(stage);
+                    alert.initModality(Modality.WINDOW_MODAL);
+                    alert.showAndWait();
+                    return;
 		        }
 		        else if(!cccd.matches(regexcccd))
 		        {
 		        	Alert alert = new Alert(Alert.AlertType.ERROR);
-		        	alert.setHeaderText(null);
-		        	alert.setContentText("CCCD phải đúng định dạng : 0XXXXXXXXXXX");
-		        	alert.showAndWait();
-		        	return;
+                    alert.setTitle("Thông báo");
+                    alert.setHeaderText(null);
+                    alert.setContentText("CCCD phải đúng định dạng : 0XXXXXXXXXXX");
+                    Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+                    alert.initOwner(stage);
+                    alert.initModality(Modality.WINDOW_MODAL);
+                    alert.showAndWait();
+                    return;
 		        }
 //		        else if(!passport.matches(regexpp) && cccd.isEmpty())
 //		        {
@@ -836,9 +862,36 @@ public class ThemKhachHang extends Application {
 //		        }
 //		        
 		        
+		        if(khdao.checksdt(sdt))
+		        {
+		        	Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Thông báo");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Số Điện thoại đã tồn tại!");
+                    Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+                    alert.initOwner(stage);
+                    alert.initModality(Modality.WINDOW_MODAL);
+                    alert.showAndWait();
+                    return;
+		        }
+		        else if(khdao.checkCCCD(cccd) && cccd.matches(regexcccd))
+			    {
+		        	Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Thông báo");
+                    alert.setHeaderText(null);
+                    alert.setContentText("CCCD đã tồn tại!");
+                    Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+                    alert.initOwner(stage);
+                    alert.initModality(Modality.WINDOW_MODAL);
+                    alert.showAndWait();
+                    return;
+			    }
+		        
+		        
+		        
 		        
 		        if(khdao.themKhachHang(kh)) {
-			            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		        	Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			            alert.setContentText("Thêm Khách Hàng Thành Công");
 			            alert.setHeaderText(null);
 			            alert.showAndWait();

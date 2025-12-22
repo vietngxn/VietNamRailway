@@ -210,6 +210,15 @@ public class NhanVienDAO {
 		ResultSet rs = st.executeQuery(q);
 		return rs.next();
 	}
+	
+	public boolean checksdt(String sdt) throws SQLException {
+		String q = "select * \r\n"
+				+ "from NhanVien nv\r\n"
+				+ "where nv.sdt = '" + sdt + "'";
+		ResultSet rs = st.executeQuery(q);
+		return rs.next();
+	}
+
 
 	public String getMaNhanVienBangMaVeVaLoaiTuongTac(String maVe, String loai) throws SQLException {
 		String sql = "SELECT distinct hd.maNhanVien " + "FROM HoaDon hd "
@@ -223,6 +232,57 @@ public class NhanVienDAO {
 		}
 		rs.close();
 		return maNV;
+	}
+	
+	public boolean capnhatIsremove(String maNhanVien,boolean isremove) throws SQLException {
+		int value = isremove ? 1 : 0;
+		String sql = "UPDATE NhanVien SET isremove = " + value + " WHERE maNhanVien = '" + maNhanVien + "'";
+
+		int rows = st.executeUpdate(sql);
+		return rows > 0;
+	}
+	
+	
+	public ArrayList<NhanVien> getListNhanVientheoisremove(boolean isRemove) throws SQLException {
+	    ArrayList<NhanVien> list = new ArrayList<>();
+
+	    int removeValue = isRemove ? 1 : 0;
+
+	    String q =
+	        "SELECT nv.*, cv.tenChucVu " +
+	        "FROM NhanVien nv " +
+	        "JOIN ChucVu cv ON nv.maChucVu = cv.maChucVu " +
+	        "WHERE nv.isRemove = " + removeValue;
+
+	    ResultSet rs = st.executeQuery(q);
+
+	    while (rs.next()) {
+	        String maNhanVien = rs.getString("maNhanVien");
+	        String hoTen = rs.getString("hoTen");
+
+	        String maChucVu = rs.getString("maChucVu");
+	        String tenChucVu = rs.getString("tenChucVu");
+	        ChucVu chucVu = new ChucVu(maChucVu, tenChucVu);
+
+	        LocalDate ngaySinh = rs.getDate("ngaySinh").toLocalDate();
+	        String diaChi = rs.getString("diaChi");
+	        String email = rs.getString("email");
+	        String sdt = rs.getString("sdt");
+	        LocalDate ngayVaoLam = rs.getDate("ngayVaoLam").toLocalDate();
+	        String tinhTrangLamViec = rs.getString("tinhTrangLamViec");
+	        String gioiTinh = rs.getString("gioiTinh");
+	        String cccd = rs.getString("cccd");
+	        boolean isRemoveValue = rs.getBoolean("isRemove");
+
+	        NhanVien nv = new NhanVien(
+	            maNhanVien, hoTen, chucVu, ngaySinh, diaChi, email,
+	            sdt, ngayVaoLam, tinhTrangLamViec, gioiTinh, cccd, isRemoveValue
+	        );
+
+	        list.add(nv);
+	    }
+
+	    return list;
 	}
 
 }
