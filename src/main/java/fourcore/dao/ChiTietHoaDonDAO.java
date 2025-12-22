@@ -70,6 +70,16 @@ public class ChiTietHoaDonDAO {
 		return cthd1;
 	}
 
+	public ChiTietHoaDon getCthdByMaVe(String maVe) throws SQLException {
+		ArrayList<ChiTietHoaDon> listCTHoaDon = getListChiTietHoaDon();
+		for (ChiTietHoaDon cthd : listCTHoaDon) {
+			if (cthd.getVeTau().getMaVeTau().equalsIgnoreCase(maVe)) {
+				return cthd;
+			}
+		}
+		return null;
+	}
+
 	public void themChiTietHoaDon(ChiTietHoaDon cthd) throws SQLException {
 
 		String countQuery = "SELECT COUNT(*) AS soLuong FROM ChiTietHoaDon";

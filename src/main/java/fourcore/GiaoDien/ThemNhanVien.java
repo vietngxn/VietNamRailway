@@ -93,8 +93,8 @@ public class ThemNhanVien extends Application {
 	private ImageView showMenuPhuIconView;
 	private HBox doiVeBox;
 	private HBox banVeBox;
-	private HBox hoanVeBox;
-	private HBox capVeBox;
+		private HBox hoanVeBox;
+		private HBox capVeBox;
 	private HBox xemLichSuVeBox;
 	private HBox quanLiKhachHangMenu;
 	private ImageView quanLiKhachHangIconView;
@@ -795,10 +795,10 @@ public class ThemNhanVien extends Application {
 //		    String doiTuong = txtcomboDoiTuong.getText();
 		    String gioiTinh = txtGioiTinh.getText();
 		    
-		    
+		    String regexten = "[A-Za-z]+";
 		    String regexsdt = "^0\\d{9}";
 	        String regexcccd = "^0\\d{11}";
-	        String regexemail = "^[a-zA-Z0-9]+@(.+)$";
+	        String regexemail = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
 	        
 		    
 		    if(ten.isEmpty())
@@ -894,7 +894,15 @@ public class ThemNhanVien extends Application {
 		    	return;
 		    }
 		    
-		    if(!sdt.matches(regexsdt)) {
+		    if(!ten.matches(regexten))
+		    {
+		    	Alert alert = new Alert(Alert.AlertType.ERROR);
+	        	alert.setHeaderText(null);
+	        	alert.setContentText("Tên sai định dạng!");
+	        	alert.showAndWait();
+	        	return;
+		    }
+		    else if(!sdt.matches(regexsdt)) {
 	        	Alert alert = new Alert(Alert.AlertType.ERROR);
 	        	alert.setHeaderText(null);
 	        	alert.setContentText("Số điện thoại không đúng định dạng.SDT phải bao gồm 10 chữ số, bắt đầu bằng số 0 ");
@@ -943,7 +951,16 @@ public class ThemNhanVien extends Application {
 		        }
 		        
 		        
-		        if(nvdao.checkCCCD(cccd))
+		        
+		        if(nvdao.checksdt(sdt))
+		        {
+		        	Alert alert = new Alert(Alert.AlertType.ERROR);
+		        	alert.setContentText("SDT đã tồn tại");
+		        	alert.setHeaderText(null);
+		        	alert.showAndWait();
+		        	return;
+		        }
+		        else if(nvdao.checkCCCD(cccd))
 		        {
 		        	Alert alert = new Alert(Alert.AlertType.ERROR);
 		        	alert.setContentText("CCCD đã tồn tại");

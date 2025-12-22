@@ -126,6 +126,7 @@ public class QuanLyCTKM extends Application {
 	private Button btn_khoiPhuc1;
 	private Stage window;
 	private Button btn_timkiem;
+	private Button btn_reload;
 
 
     public Button getBtn_themCTKM(){
@@ -919,6 +920,8 @@ public class QuanLyCTKM extends Application {
 			create_table_layout();
 			
 			create_layout_button();
+			
+			
 			primaryStage.setFullScreen(true);
 //			primaryStage.show();
 
@@ -993,7 +996,20 @@ public class QuanLyCTKM extends Application {
 		    "-fx-border-radius: 30px;" +
 		    "-fx-background-radius: 30px;");
 		
-		layout_button_timkiem.getChildren().add(btn_timkiem);
+		
+		btn_reload = new Button("Làm mới");
+		btn_reload.setPrefSize(150, 50);
+		btn_reload.setMaxSize(150, 50);
+		btn_reload.setStyle("-fx-background-color: #00BACB;" +
+		    "-fx-text-fill: white;" +
+		    "-fx-font-family: 'Inter';" +
+		    "-fx-font-weight: bold;" +
+		    "-fx-font-size: 14px;" +
+		    "-fx-cursor: hand;" +
+		    "-fx-border-radius: 30px;" +
+		    "-fx-background-radius: 30px;");
+		
+		layout_button_timkiem.getChildren().addAll(btn_timkiem,btn_reload);
 		
 		btn_timkiem.setOnMouseClicked(e-> {
 			String ma = txt_timkiem.getText();
@@ -1028,7 +1044,7 @@ public class QuanLyCTKM extends Application {
 				else if(km != null && km.getRs() == 0)
 				{
 					table_desc.getChildren().clear();
-					loadCTKMData(km.getMaKhuyenMai(),km.getTenChuongTrinh(), km.getNgayBatDau().toLocalDate(), km.getNgayKetThuc().toLocalDate(), km.getDieuKienApDung(), km.getTrangThaiKhuyenMai());
+					loadCTKMData(km.getMaKhuyenMai(),km.getTenChuongTrinh(), km.getNgayBatDau().toLocalDate(), km.getNgayKetThuc().toLocalDate(), km.getGiaTriPhanTramKhuyenMai(), km.getTrangThaiKhuyenMai());
 					hangchon = null;
 				}
 			} catch (SQLException e1) {
@@ -1037,6 +1053,17 @@ public class QuanLyCTKM extends Application {
 			}	
 			
 		});
+		
+		btn_reload.setOnMouseClicked(e-> {
+			try {
+				ctkmDAO.capNhatTrangThaiTatCa();
+				hienThi();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+		
 		
 		layout_timkiem.getChildren().add(layout_button_timkiem);
 
@@ -1065,7 +1092,7 @@ public class QuanLyCTKM extends Application {
 		noiDungChinh.getChildren().add(title_layout);
 	}
 	
-	public void create_table_layout() {
+	public void create_table_layout() throws SQLException {
 	    table_layout = new VBox();
 	    table_layout.setPadding(new Insets(10));
 	    
@@ -1093,7 +1120,7 @@ public class QuanLyCTKM extends Application {
 	    lbl_title_ngayketthuc = new Label("Ngày Kết Thúc");
 	    lbl_title_ngayketthuc.setStyle(styleHeader);
 	    
-	    lbl_title_dieuKienApDung = new Label("Điều Kiện Áp Dụng");
+	    lbl_title_dieuKienApDung = new Label("Giá Trị KM");
 	    
 	    lbl_title_dieuKienApDung.setStyle(styleHeader);
 	    
@@ -1149,7 +1176,7 @@ public class QuanLyCTKM extends Application {
 //  DATA INPUT PATTERN:      maCT,tenCT,ngaybatdau,ngayketthuc,trangthai
         for (KhuyenMai khuyenMai : listKhuyenMai) {
             if (khuyenMai.getRs() == 0){
-            	loadCTKMData(khuyenMai.getMaKhuyenMai(), khuyenMai.getTenChuongTrinh(), khuyenMai.getNgayBatDau().toLocalDate(), khuyenMai.getNgayKetThuc().toLocalDate(), khuyenMai.getDieuKienApDung(), khuyenMai.getTrangThaiKhuyenMai());                
+            	loadCTKMData(khuyenMai.getMaKhuyenMai(), khuyenMai.getTenChuongTrinh(), khuyenMai.getNgayBatDau().toLocalDate(), khuyenMai.getNgayKetThuc().toLocalDate(), khuyenMai.getGiaTriPhanTramKhuyenMai(), khuyenMai.getTrangThaiKhuyenMai());                
             }
         }
 
@@ -1397,9 +1424,7 @@ public class QuanLyCTKM extends Application {
 	                for (KhuyenMai khuyenMai : listKhuyenMai1) {
 	                    if (khuyenMai.getRs() == 0) {
 	                        
-	                        loadCTKMData(khuyenMai.getMaKhuyenMai(), khuyenMai.getTenChuongTrinh(), 
-	                            khuyenMai.getNgayBatDau().toLocalDate(), khuyenMai.getNgayKetThuc().toLocalDate(), 
-	                            khuyenMai.getDieuKienApDung(), khuyenMai.getTrangThaiKhuyenMai());
+	                    	loadCTKMData(khuyenMai.getMaKhuyenMai(), khuyenMai.getTenChuongTrinh(), khuyenMai.getNgayBatDau().toLocalDate(), khuyenMai.getNgayKetThuc().toLocalDate(), khuyenMai.getGiaTriPhanTramKhuyenMai(), khuyenMai.getTrangThaiKhuyenMai());
 	                    }
 	                }
 	            } catch (SQLException e1) {
@@ -1504,25 +1529,12 @@ public class QuanLyCTKM extends Application {
 				 GridPane selectedRow = hangchon;
 				 
 				 String maKM = ((Label)((StackPane)selectedRow.getChildren().get(0)).getChildren().get(0)).getText();
-			     String tenKM = ((Label)((StackPane)selectedRow.getChildren().get(1)).getChildren().get(0)).getText();
-			     String ngayBatDau = ((Label)((StackPane)selectedRow.getChildren().get(2)).getChildren().get(0)).getText();
-			     String ngayKetThuc = ((Label)((StackPane)selectedRow.getChildren().get(3)).getChildren().get(0)).getText();
-			     String dieuKienApDung = ((Label)((StackPane)selectedRow.getChildren().get(4)).getChildren().get(0)).getText();
-			     String trangThai = ((Label)((StackPane)selectedRow.getChildren().get(5)).getChildren().get(0)).getText();
-			     System.out.println(ngayBatDau);
-			     
-			     System.out.println(ngayKetThuc);
-			     
-			     LocalDate nbd = LocalDate.parse(ngayBatDau);
-			     LocalDate nkt = LocalDate.parse(ngayKetThuc);
-			     
-			     LocalDateTime nbd1 = nbd.atStartOfDay();
-			     LocalDateTime nkt1 = nkt.atStartOfDay();
-			     
-			     
+			    
+
 			     try {
-					double phantram = ctkmDAO.getPhanTramKhuyenMai(maKM);
-					KhuyenMai KM = new KhuyenMai(maKM, tenKM, trangThai, dieuKienApDung, phantram, nbd1, nkt1);
+					
+			    	 KhuyenMai km = ctkmDAO.getKhuyenMaiBangMa(maKM);
+			    	 
 				     
 				     File file = new File("KhuyenMai.dat");
 				        if (file.exists()) {
@@ -1530,10 +1542,10 @@ public class QuanLyCTKM extends Application {
 				        }
 				     try {
 						ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("KhuyenMai.dat"));
-						oos.writeObject(KM);
+						oos.writeObject(km);
 						oos.flush();
 						oos.close();
-						System.out.println("Ghi Thành Công");
+						
 						
 					} catch (FileNotFoundException e1) {
 						// TODO Auto-generated catch block
@@ -1585,6 +1597,7 @@ public class QuanLyCTKM extends Application {
 	    }
 	    else 
 	    	colorStyle = "-fx-text-fill: red;";
+	    
 	    lblMaCTKM.setStyle(baseStyle);
 	    lblTenCTKM.setStyle(baseStyle);
 	    lblNgayBatDau.setStyle(baseStyle);
@@ -1678,7 +1691,7 @@ public class QuanLyCTKM extends Application {
 	    targetPanel.getChildren().add(data);
 	}
 	
-	public void loadCTKMData(String maCT, String tenCT, LocalDate ngaybatdau, LocalDate ngayketthuc, String doituong, String trangthai) {
+	public void loadCTKMData(String maCT, String tenCT, LocalDate ngaybatdau, LocalDate ngayketthuc, double giatri, String trangthai) throws SQLException {
 	    GridPane data = new GridPane();
 	    
 	    data.setHgap(10);
@@ -1689,14 +1702,13 @@ public class QuanLyCTKM extends Application {
 	    data.setPadding(new Insets(0, 0, 0, 10));
 	    
 	    
-	    String trangthai1 = "";
 	    LocalDate hientai = LocalDate.now();
-	    if(!hientai.isBefore(ngaybatdau) && !hientai.isAfter(ngayketthuc))
-	    {
-	    	trangthai1 = "Kích Hoạt";
-	    }
-	    else
-	    	trangthai1 = "Kết Thúc";
+	    LocalDateTime now = LocalDateTime.now();
+	    
+	   
+
+	   
+	    
 	    
 	    
 	    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -1709,11 +1721,11 @@ public class QuanLyCTKM extends Application {
 	    Label lblTenCT = new Label(tenCT);
 	    Label lblNgayBD = new Label(ngaybd);
 	    Label lblNgayKT = new Label(ngaykt);
-	    Label lbldieuKienApDung = new Label(doituong);
+	    Label lblgiaTri = new Label(""+giatri);
 	    
-	    Label lblTrangThai = new Label(trangthai1);
+	    Label lblTrangThai = new Label(trangthai);
 	    String colorStyle = "";
-	    if(trangthai1.equalsIgnoreCase("kích hoạt"))
+	    if(trangthai.equalsIgnoreCase("kích hoạt"))
 	    {	    	
 	     colorStyle = "-fx-text-fill: green;";
 	    }
@@ -1724,7 +1736,7 @@ public class QuanLyCTKM extends Application {
 	    lblTenCT.setStyle(baseStyle);
 	    lblNgayBD.setStyle(baseStyle);
 	    lblNgayKT.setStyle(baseStyle);
-	    lbldieuKienApDung.setStyle(baseStyle);
+	    lblgiaTri.setStyle(baseStyle);
 	    lblTrangThai.setStyle(baseStyle + colorStyle);
 	   
 	    lblMaCT.setTranslateX(-140);
@@ -1732,17 +1744,17 @@ public class QuanLyCTKM extends Application {
 	    lblNgayBD.setTranslateX(-40);
 	    lblNgayKT.setTranslateX(-40);
 	    lblTrangThai.setTranslateX(60);
-	    lbldieuKienApDung.setTranslateX(5);
+	    lblgiaTri.setTranslateX(5);
 	    lblTenCT.setWrapText(true);
 	    
 	    StackPane paneData1 = new StackPane(lblMaCT);
 	    StackPane paneData2 = new StackPane(lblTenCT);
 	    StackPane paneData3 = new StackPane(lblNgayBD);
 	    StackPane paneData4 = new StackPane(lblNgayKT);
-	    StackPane paneData5 = new StackPane(lbldieuKienApDung);
+	    StackPane paneData5 = new StackPane(lblgiaTri);
 	    StackPane paneData6 = new StackPane(lblTrangThai);
 	    
-	    lbldieuKienApDung.setWrapText(true);
+	    lblgiaTri.setWrapText(true);
 	    
 	    paneData1.setPrefWidth(150);
 	    paneData2.setPrefWidth(180);
@@ -1799,16 +1811,13 @@ public class QuanLyCTKM extends Application {
 	    
 	    dongHienTai.setOnMouseClicked(e -> {
 	        if (hangchon == dongHienTai) {
-	            // Bỏ chọn nếu click lại hàng đang chọn
 	            hangchon = null;
 	            dongHienTai.setStyle(normalStyle);
 	        } else {
-	            // Bỏ chọn hàng cũ
 	            if (hangchon != null) {
 	                hangchon.setStyle(normalStyle);
 	            }
 	            
-	            // Chọn hàng mới
 	            hangchon = dongHienTai;
 	            dongHienTai.setStyle(selectedStyle);
 	        }
@@ -1822,6 +1831,17 @@ public class QuanLyCTKM extends Application {
 	            
 	            try {
 	                KhuyenMai km = ctkmDAO.getKhuyenMaiBangMa(maCTKM);
+	                
+	                LocalDate  hienTai = LocalDate.now();
+	                String trangthai2 = null;
+	                if (hientai.isBefore(ngaybatdau)) {
+	                    trangthai2 = "Chưa kích hoạt";  
+	                } else if (!hientai.isAfter(ngayketthuc)) {
+	                    trangthai2 = "Kích hoạt";       
+	                } else {
+	                    trangthai2 = "Kết thúc";        
+	                }
+	                km.setTrangThaiKhuyenMai(trangthai2);
 	                
 	                File file = new File("KhuyenMai.dat");
 	                if(file.exists()) {
@@ -1874,33 +1894,28 @@ public class QuanLyCTKM extends Application {
 	        table_desc.getChildren().clear();
 	    }
 	    hangchon = null;
-	    btn_xoaCTKM.setDisable(true);
-	    btn_capnhat.setDisable(true);
+	    if (btn_xoaCTKM != null) btn_xoaCTKM.setDisable(true);
+	    if (btn_capnhat != null) btn_capnhat.setDisable(true);
+	    
 	    
 	    try {
 	        listKhuyenMai = ctkmDAO.getListKhuyenMai();
 	        
-	        // ✅ Load dữ liệu vào table
+
 	        for (KhuyenMai khuyenMai : listKhuyenMai) {
 	            if (khuyenMai.getRs() == 0) {
-	                loadCTKMData(
-	                    khuyenMai.getMaKhuyenMai(),
-	                    khuyenMai.getTenChuongTrinh(),
-	                    khuyenMai.getNgayBatDau().toLocalDate(),
-	                    khuyenMai.getNgayKetThuc().toLocalDate(),
-	                    khuyenMai.getDieuKienApDung(),
-	                    khuyenMai.getTrangThaiKhuyenMai()
-	                );
+	            	loadCTKMData(khuyenMai.getMaKhuyenMai(), khuyenMai.getTenChuongTrinh(), khuyenMai.getNgayBatDau().toLocalDate(), khuyenMai.getNgayKetThuc().toLocalDate(), khuyenMai.getGiaTriPhanTramKhuyenMai(), khuyenMai.getTrangThaiKhuyenMai());
 	            }
 	        }
 	        
-	        System.out.println("✓ Refresh table thành công!");
 	        
 	    } catch (SQLException e) {
-	        System.err.println("❌ Lỗi khi refresh table: " + e.getMessage());
+	        System.err.println("Lỗi khi refresh table: " + e.getMessage());
 	        e.printStackTrace();
 	    }
 	}
+	
+	
 	
 	public static void main(String[] args) {
 		launch(args);

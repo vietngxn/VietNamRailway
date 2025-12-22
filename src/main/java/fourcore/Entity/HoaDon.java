@@ -157,10 +157,10 @@ public class HoaDon {
 	// ===== toString() =====
 	@Override
 	public String toString() {
-		return "HoaDon{" + "maHoaDon='" + maHoaDon + '\'' + ", maNhanVien='" + maNhanVien + '\''
-				+ ", tenKhachHangThanhToan='" + tenKhachHangThanhToan + '\'' + ", emailKhachHangThanhToan='"
-				+ emailKhachHangThanhToan + '\'' + ", cccdKhachHangThanhToan='" + cccdKhachHangThanhToan + '\''
-				+ ", sdtKhachHangThanhToan='" + sdtKhachHangThanhToan + '\'' + ", ngayThanhToan=" + ngayThanhToan
-				+ ", tongTien=" + tongTien + '}';
+		return "HoaDon [maHoaDon=" + maHoaDon + ", maLoaiHoaDon=" + maLoaiHoaDon + ", maNhanVien=" + maNhanVien
+				+ ", tenKhachHangThanhToan=" + tenKhachHangThanhToan + ", emailKhachHangThanhToan="
+				+ emailKhachHangThanhToan + ", cccdKhachHangThanhToan=" + cccdKhachHangThanhToan
+				+ ", sdtKhachHangThanhToan=" + sdtKhachHangThanhToan + ", diaChiKhachHangThanhToan="
+				+ diaChiKhachHangThanhToan + ", ngayThanhToan=" + ngayThanhToan + ", tongTien=" + tongTien + "]";
 	}
 }

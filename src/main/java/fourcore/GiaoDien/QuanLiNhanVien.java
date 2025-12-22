@@ -138,6 +138,7 @@ public class QuanLiNhanVien extends Application {
 	private GridPane[] hangchonPopup = null;
 	private Button btn_timkiem;
 	private TaiKhoanDAO tkdao;
+	private Button btn_duoiviec;
     
 	public Button getButtonthem() {
         return this.btn_themNhanVien;
@@ -157,7 +158,7 @@ public class QuanLiNhanVien extends Application {
 //			======================
             nhanvienDAO = new NhanVienDAO();
             
-            listnhanVien = nhanvienDAO.getListNhanVien();
+            listnhanVien = null;
             tkdao = new TaiKhoanDAO();
 //----------------------------------------------------------------------------------------------------------------------------------------
             BorderPane root = new BorderPane();
@@ -1012,7 +1013,7 @@ public class QuanLiNhanVien extends Application {
 					if(nv  != null)
 					{
 						table_desc.getChildren().clear();
-						loadCTKMData(nv.getMaNhanVien(), nv.getHoTen(),nv.getSdt(), nv.getGioiTinh(), nv.getEmail(), nv.getCccd(),nv.getTinhTrangLamViec());
+						loadNhanVien(nv.getMaNhanVien(), nv.getHoTen(),nv.getSdt(), nv.getGioiTinh(), nv.getEmail(), nv.getCccd(),nv.getTinhTrangLamViec());
 					}
 					else {
 						Alert alert =  new Alert(Alert.AlertType.INFORMATION);
@@ -1177,14 +1178,14 @@ public class QuanLiNhanVien extends Application {
 	
 	public void loaddata() throws SQLException
 	{
-		listnhanVien.clear();
+		
 		if (table_desc != null) {
 	        table_desc.getChildren().clear();
 	    }
-		listnhanVien = nhanvienDAO.getListNhanVien();
+		listnhanVien = nhanvienDAO.getListNhanVientheoisremove(false);
 		for (NhanVien nv : listnhanVien) {
-	        if(nv.getTinhTrangLamViec().equalsIgnoreCase("còn làm")) {
-	            loadCTKMData(nv.getMaNhanVien(), nv.getHoTen(), nv.getSdt(), nv.getGioiTinh(), nv.getEmail(), nv.getCccd(), nv.getTinhTrangLamViec());
+	        if(nv.getisRemove() == false) {
+	            loadNhanVien(nv.getMaNhanVien(), nv.getHoTen(), nv.getSdt(), nv.getGioiTinh(), nv.getEmail(), nv.getCccd(), nv.getTinhTrangLamViec());
 	            
 	        }
 	    }
@@ -1217,13 +1218,19 @@ public class QuanLiNhanVien extends Application {
 		btn_khoiphuc = new Button("Khôi Phục");
 		btn_khoiphuc.setStyle(style+"-fx-background-color: linear-gradient(to top, #00BACB, #8EE6ED);");
 		btn_khoiphuc.setPrefSize(225, 60);
-		btn_capnhat.setDisable(true);
+		
+		
+		
+		btn_duoiviec = new Button("Đuổi Việc");
+		btn_duoiviec.setStyle(style+"-fx-background-color: linear-gradient(to top, #00BACB, #8EE6ED);");
+		btn_duoiviec.setPrefSize(225, 60);
+		btn_duoiviec.setDisable(true);
+		
 		
 		
 		layout_button.setSpacing(40);
-		layout_button.getChildren().addAll(btn_khoiphuc,btn_themNhanVien,btn_xoaNhanVien,btn_capnhat);
+		layout_button.getChildren().addAll(btn_duoiviec,btn_themNhanVien,btn_xoaNhanVien,btn_capnhat);
 		
-		// REPLACE THIS SECTION in your btn_khoiphuc.setOnAction() method:
 
 		btn_khoiphuc.setOnAction(e -> {
 			
@@ -1339,13 +1346,12 @@ public class QuanLiNhanVien extends Application {
 		    // === LOAD DỮ LIỆU ===
 		    ArrayList<NhanVien> listnhanvien2 = new ArrayList<NhanVien>();
 		    try {
-				listnhanvien2 = nhanvienDAO.getListNhanVien();
+				listnhanvien2 = nhanvienDAO.getListNhanVientheoisremove(true);
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		    for (NhanVien nv : listnhanvien2) {
-		        if(nv.getTinhTrangLamViec().equalsIgnoreCase("đã nghỉ")) {
+		        if(nv.getisRemove() == true) {
 		            loadDuLieuKhoiPhuc(table_desc_recovery, nv.getMaNhanVien(), nv.getHoTen(), nv.getSdt(), nv.getGioiTinh(),nv.getEmail(),nv.getCccd(),nv.getTinhTrangLamViec());
 		            
 		        }
@@ -1387,21 +1393,21 @@ public class QuanLiNhanVien extends Application {
 		    // === XỬ LÝ BUTTON KHÔI PHỤC ===
 		    btn_khoiPhuc1.setOnAction(ev -> {
 		        if(hangchonPopup[0] == null) {
-		            Alert alert = new Alert(Alert.AlertType.WARNING);
-		            alert.setTitle("Thông báo");
-		            alert.setHeaderText(null);
-		            alert.setContentText("Vui lòng chọn nhân viên để khôi phục");
-		            alert.showAndWait();
-		            return;
+		        	Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Thông báo");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Vui lòng chọn nhân viên để khôi phục!");
+                    Stage stage = (Stage) ((Node) ev.getSource()).getScene().getWindow();
+                    alert.initOwner(stage);
+                    alert.initModality(Modality.WINDOW_MODAL);
+                    alert.showAndWait();
 		        }
 		        
 		        // Lấy mã nhân viên từ dòng được chọn
 		        String maNhanVien = ((Label)((StackPane)hangchonPopup[0].getChildren().get(0)).getChildren().get(0)).getText();
 		        
 		        try {
-		            // Cập nhật trạng thái nhân viên về "còn làm"
-		        	 if(nhanvienDAO.capNhatTrangThaidiLam(maNhanVien)){
-		                // Xóa dòng từ table recovery
+		        	 if(nhanvienDAO.capnhatIsremove(maNhanVien,false)){
 		                FadeTransition ft = new FadeTransition(Duration.millis(400), hangchonPopup[0]);
 		                ft.setFromValue(1.0);
 		                ft.setToValue(0);
@@ -1413,23 +1419,23 @@ public class QuanLiNhanVien extends Application {
 		                    tkdao.capNhatIsRemove(maNhanVien, false);
 		                });
 		                
-		                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		                alert.setTitle("Thành công");
-		                alert.setHeaderText(null);
-		                alert.setContentText("Khôi phục nhân viên thành công!");
-		                alert.showAndWait();
+		                Alert alert = new Alert(Alert.AlertType.WARNING);
+	                    alert.setTitle("Thông báo");
+	                    alert.setHeaderText(null);
+	                    alert.setContentText("Khôi phục nhân viên thành công!");
+	                    Stage stage = (Stage) ((Node) ev.getSource()).getScene().getWindow();
+	                    alert.initOwner(stage);
+	                    alert.initModality(Modality.WINDOW_MODAL);
+	                    alert.showAndWait();
+	                    
 		            }
 		        } catch (SQLException ex) {
-		            Alert alert = new Alert(Alert.AlertType.ERROR);
-		            alert.setTitle("Lỗi");
-		            alert.setHeaderText(null);
-		            alert.setContentText("Có lỗi xảy ra: " + ex.getMessage());
-		            alert.showAndWait();
+		            
 		            ex.printStackTrace();
 		        }
 		    });
 		    
-		    // === XỬ LÝ BUTTON ĐÓNG ===
+
 		    btn_quayLai.setOnAction(ev -> {
 		        popupStage.close();
 		        
@@ -1462,12 +1468,16 @@ public class QuanLiNhanVien extends Application {
 					String manv =  ((Label)((StackPane)hangchon.getChildren().get(0)).getChildren().get(0)).getText();
 					
 					try {
-						if(nhanvienDAO.capNhatTrangThaiNghiLam(manv))
+						if(nhanvienDAO.capnhatIsremove(manv,true))
 						{
 							Alert alert = new Alert(Alert.AlertType.INFORMATION);
-							alert.setContentText("Xóa Nhân Viên Thành Công");
-							alert.setHeaderText(null);
-							alert.show();
+		                    alert.setTitle("Thông báo");
+		                    alert.setHeaderText(null);
+		                    alert.setContentText("Xóa nhân viên thành công!");
+		                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		                    alert.initOwner(stage);
+		                    alert.initModality(Modality.WINDOW_MODAL);
+		                    alert.showAndWait();
 							FadeTransition ft = new FadeTransition(Duration.millis(400 ),hangchon);
 							ft.setFromValue(1.0);
 							ft.setToValue(0);
@@ -1479,6 +1489,66 @@ public class QuanLiNhanVien extends Application {
 								tkdao.capNhatIsRemove(manv, true);
 								
 							});
+						}
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				
+				
+				
+				
+			}
+		});
+		
+			btn_duoiviec.setOnMouseClicked(event -> {
+			String manv =  ((Label)((StackPane)hangchon.getChildren().get(0)).getChildren().get(0)).getText();
+			try {
+				NhanVien nv = nhanvienDAO.getNhanVienByMa(manv);
+				if(nv.getTinhTrangLamViec().equalsIgnoreCase("Đã nghỉ"))
+				{
+					Alert alert = new Alert(Alert.AlertType.INFORMATION);
+	                alert.setTitle("Thông báo");
+	                alert.setHeaderText(null);
+	                alert.setContentText("Nhân viên đã nghỉ việc!");
+	                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+	                alert.initOwner(stage);
+	                alert.initModality(Modality.WINDOW_MODAL);
+	                alert.showAndWait();
+				}
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}	
+			if(hangchon == null)
+			{		
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Thông báo");
+                alert.setHeaderText(null);
+                alert.setContentText("Vui lòng chọn 1 nhân viên!");
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                alert.initOwner(stage);
+                alert.initModality(Modality.WINDOW_MODAL);
+                alert.showAndWait();
+			}
+			else {
+					
+					
+					try {
+						if(nhanvienDAO.capNhatTrangThaiNghiLam(manv))
+						{
+							Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		                    alert.setTitle("Thông báo");
+		                    alert.setHeaderText(null);
+		                    alert.setContentText("Đuổi việc nhân viên thành công!");
+		                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		                    alert.initOwner(stage);
+		                    alert.initModality(Modality.WINDOW_MODAL);
+		                    alert.showAndWait();
+							loaddata();
+								tkdao.capNhatIsRemove(manv, true);
+								
+							
 						}
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
@@ -1661,7 +1731,7 @@ public class QuanLiNhanVien extends Application {
 	
 
 	
-	public void loadCTKMData(String maNhanVien, String tenNhanVien, String soDienThoai,String gioiTinh,String email,String cccd, String tinhtranglamviec) {
+	public void loadNhanVien(String maNhanVien, String tenNhanVien, String soDienThoai,String gioiTinh,String email,String cccd, String tinhtranglamviec) {
 		
 	    GridPane data = new GridPane();
 	    
@@ -1823,6 +1893,7 @@ public class QuanLiNhanVien extends Application {
 			    hangchon = dongHienTai;
 			    dongHienTai.setStyle(selectedStyle);
 			}
+			btn_duoiviec.setDisable(hangchon == null);
 			btn_xoaNhanVien.setDisable(hangchon == null);
 			btn_capnhat.setDisable(hangchon == null);
 		});

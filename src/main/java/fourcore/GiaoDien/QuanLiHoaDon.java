@@ -526,9 +526,9 @@ public class QuanLiHoaDon extends Application {
 
 			} else if ("LHD03".equalsIgnoreCase(hd.getMaLoaiHoaDon().getMaLoaiHoaDon())) {
 
-				double phiHoan = v.tinhPhiHoanTra(hd.getNgayThanhToan(), v.getGiaVe(), ct.getLoaiHoaDonChoVe());
+				double phiDoi = ct.getThanhTien();
 				values = new String[] { String.valueOf(cnt++), ct.getVeTau().getMaVeTau(), v.getLoaiVe(),
-						nft.format(v.getGiaVe()), nft.format(phiHoan), nft.format(v.getGiaVe() - phiHoan) };
+						nft.format(v.getGiaVe()), nft.format(phiDoi), nft.format(v.getGiaVe() + phiDoi) };
 
 				tongCong += v.getGiaVe();
 			}

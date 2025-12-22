@@ -12,10 +12,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import fourcore.Entity.ChiTietHoaDon;
 import fourcore.Entity.ChuyenTau;
 import fourcore.Entity.LichSuTuongTacVe;
 import fourcore.Entity.Tau;
 import fourcore.Entity.Ve;
+import fourcore.dao.ChiTietHoaDonDAO;
 import fourcore.dao.ChuyenTauDAO;
 import fourcore.dao.LichSuTuongTacVe_Dao;
 import fourcore.dao.NhanVienDAO;
@@ -88,6 +90,8 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 	private LocalDate ngayDen;
 	private StackPane pnlXuatTKBtn;
 	private Button btnXuatTK;
+	private ChiTietHoaDonDAO cthdDao;
+	private ChiTietHoaDon cthd;
 
 	public VBox taoDataChoTableLichSuMuaBanDoiVe(String mave, String chuyen, String loai, String gaDiGaDen,
 			String ngayKhoiHanh, String vitrighe, LocalDate ngayMua, String hoten, String doituong, String sogiayto,
@@ -107,13 +111,13 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 
 		String baseStyle = "-fx-font-family: 'Kanit'; -fx-font-weight: bold; -fx-font-size: 15px;";
 		String ghiChuValue = null;
-//		if (trangThai.equalsIgnoreCase("Hoạt động")) {
-//			ghiChuValue = "Còn hoạt động";
-//		} else if (trangThai.equalsIgnoreCase("Kết thúc") && !mavedoi.isEmpty() && mavedoi != null) {
-//			ghiChuValue = "Vé đã được đổi";
-//		} else if (trangThai.equalsIgnoreCase("Đã hoàn trả")) {
-//			ghiChuValue = "Vé đã hoàn trả";
-//		}
+		if (trangThai.equalsIgnoreCase("Hoạt động")) {
+			ghiChuValue = "Còn hoạt động";
+		} else if (trangThai.equalsIgnoreCase("Kết thúc") && !mavedoi.isEmpty() && mavedoi != null) {
+			ghiChuValue = "Vé đã được đổi";
+		} else if (trangThai.equalsIgnoreCase("Đã hoàn trả")) {
+			ghiChuValue = "Vé đã hoàn trả";
+		}
 		Label[] labels = { new Label(mave), new Label(chuyen), new Label(loai), new Label(gaDiGaDen),
 				new Label(ngayKhoiHanh), new Label(vitrighe), new Label(formatter.format(ngayMua)),
 				new Label(ghiChuValue), new Label(nhanvien) };
@@ -215,6 +219,11 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 
 		VBox pnlsubCT2 = taoSubCT2("Giá vé", nf.format(giave), lblCTStyle, lblValueCTStyle);
 		VBox pnlsubCT5 = taoSubCT2("Phí hoàn đổi trả", nf.format(giatrichenhlech), lblCTStyle, lblValueCTStyle);
+		if (loai.equalsIgnoreCase("Bán vé")) {
+			thanhtien *= 1.08;
+		} else if (loai.equalsIgnoreCase("Hoàn trả vé")) {
+			thanhtien = giave - giatrichenhlech;
+		}
 		VBox pnlsubCT6 = taoSubCT2("Thành tiền", nf.format(thanhtien), lblCTStyle, lblValueCTStyle);
 
 		if (loai.equalsIgnoreCase("Bán vé")) {
@@ -250,7 +259,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 			xemCTBtnPnl.getChildren().add(xemCTBtn);
 			xemCTBtnPnl.setAlignment(Pos.CENTER);
 
-			for (Pane pnl : new Pane[] { pnlsubCT1, pnlsubCT2, pnlsubCT5, pnlsubCT6, xemCTBtnPnl }) {
+			for (Pane pnl : new Pane[] { pnlsubCT1, pnlsubCT2, pnlsubCT5, xemCTBtnPnl }) {
 				pnl.setPrefWidth(280);
 			}
 
@@ -266,7 +275,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 				ctVeMoiPnl.setManaged(!check);
 			});
 
-			pnlThongTinChiTiet.getChildren().addAll(pnlsubCT1, pnlsubCT2, pnlsubCT5, pnlsubCT6, xemCTBtnPnl);
+			pnlThongTinChiTiet.getChildren().addAll(pnlsubCT1, pnlsubCT2, pnlsubCT5, xemCTBtnPnl);
 			pnlThongTinChiTiet.setManaged(false);
 			pnlThongTinChiTiet.setVisible(false);
 			checkVisible(pnlTraVe, pnlThongTinChiTiet, ctVeMoiPnl);
@@ -274,6 +283,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 			return pnlTraVe;
 		}
 
+		
 		pnlsubCT1.setPrefWidth(400);
 		for (Pane pnl : new Pane[] { pnlsubCT2, pnlsubCT5, pnlsubCT6 }) {
 			pnl.setPrefWidth(400);
@@ -331,11 +341,12 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 		veDao = new VeDAO();
 		ctDAO = new ChuyenTauDAO();
 		tDao = new Tau_DAO();
+		cthdDao = new ChiTietHoaDonDAO();
 
 		Ve v = veDao.getVeBangMaVe(ma);
 		ct = ctDAO.getChuyenTauBangMa(v.getChuyenTau().getMaChuyenTau());
 		t = tDao.getTauByMaTau(ct.getTau().getMaTau());
-
+		cthd = cthdDao.getCthdByMaVe(ma);
 		GridPane data = new GridPane();
 		data.setHgap(10);
 		data.setAlignment(Pos.CENTER);
@@ -350,7 +361,7 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 				new Label(formatter.format(v.getNgayGioDi().toLocalDate()) + " - "
 						+ v.getNgayGioDi().toLocalTime().toString()),
 				new Label("Toa số " + v.getSoToa() + " chỗ " + v.getSoGhe()), new Label(formatter.format(ngayMua)),
-				new Label("Thành tiền: " + nf.format(v.getGiaVe())) };
+				new Label("Thành tiền: " + nf.format(cthd.getThanhTien() * 1.08)) };
 		double[] widths = { 200, 200, 250, 230, 210, 230, 250 };
 
 		for (int i = 0; i < labels.length; i++) {
@@ -402,21 +413,24 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 		ct = ctDAO.getChuyenTauBangMa(x.getVeTau().getChuyenTau().getMaChuyenTau());
 		t = tDao.getTauByMaTau(ct.getTau().getMaTau());
 		nvDao = new NhanVienDAO();
+		cthdDao = new ChiTietHoaDonDAO();
+		ChiTietHoaDon cthd = cthdDao.getCthdByMaVe(x.getVeTau().getMaVeTau());
 		String maNV = nvDao.getMaNhanVienBangMaVeVaLoaiTuongTac(x.getVeTau().getMaVeTau(),
 				x.getLoaiTuongTacVe().getMaLoaiTuongTac());
-		pnlDataDoiVe.getChildren().add(taoDataChoTableLichSuMuaBanDoiVe(x.getVeTau().getMaVeTau(),
-				t.getLoaiTau().getTenLoaiTau(), x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
-				x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
-				formatter.format(x.getVeTau().getNgayGioDi().toLocalDate()) + " - "
-						+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
-				"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
-				x.getNgayTuongTac().toLocalDate(), x.getVeTau().getKhachHang().getHoten(),
-				x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(), x.getVeTau().getKhachHang().getCccd(),
-				veDao.layGiaTienGheTheoMaVe(x.getVeTau().getMaVeTau()),
-				nf.format(x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
-				nf.format(x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%", x.getGiaTriChenhLech(),
-				x.tinhTongTien(x.getLoaiTuongTacVe().getMaLoaiTuongTac()), x.getVeTau().getTrangThaiDoiVe(), maNV,
-				x.getVeTau().getGhiChu(), x.getVeTau().getTrangThaiVe()));
+		pnlDataDoiVe.getChildren()
+				.add(taoDataChoTableLichSuMuaBanDoiVe(x.getVeTau().getMaVeTau(), t.getLoaiTau().getTenLoaiTau(),
+						x.getLoaiTuongTacVe().getTenLoaiTuongTac(),
+						x.getVeTau().getGaDi() + " - " + x.getVeTau().getGaDen(),
+						formatter.format(x.getVeTau().getNgayGioDi().toLocalDate()) + " - "
+								+ x.getVeTau().getNgayGioDi().toLocalTime().toString(),
+						"Toa số " + x.getVeTau().getSoToa() + " chỗ " + x.getVeTau().getSoGhe(),
+						x.getNgayTuongTac().toLocalDate(), x.getVeTau().getKhachHang().getHoten(),
+						x.getVeTau().getDoiTuongGiamGia().getTenDoiTuongGiamGia(),
+						x.getVeTau().getKhachHang().getCccd(), veDao.layGiaTienGheTheoMaVe(x.getVeTau().getMaVeTau()),
+						nf.format(x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
+						nf.format(x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%", cthd.getDongia(),
+						cthd.getThanhTien(), x.getVeTau().getTrangThaiDoiVe(), maNV, x.getVeTau().getGhiChu(),
+						x.getVeTau().getTrangThaiVe()));
 	}
 
 	public StackPane thongBaoKhongTimThayVe() {
@@ -437,8 +451,10 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 		veDao = new VeDAO();
 		VBox box = new VBox(10);
 		nvDao = new NhanVienDAO();
+		cthdDao = new ChiTietHoaDonDAO();
 
 		for (LichSuTuongTacVe x : list) {
+			cthd = cthdDao.getCthdByMaVe(x.getVeTau().getMaVeTau());
 			ct = ctDAO.getChuyenTauBangMa(x.getVeTau().getChuyenTau().getMaChuyenTau());
 			t = tDao.getTauByMaTau(ct.getTau().getMaTau());
 			String maNV = nvDao.getMaNhanVienBangMaVeVaLoaiTuongTac(x.getVeTau().getMaVeTau(),
@@ -454,8 +470,8 @@ public class GiaoDienLichSuMuaBanDoiVe extends Application {
 					veDao.layGiaTienGheTheoMaVe(x.getVeTau().getMaVeTau()),
 					nf.format(x.getVeTau().getDoiTuongGiamGia().getGiaTriPhanTramGiamGia()) + "%",
 					nf.format(x.getVeTau().getKhuyenMai().getGiaTriPhanTramKhuyenMai()) + "%", x.getGiaTriChenhLech(),
-					x.tinhTongTien(x.getLoaiTuongTacVe().getMaLoaiTuongTac()), x.getVeTau().getTrangThaiDoiVe(), maNV,
-					x.getVeTau().getGhiChu(), x.getVeTau().getTrangThaiVe()));
+					cthd.getThanhTien(), x.getVeTau().getTrangThaiDoiVe(), maNV, x.getVeTau().getGhiChu(),
+					x.getVeTau().getTrangThaiVe()));
 		}
 		return box;
 	}
