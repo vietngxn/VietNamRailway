@@ -895,6 +895,11 @@ public class CapNhatNhanVien extends Application {
 		    	cv.setMaChucVu("CV02");
 		    }
 		    NhanVien nv1 = new NhanVien(nv.getMaNhanVien(), ten, cv, ngaysinh, diaChi, email, sdt, ngayvaolam, tinhTrang1, gioitinh, cccd1);
+		    
+		   
+	        
+		    
+		    
 		    try {
 				if(nvdao.suaNhanVien(nv1))
 				{
@@ -1100,7 +1105,7 @@ public class CapNhatNhanVien extends Application {
     	StackPane spSoDienThoai = new StackPane();
     	spSoDienThoai.getChildren().addAll(lblSoDienThoai, txtSoDienThoai);
     	spSoDienThoai.setAlignment(lblSoDienThoai, Pos.CENTER_LEFT);
-    	
+    	txtSoDienThoai.setDisable(true);
     	
     	    txtSoDienThoai.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
     	        if (isNowFocused && txtSoDienThoai.getText().trim().isEmpty()) {
@@ -1235,7 +1240,7 @@ public class CapNhatNhanVien extends Application {
     	txtCCCD.setPrefWidth(600);
     	txtCCCD.setPrefHeight(40);
     	txtCCCD.setId("txt_CapNhatChuyenTau");
-    	
+    	txtCCCD.setDisable(true);
     	StackPane spCCCD = new StackPane();
     	spCCCD.getChildren().addAll(lblCCCD, txtCCCD);
     	spCCCD.setAlignment(lblCCCD, Pos.CENTER_LEFT);

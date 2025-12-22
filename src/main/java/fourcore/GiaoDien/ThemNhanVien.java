@@ -795,7 +795,7 @@ public class ThemNhanVien extends Application {
 //		    String doiTuong = txtcomboDoiTuong.getText();
 		    String gioiTinh = txtGioiTinh.getText();
 		    
-		    String regexten = "[A-Za-z]+";
+		    String regexten = "^[\\p{L} ]+$";
 		    String regexsdt = "^0\\d{9}";
 	        String regexcccd = "^0\\d{11}";
 	        String regexemail = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
@@ -885,13 +885,12 @@ public class ThemNhanVien extends Application {
 		    }
 		    
 		    
-		    if(ngayvaolam.isAfter(LocalDate.now()))
-		    {
-		    	Alert alert = new Alert(Alert.AlertType.ERROR);
-		    	alert.setContentText("Ngày vào làm phải trước ngày hiện tại!");
-		    	alert.setHeaderText(null);
-		    	alert.showAndWait();
-		    	return;
+		    if(ngayvaolam.isBefore(LocalDate.now())) {
+		        Alert alert = new Alert(Alert.AlertType.ERROR);
+		        alert.setContentText("Ngày vào làm phải sau hoặc bằng ngày hiện tại!");
+		        alert.setHeaderText(null);
+		        alert.showAndWait();
+		        return;
 		    }
 		    
 		    if(!ten.matches(regexten))
