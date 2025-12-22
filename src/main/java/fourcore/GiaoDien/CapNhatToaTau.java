@@ -625,6 +625,8 @@ public class CapNhatToaTau extends Application {
 	
 	
 public VBox creat_themtoatau_layout() throws SQLException, IOException {
+		checkToaGheNgoi = 0;
+		checkToaGiuongNam = 9;
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		String duongdantoa = "/img/thantauchon.png";
@@ -767,40 +769,74 @@ public VBox creat_themtoatau_layout() throws SQLException, IOException {
 		ArrayList<ToaTau> listToaTauTheoHanhTrinh = toataudao.getListToaTauTenToaTau1(tau.getLoaiTau().getTenLoaiTau());
 		for(ToaTau c : listToaTauTheoHanhTrinh) System.out.println("c " + c.getMaToaTau());
 		
+		
+		
 		ArrayList<ToaTau> listToaTauTheoChuyenTau = toataudao.getListToaTauByMaCT1(maChuyenTau);
 		ArrayList<String> listMaToa = new ArrayList<>();
 		for(ToaTau t : listToaTauTheoChuyenTau) {
 			addToaTau(t, listToaTauTheoChuyen);
+			System.out.println(checkToaGheNgoi);
+			System.out.println(checkToaGiuongNam);
 			listMaToa.add(t.getMaToaTau());
 		}
 		ArrayList<String> listToaTauTheoChuyenTauDaBan = new ArrayList<>();
 		
 		Map<String, ArrayList<GheNgoi>> mapGheTheoToa = new HashMap<>();
 		
-		String stringMaToaSQL = listToaTauTheoChuyenTau.stream().map(ma -> "'" + ma + "'").collect(Collectors.joining(", "));
+		String stringMaToaSQL = listMaToa.stream().map(ma -> "'" + ma + "'").collect(Collectors.joining(", "));
 		mapGheTheoToa.clear();
 		mapGheTheoToa = ghedao.getMapGheTheoToa(stringMaToaSQL);
+		System.out.println(stringMaToaSQL);
 		
-		for(Map.Entry<String, ArrayList<GheNgoi>> map : mapGheTheoToa.entrySet()) {
-			if(map.getKey().startsWith("GN")) {
-				for(int i = 1; i <= 36; i++) {
-					GheTrenChuyenTau gtct = ghedao.getGheTrenChuyenTau(i, map.getKey(), chuyenTau.getMaChuyenTau());
-					if(gtct.getTrangThaiGhe().equalsIgnoreCase("Đã bán")) {
-						listToaTauTheoChuyenTauDaBan.add(map.getKey());
-						break;
-					}
-				}
-			}
-		}
 		
-		for(int i = 0; i <= listToaTauTheoChuyenTauDaBan.size()-1; i++) {
-			for(int j = 0; j <= listToaTauTheoChuyen.size()-1; j++) {
-				if(listToaTauTheoChuyenTauDaBan.get(i).equalsIgnoreCase(listToaTauTheoChuyenTau.get(j).getMaToaTau())) {
-					listToaTauTheoChuyenTau.remove(j);
-					break;
-				}
-			}
-		}
+		
+//		for(Map.Entry<String, ArrayList<GheNgoi>> map : mapGheTheoToa.entrySet()) {
+//			System.out.println(map.getKey());
+//			if(map.getKey().startsWith("GN")) {
+//				for(int i = 1; i <= 36; i++) {
+//					GheTrenChuyenTau gtct = ghedao.getGheTrenChuyenTau(i, map.getKey(), chuyenTau.getMaChuyenTau());
+//					if(gtct.getTrangThaiGhe().equalsIgnoreCase("Đã bán")) {
+//						System.out.println("nnn");
+//						listToaTauTheoChuyenTauDaBan.add(map.getKey());
+////						for(int j = 0; j <= listToaTauTheoChuyen.size()-1; j++) {
+////							if(listToaTauTheoChuyenTauDaBan.get(j).equalsIgnoreCase(map.getKey())) {
+////							
+////							System.out.println("----------");
+////							break;
+////							}
+////						}
+//						break;
+//					}
+//				}
+//			} else {
+//				for(int i = 1; i <= 18; i++) {
+//					GheTrenChuyenTau gtct = ghedao.getGheTrenChuyenTau(i, map.getKey(), chuyenTau.getMaChuyenTau());
+//					if(gtct.getTrangThaiGhe().equalsIgnoreCase("Đã bán")) {
+//						System.out.println("nnn");
+//						listToaTauTheoChuyenTauDaBan.add(map.getKey());
+////						for(int j = 0; j <= listToaTauTheoChuyen.size()-1; j++) {
+////							if(listToaTauTheoChuyenTauDaBan.get(j).equalsIgnoreCase(map.getKey())) {
+////							
+////							System.out.println("----------");
+////							break;
+////							}
+////						}
+//						break;
+//					}
+//				}
+//			}
+//		}
+		
+//		for(int i = 0; i <= listToaTauTheoChuyenTauDaBan.size()-1; i++) {
+//			for(int j = 0; j <= listToaTauTheoChuyen.size()-1; j++) {
+//				System.out.println(listToaTauTheoChuyenTauDaBan.get(i) + "e");
+//				if(listToaTauTheoChuyenTauDaBan.get(i).equalsIgnoreCase(listToaTauTheoChuyenTau.get(j).getMaToaTau())) {
+//					listToaTauTheoChuyenTau.remove(j);
+//					System.out.println(listToaTauTheoChuyenTauDaBan.get(i) + "e");
+//					break;
+//				}
+//			}
+//		}
 		
 		
 //		listToaTauTheoHanhTrinh.removeAll(listToaTauTheoTenToaTau);
@@ -855,10 +891,7 @@ public VBox creat_themtoatau_layout() throws SQLException, IOException {
 		            setFocusTraversable(true);
 		            table.setId("");
 		            
-		            if(toaTau != null && listToaTauTheoChuyenTauDaBan.contains(toaTau.getMaToaTau()) ) {
-		            	setStyle("-fx-background-color: #E6E6FA;");
-		            }
-		            else if(toaTau != null && listToaTauTheoChuyenTau.contains(toaTau)) {
+		            if(toaTau != null && listToaTauTheoChuyenTau.contains(toaTau)) {
 		            	setStyle("-fx-background-color: #77dd77;");
 		            }
 		            
@@ -875,6 +908,13 @@ public VBox creat_themtoatau_layout() throws SQLException, IOException {
 		            	setMouseTransparent(true);    
 		                setFocusTraversable(false); 
 		            }
+		            
+		            if(toaTau != null && listToaTauTheoChuyenTau.contains(toaTau) ) {
+		            	setStyle("-fx-background-color: #9370DB;");
+		            	setMouseTransparent(true);    
+		                setFocusTraversable(false); 
+		            }
+		           
 		        }
 		    };
 
@@ -883,13 +923,14 @@ public VBox creat_themtoatau_layout() throws SQLException, IOException {
 		            ToaTau toaTauClick = row.getItem();
 		            if (!listToaTauTheoChuyen.contains(toaTauClick)) {
 		                addToaTau(toaTauClick, listToaTauTheoChuyen);
-		                
+		               
 		            } else {
+		              
+
 		            	removeToaTau(toaTauClick, listToaTauTheoChuyen);
 		            	}
 		            
-		            table.getSelectionModel().clearSelection();
-		            table.getSelectionModel().select(toaTauClick);
+		            
 		            table.refresh();
 		        }
 		    });
@@ -925,6 +966,7 @@ public VBox creat_themtoatau_layout() throws SQLException, IOException {
 		layoutThemToaTau.getChildren().addAll(boxLblThemChuyenTau, lblThemToaTau, boxToaTau, table, boxButton);
 		layoutThemToaTau.setAlignment(Pos.CENTER);
 		layoutThemToaTau.setStyle("-fx-background-color: #FFFFFF");
+		System.out.println(checkToaGheNgoi);
 		return layoutThemToaTau;
 	}
 	
@@ -1021,7 +1063,7 @@ public VBox creat_themtoatau_layout() throws SQLException, IOException {
 		return this.buttonTiepTuc;
 	}
 	public void addToaTau(ToaTau toaTau, ArrayList<ToaTau> listToaTauTheoChuyen) {
-	    int index = -1;
+	    int index = checkToaGheNgoi;
 
 	    if (toaTau.getSoGhe() == 36) {
 	        if (checkToaGheNgoi == 2) {
@@ -1039,7 +1081,7 @@ public VBox creat_themtoatau_layout() throws SQLException, IOException {
 	        index = checkToaGiuongNam;
 	        checkToaGiuongNam--;
 	    }
-
+	    
 	    if (index != -1 && !listToaTauTheoChuyen.contains(toaTau)) {
 	        StackPane spToa = mapSpToa.get(index);
 	        Label lblToa = (Label) spToa.getChildren().get(1);
@@ -1048,6 +1090,7 @@ public VBox creat_themtoatau_layout() throws SQLException, IOException {
 	        lblToa.setText(toaTau.getMaToaTau());
 	        imgToa.setOpacity(1.0);
 	        listToaTauTheoChuyen.add(toaTau);
+	        System.out.println(index +" "+ checkToaGheNgoi);
 	    }
 	}
 	public void removeToaTau(ToaTau toaTau, ArrayList<ToaTau> listToaTauTheoChuyen) {
@@ -1074,8 +1117,6 @@ public VBox creat_themtoatau_layout() throws SQLException, IOException {
 		    }
 	}
 	public Button getButtonTroLai() {
-		checkToaGheNgoi = 0;
-		checkToaGiuongNam = 9;
 		return this.buttonTroLai;
 	}	  
 	public static void main(String[] args) {

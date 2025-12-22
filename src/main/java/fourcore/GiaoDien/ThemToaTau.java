@@ -1007,8 +1007,6 @@ public VBox creat_themtoatau_layout() throws SQLException, IOException {
 		    }
 	}
 	public Button getButtonTroLai() {
-		checkToaGheNgoi = 0;
-		checkToaGiuongNam = 9;
 		return this.buttonTroLai;
 	}	  
 	public static void main(String[] args) {

@@ -8,9 +8,12 @@ import java.util.ArrayList;
 
 import fourcore.DatabaseConnector.DatabaseConnector;
 import fourcore.Entity.GheTrenChuyenTau;
+import fourcore.Entity.LoaiToaTau;
+import fourcore.Entity.ToaTau;
 
 public class GheTrenChuyenTau_dao {
-
+	ChuyenTauDAO chuyentaudao = new ChuyenTauDAO();
+	GheNgoiDAO ghengoidao = new GheNgoiDAO();
 	DatabaseConnector databaseConnector = new DatabaseConnector();
 	ArrayList<GheTrenChuyenTau> listGheTrenChuyenTau = new ArrayList<>();
 	Statement myStmt;
@@ -78,5 +81,73 @@ public class GheTrenChuyenTau_dao {
 		int rows = myStmt.executeUpdate(q);
 		return rows > 0;
 	}
+	public ArrayList<GheTrenChuyenTau> getListGheTrenChuyenTauByMaCT(String maChuyenTau) {
+
+	    ArrayList<GheTrenChuyenTau> list = new ArrayList<>();
+
+	    String sql =
+	        "SELECT maGheTrenChuyenTau, maChuyenTau, maGheNgoi, trangThaiGhe, giaTienGhe \n" +
+	        "FROM GheTrenChuyenTau \n" +
+	        "WHERE maChuyenTau = ?";
+
+	    try {
+	        PreparedStatement ps = databaseConnector
+	                .connect()
+	                .getConnection()
+	                .prepareStatement(sql);
+
+	        ps.setString(1, maChuyenTau);
+	        ResultSet rs = ps.executeQuery();
+
+	        while (rs.next()) {
+	            String maGheTrenChuyenTau = rs.getString("maGheTrenChuyenTau");
+	            String maCT = rs.getString("maChuyenTau");
+	            String maGheNgoi = rs.getString("maGheNgoi");
+	            String trangThaiGhe = rs.getString("trangThaiGhe");
+	            double giaTienGhe = rs.getDouble("giaTienGhe");
+
+	            GheTrenChuyenTau ghe = new GheTrenChuyenTau(
+	                maGheTrenChuyenTau,
+	                trangThaiGhe,
+	                giaTienGhe,
+	                chuyentaudao.getChuyenTauBangMa(maChuyenTau),
+	                ghengoidao.getGheBangMaGhe(maGheNgoi)
+	            );
+
+	            list.add(ghe);
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return list;
+	}
+
+	public boolean deleteGheTrenChuyenTauByMa(String maGheTrenChuyenTau) {
+
+	    String sql =
+	        "DELETE FROM GheTrenChuyenTau \n" +
+	        "WHERE maGheTrenChuyenTau = ?";
+
+	    int n = 0;
+
+	    try {
+	        PreparedStatement ps = databaseConnector
+	                .connect()
+	                .getConnection()
+	                .prepareStatement(sql);
+
+	        ps.setString(1, maGheTrenChuyenTau);
+
+	        n = ps.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return n > 0;
+	}
+
 
 }
